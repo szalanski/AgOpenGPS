@@ -78,6 +78,7 @@ namespace AgIO
 
         //used to send communication check pgn= C8 or 200
         private byte[] helloFromAgIO = { 0x80, 0x81, 0x7F, 200, 3, 56, 0, 0, 0x47 };
+        private byte[] udpTest = { 0x80, 0x81, 0x7F, 198, 3, 56, 0, 0, 0x47 };
 
         public IPAddress ipCurrent;
         //initialize loopback and udp network
@@ -374,6 +375,13 @@ namespace AgIO
                     else if (data[3] == 121 && data.Length == 11)
                         traffic.helloFromIMU = 0;
 
+                    else if (data[3] == 199)    //GPS module
+                    {
+                        udpTest[5] = data[5];
+                        SendUDPMessage(udpTest, epModule);
+                    }
+
+
                     //scan Reply
                     else if (data[3] == 203 && data.Length == 13) //
                     {
@@ -432,15 +440,15 @@ namespace AgIO
                             scanReply.isNewData = true;
                             scanReply.isNewGPS = true;
                         }
+
+                    } // end of pgns
+
+                    else if (data[0] == 36 && (data[1] == 71 || data[1] == 80 || data[1] == 75))
+                    {
+                        traffic.cntrGPSOut += data.Length;
+                        rawBuffer += Encoding.ASCII.GetString(data);
+                        ParseNMEA(ref rawBuffer);
                     }
-
-                } // end of pgns
-
-                else if (data[0] == 36 && (data[1] == 71 || data[1] == 80 || data[1] == 75))
-                {
-                    traffic.cntrGPSOut += data.Length;
-                    rawBuffer += Encoding.ASCII.GetString(data);
-                    ParseNMEA(ref rawBuffer);
                 }
             }
             catch

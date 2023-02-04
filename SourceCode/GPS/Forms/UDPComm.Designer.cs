@@ -17,6 +17,9 @@ namespace AgOpenGPS
         private EndPoint epAgIO = new IPEndPoint(IPAddress.Parse("127.255.255.255"), 17777);
         private EndPoint endPointLoopBack = new IPEndPoint(IPAddress.Loopback, 0);
 
+        private byte[] udpTest = { 0x80, 0x81, 0x7F, 197, 3, 56, 0, 0, 0x47 };
+
+
         // Data stream
         private byte[] loopBuffer = new byte[1024];
 
@@ -253,6 +256,13 @@ namespace AgOpenGPS
                             if (data.Length != 14)
                                 break;
                             mc.sensorData = data[5];
+                            break;
+                        }
+
+                    case 199:
+                        {
+                            udpTest[5] = data[5];
+                            SendPgnToLoop(udpTest);
                             break;
                         }
 
