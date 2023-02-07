@@ -19,7 +19,7 @@ namespace AgOpenGPS
 
         public double distSteerError, lastDistSteerError, derivativeDistError;
 
-        public double pivotDistanceError, stanleyModeMultiplier;
+        public double pivotDistanceError;
 
         //public int modeTimeCounter = 0;
 
@@ -47,7 +47,7 @@ namespace AgOpenGPS
             double sped = Math.Abs(mf.avgSpeed);
             if (sped > 1) sped = 1 + 0.277 * (sped - 1);
             else sped = 1;
-            double XTEc = Math.Atan((distanceFromCurrentLineSteer * mf.vehicle.stanleyDistanceErrorGain * stanleyModeMultiplier)
+            double XTEc = Math.Atan((distanceFromCurrentLineSteer * mf.vehicle.stanleyDistanceErrorGain )
                 / (sped));
 
             xTrackSteerCorrection = (xTrackSteerCorrection * 0.5) + XTEc * (0.5);
