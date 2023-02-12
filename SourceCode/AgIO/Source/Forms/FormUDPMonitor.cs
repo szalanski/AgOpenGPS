@@ -30,6 +30,7 @@ namespace AgIO
         {
             mf.isUDPMonitorOn = true;
             timer1.Enabled = true;
+            logOn = true;
         }
 
 
@@ -50,7 +51,7 @@ namespace AgIO
             }
             else
             {
-                btnLog.BackColor = Color.Transparent;
+                btnLog.BackColor = Color.Salmon;
                 mf.isUDPMonitorOn = false;
                 timer1.Enabled = false;
             }
@@ -80,6 +81,15 @@ namespace AgIO
         private void btnClear_Click(object sender, EventArgs e)
         {
             textBoxRcv.Text = "";
+        }
+
+        private void btnLogNMEA_Click(object sender, EventArgs e)
+        {
+
+            mf.isGPSLogOn = !mf.isGPSLogOn;
+
+            if (mf.isGPSLogOn) btnLogNMEA.BackColor = Color.LightGreen;
+            else btnLogNMEA.BackColor = Color.Salmon;
         }
     }
 }

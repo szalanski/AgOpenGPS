@@ -275,7 +275,7 @@ namespace AgIO
             {
                 if (isUDPMonitorOn)
                 {
-                    logUDPSentence.Append(endPoint.ToString() + "," + byteData[2].ToString() + " > " + byteData[3].ToString() + "\r\n");
+                    logUDPSentence.Append(DateTime.Now.ToString("mm: ss.fff\t") + endPoint.ToString() + "\t" + byteData[2].ToString() + " > " + byteData[3].ToString() + "\r\n");
 
                     //    for (int i = 2; i < byteData.Length; i++)
                     //    {
@@ -324,7 +324,7 @@ namespace AgIO
             try
             {
                 // Receive all data
-                int msgLen = UDPSocket.EndReceiveFrom(asyncResult, ref endPointUDP);
+                int msgLen = UDPSocket.EndReceiveFrom(asyncResult, ref endPointUDP);                
 
                 byte[] localMsg = new byte[msgLen];
                 Array.Copy(buffer, localMsg, msgLen);
@@ -350,13 +350,10 @@ namespace AgIO
             {
                 if (data[0] == 0x80 && data[1] == 0x81)
                 {
+
                     if (isUDPMonitorOn)
                     {
-                        //for (int i = 2; i < data.Length; i++)
-                        //{
-                        logUDPSentence.Append(endPointUDP.ToString() + "," +data[2].ToString() + " < " + data[3].ToString() + "\r\n");
-                        //}
-                        //logUDPSentence.Append("\r\n");
+                        logUDPSentence.Append(DateTime.Now.ToString("mm: ss.fff\t") + endPointUDP.ToString() + "\t" + data[3].ToString() + " < " + data[2].ToString() + "\r\n");
                     }
 
                     //module return via udp sent to AOG
@@ -461,14 +458,20 @@ namespace AgIO
                         }
 
                     } // end of pgns
+                }
 
-                    else if (data[0] == 36 && (data[1] == 71 || data[1] == 80 || data[1] == 75))
+                else if (data[0] == 36 && (data[1] == 71 || data[1] == 80 || data[1] == 75))
+                {
+                    traffic.cntrGPSOut += data.Length;
+                    rawBuffer += Encoding.ASCII.GetString(data);
+                    ParseNMEA(ref rawBuffer);
+
+                    if (isUDPMonitorOn && isGPSLogOn)
                     {
-                        traffic.cntrGPSOut += data.Length;
-                        rawBuffer += Encoding.ASCII.GetString(data);
-                        ParseNMEA(ref rawBuffer);
+                        logUDPSentence.Append(DateTime.Now.ToString("mm: ss.fff\t") + System.Text.Encoding.ASCII.GetString(data));
                     }
                 }
+
             }
             catch
             {
