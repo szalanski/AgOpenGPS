@@ -273,6 +273,16 @@ namespace AgIO
         {
             if (isUDPNetworkConnected)
             {
+                if (isUDPMonitorOn)
+                {
+                    logUDPSentence.Append(endPoint.ToString() + "," + byteData[2].ToString() + " > " + byteData[3].ToString() + "\r\n");
+
+                    //    for (int i = 2; i < byteData.Length; i++)
+                    //    {
+                    //        logUDPSentence.Append(byteData[i].ToString() + ",");
+                    //    }
+                    //    logUDPSentence.Append("\r\n");
+                }
                 try
                 {
                     // Send packet to the zero
@@ -340,6 +350,15 @@ namespace AgIO
             {
                 if (data[0] == 0x80 && data[1] == 0x81)
                 {
+                    if (isUDPMonitorOn)
+                    {
+                        //for (int i = 2; i < data.Length; i++)
+                        //{
+                        logUDPSentence.Append(endPointUDP.ToString() + "," +data[2].ToString() + " < " + data[3].ToString() + "\r\n");
+                        //}
+                        //logUDPSentence.Append("\r\n");
+                    }
+
                     //module return via udp sent to AOG
                     SendToLoopBackMessageAOG(data);
 

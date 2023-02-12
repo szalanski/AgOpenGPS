@@ -322,7 +322,7 @@ namespace AgIO
 
         private void btnHelp_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start(gStr.gsSerialMonHelp);
+            System.Diagnostics.Process.Start(gStr.gsEthernetHelp);
 
         }
 

@@ -48,6 +48,7 @@ namespace AgIO
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripEthernet = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSerialMonitor = new System.Windows.Forms.ToolStripMenuItem();
             this.deviceManagerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsMenuStrip = new System.Windows.Forms.ToolStripDropDownButton();
             this.saveToolStrip = new System.Windows.Forms.ToolStripMenuItem();
@@ -99,7 +100,7 @@ namespace AgIO
             this.btnGPSData = new System.Windows.Forms.Button();
             this.btnUDP = new System.Windows.Forms.Button();
             this.btnHelp = new System.Windows.Forms.Button();
-            this.toolStripSerialMonitor = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripUDPMonitor = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -276,6 +277,7 @@ namespace AgIO
             this.toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem1,
             this.toolStripMenuItem2,
+            this.toolStripUDPMonitor,
             this.toolStripEthernet,
             this.toolStripSerialMonitor,
             this.deviceManagerToolStripMenuItem});
@@ -312,6 +314,15 @@ namespace AgIO
             this.toolStripEthernet.Size = new System.Drawing.Size(311, 70);
             this.toolStripEthernet.Text = "Ethernet Settings";
             this.toolStripEthernet.Click += new System.EventHandler(this.toolStripEthernet_Click);
+            // 
+            // toolStripSerialMonitor
+            // 
+            this.toolStripSerialMonitor.Font = new System.Drawing.Font("Tahoma", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.toolStripSerialMonitor.Image = global::AgIO.Properties.Resources.NTRIP_Serial;
+            this.toolStripSerialMonitor.Name = "toolStripSerialMonitor";
+            this.toolStripSerialMonitor.Size = new System.Drawing.Size(311, 70);
+            this.toolStripSerialMonitor.Text = "Serial Monitor";
+            this.toolStripSerialMonitor.Click += new System.EventHandler(this.toolStripSerialMonitor_Click);
             // 
             // deviceManagerToolStripMenuItem
             // 
@@ -1073,14 +1084,14 @@ namespace AgIO
             this.btnHelp.UseVisualStyleBackColor = true;
             this.btnHelp.Click += new System.EventHandler(this.btnHelp_Click);
             // 
-            // toolStripSerialMonitor
+            // toolStripUDPMonitor
             // 
-            this.toolStripSerialMonitor.Font = new System.Drawing.Font("Tahoma", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.toolStripSerialMonitor.Image = global::AgIO.Properties.Resources.NTRIP_Serial;
-            this.toolStripSerialMonitor.Name = "toolStripSerialMonitor";
-            this.toolStripSerialMonitor.Size = new System.Drawing.Size(311, 70);
-            this.toolStripSerialMonitor.Text = "Serial Monitor";
-            this.toolStripSerialMonitor.Click += new System.EventHandler(this.toolStripSerialMonitor_Click);
+            this.toolStripUDPMonitor.Font = new System.Drawing.Font("Tahoma", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.toolStripUDPMonitor.Image = global::AgIO.Properties.Resources.B_UDP;
+            this.toolStripUDPMonitor.Name = "toolStripUDPMonitor";
+            this.toolStripUDPMonitor.Size = new System.Drawing.Size(311, 70);
+            this.toolStripUDPMonitor.Text = "UDP Monitor";
+            this.toolStripUDPMonitor.Click += new System.EventHandler(this.toolStripUDPMonitor_Click);
             // 
             // FormLoop
             // 
@@ -1233,6 +1244,7 @@ namespace AgIO
         private System.Windows.Forms.ToolStripMenuItem toolStripEthernet;
         private System.Windows.Forms.Button btnHelp;
         private System.Windows.Forms.ToolStripMenuItem toolStripSerialMonitor;
+        private System.Windows.Forms.ToolStripMenuItem toolStripUDPMonitor;
     }
 }
 

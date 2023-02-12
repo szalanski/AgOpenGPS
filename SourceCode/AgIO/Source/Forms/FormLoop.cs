@@ -36,8 +36,10 @@ namespace AgIO
         //Stringbuilder
         public StringBuilder logNMEASentence = new StringBuilder();
         public StringBuilder logMonitorSentence = new StringBuilder();
+        public StringBuilder logUDPSentence = new StringBuilder();
 
         private StringBuilder sbRTCM = new StringBuilder();
+        public bool isLogNMEA, isLogMonitorOn, isUDPMonitorOn;
 
         public bool isKeyboardOn = true;
 
@@ -60,7 +62,6 @@ namespace AgIO
 
         //is the fly out displayed
         public bool isViewAdvanced = false;
-        public bool isLogNMEA, isLogMonitorOn;
 
         //used to hide the window and not update text fields and most counters
         public bool isAppInFocus = true, isLostFocus;

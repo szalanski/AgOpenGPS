@@ -90,6 +90,12 @@
     <Compile Include="Forms\FormCommSetGPS.Designer.cs">
       <DependentUpon>FormCommSetGPS.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormUDPMonitor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormUDPMonitor.designer.cs">
+      <DependentUpon>FormUDPMonitor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormSerialMonitor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -196,6 +202,9 @@
     <EmbeddedResource Include="Forms\FormCommSetGPS.resx">
       <DependentUpon>FormCommSetGPS.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormUDPMonitor.resx">
+      <DependentUpon>FormUDPMonitor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormSerialMonitor.resx">
       <DependentUpon>FormSerialMonitor.cs</DependentUpon>
