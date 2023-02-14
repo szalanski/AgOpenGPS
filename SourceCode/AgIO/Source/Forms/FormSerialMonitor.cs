@@ -1,28 +1,23 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.IO.Ports;
-using System.Linq;
-using System.Net;
-using System.Net.NetworkInformation;
-using System.Net.Sockets;
 using System.Windows.Forms;
 
 namespace AgIO
 {
     public partial class FormSerialMonitor : Form
     {
-        //class variables
-        private readonly FormLoop mf = null;
-
-        public static string portName = "***";
         public static int baudRate = 115200;
 
+        public static string portName = "***";
+
         public string recvSentence = "GPS";
+
         public SerialPort sp = new SerialPort(portName, baudRate, Parity.None, 8, StopBits.One);
 
+        //class variables
+        private readonly FormLoop mf = null;
         private bool logOn = false;
 
         public FormSerialMonitor(Form callingForm)
@@ -32,115 +27,38 @@ namespace AgIO
             InitializeComponent();
         }
 
-        private void FormUDp_Load(object sender, EventArgs e)
+        private void btnClear_Click(object sender, EventArgs e)
         {
-            cboxPort.Items.Clear();
-            foreach (string s in System.IO.Ports.SerialPort.GetPortNames())
-            {
-                cboxPort.Items.Add(s);
-            }
+            textBoxRcv.Text = "";
         }
 
-        #region IMUSerialPort //--------------------------------------------------------------------
-        private void ReceivePort(string sentence)
+        private void btnCloseSerial_Click(object sender, EventArgs e)
         {
-            textBoxRcv.AppendText(sentence);
-        }
-
-        //Send machine info out to machine board
-        public void SendPort(byte[] items, int numItems)
-        {
-            //Tell Arduino to turn section on or off accordingly
-            //if (sp.IsOpen)
-            //{
-            //    try
-            //    {
-            //        sp.Write(items, 0, numItems);
-            //    }
-            //    catch (Exception)
-            //    {
-            //        ClosePort();
-            //    }
-            //}
-        }
-
-        //open the Arduino serial port
-        public void OpenPort()
-        {
-            if (!sp.IsOpen)
-            {
-                sp.PortName = portName;
-                sp.BaudRate = baudRate;
-                sp.DataReceived += sp_DataReceived;
-                sp.DtrEnable = true;
-                sp.RtsEnable = true;
-            }
-
-            try { sp.Open(); }
-            catch (Exception e)
-            {
-                //WriteErrorLog("Opening Machine Port" + e.ToString());
-
-                //MessageBox.Show(e.Message + "\n\r" + "\n\r" + "Go to Settings -> COM Ports to Fix", "No Arduino Port Active");
-
-
-                //Properties.Settings.Default.setPort_wasConnected = false;
-                //Properties.Settings.Default.Save();
-                //wasConnectedLastRun = false;
-            }
-
+            ClosePort();
             if (sp.IsOpen)
             {
-                //short delay for the use of mega2560, it is working in debugmode with breakpoint
-                System.Threading.Thread.Sleep(500); // 500 was not enough
-
-                sp.DiscardOutBuffer();
-                sp.DiscardInBuffer();
+                cboxBaud.Enabled = false;
+                cboxPort.Enabled = false;
+                btnCloseSerial.Enabled = true;
+                btnOpenSerial.Enabled = false;
             }
-        }
-
-        //close the machine port
-        public void ClosePort()
-        {
-            if (sp.IsOpen)
+            else
             {
-                sp.DataReceived -= sp_DataReceived;
-                try
-                {
-                    sp.Close();
-                }
-
-                catch (Exception e)
-                {
-                    //WriteErrorLog("Closing Machine Serial Port" + e.ToString());
-                    MessageBox.Show(e.Message, "Connection already terminated??");
-                }
-
-                sp.Dispose();
+                cboxBaud.Enabled = true;
+                cboxPort.Enabled = true;
+                btnCloseSerial.Enabled = false;
+                btnOpenSerial.Enabled = true;
             }
         }
 
-        private void sp_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
+        private void btnFileSave_Click(object sender, EventArgs e)
         {
-            if (sp.IsOpen)
+            using (StreamWriter writer = new StreamWriter("zAgIO_SerialMon_log.txt", false))
             {
-                try
-                {
-                    string sentence = sp.ReadExisting();
-                    BeginInvoke((MethodInvoker)(() => ReceivePort(sentence)));
-                }
-                catch (Exception)
-                {
-                }
+                writer.Write(textBoxRcv.Text);
             }
-        }
-        #endregion ----------------------------------------------------------------
 
-
-        private void btnSerialCancel_Click(object sender, EventArgs e)
-        {
-            mf.isLogMonitorOn = false;
-            Close();
+            mf.TimedMessageBox(2000, "File Saved", "To zAgIO_SerialMon_Log.Txt");
         }
 
         private void btnHelp_Click(object sender, EventArgs e)
@@ -148,16 +66,21 @@ namespace AgIO
             System.Diagnostics.Process.Start(gStr.gsSerialMonHelp);
         }
 
-        private void cboxPort_SelectedIndexChanged(object sender, EventArgs e)
+        private void btnLog_Click(object sender, EventArgs e)
         {
-            sp.PortName = cboxPort.Text;
-            portName = cboxPort.Text;
-        }
-
-        private void cboxBaud_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            sp.BaudRate = Convert.ToInt32(cboxBaud.Text);
-            baudRate = Convert.ToInt32(cboxBaud.Text);
+            logOn = !logOn;
+            if (logOn)
+            {
+                btnLog.BackColor = Color.LightGreen;
+                mf.isLogMonitorOn = true;
+                timer1.Enabled = true;
+            }
+            else
+            {
+                btnLog.BackColor = Color.Transparent;
+                mf.isLogMonitorOn = false;
+                timer1.Enabled = false;
+            }
         }
 
         private void btnOpenSerial_Click(object sender, EventArgs e)
@@ -180,7 +103,6 @@ namespace AgIO
                 btnOpenSerial.Enabled = true;
                 MessageBox.Show("Unable to connect to Port");
             }
-
         }
 
         private void btnRescan_Click(object sender, EventArgs e)
@@ -193,40 +115,124 @@ namespace AgIO
             }
         }
 
-        private void btnCloseSerial_Click(object sender, EventArgs e)
+        private void btnSerialCancel_Click(object sender, EventArgs e)
         {
-            ClosePort();
-            if (sp.IsOpen)
-            {
-                cboxBaud.Enabled = false;
-                cboxPort.Enabled = false;
-                btnCloseSerial.Enabled = true;
-                btnOpenSerial.Enabled = false;
-            }
-            else
-            {
-                cboxBaud.Enabled = true;
-                cboxPort.Enabled = true;
-                btnCloseSerial.Enabled = false;
-                btnOpenSerial.Enabled = true;
-            }
-
+            mf.isLogMonitorOn = false;
+            Close();
         }
 
-        private void btnLog_Click(object sender, EventArgs e)
+        private void cboxBaud_SelectedIndexChanged(object sender, EventArgs e)
         {
-            logOn = !logOn;
-            if (logOn)
+            sp.BaudRate = Convert.ToInt32(cboxBaud.Text);
+            baudRate = Convert.ToInt32(cboxBaud.Text);
+        }
+
+        private void cboxPort_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            sp.PortName = cboxPort.Text;
+            portName = cboxPort.Text;
+        }
+
+        private void FormSerialMonitor_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            mf.isLogMonitorOn = false;
+        }
+
+        private void FormUDp_Load(object sender, EventArgs e)
+        {
+            cboxPort.Items.Clear();
+            foreach (string s in System.IO.Ports.SerialPort.GetPortNames())
             {
-                btnLog.BackColor = Color.LightGreen;
-                mf.isLogMonitorOn = true;
-                timer1.Enabled = true;
+                cboxPort.Items.Add(s);
             }
-            else
+        }
+
+        public void ClosePort()
+        {
+            if (sp.IsOpen)
             {
-                btnLog.BackColor = Color.Transparent;
-                mf.isLogMonitorOn = false;
-                timer1.Enabled = false;
+                sp.DataReceived -= sp_DataReceived;
+                try
+                {
+                    sp.Close();
+                }
+                catch (Exception e)
+                {
+                    //WriteErrorLog("Closing Machine Serial Port" + e.ToString());
+                    MessageBox.Show(e.Message, "Connection already terminated??");
+                }
+
+                sp.Dispose();
+            }
+        }
+
+        //open the Arduino serial port
+        public void OpenPort()
+        {
+            if (!sp.IsOpen)
+            {
+                sp.PortName = portName;
+                sp.BaudRate = baudRate;
+                sp.DataReceived += sp_DataReceived;
+                sp.DtrEnable = true;
+                sp.RtsEnable = true;
+            }
+
+            try { sp.Open(); }
+            catch (Exception)
+            {
+                //WriteErrorLog("Opening Machine Port" + e.ToString());
+
+                //MessageBox.Show(e.Message + "\n\r" + "\n\r" + "Go to Settings -> COM Ports to Fix", "No Arduino Port Active");
+
+                //Properties.Settings.Default.setPort_wasConnected = false;
+                //Properties.Settings.Default.Save();
+                //wasConnectedLastRun = false;
+            }
+
+            if (sp.IsOpen)
+            {
+                //short delay for the use of mega2560, it is working in debugmode with breakpoint
+                System.Threading.Thread.Sleep(500); // 500 was not enough
+
+                sp.DiscardOutBuffer();
+                sp.DiscardInBuffer();
+            }
+        }
+
+        //Send machine info out to machine board
+        public void SendPort(byte[] items, int numItems)
+        {
+            //Tell Arduino to turn section on or off accordingly
+            //if (sp.IsOpen)
+            //{
+            //    try
+            //    {
+            //        sp.Write(items, 0, numItems);
+            //    }
+            //    catch (Exception)
+            //    {
+            //        ClosePort();
+            //    }
+            //}
+        }
+
+        private void ReceivePort(string sentence)
+        {
+            textBoxRcv.AppendText(sentence);
+        }
+        private void sp_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
+        {
+            if (sp.IsOpen)
+            {
+                try
+                {
+                    string sentence = sp.ReadExisting();
+                    BeginInvoke((MethodInvoker)(() => ReceivePort(sentence)));
+                }
+                catch (Exception)
+                {
+                }
             }
         }
 
@@ -234,26 +240,6 @@ namespace AgIO
         {
             textBoxRcv.AppendText(mf.logMonitorSentence.ToString());
             mf.logMonitorSentence.Clear();
-        }
-
-        private void btnFileSave_Click(object sender, EventArgs e)
-        {
-            using (StreamWriter writer = new StreamWriter("zAgIO_SerialMon_log.txt", false))
-            {
-                writer.Write(textBoxRcv.Text);
-            }
-
-            mf.TimedMessageBox(2000, "File Saved", "To zAgIO_SerialMon_Log.Txt");
-        }
-
-        private void FormSerialMonitor_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            mf.isLogMonitorOn=false;
-        }
-
-        private void btnClear_Click(object sender, EventArgs e)
-        {
-            textBoxRcv.Text = "";
         }
     }
 }

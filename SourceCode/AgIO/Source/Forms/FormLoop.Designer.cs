@@ -277,9 +277,9 @@ namespace AgIO
             this.toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem1,
             this.toolStripMenuItem2,
-            this.toolStripEthernet,
             this.toolStripUDPMonitor,
             this.toolStripSerialMonitor,
+            this.toolStripEthernet,
             this.deviceManagerToolStripMenuItem});
             this.toolStripDropDownButton1.Image = global::AgIO.Properties.Resources.Settings48;
             this.toolStripDropDownButton1.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
@@ -327,7 +327,7 @@ namespace AgIO
             // toolStripSerialMonitor
             // 
             this.toolStripSerialMonitor.Font = new System.Drawing.Font("Tahoma", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.toolStripSerialMonitor.Image = global::AgIO.Properties.Resources.NTRIP_Serial;
+            this.toolStripSerialMonitor.Image = global::AgIO.Properties.Resources.SerialMonitor;
             this.toolStripSerialMonitor.Name = "toolStripSerialMonitor";
             this.toolStripSerialMonitor.Size = new System.Drawing.Size(296, 70);
             this.toolStripSerialMonitor.Text = "Serial Monitor";

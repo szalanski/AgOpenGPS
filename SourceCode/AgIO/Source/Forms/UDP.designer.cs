@@ -195,50 +195,6 @@ namespace AgIO
 
             //send out to VR Loopback
             if (isPluginUsed) SendToLoopBackMessageVR(data);
-
-            if (data[0] == 0x80 && data[1] == 0x81)
-            {
-                switch (data[3])
-                {
-                    case 0xFE: //254 AutoSteer Data
-                        {
-                            //serList.AddRange(data);
-                            SendSteerModulePort(data, data.Length);
-                            SendMachineModulePort(data, data.Length);
-                            break;
-                        }
-                    case 0xFC: //252 steer settings
-                        {
-                            SendSteerModulePort(data, data.Length);
-                            break;
-                        }
-                    case 0xFB: //251 steer config
-                        {
-                            SendSteerModulePort(data, data.Length);
-                            break;
-                        }
-                    case 0xEF: //239 machine pgn
-                        {
-                            SendMachineModulePort(data, data.Length);
-                            SendSteerModulePort(data, data.Length);
-                            break;
-                        }
-
-                    case 0xEE: //238 machine config
-                        {
-                            SendMachineModulePort(data, data.Length);
-                            SendSteerModulePort(data, data.Length);
-                            break;
-                        }
-
-                    case 0xEC: //236 machine config
-                        {
-                            SendMachineModulePort(data, data.Length);
-                            SendSteerModulePort(data, data.Length);
-                            break;
-                        }
-                }
-            }
         }
 
         private void ReceiveDataLoopAsync(IAsyncResult asyncResult)

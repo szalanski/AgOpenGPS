@@ -157,33 +157,6 @@ namespace AgIO
                 OpenRtcmPort();
             }
 
-            //Open IMU
-            portNameIMU = Settings.Default.setPort_portNameIMU;
-            wasIMUConnectedLastRun = Settings.Default.setPort_wasIMUConnected;
-            if (wasIMUConnectedLastRun)
-            {
-                OpenIMUPort();
-                if (spIMU.IsOpen) lblIMUComm.Text = portNameIMU;
-            }
-
-
-            //same for SteerModule port
-            portNameSteerModule = Settings.Default.setPort_portNameSteer;
-            wasSteerModuleConnectedLastRun = Settings.Default.setPort_wasSteerModuleConnected;
-            if (wasSteerModuleConnectedLastRun)
-            {
-                OpenSteerModulePort();
-                if (spSteerModule.IsOpen) lblMod1Comm.Text = portNameSteerModule;
-            }
-
-            //same for MachineModule port
-            portNameMachineModule = Settings.Default.setPort_portNameMachine;
-            wasMachineModuleConnectedLastRun = Settings.Default.setPort_wasMachineModuleConnected;
-            if (wasMachineModuleConnectedLastRun)
-            {
-                OpenMachineModulePort();
-                if (spMachineModule.IsOpen) lblMod2Comm.Text = portNameMachineModule;
-            }
 
             ConfigureNTRIP();
 
@@ -271,9 +244,6 @@ namespace AgIO
         private void FormLoop_FormClosing(object sender, FormClosingEventArgs e)
         {
             Settings.Default.setPort_wasGPSConnected = wasGPSConnectedLastRun;
-            Settings.Default.setPort_wasIMUConnected = wasIMUConnectedLastRun;
-            Settings.Default.setPort_wasSteerModuleConnected = wasSteerModuleConnectedLastRun;
-            Settings.Default.setPort_wasMachineModuleConnected = wasMachineModuleConnectedLastRun;
             Settings.Default.setPort_wasRtcmConnected = wasRtcmConnectedLastRun;
 
             Settings.Default.Save();
@@ -480,43 +450,12 @@ namespace AgIO
 
                 #region Serial update
 
-                if (wasIMUConnectedLastRun)
-                {
-                    if (!spIMU.IsOpen)
-                    {
-                        byte[] imuClose = new byte[] { 0x80, 0x81, 0x7C, 0xD4, 2, 1, 0, 83 };
-
-                        //tell AOG IMU is disconnected
-                        SendToLoopBackMessageAOG(imuClose);
-                        wasIMUConnectedLastRun = false;
-                        lblIMUComm.Text = "";
-                    }
-                }
-
                 if (wasGPSConnectedLastRun)
                 {
                     if (!spGPS.IsOpen)
                     {
                         wasGPSConnectedLastRun = false;
                         lblGPS1Comm.Text = "";
-                    }
-                }
-
-                if (wasSteerModuleConnectedLastRun)
-                {
-                    if (!spSteerModule.IsOpen)
-                    {
-                        wasSteerModuleConnectedLastRun = false;
-                        lblMod1Comm.Text = "";
-                    }
-                }
-
-                if (wasMachineModuleConnectedLastRun)
-                {
-                    if (!spMachineModule.IsOpen)
-                    {
-                        wasMachineModuleConnectedLastRun = false;
-                        lblMod2Comm.Text = "";
                     }
                 }
 
