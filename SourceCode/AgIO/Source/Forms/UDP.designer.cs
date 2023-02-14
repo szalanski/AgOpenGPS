@@ -78,7 +78,6 @@ namespace AgIO
 
         //used to send communication check pgn= C8 or 200
         private byte[] helloFromAgIO = { 0x80, 0x81, 0x7F, 200, 3, 56, 0, 0, 0x47 };
-        private byte[] udpTest = { 0x80, 0x81, 0x7F, 198, 3, 56, 0, 0, 0x47 };
 
         public IPAddress ipCurrent;
         //initialize loopback and udp network
@@ -275,14 +274,17 @@ namespace AgIO
             {
                 if (isUDPMonitorOn)
                 {
-                    logUDPSentence.Append(DateTime.Now.ToString("mm: ss.fff\t") + endPoint.ToString() + "\t" + byteData[2].ToString() + " > " + byteData[3].ToString() + "\r\n");
-
-                    //    for (int i = 2; i < byteData.Length; i++)
-                    //    {
-                    //        logUDPSentence.Append(byteData[i].ToString() + ",");
-                    //    }
-                    //    logUDPSentence.Append("\r\n");
+                    if (epNtrip != null && endPoint.Port == epNtrip.Port)
+                    {
+                        if (isNTRIPLogOn)
+                            logUDPSentence.Append(DateTime.Now.ToString("ss.fff\t") + endPoint.ToString() + "\t" + " > NTRIP\r\n");
+                    }
+                    else
+                    {
+                        logUDPSentence.Append(DateTime.Now.ToString("ss.fff\t") + endPoint.ToString() + "\t" + " > " + byteData[3].ToString() + "\r\n");
+                    }
                 }
+
                 try
                 {
                     // Send packet to the zero
@@ -324,7 +326,7 @@ namespace AgIO
             try
             {
                 // Receive all data
-                int msgLen = UDPSocket.EndReceiveFrom(asyncResult, ref endPointUDP);                
+                int msgLen = UDPSocket.EndReceiveFrom(asyncResult, ref endPointUDP);
 
                 byte[] localMsg = new byte[msgLen];
                 Array.Copy(buffer, localMsg, msgLen);
@@ -350,12 +352,6 @@ namespace AgIO
             {
                 if (data[0] == 0x80 && data[1] == 0x81)
                 {
-
-                    if (isUDPMonitorOn)
-                    {
-                        logUDPSentence.Append(DateTime.Now.ToString("mm: ss.fff\t") + endPointUDP.ToString() + "\t" + data[3].ToString() + " < " + data[2].ToString() + "\r\n");
-                    }
-
                     //module return via udp sent to AOG
                     SendToLoopBackMessageAOG(data);
 
@@ -390,13 +386,6 @@ namespace AgIO
 
                     else if (data[3] == 121 && data.Length == 11)
                         traffic.helloFromIMU = 0;
-
-                    else if (data[3] == 199)    //GPS module
-                    {
-                        udpTest[5] = data[5];
-                        SendUDPMessage(udpTest, epModule);
-                    }
-
 
                     //scan Reply
                     else if (data[3] == 203 && data.Length == 13) //
@@ -456,9 +445,14 @@ namespace AgIO
                             scanReply.isNewData = true;
                             scanReply.isNewGPS = true;
                         }
+                    }
 
-                    } // end of pgns
-                }
+                    if (isUDPMonitorOn)
+                    {
+                        logUDPSentence.Append(DateTime.Now.ToString("ss.fff\t") + endPointUDP.ToString() + "\t" + " < " + data[3].ToString() + "\r\n");
+                    }
+
+                } // end of pgns
 
                 else if (data[0] == 36 && (data[1] == 71 || data[1] == 80 || data[1] == 75))
                 {
@@ -468,10 +462,9 @@ namespace AgIO
 
                     if (isUDPMonitorOn && isGPSLogOn)
                     {
-                        logUDPSentence.Append(DateTime.Now.ToString("mm: ss.fff\t") + System.Text.Encoding.ASCII.GetString(data));
+                        logUDPSentence.Append(DateTime.Now.ToString("ss.fff\t") + System.Text.Encoding.ASCII.GetString(data));
                     }
                 }
-
             }
             catch
             {

@@ -91,5 +91,21 @@ namespace AgIO
             if (mf.isGPSLogOn) btnLogNMEA.BackColor = Color.LightGreen;
             else btnLogNMEA.BackColor = Color.Salmon;
         }
+
+        private void btnLogNTRIP_Click(object sender, EventArgs e)
+        {
+
+            mf.isNTRIPLogOn = !mf.isNTRIPLogOn;
+
+            if (mf.isNTRIPLogOn) btnLogNTRIP.BackColor = Color.LightGreen;
+            else btnLogNTRIP.BackColor = Color.Salmon;
+        }
+
+        private void lblPGNGuide_Click(object sender, EventArgs e)
+        {
+            var form = new FormPGN();
+                form.Show(this);
+
+        }
     }
 }
