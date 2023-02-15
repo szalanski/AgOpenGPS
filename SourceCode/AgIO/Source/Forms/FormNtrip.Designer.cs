@@ -74,7 +74,6 @@
             this.listboxIP = new System.Windows.Forms.ListBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.label1 = new System.Windows.Forms.Label();
-            this.cboxToSerial = new System.Windows.Forms.CheckBox();
             this.cboxToUDP = new System.Windows.Forms.CheckBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.comboboxPacketSize = new System.Windows.Forms.ComboBox();
@@ -657,7 +656,6 @@
             // 
             this.tabPage2.BackColor = System.Drawing.Color.Azure;
             this.tabPage2.Controls.Add(this.label1);
-            this.tabPage2.Controls.Add(this.cboxToSerial);
             this.tabPage2.Controls.Add(this.cboxToUDP);
             this.tabPage2.Controls.Add(this.nudSendToUDPPort);
             this.tabPage2.Controls.Add(this.label19);
@@ -685,30 +683,12 @@
             // label1
             // 
             this.label1.Font = new System.Drawing.Font("Tahoma", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(440, 61);
+            this.label1.Location = new System.Drawing.Point(423, 139);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(240, 31);
             this.label1.TabIndex = 142;
             this.label1.Text = "Send To GPS Using:";
             this.label1.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            // 
-            // cboxToSerial
-            // 
-            this.cboxToSerial.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cboxToSerial.Appearance = System.Windows.Forms.Appearance.Button;
-            this.cboxToSerial.BackColor = System.Drawing.Color.Salmon;
-            this.cboxToSerial.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.cboxToSerial.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.cboxToSerial.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cboxToSerial.Font = new System.Drawing.Font("Tahoma", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cboxToSerial.Image = global::AgIO.Properties.Resources.NtripToSerial;
-            this.cboxToSerial.Location = new System.Drawing.Point(395, 106);
-            this.cboxToSerial.Name = "cboxToSerial";
-            this.cboxToSerial.Size = new System.Drawing.Size(150, 50);
-            this.cboxToSerial.TabIndex = 140;
-            this.cboxToSerial.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.cboxToSerial.UseVisualStyleBackColor = false;
-            this.cboxToSerial.Click += new System.EventHandler(this.cboxToSerial_Click);
             // 
             // cboxToUDP
             // 
@@ -914,7 +894,6 @@
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.CheckBox cboxToSerial;
         private System.Windows.Forms.CheckBox cboxToUDP;
         private System.Windows.Forms.ListBox listboxIP;
         private System.Windows.Forms.Label label1;

@@ -43,7 +43,7 @@ namespace AgIO
 
         public bool isKeyboardOn = true;
 
-        public bool isSendToSerial = true, isSendToUDP = false;
+        public bool isNTRIPToggle = true, isSendToUDP = false;
 
         public bool isGPSSentencesOn = false, isSendNMEAToUDP;
 
@@ -127,52 +127,9 @@ namespace AgIO
 
             packetSizeNTRIP = Properties.Settings.Default.setNTRIP_packetSize;
 
-            isSendToSerial = Settings.Default.setNTRIP_sendToSerial;
             isSendToUDP = Settings.Default.setNTRIP_sendToUDP;
 
-            //lblMount.Text = Properties.Settings.Default.setNTRIP_mount;
-
-            lblGPS1Comm.Text = "";
-            lblIMUComm.Text = "";
-            lblMod1Comm.Text = "";
-            lblMod2Comm.Text = "";
-
-            //set baud and port from last time run
-            baudRateGPS = Settings.Default.setPort_baudRateGPS;
-            portNameGPS = Settings.Default.setPort_portNameGPS;
-            wasGPSConnectedLastRun = Settings.Default.setPort_wasGPSConnected;
-            if (wasGPSConnectedLastRun)
-            {
-                OpenGPSPort();
-                if (spGPS.IsOpen) lblGPS1Comm.Text = portNameGPS;
-            }
-
-            // set baud and port for rtcm from last time run
-            baudRateRtcm = Settings.Default.setPort_baudRateRtcm;
-            portNameRtcm = Settings.Default.setPort_portNameRtcm;
-            wasRtcmConnectedLastRun = Settings.Default.setPort_wasRtcmConnected;
-
-            if (wasRtcmConnectedLastRun)
-            {
-                OpenRtcmPort();
-            }
-
-
             ConfigureNTRIP();
-
-            string[] ports = System.IO.Ports.SerialPort.GetPortNames();
-
-            if (ports.Length == 0)
-            {
-                lblSerialPorts.Text = "None";
-            }
-            else
-            {
-                for (int i = 0; i < ports.Length; i++)
-                {
-                    lblSerialPorts.Text = ports[i] + "\r\n";
-                }
-            }
 
             isConnectedIMU = cboxIsIMUModule.Checked = Properties.Settings.Default.setMod_isIMUConnected;
             isConnectedSteer = cboxIsSteerModule.Checked = Properties.Settings.Default.setMod_isSteerConnected;
@@ -198,39 +155,33 @@ namespace AgIO
             if (isConnectedIMU)
             {
                 btnIMU.Visible = true; 
-                lblIMUComm.Visible = true;
                 cboxIsIMUModule.BackgroundImage = Properties.Resources.Cancel64;
             }
             else
             {
                 btnIMU.Visible = false;
-                lblIMUComm.Visible = false;
                 cboxIsIMUModule.BackgroundImage = Properties.Resources.AddNew;
             }
 
             if (isConnectedMachine)
             {
                 btnMachine.Visible = true;
-                lblMod2Comm.Visible = true;
                 cboxIsMachineModule.BackgroundImage = Properties.Resources.Cancel64;
             }
             else
             {
                 btnMachine.Visible = false;
-                lblMod2Comm.Visible = false;
                 cboxIsMachineModule.BackgroundImage = Properties.Resources.AddNew;
             }
 
             if (isConnectedSteer)
             {
                 btnSteer.Visible = true;
-                lblMod1Comm.Visible = true;
                 cboxIsSteerModule.BackgroundImage = Properties.Resources.Cancel64;
             }
             else
             {
                 btnSteer.Visible = false;
-                lblMod1Comm.Visible = false;
                 cboxIsSteerModule.BackgroundImage = Properties.Resources.AddNew;
             }
 
@@ -243,9 +194,6 @@ namespace AgIO
 
         private void FormLoop_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Settings.Default.setPort_wasGPSConnected = wasGPSConnectedLastRun;
-            Settings.Default.setPort_wasRtcmConnected = wasRtcmConnectedLastRun;
-
             Settings.Default.Save();
 
             if (loopBackSocket != null)
@@ -328,6 +276,13 @@ namespace AgIO
                 }
 
                 focusSkipCounter-- ;
+            }
+
+            if (ntripCounter > 30)
+            {
+                isNTRIPToggle = !isNTRIPToggle;
+                if (isNTRIPToggle) lblNTRIPBytes.BackColor = Color.CornflowerBlue;
+                    else lblNTRIPBytes.BackColor = Color.DarkOrange;
             }
 
             #endregion
@@ -447,19 +402,6 @@ namespace AgIO
                         sbRTCM.Append("Error");
                     }
                 }
-
-                #region Serial update
-
-                if (wasGPSConnectedLastRun)
-                {
-                    if (!spGPS.IsOpen)
-                    {
-                        wasGPSConnectedLastRun = false;
-                        lblGPS1Comm.Text = "";
-                    }
-                }
-
-                #endregion
             }
         }
 
@@ -616,23 +558,6 @@ namespace AgIO
 
         // Buttons, Checkboxes and Clicks  ***************************************************
 
-        private void RescanPorts()
-        {
-            string[] ports = System.IO.Ports.SerialPort.GetPortNames();
-
-            if (ports.Length == 0)
-            {
-                lblSerialPorts.Text = "None";
-            }
-            else
-            {
-                for (int i = 0; i < ports.Length; i++)
-                {
-                    lblSerialPorts.Text = ports[i] + " ";
-                }
-            }
-        }
-
         private void deviceManagerToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Process.Start("devmgmt.msc");
@@ -660,31 +585,6 @@ namespace AgIO
         private void btnResetTimer_Click(object sender, EventArgs e)
         {
             threeMinuteTimer = secondsSinceStart;
-        }
-
-        private void serialPassThroughToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (isRadio_RequiredOn)
-            {
-                TimedMessageBox(2000, "Radio NTRIP ON", "Turn it off before using Serial Pass Thru");
-                return;
-            }
-
-            if (isNTRIP_RequiredOn)
-            {
-                TimedMessageBox(2000, "Air NTRIP ON", "Turn it off before using Serial Pass Thru");
-                return;
-            }
-
-            using (var form = new FormSerialPass(this))
-            {
-                if (form.ShowDialog(this) == DialogResult.OK)
-                {
-                    ////Clicked Save
-                    //Application.Restart();
-                    //Environment.Exit(0);
-                }
-            }
         }
 
         private void btnRelayTest_Click(object sender, EventArgs e)
@@ -785,12 +685,6 @@ namespace AgIO
             SetModulesOnOff();
         }
 
-        private void btnBringUpCommSettings_Click(object sender, EventArgs e)
-        {
-            SettingsCommunicationGPS();
-            RescanPorts();
-        }
-
         private void btnUDP_Click(object sender, EventArgs e)
         {
             if (!Settings.Default.setUDP_isOn) SettingsEthernet();
@@ -802,11 +696,6 @@ namespace AgIO
             StartAOG();
         }
 
-        private void btnNTRIP_Click(object sender, EventArgs e)
-        {
-            SettingsNTRIP();
-        }
-
         private void btnExit_Click(object sender, EventArgs e)
         {
             Close();
@@ -814,11 +703,6 @@ namespace AgIO
 
         private void pictureBox2_Click(object sender, EventArgs e)
         {
-        }
-
-        private void btnRadio_Click_1(object sender, EventArgs e)
-        {
-            SettingsRadio();
         }
 
         private void btnWindowsShutDown_Click(object sender, EventArgs e)

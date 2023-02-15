@@ -63,7 +63,6 @@ namespace AgIO
             //IPAddress[] ipaddress = Dns.GetHostAddresses(hostName);
             GetIP4AddressList();
 
-            cboxToSerial.Checked = Properties.Settings.Default.setNTRIP_sendToSerial;
             cboxToUDP.Checked = Properties.Settings.Default.setNTRIP_sendToUDP;
             nudSendToUDPPort.Value = Properties.Settings.Default.setNTRIP_sendToUDPPort;
 
@@ -98,13 +97,6 @@ namespace AgIO
         private void cboxIsNTRIPOn_Click(object sender, EventArgs e)
         {
             Properties.Settings.Default.setNTRIP_isOn = cboxIsNTRIPOn.Checked;
-
-            if (cboxIsNTRIPOn.Checked)
-            {
-                Properties.Settings.Default.setRadio_isOn = mf.isRadio_RequiredOn = false;
-                Properties.Settings.Default.setPass_isOn = mf.isSerialPass_RequiredOn = false;
-            }
-
             Properties.Settings.Default.Save();
 
             mf.YesMessageBox("Restart of AgIO is Required - Restarting");
@@ -207,12 +199,6 @@ namespace AgIO
 
             Properties.Settings.Default.setNTRIP_isOn = cboxIsNTRIPOn.Checked;
 
-            if (cboxIsNTRIPOn.Checked)
-            {
-                Properties.Settings.Default.setRadio_isOn = mf.isRadio_RequiredOn = false;
-                Properties.Settings.Default.setPass_isOn = mf.isSerialPass_RequiredOn = false;
-            }
-
             Properties.Settings.Default.setNTRIP_userName = tboxUserName.Text;
             Properties.Settings.Default.setNTRIP_userPassword = tboxUserPassword.Text;
             Properties.Settings.Default.setNTRIP_mount = tboxMount.Text;
@@ -226,10 +212,8 @@ namespace AgIO
             Properties.Settings.Default.setNTRIP_isHTTP10 = cboxHTTP.Text == "1.0";
             Properties.Settings.Default.setNTRIP_isTCP = checkBoxusetcp.Checked;
 
-            Properties.Settings.Default.setNTRIP_sendToSerial = cboxToSerial.Checked;
             Properties.Settings.Default.setNTRIP_sendToUDP = cboxToUDP.Checked;
 
-            mf.isSendToSerial = cboxToSerial.Checked;
             mf.isSendToUDP = cboxToUDP.Checked;
 
             mf.packetSizeNTRIP = Convert.ToInt32(comboboxPacketSize.Text);
@@ -435,7 +419,6 @@ namespace AgIO
         private void cboxToUDP_Click(object sender, EventArgs e)
         {
             ntripStatusChanged = true;
-            if (cboxToSerial.Checked) cboxToSerial.Checked = false;
         }
 
         private void cboxToSerial_Click(object sender, EventArgs e)

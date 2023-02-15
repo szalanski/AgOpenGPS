@@ -38,30 +38,20 @@ namespace AgIO
             this.lblCurrentLat = new System.Windows.Forms.Label();
             this.lblWatch = new System.Windows.Forms.Label();
             this.lblNTRIPBytes = new System.Windows.Forms.Label();
-            this.lblMod2Comm = new System.Windows.Forms.Label();
-            this.lblMod1Comm = new System.Windows.Forms.Label();
-            this.lblIMUComm = new System.Windows.Forms.Label();
             this.lblFromGPS = new System.Windows.Forms.Label();
-            this.lblGPS1Comm = new System.Windows.Forms.Label();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripEthernet = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripUDPMonitor = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSerialMonitor = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripEthernet = new System.Windows.Forms.ToolStripMenuItem();
             this.deviceManagerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsMenuStrip = new System.Windows.Forms.ToolStripDropDownButton();
-            this.saveToolStrip = new System.Windows.Forms.ToolStripMenuItem();
-            this.loadToolStrip = new System.Windows.Forms.ToolStripMenuItem();
-            this.serialPassThroughToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lblSteerAngle = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
             this.lblNTRIP_IP = new System.Windows.Forms.Label();
-            this.lblSerialPorts = new System.Windows.Forms.Label();
             this.lblMount = new System.Windows.Forms.Label();
             this.lblIP = new System.Windows.Forms.Label();
-            this.ntripMeterTimer = new System.Windows.Forms.Timer(this.components);
             this.lblMessages = new System.Windows.Forms.Label();
             this.lblWASCounts = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -167,63 +157,27 @@ namespace AgIO
             this.lblWatch.BackColor = System.Drawing.Color.Transparent;
             this.lblWatch.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblWatch.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.lblWatch.Location = new System.Drawing.Point(14, 105);
+            this.lblWatch.Location = new System.Drawing.Point(15, 113);
             this.lblWatch.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblWatch.Name = "lblWatch";
-            this.lblWatch.Size = new System.Drawing.Size(105, 18);
+            this.lblWatch.Size = new System.Drawing.Size(145, 18);
             this.lblWatch.TabIndex = 146;
             this.lblWatch.Text = "Watch";
             this.lblWatch.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblNTRIPBytes
             // 
-            this.lblNTRIPBytes.BackColor = System.Drawing.Color.Transparent;
-            this.lblNTRIPBytes.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblNTRIPBytes.BackColor = System.Drawing.Color.DarkOrange;
+            this.lblNTRIPBytes.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblNTRIPBytes.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.lblNTRIPBytes.Location = new System.Drawing.Point(14, 81);
+            this.lblNTRIPBytes.Location = new System.Drawing.Point(15, 79);
             this.lblNTRIPBytes.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblNTRIPBytes.Name = "lblNTRIPBytes";
-            this.lblNTRIPBytes.Size = new System.Drawing.Size(105, 18);
+            this.lblNTRIPBytes.Size = new System.Drawing.Size(145, 29);
             this.lblNTRIPBytes.TabIndex = 148;
             this.lblNTRIPBytes.Text = "999,999,999";
             this.lblNTRIPBytes.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.lblNTRIPBytes.Click += new System.EventHandler(this.lblNTRIPBytes_Click);
-            // 
-            // lblMod2Comm
-            // 
-            this.lblMod2Comm.BackColor = System.Drawing.Color.Transparent;
-            this.lblMod2Comm.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblMod2Comm.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.lblMod2Comm.Location = new System.Drawing.Point(167, 342);
-            this.lblMod2Comm.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblMod2Comm.Name = "lblMod2Comm";
-            this.lblMod2Comm.Size = new System.Drawing.Size(64, 25);
-            this.lblMod2Comm.TabIndex = 178;
-            this.lblMod2Comm.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // lblMod1Comm
-            // 
-            this.lblMod1Comm.BackColor = System.Drawing.Color.Transparent;
-            this.lblMod1Comm.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblMod1Comm.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.lblMod1Comm.Location = new System.Drawing.Point(167, 170);
-            this.lblMod1Comm.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblMod1Comm.Name = "lblMod1Comm";
-            this.lblMod1Comm.Size = new System.Drawing.Size(64, 25);
-            this.lblMod1Comm.TabIndex = 177;
-            this.lblMod1Comm.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // lblIMUComm
-            // 
-            this.lblIMUComm.BackColor = System.Drawing.Color.Transparent;
-            this.lblIMUComm.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblIMUComm.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.lblIMUComm.Location = new System.Drawing.Point(167, 86);
-            this.lblIMUComm.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblIMUComm.Name = "lblIMUComm";
-            this.lblIMUComm.Size = new System.Drawing.Size(64, 25);
-            this.lblIMUComm.TabIndex = 175;
-            this.lblIMUComm.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // lblFromGPS
             // 
@@ -238,18 +192,6 @@ namespace AgIO
             this.lblFromGPS.TabIndex = 130;
             this.lblFromGPS.Text = "---";
             this.lblFromGPS.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // lblGPS1Comm
-            // 
-            this.lblGPS1Comm.BackColor = System.Drawing.Color.Transparent;
-            this.lblGPS1Comm.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblGPS1Comm.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.lblGPS1Comm.Location = new System.Drawing.Point(167, 257);
-            this.lblGPS1Comm.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblGPS1Comm.Name = "lblGPS1Comm";
-            this.lblGPS1Comm.Size = new System.Drawing.Size(64, 25);
-            this.lblGPS1Comm.TabIndex = 176;
-            this.lblGPS1Comm.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // statusStrip1
             // 
@@ -306,15 +248,6 @@ namespace AgIO
             this.toolStripMenuItem2.Text = "Load";
             this.toolStripMenuItem2.Click += new System.EventHandler(this.toolStripMenuItem2_Click);
             // 
-            // toolStripEthernet
-            // 
-            this.toolStripEthernet.Font = new System.Drawing.Font("Tahoma", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.toolStripEthernet.Image = global::AgIO.Properties.Resources.EthernetSetup;
-            this.toolStripEthernet.Name = "toolStripEthernet";
-            this.toolStripEthernet.Size = new System.Drawing.Size(296, 70);
-            this.toolStripEthernet.Text = "Ethernet Setup";
-            this.toolStripEthernet.Click += new System.EventHandler(this.toolStripEthernet_Click);
-            // 
             // toolStripUDPMonitor
             // 
             this.toolStripUDPMonitor.Font = new System.Drawing.Font("Tahoma", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -333,6 +266,15 @@ namespace AgIO
             this.toolStripSerialMonitor.Text = "Serial Monitor";
             this.toolStripSerialMonitor.Click += new System.EventHandler(this.toolStripSerialMonitor_Click);
             // 
+            // toolStripEthernet
+            // 
+            this.toolStripEthernet.Font = new System.Drawing.Font("Tahoma", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.toolStripEthernet.Image = global::AgIO.Properties.Resources.EthernetSetup;
+            this.toolStripEthernet.Name = "toolStripEthernet";
+            this.toolStripEthernet.Size = new System.Drawing.Size(296, 70);
+            this.toolStripEthernet.Text = "Ethernet Setup";
+            this.toolStripEthernet.Click += new System.EventHandler(this.toolStripEthernet_Click);
+            // 
             // deviceManagerToolStripMenuItem
             // 
             this.deviceManagerToolStripMenuItem.Font = new System.Drawing.Font("Tahoma", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -347,43 +289,13 @@ namespace AgIO
             this.settingsMenuStrip.AutoSize = false;
             this.settingsMenuStrip.BackColor = System.Drawing.Color.Transparent;
             this.settingsMenuStrip.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.settingsMenuStrip.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.saveToolStrip,
-            this.loadToolStrip,
-            this.serialPassThroughToolStripMenuItem});
             this.settingsMenuStrip.Image = global::AgIO.Properties.Resources.NtripSettings;
             this.settingsMenuStrip.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.settingsMenuStrip.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.settingsMenuStrip.Name = "settingsMenuStrip";
             this.settingsMenuStrip.ShowDropDownArrow = false;
             this.settingsMenuStrip.Size = new System.Drawing.Size(110, 68);
-            // 
-            // saveToolStrip
-            // 
-            this.saveToolStrip.Font = new System.Drawing.Font("Tahoma", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.saveToolStrip.Image = global::AgIO.Properties.Resources.NTRIP_Client;
-            this.saveToolStrip.Name = "saveToolStrip";
-            this.saveToolStrip.Size = new System.Drawing.Size(285, 70);
-            this.saveToolStrip.Text = "Client NTRIP";
-            this.saveToolStrip.Click += new System.EventHandler(this.btnNTRIP_Click);
-            // 
-            // loadToolStrip
-            // 
-            this.loadToolStrip.Font = new System.Drawing.Font("Tahoma", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.loadToolStrip.Image = global::AgIO.Properties.Resources.RadioSettings;
-            this.loadToolStrip.Name = "loadToolStrip";
-            this.loadToolStrip.Size = new System.Drawing.Size(285, 70);
-            this.loadToolStrip.Text = "Radio NTRIP";
-            this.loadToolStrip.Click += new System.EventHandler(this.btnRadio_Click_1);
-            // 
-            // serialPassThroughToolStripMenuItem
-            // 
-            this.serialPassThroughToolStripMenuItem.Font = new System.Drawing.Font("Tahoma", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.serialPassThroughToolStripMenuItem.Image = global::AgIO.Properties.Resources.NTRIP_Serial;
-            this.serialPassThroughToolStripMenuItem.Name = "serialPassThroughToolStripMenuItem";
-            this.serialPassThroughToolStripMenuItem.Size = new System.Drawing.Size(285, 70);
-            this.serialPassThroughToolStripMenuItem.Text = "Serial NTRIP";
-            this.serialPassThroughToolStripMenuItem.Click += new System.EventHandler(this.serialPassThroughToolStripMenuItem_Click);
+            this.settingsMenuStrip.Click += new System.EventHandler(this.settingsMenuStrip_Click);
             // 
             // lblSteerAngle
             // 
@@ -398,22 +310,6 @@ namespace AgIO
             this.lblSteerAngle.TabIndex = 473;
             this.lblSteerAngle.Text = "UDP";
             // 
-            // label1
-            // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.label1.AutoSize = true;
-            this.label1.BackColor = System.Drawing.Color.Transparent;
-            this.label1.Cursor = System.Windows.Forms.Cursors.Default;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.label1.Location = new System.Drawing.Point(15, 397);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(77, 15);
-            this.label1.TabIndex = 470;
-            this.label1.Text = "Com Ports:";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // lblNTRIP_IP
             // 
             this.lblNTRIP_IP.BackColor = System.Drawing.Color.Transparent;
@@ -426,21 +322,6 @@ namespace AgIO
             this.lblNTRIP_IP.TabIndex = 468;
             this.lblNTRIP_IP.Text = "--";
             this.lblNTRIP_IP.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lblSerialPorts
-            // 
-            this.lblSerialPorts.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.lblSerialPorts.AutoSize = true;
-            this.lblSerialPorts.BackColor = System.Drawing.Color.Transparent;
-            this.lblSerialPorts.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSerialPorts.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.lblSerialPorts.Location = new System.Drawing.Point(90, 398);
-            this.lblSerialPorts.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblSerialPorts.Name = "lblSerialPorts";
-            this.lblSerialPorts.Size = new System.Drawing.Size(45, 14);
-            this.lblSerialPorts.TabIndex = 467;
-            this.lblSerialPorts.Text = "Com12";
-            this.lblSerialPorts.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // lblMount
             // 
@@ -459,21 +340,16 @@ namespace AgIO
             // 
             this.lblIP.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblIP.BackColor = System.Drawing.Color.Transparent;
-            this.lblIP.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblIP.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblIP.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.lblIP.Location = new System.Drawing.Point(10, 205);
+            this.lblIP.Location = new System.Drawing.Point(11, 203);
             this.lblIP.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblIP.Name = "lblIP";
-            this.lblIP.Size = new System.Drawing.Size(123, 102);
+            this.lblIP.Size = new System.Drawing.Size(157, 102);
             this.lblIP.TabIndex = 464;
             this.lblIP.Text = "288.288.288.288";
             this.lblIP.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.lblIP.Click += new System.EventHandler(this.lblIP_Click);
-            // 
-            // ntripMeterTimer
-            // 
-            this.ntripMeterTimer.Interval = 50;
-            this.ntripMeterTimer.Tick += new System.EventHandler(this.ntripMeterTimer_Tick);
             // 
             // lblMessages
             // 
@@ -588,10 +464,10 @@ namespace AgIO
             this.btnStartStopNtrip.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnStartStopNtrip.ForeColor = System.Drawing.Color.Black;
             this.btnStartStopNtrip.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.btnStartStopNtrip.Location = new System.Drawing.Point(25, 130);
+            this.btnStartStopNtrip.Location = new System.Drawing.Point(33, 142);
             this.btnStartStopNtrip.Margin = new System.Windows.Forms.Padding(4);
             this.btnStartStopNtrip.Name = "btnStartStopNtrip";
-            this.btnStartStopNtrip.Size = new System.Drawing.Size(80, 27);
+            this.btnStartStopNtrip.Size = new System.Drawing.Size(102, 27);
             this.btnStartStopNtrip.TabIndex = 147;
             this.btnStartStopNtrip.Text = "StartStop";
             this.btnStartStopNtrip.UseVisualStyleBackColor = false;
@@ -847,7 +723,6 @@ namespace AgIO
             this.btnIMU.Size = new System.Drawing.Size(84, 59);
             this.btnIMU.TabIndex = 185;
             this.btnIMU.UseVisualStyleBackColor = false;
-            this.btnIMU.Click += new System.EventHandler(this.btnBringUpCommSettings_Click);
             // 
             // btnSteer
             // 
@@ -866,7 +741,6 @@ namespace AgIO
             this.btnSteer.Size = new System.Drawing.Size(84, 59);
             this.btnSteer.TabIndex = 189;
             this.btnSteer.UseVisualStyleBackColor = false;
-            this.btnSteer.Click += new System.EventHandler(this.btnBringUpCommSettings_Click);
             // 
             // btnMachine
             // 
@@ -885,7 +759,6 @@ namespace AgIO
             this.btnMachine.Size = new System.Drawing.Size(84, 59);
             this.btnMachine.TabIndex = 188;
             this.btnMachine.UseVisualStyleBackColor = false;
-            this.btnMachine.Click += new System.EventHandler(this.btnBringUpCommSettings_Click);
             // 
             // btnGPS
             // 
@@ -904,7 +777,6 @@ namespace AgIO
             this.btnGPS.Size = new System.Drawing.Size(84, 59);
             this.btnGPS.TabIndex = 187;
             this.btnGPS.UseVisualStyleBackColor = false;
-            this.btnGPS.Click += new System.EventHandler(this.btnBringUpCommSettings_Click);
             // 
             // btnWindowsShutDown
             // 
@@ -1069,7 +941,7 @@ namespace AgIO
             this.btnUDP.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnUDP.ForeColor = System.Drawing.Color.White;
             this.btnUDP.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.btnUDP.Location = new System.Drawing.Point(18, 309);
+            this.btnUDP.Location = new System.Drawing.Point(28, 309);
             this.btnUDP.Margin = new System.Windows.Forms.Padding(4);
             this.btnUDP.Name = "btnUDP";
             this.btnUDP.Size = new System.Drawing.Size(107, 73);
@@ -1117,9 +989,7 @@ namespace AgIO
             this.Controls.Add(this.lblNTRIPBytes);
             this.Controls.Add(this.cboxIsMachineModule);
             this.Controls.Add(this.lblMount);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.lblNTRIP_IP);
-            this.Controls.Add(this.lblSerialPorts);
             this.Controls.Add(this.btnIMU);
             this.Controls.Add(this.btnSteer);
             this.Controls.Add(this.btnMachine);
@@ -1138,11 +1008,7 @@ namespace AgIO
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.cboxLogNMEA);
-            this.Controls.Add(this.lblGPS1Comm);
-            this.Controls.Add(this.lblMod2Comm);
-            this.Controls.Add(this.lblMod1Comm);
             this.Controls.Add(this.label6);
-            this.Controls.Add(this.lblIMUComm);
             this.Controls.Add(this.lblMessages);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.btnExit);
@@ -1188,25 +1054,16 @@ namespace AgIO
         private System.Windows.Forms.Label lblWatch;
         private System.Windows.Forms.Button btnStartStopNtrip;
         private System.Windows.Forms.Label lblNTRIPBytes;
-        private System.Windows.Forms.Label lblMod2Comm;
-        private System.Windows.Forms.Label lblMod1Comm;
-        private System.Windows.Forms.Label lblIMUComm;
         private System.Windows.Forms.Label lblFromGPS;
-        private System.Windows.Forms.Label lblGPS1Comm;
         private System.Windows.Forms.ToolStripDropDownButton settingsMenuStrip;
-        private System.Windows.Forms.ToolStripMenuItem saveToolStrip;
-        private System.Windows.Forms.ToolStripMenuItem loadToolStrip;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.Button btnUDP;
         private System.Windows.Forms.Button btnRunAOG;
         private System.Windows.Forms.Button btnExit;
         private System.Windows.Forms.CheckBox cboxLogNMEA;
-        private System.Windows.Forms.Timer ntripMeterTimer;
         private System.Windows.Forms.Label lblMount;
         private System.Windows.Forms.Label lblIP;
-        private System.Windows.Forms.Label lblSerialPorts;
         private System.Windows.Forms.Label lblNTRIP_IP;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label lblSteerAngle;
         private System.Windows.Forms.Label lblMessages;
         private System.Windows.Forms.Button btnSlide;
@@ -1230,7 +1087,6 @@ namespace AgIO
         private System.Windows.Forms.Button btnResetTimer;
         private System.Windows.Forms.Label lblStationID;
         private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.ToolStripMenuItem serialPassThroughToolStripMenuItem;
         private System.Windows.Forms.Label lblSkipCounter;
         private System.Windows.Forms.Button btnRelayTest;
         private System.Windows.Forms.Label lblCount;

@@ -7,6 +7,7 @@ using System.Globalization;
 using System.IO.Ports;
 using System.Collections.Generic;
 using System.Linq;
+using System.Drawing;
 
 // Declare the delegate prototype to send data back to the form
 delegate void UpdateRTCM_Data(byte[] data);
@@ -45,21 +46,14 @@ namespace AgIO
         public bool isNTRIP_Sending = false;
         public bool isRunGGAInterval = false;
 
-        public bool isRadio_RequiredOn = false;
-        public bool isSerialPass_RequiredOn = false;
-        internal SerialPort spRadio = new SerialPort("Radio", 9600, Parity.None, 8, StopBits.One);
-
         List<int> rList = new List<int>();
         List<int> aList = new List<int>();
-
-        //NTRIP metering
-        Queue<byte> rawTrip = new Queue<byte>();
 
         //set up connection to Caster
         private void DoNTRIPSecondRoutine()
         {
             //count up the ntrip clock only if everything is alive
-            if (isNTRIP_RequiredOn || isRadio_RequiredOn || isSerialPass_RequiredOn)
+            if (isNTRIP_RequiredOn)
             {
                 IncrementNTRIPWatchDog();
             }
@@ -68,14 +62,6 @@ namespace AgIO
             if (isNTRIP_RequiredOn && !isNTRIP_Connected && !isNTRIP_Connecting)
             {
                 if (!isNTRIP_Starting && ntripCounter > 20)
-                {
-                    StartNTRIP();
-                }
-            }
-
-            if ((isRadio_RequiredOn || isSerialPass_RequiredOn) && !isNTRIP_Connected && !isNTRIP_Connecting)
-            {
-                if (!isNTRIP_Starting)
                 {
                     StartNTRIP();
                 }
@@ -94,7 +80,7 @@ namespace AgIO
                 }
             }
 
-            if (isNTRIP_RequiredOn || isRadio_RequiredOn)
+            if (isNTRIP_RequiredOn)
             {
                 //pbarNtripMenu.Value = unchecked((byte)(tripBytes * 0.02));
                 lblNTRIPBytes.Text = ((tripBytes >> 10)).ToString("###,###,### kb");
@@ -126,10 +112,6 @@ namespace AgIO
                             {
                                 lblWatch.Text += " NTRIP";
                             }
-                            else if (isRadio_RequiredOn)
-                            {
-                                lblWatch.Text += " Radio";
-                            }
                         }
                     }
 
@@ -139,17 +121,6 @@ namespace AgIO
                         isNTRIP_Sending = false;
                     }
                 }
-            }
-            else if (isSerialPass_RequiredOn)
-            {
-                //pbarNtripMenu.Value = unchecked((byte)(tripBytes * 0.02));
-                lblNTRIPBytes.Text = ((tripBytes >> 10)).ToString("###,###,### kb");
-
-                //update byte counter and up counter
-                if (ntripCounter > 59) btnStartStopNtrip.Text = (ntripCounter >> 6) + " Min";
-                else if (ntripCounter < 60 && ntripCounter > 22) btnStartStopNtrip.Text = ntripCounter + " Secs";
-                else btnStartStopNtrip.Text = "In " + (Math.Abs(ntripCounter - 22)) + " secs";
-
             }
         }
 
@@ -166,16 +137,8 @@ namespace AgIO
 
             //start NTRIP if required
             isNTRIP_RequiredOn = Properties.Settings.Default.setNTRIP_isOn;
-            isRadio_RequiredOn = Properties.Settings.Default.setRadio_isOn;
-            isSerialPass_RequiredOn = Properties.Settings.Default.setPass_isOn;
 
-            if (isRadio_RequiredOn || isSerialPass_RequiredOn)
-            {
-                // Immediatly connect radio
-                ntripCounter = 20;
-            }
-
-            if (isNTRIP_RequiredOn || isRadio_RequiredOn || isSerialPass_RequiredOn)
+            if (isNTRIP_RequiredOn)
             {
                 btnStartStopNtrip.Visible = true;
                 btnStartStopNtrip.Visible = true;
@@ -300,78 +263,6 @@ namespace AgIO
                 lblNTRIP_IP.Text = broadCasterIP;
                 lblMount.Text = mount;
             }
-            else if (isRadio_RequiredOn)
-            {
-                if (!string.IsNullOrEmpty(Properties.Settings.Default.setPort_portNameRadio))
-                {
-                    // Disconnect when already connected
-                    if (spRadio != null)
-                    {
-                        spRadio.Close();
-                        spRadio.Dispose();
-                    }
-
-                    // Setup and open serial port
-                    spRadio = new SerialPort(Properties.Settings.Default.setPort_portNameRadio);
-                    spRadio.BaudRate = int.Parse(Properties.Settings.Default.setPort_baudRateRadio);
-                    spRadio.DataReceived += NtripPort_DataReceived;
-                    isNTRIP_Connecting = false;
-                    isNTRIP_Connected = true;
-
-                    try
-                    {
-                        spRadio.Open();
-                    }
-                    catch (Exception ex)
-                    {
-                        isNTRIP_Connecting = false;
-                        isNTRIP_Connected = false;
-                        isRadio_RequiredOn = false;
-
-                        TimedMessageBox(2000, "Error connecting to radio", $"{ex.Message}");
-                    }
-                }
-            }
-            else if (isSerialPass_RequiredOn)
-            {
-                toUDP_Port = Properties.Settings.Default.setNTRIP_sendToUDPPort; //send rtcm to which udp port
-                epNtrip = new IPEndPoint(IPAddress.Parse(
-                    Properties.Settings.Default.etIP_SubnetOne.ToString() + "." +
-                    Properties.Settings.Default.etIP_SubnetTwo.ToString() + "." +
-                    Properties.Settings.Default.etIP_SubnetThree.ToString() + ".255"), toUDP_Port);
-
-                if (!string.IsNullOrEmpty(Properties.Settings.Default.setPort_portNameRadio))
-                {
-                    // Disconnect when already connected
-                    if (spRadio != null)
-                    {
-                        spRadio.Close();
-                        spRadio.Dispose();
-                    }
-
-                    // Setup and open serial port
-                    spRadio = new SerialPort(Properties.Settings.Default.setPort_portNameRadio);
-                    spRadio.BaudRate = int.Parse(Properties.Settings.Default.setPort_baudRateRadio);
-                    spRadio.DataReceived += NtripPort_DataReceived;
-                    isNTRIP_Connecting = false;
-                    isNTRIP_Connected = true;
-                    lblWatch.Text = "RTCM Serial";
-
-
-                    try
-                    {
-                        spRadio.Open();
-                    }
-                    catch (Exception ex)
-                    {
-                        isNTRIP_Connecting = false;
-                        isNTRIP_Connected = false;
-                        isSerialPass_RequiredOn = false;
-
-                        TimedMessageBox(2000, "Error connecting to Serial Pass", $"{ex.Message}");
-                    }
-                }
-            }
         }
 
         private void ReconnectRequest()
@@ -458,8 +349,8 @@ namespace AgIO
         {
             //update gui with stats
             tripBytes += (uint)data.Length;
-            
-            if (isViewAdvanced && isNTRIP_RequiredOn )
+
+            if (isViewAdvanced && isNTRIP_RequiredOn)
             {
                 int mess = 0;
                 //lblPacketSize.Text = data.Length.ToString();
@@ -477,7 +368,7 @@ namespace AgIO
                             if (mess > 1000 && mess < 1231)
                             {
                                 rList.Add(mess);
-                                i += (data[i + 1] << 6) + (data[i + 2])+5;
+                                i += (data[i + 1] << 6) + (data[i + 2]) + 5;
                                 if (data[i + 1] != 211)
                                 {
                                     //rList.Clear();
@@ -501,79 +392,14 @@ namespace AgIO
             //reset watchdog since we have updated data
             NTRIP_Watchdog = 0;
 
-            if (isNTRIP_RequiredOn)
-            {
-                //move the ntrip stream to queue
-                for (int i = 0; i < data.Length; i++)
-                {
-                    rawTrip.Enqueue(data[i]);
-                }
-
-                ntripMeterTimer.Enabled = true;
-            }
-            else
-            {
-                lblToGPS.Text = data.Length.ToString();
-                //send it
-                SendNTRIP(data);
-            }
-
-
-        }
-
-        private void ntripMeterTimer_Tick(object sender, EventArgs e)
-        {
-            //we really should get here, but have to check
-            if (rawTrip.Count == 0) return;
-
-            //how many bytes in the Queue
-            int cnt = rawTrip.Count;
-
-            //how many sends have occured
-            traffic.cntrGPSIn++;
-
-            //128 bytes chunks max
-            if (cnt > packetSizeNTRIP) cnt = packetSizeNTRIP;
-
-            //new data array to send
-            byte[] trip = new byte[cnt];
-
-            traffic.cntrGPSInBytes += cnt;
-
-            //dequeue into the array
-            for (int i = 0; i < cnt; i++) trip[i] = rawTrip.Dequeue();
-
+            lblToGPS.Text = data.Length.ToString();
+            
             //send it
-            SendNTRIP(trip);
-
-            //Are we done?
-            if (rawTrip.Count == 0)
-            {
-                ntripMeterTimer.Enabled = false;
-
-                if (focusSkipCounter != 0)
-                {
-                    lblToGPS.Text = traffic.cntrGPSInBytes == 0 ? "---" : (traffic.cntrGPSInBytes).ToString();
-                    traffic.cntrGPSInBytes = 0;
-                }
-            }
-
-            //Can't keep up as internet dumped a shit load so clear
-            if (rawTrip.Count > 10000) rawTrip.Clear();
-
-            ////show how many bytes left in the queue
-            if (isViewAdvanced)
-                lblCount.Text = rawTrip.Count.ToString();
+            SendNTRIP(data);
         }
 
         public void SendNTRIP(byte[] data)
         {
-            //serial send out GPS port
-            if (isSendToSerial)
-            {
-                SendGPSPort(data);
-            }
-
             //send out UDP Port
             if (isSendToUDP)
             {
@@ -655,36 +481,6 @@ namespace AgIO
             }
         }
 
-        private void NtripPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
-        {
-            // Check if we got any data
-            try
-            {
-                SerialPort comport = (SerialPort)sender;
-                if (comport.BytesToRead < 32) 
-                    return;
-
-                int nBytesRec = comport.BytesToRead;
-
-                if (nBytesRec > 0)
-                {
-                    byte[] localMsg = new byte[nBytesRec];
-                    comport.Read(localMsg, 0, nBytesRec);
-
-                    BeginInvoke((MethodInvoker)(() => OnAddMessage(localMsg)));
-                }
-                else
-                {
-                    // If no data was recieved then the connection is probably dead
-                    // TODO: What can we do?
-                }
-            }
-            catch (Exception)
-            {
-                //MessageBox.Show( this, ex.Message, "Unusual error druing Recieve!" );
-            }
-        }
-
         private string ToBase64(string str)
         {
             Encoding asciiEncoding = Encoding.ASCII;
@@ -708,17 +504,6 @@ namespace AgIO
                 //Also stop the requests now
                 isNTRIP_RequiredOn = false;
             }
-            else if(spRadio != null)
-            {
-                spRadio.Close();
-                spRadio.Dispose();
-                spRadio = null;
-
-                ReconnectRequest();
-
-                //Also stop the requests now
-                isRadio_RequiredOn = false;
-            }
         }
 
         private void SettingsShutDownNTRIP()
@@ -728,14 +513,6 @@ namespace AgIO
                 clientSocket.Shutdown(SocketShutdown.Both);
                 clientSocket.Close();
                 System.Threading.Thread.Sleep(500);
-                ReconnectRequest();
-            }
-
-            if (spRadio != null && spRadio.IsOpen)
-            {
-                spRadio.Close();
-                spRadio.Dispose();
-                spRadio = null;
                 ReconnectRequest();
             }
         }

@@ -41,17 +41,6 @@ namespace AgIO
             form.Show(this);
         }
 
-        private void SettingsCommunicationGPS()
-        {
-            isGPSCommOpen = true;
-
-            using (FormCommSetGPS form = new FormCommSetGPS(this))
-            {
-                form.ShowDialog(this);
-            }
-            isGPSCommOpen = false;
-        }
-
         private void SettingsEthernet()
         {
             using (FormEthernet form = new FormEthernet(this))
@@ -59,22 +48,13 @@ namespace AgIO
                 form.ShowDialog(this);
             }
         }
+        private void settingsMenuStrip_Click(object sender, EventArgs e)
+        {
+            SettingsNTRIP();
+        }
 
         private void SettingsNTRIP()
         {
-            if (isRadio_RequiredOn)
-            {
-                TimedMessageBox(2000, "Radio NTRIP ON", "Turn it off before using NTRIP");
-                return;
-            }
-
-            if (isSerialPass_RequiredOn)
-            {
-                TimedMessageBox(2000, "Serial NTRIP ON", "Turn it off before using NTRIP");
-                return;
-            }
-
-
             using (var form = new FormNtrip(this))
             {
                 if (form.ShowDialog(this) == DialogResult.OK)
@@ -84,34 +64,6 @@ namespace AgIO
                         SettingsShutDownNTRIP();
                     }
                 }
-            }
-        }
-
-        private void SettingsRadio()
-        {
-            if (isSerialPass_RequiredOn)
-            {
-                TimedMessageBox(2000, "Serial Pass NTRIP ON", "Turn it off before using Radio NTRIP");
-                return;
-            }
-
-            if (isNTRIP_RequiredOn)
-            {
-                TimedMessageBox(2000, "Air NTRIP ON", "Turn it off before using Radio NTRIP");
-                return;
-            }
-
-            if (isRadio_RequiredOn && isNTRIP_Connected)
-            {
-                ShutDownNTRIP();
-                lblWatch.Text = "Stopped";
-                btnStartStopNtrip.Text = "OffLine";
-                isRadio_RequiredOn = false;
-            }
-
-            using (var form = new FormRadio(this))
-            {
-                form.ShowDialog(this);
             }
         }
 
@@ -155,22 +107,20 @@ namespace AgIO
 
         private void btnStartStopNtrip_Click(object sender, EventArgs e)
         {
-            if (Properties.Settings.Default.setNTRIP_isOn || Properties.Settings.Default.setRadio_isOn)
+            if (Properties.Settings.Default.setNTRIP_isOn )
             {
-                if (isNTRIP_RequiredOn || isRadio_RequiredOn)
+                if (isNTRIP_RequiredOn )
                 {
                     ShutDownNTRIP();
                     lblWatch.Text = "Stopped";
                     btnStartStopNtrip.Text = "OffLine";
                     isNTRIP_RequiredOn = false;
-                    isRadio_RequiredOn = false;
                     lblNTRIP_IP.Text = "--";
                     lblMount.Text = "--";
                 }
                 else
                 {
                     isNTRIP_RequiredOn = Properties.Settings.Default.setNTRIP_isOn;
-                    isRadio_RequiredOn = Properties.Settings.Default.setRadio_isOn;
                     lblWatch.Text = "Waiting";
                     lblNTRIP_IP.Text = "--";
                     lblMount.Text= "--";
