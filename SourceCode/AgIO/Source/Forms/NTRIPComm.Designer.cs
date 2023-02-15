@@ -286,7 +286,7 @@ namespace AgIO
             ntripCounter++;
 
             //Thinks is connected but not receiving anything
-            if (NTRIP_Watchdog++ > 30 && isNTRIP_Connected) 
+            if (NTRIP_Watchdog++ > 20 && isNTRIP_Connected) 
                 ReconnectRequest();
 
             //Once all connected set the timer GGA to NTRIP Settings
@@ -341,7 +341,7 @@ namespace AgIO
             }
             catch (Exception)
             {
-                //MessageBox.Show(this, ex.Message, "Send Message Failed!");
+                ReconnectRequest();
             }
         }
 
@@ -431,7 +431,7 @@ namespace AgIO
             }
             catch (Exception)
             {
-                //MessageBox.Show(this, ex.Message, "Send Message Failed!");
+                ReconnectRequest();
             }
         }
         private void NTRIPtick(object o, EventArgs e)
