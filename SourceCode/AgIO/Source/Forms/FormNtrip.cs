@@ -63,7 +63,6 @@ namespace AgIO
             //IPAddress[] ipaddress = Dns.GetHostAddresses(hostName);
             GetIP4AddressList();
 
-            cboxToUDP.Checked = Properties.Settings.Default.setNTRIP_sendToUDP;
             nudSendToUDPPort.Value = Properties.Settings.Default.setNTRIP_sendToUDPPort;
 
             tboxEnterURL.Text = Properties.Settings.Default.setNTRIP_casterURL;
@@ -212,19 +211,8 @@ namespace AgIO
             Properties.Settings.Default.setNTRIP_isHTTP10 = cboxHTTP.Text == "1.0";
             Properties.Settings.Default.setNTRIP_isTCP = checkBoxusetcp.Checked;
 
-            Properties.Settings.Default.setNTRIP_sendToUDP = cboxToUDP.Checked;
-
-            mf.isSendToUDP = cboxToUDP.Checked;
-
             mf.packetSizeNTRIP = Convert.ToInt32(comboboxPacketSize.Text);
             Properties.Settings.Default.setNTRIP_packetSize = Convert.ToInt32(comboboxPacketSize.Text);
-
-
-            if (Properties.Settings.Default.setNTRIP_isOn && Properties.Settings.Default.setRadio_isOn)
-            {
-                mf.TimedMessageBox(2000, "Radio also enabled", "Disable the Radio NTRIP");
-                Properties.Settings.Default.setRadio_isOn = false;
-            }
 
             Properties.Settings.Default.Save();
 
@@ -414,17 +402,6 @@ namespace AgIO
             if (tboxUserPassword.PasswordChar == '*') tboxUserPassword.PasswordChar = '\0';
             else tboxUserPassword.PasswordChar = '*';
             tboxUserPassword.Invalidate();
-        }
-
-        private void cboxToUDP_Click(object sender, EventArgs e)
-        {
-            ntripStatusChanged = true;
-        }
-
-        private void cboxToSerial_Click(object sender, EventArgs e)
-        {
-            ntripStatusChanged = true;
-            if (cboxToUDP.Checked) cboxToUDP.Checked = false;
         }
 
         private void btnHelp_Click(object sender, EventArgs e)

@@ -74,7 +74,6 @@
             this.listboxIP = new System.Windows.Forms.ListBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.label1 = new System.Windows.Forms.Label();
-            this.cboxToUDP = new System.Windows.Forms.CheckBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.comboboxPacketSize = new System.Windows.Forms.ComboBox();
             this.labelRtcmPort = new System.Windows.Forms.Label();
@@ -175,7 +174,7 @@
             // 
             this.nudSendToUDPPort.BackColor = System.Drawing.Color.AliceBlue;
             this.nudSendToUDPPort.Font = new System.Drawing.Font("Tahoma", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nudSendToUDPPort.Location = new System.Drawing.Point(569, 200);
+            this.nudSendToUDPPort.Location = new System.Drawing.Point(477, 190);
             this.nudSendToUDPPort.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -656,7 +655,6 @@
             // 
             this.tabPage2.BackColor = System.Drawing.Color.Azure;
             this.tabPage2.Controls.Add(this.label1);
-            this.tabPage2.Controls.Add(this.cboxToUDP);
             this.tabPage2.Controls.Add(this.nudSendToUDPPort);
             this.tabPage2.Controls.Add(this.label19);
             this.tabPage2.Controls.Add(this.label9);
@@ -687,26 +685,8 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(240, 31);
             this.label1.TabIndex = 142;
-            this.label1.Text = "Send To GPS Using:";
+            this.label1.Text = "Send To Port:";
             this.label1.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            // 
-            // cboxToUDP
-            // 
-            this.cboxToUDP.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cboxToUDP.Appearance = System.Windows.Forms.Appearance.Button;
-            this.cboxToUDP.BackColor = System.Drawing.Color.Salmon;
-            this.cboxToUDP.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.cboxToUDP.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.cboxToUDP.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cboxToUDP.Font = new System.Drawing.Font("Tahoma", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cboxToUDP.Image = global::AgIO.Properties.Resources.NtripToUDP;
-            this.cboxToUDP.Location = new System.Drawing.Point(395, 197);
-            this.cboxToUDP.Name = "cboxToUDP";
-            this.cboxToUDP.Size = new System.Drawing.Size(150, 50);
-            this.cboxToUDP.TabIndex = 141;
-            this.cboxToUDP.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.cboxToUDP.UseVisualStyleBackColor = false;
-            this.cboxToUDP.Click += new System.EventHandler(this.cboxToUDP_Click);
             // 
             // tabPage3
             // 
@@ -894,7 +874,6 @@
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.CheckBox cboxToUDP;
         private System.Windows.Forms.ListBox listboxIP;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TabPage tabPage3;

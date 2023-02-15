@@ -4,13 +4,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Windows.Forms;
 using System.Globalization;
-using System.IO.Ports;
 using System.Collections.Generic;
-using System.Linq;
-using System.Drawing;
-
-// Declare the delegate prototype to send data back to the form
-delegate void UpdateRTCM_Data(byte[] data);
 
 namespace AgIO
 {
@@ -345,6 +339,50 @@ namespace AgIO
             }
         }
 
+        //intial connection only
+        public void OnConnect(IAsyncResult ar)
+        {
+            // Check if we were sucessfull
+            try
+            {
+                if (clientSocket.Connected)
+                    clientSocket.BeginReceive(casterRecBuffer, 0, casterRecBuffer.Length, SocketFlags.None, new AsyncCallback(OnReceivedData), null);
+            }
+            catch (Exception)
+            {
+                ReconnectRequest();
+            }
+        }
+
+        //called when data received
+        public void OnReceivedData(IAsyncResult ar)
+        {
+            // Check if we got any data
+            try
+            {
+                int nBytesRec = clientSocket.EndReceive(ar);
+                if (nBytesRec > 0)
+                {
+                    byte[] localMsg = new byte[nBytesRec];
+                    Array.Copy(casterRecBuffer, localMsg, nBytesRec);
+
+                    BeginInvoke((MethodInvoker)(() => OnAddMessage(localMsg)));
+                    clientSocket.BeginReceive(casterRecBuffer, 0, casterRecBuffer.Length, SocketFlags.None, new AsyncCallback(OnReceivedData), null);
+                }
+                else
+                {
+                    // If no data was recieved then the connection is probably dead
+                    Console.WriteLine("Client {0}, disconnected", clientSocket.RemoteEndPoint);
+                    clientSocket.Shutdown(SocketShutdown.Both);
+                    clientSocket.Close();
+                }
+            }
+            catch (Exception)
+            {
+                //MessageBox.Show( this, ex.Message, "Unusual error druing Recieve!" );
+            }
+        }
+
         public void OnAddMessage(byte[] data)
         {
             //update gui with stats
@@ -395,16 +433,7 @@ namespace AgIO
             lblToGPS.Text = data.Length.ToString();
             
             //send it
-            SendNTRIP(data);
-        }
-
-        public void SendNTRIP(byte[] data)
-        {
-            //send out UDP Port
-            if (isSendToUDP)
-            {
-                SendUDPMessage(data, epNtrip);
-            }
+            SendUDPMessage(data, epNtrip);
         }
 
         public void SendGGA()
@@ -437,48 +466,6 @@ namespace AgIO
         private void NTRIPtick(object o, EventArgs e)
         {
             SendGGA();
-        }
-
-        public void OnConnect(IAsyncResult ar)
-        {
-            // Check if we were sucessfull
-            try
-            {
-                if (clientSocket.Connected)
-                    clientSocket.BeginReceive(casterRecBuffer, 0, casterRecBuffer.Length, SocketFlags.None, new AsyncCallback(OnRecievedData), null);
-            }
-            catch (Exception)
-            {
-                //MessageBox.Show(ex.Message, "Unusual error during Connect!");
-            }
-        }
-
-        public void OnRecievedData(IAsyncResult ar)
-        {
-            // Check if we got any data
-            try
-            {
-                int nBytesRec = clientSocket.EndReceive(ar);
-                if (nBytesRec > 0)
-                {
-                    byte[] localMsg = new byte[nBytesRec];
-                    Array.Copy(casterRecBuffer, localMsg, nBytesRec);
-
-                    BeginInvoke((MethodInvoker)(() => OnAddMessage(localMsg)));
-                    clientSocket.BeginReceive(casterRecBuffer, 0, casterRecBuffer.Length, SocketFlags.None, new AsyncCallback(OnRecievedData), null);
-                }
-                else
-                {
-                    // If no data was recieved then the connection is probably dead
-                    Console.WriteLine("Client {0}, disconnected", clientSocket.RemoteEndPoint);
-                    clientSocket.Shutdown(SocketShutdown.Both);
-                    clientSocket.Close();
-                }
-            }
-            catch (Exception)
-            {
-                //MessageBox.Show( this, ex.Message, "Unusual error druing Recieve!" );
-            }
         }
 
         private string ToBase64(string str)
