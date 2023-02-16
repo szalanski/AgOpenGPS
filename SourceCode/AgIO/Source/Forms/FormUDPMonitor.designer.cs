@@ -187,7 +187,7 @@
             this.btnLogNTRIP.FlatAppearance.BorderSize = 0;
             this.btnLogNTRIP.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnLogNTRIP.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnLogNTRIP.Image = global::AgIO.Properties.Resources.NTRIP_Client;
+            this.btnLogNTRIP.Image = global::AgIO.Properties.Resources.NtripSettings;
             this.btnLogNTRIP.Location = new System.Drawing.Point(148, 233);
             this.btnLogNTRIP.Name = "btnLogNTRIP";
             this.btnLogNTRIP.Size = new System.Drawing.Size(53, 53);

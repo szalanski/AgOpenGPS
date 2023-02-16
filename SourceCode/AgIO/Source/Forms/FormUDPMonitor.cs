@@ -89,7 +89,7 @@ namespace AgIO
             mf.isGPSLogOn = !mf.isGPSLogOn;
 
             if (mf.isGPSLogOn) btnLogNMEA.BackColor = Color.LightGreen;
-            else btnLogNMEA.BackColor = Color.Salmon;
+            else btnLogNMEA.BackColor = Color.Transparent;
         }
 
         private void btnLogNTRIP_Click(object sender, EventArgs e)
@@ -98,7 +98,7 @@ namespace AgIO
             mf.isNTRIPLogOn = !mf.isNTRIPLogOn;
 
             if (mf.isNTRIPLogOn) btnLogNTRIP.BackColor = Color.LightGreen;
-            else btnLogNTRIP.BackColor = Color.Salmon;
+            else btnLogNTRIP.BackColor = Color.Transparent;
         }
 
         private void lblPGNGuide_Click(object sender, EventArgs e)
