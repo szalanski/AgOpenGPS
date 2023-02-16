@@ -52,7 +52,7 @@
             this.btnSerialCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSerialCancel.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSerialCancel.Image = global::AgIO.Properties.Resources.OK64;
-            this.btnSerialCancel.Location = new System.Drawing.Point(386, 232);
+            this.btnSerialCancel.Location = new System.Drawing.Point(434, 232);
             this.btnSerialCancel.Name = "btnSerialCancel";
             this.btnSerialCancel.Size = new System.Drawing.Size(65, 54);
             this.btnSerialCancel.TabIndex = 71;
@@ -64,15 +64,16 @@
             this.textBoxRcv.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxRcv.BackColor = System.Drawing.SystemColors.Window;
+            this.textBoxRcv.BackColor = System.Drawing.SystemColors.InfoText;
             this.textBoxRcv.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxRcv.ForeColor = System.Drawing.Color.White;
             this.textBoxRcv.Location = new System.Drawing.Point(6, 31);
             this.textBoxRcv.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBoxRcv.Multiline = true;
             this.textBoxRcv.Name = "textBoxRcv";
             this.textBoxRcv.ReadOnly = true;
             this.textBoxRcv.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBoxRcv.Size = new System.Drawing.Size(437, 194);
+            this.textBoxRcv.Size = new System.Drawing.Size(485, 194);
             this.textBoxRcv.TabIndex = 539;
             this.textBoxRcv.WordWrap = false;
             // 
@@ -84,7 +85,7 @@
             this.btnLog.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnLog.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnLog.Image = global::AgIO.Properties.Resources.LogNMEA;
-            this.btnLog.Location = new System.Drawing.Point(290, 232);
+            this.btnLog.Location = new System.Drawing.Point(332, 232);
             this.btnLog.Name = "btnLog";
             this.btnLog.Size = new System.Drawing.Size(78, 54);
             this.btnLog.TabIndex = 541;
@@ -104,7 +105,7 @@
             this.btnFileSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnFileSave.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnFileSave.Image = global::AgIO.Properties.Resources.VehFileSave;
-            this.btnFileSave.Location = new System.Drawing.Point(77, 233);
+            this.btnFileSave.Location = new System.Drawing.Point(89, 233);
             this.btnFileSave.Name = "btnFileSave";
             this.btnFileSave.Size = new System.Drawing.Size(53, 53);
             this.btnFileSave.TabIndex = 542;
@@ -119,7 +120,7 @@
             this.btnClear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnClear.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnClear.Image = global::AgIO.Properties.Resources.Trash;
-            this.btnClear.Location = new System.Drawing.Point(6, 233);
+            this.btnClear.Location = new System.Drawing.Point(12, 233);
             this.btnClear.Name = "btnClear";
             this.btnClear.Size = new System.Drawing.Size(53, 53);
             this.btnClear.TabIndex = 543;
@@ -134,9 +135,9 @@
             this.btnLogNMEA.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnLogNMEA.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnLogNMEA.Image = global::AgIO.Properties.Resources.Nmea;
-            this.btnLogNMEA.Location = new System.Drawing.Point(219, 233);
+            this.btnLogNMEA.Location = new System.Drawing.Point(243, 233);
             this.btnLogNMEA.Name = "btnLogNMEA";
-            this.btnLogNMEA.Size = new System.Drawing.Size(53, 53);
+            this.btnLogNMEA.Size = new System.Drawing.Size(65, 53);
             this.btnLogNMEA.TabIndex = 544;
             this.btnLogNMEA.UseVisualStyleBackColor = false;
             this.btnLogNMEA.Click += new System.EventHandler(this.btnLogNMEA_Click);
@@ -146,7 +147,7 @@
             this.lblSteerAngle.AutoSize = true;
             this.lblSteerAngle.BackColor = System.Drawing.Color.Transparent;
             this.lblSteerAngle.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSteerAngle.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.lblSteerAngle.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.lblSteerAngle.Location = new System.Drawing.Point(15, 8);
             this.lblSteerAngle.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblSteerAngle.Name = "lblSteerAngle";
@@ -159,7 +160,7 @@
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.Color.Transparent;
             this.label1.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.label1.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.label1.Location = new System.Drawing.Point(100, 8);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
@@ -172,7 +173,7 @@
             this.label2.AutoSize = true;
             this.label2.BackColor = System.Drawing.Color.Transparent;
             this.label2.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.label2.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.label2.Location = new System.Drawing.Point(310, 8);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
@@ -188,7 +189,7 @@
             this.btnLogNTRIP.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnLogNTRIP.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnLogNTRIP.Image = global::AgIO.Properties.Resources.NtripSettings;
-            this.btnLogNTRIP.Location = new System.Drawing.Point(148, 233);
+            this.btnLogNTRIP.Location = new System.Drawing.Point(166, 233);
             this.btnLogNTRIP.Name = "btnLogNTRIP";
             this.btnLogNTRIP.Size = new System.Drawing.Size(53, 53);
             this.btnLogNTRIP.TabIndex = 548;
@@ -200,7 +201,7 @@
             this.lblPGNGuide.AutoSize = true;
             this.lblPGNGuide.BackColor = System.Drawing.Color.Transparent;
             this.lblPGNGuide.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblPGNGuide.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.lblPGNGuide.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.lblPGNGuide.Location = new System.Drawing.Point(381, 8);
             this.lblPGNGuide.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblPGNGuide.Name = "lblPGNGuide";
@@ -213,8 +214,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(456, 291);
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(90)))));
+            this.ClientSize = new System.Drawing.Size(504, 291);
             this.ControlBox = false;
             this.Controls.Add(this.lblPGNGuide);
             this.Controls.Add(this.btnLogNTRIP);

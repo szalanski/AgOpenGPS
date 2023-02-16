@@ -98,6 +98,7 @@
             // lblCurrentPort
             // 
             this.lblCurrentPort.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblCurrentPort.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.lblCurrentPort.Location = new System.Drawing.Point(96, 3);
             this.lblCurrentPort.Name = "lblCurrentPort";
             this.lblCurrentPort.Size = new System.Drawing.Size(121, 18);
@@ -108,6 +109,7 @@
             // lblCurrentBaud
             // 
             this.lblCurrentBaud.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblCurrentBaud.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.lblCurrentBaud.Location = new System.Drawing.Point(236, 3);
             this.lblCurrentBaud.Name = "lblCurrentBaud";
             this.lblCurrentBaud.Size = new System.Drawing.Size(124, 18);
@@ -149,7 +151,7 @@
             this.textBoxRcv.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxRcv.BackColor = System.Drawing.SystemColors.Window;
+            this.textBoxRcv.BackColor = System.Drawing.SystemColors.InfoText;
             this.textBoxRcv.Font = new System.Drawing.Font("Tahoma", 9.75F);
             this.textBoxRcv.Location = new System.Drawing.Point(12, 69);
             this.textBoxRcv.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -247,7 +249,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.White;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(95)))));
             this.ClientSize = new System.Drawing.Size(539, 361);
             this.ControlBox = false;
             this.Controls.Add(this.btnHelp);
