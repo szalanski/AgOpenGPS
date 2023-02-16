@@ -229,11 +229,6 @@ namespace AgIO
 
             secondsSinceStart = (DateTime.Now - Process.GetCurrentProcess().StartTime).TotalSeconds;
 
-            //Hello Alarm logic
-            DoHelloAlarmLogic();
-
-            DoTraffic();
-
             if (focusSkipCounter != 0)
             {
                 lblCurentLon.Text = longitude.ToString("N7");
@@ -242,10 +237,6 @@ namespace AgIO
 
             //do all the NTRIP routines
             DoNTRIPSecondRoutine();
-
-            //send a hello to modules
-            SendUDPMessage(helloFromAgIO, epModule);
-            //helloFromAgIO[7] = 0;
 
             #region Sleep
 
@@ -276,11 +267,18 @@ namespace AgIO
                 focusSkipCounter-- ;
             }
 
-            if (ntripCounter > 30)
+            if (focusSkipCounter != 0)
             {
-                isNTRIPToggle = !isNTRIPToggle;
-                if (isNTRIPToggle) lblNTRIPBytes.BackColor = Color.CornflowerBlue;
+                if (ntripCounter > 30)
+                {
+                    isNTRIPToggle = !isNTRIPToggle;
+                    if (isNTRIPToggle) lblNTRIPBytes.BackColor = Color.CornflowerBlue;
                     else lblNTRIPBytes.BackColor = Color.DarkOrange;
+                }
+                else
+                {
+                    lblNTRIPBytes.BackColor = Color.Transparent;
+                }
             }
 
             #endregion
@@ -320,6 +318,15 @@ namespace AgIO
 
         private void TwoSecondLoop()
         {
+            //Hello Alarm logic
+            DoHelloAlarmLogic();
+
+            DoTraffic();
+
+            //send a hello to modules
+            SendUDPMessage(helloFromAgIO, epModule);
+
+
             if (isLogNMEA)
             {
                 using (StreamWriter writer = new StreamWriter("zAgIO_log.txt", true))
