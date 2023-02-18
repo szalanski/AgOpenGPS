@@ -65,7 +65,7 @@ namespace AgIO
 
         //used to hide the window and not update text fields and most counters
         public bool isAppInFocus = true, isLostFocus;
-        public int focusSkipCounter = 310;
+        public int focusSkipCounter = 121;
 
         //The base directory where Drive will be stored and fields and vehicles branch from
         public string baseDirectory;
@@ -246,7 +246,7 @@ namespace AgIO
             //start counting down to minimize
             if (!isAppInFocus && !isLostFocus)
             {
-                focusSkipCounter = 310;
+                focusSkipCounter = 121;
                 isLostFocus = true;
             }
 
@@ -336,8 +336,13 @@ namespace AgIO
                 logNMEASentence.Clear();
             }
 
-            if (focusSkipCounter < 310) lblSkipCounter.Text = focusSkipCounter.ToString();
-            else lblSkipCounter.Text = "On";
+            if (focusSkipCounter != 0)
+            {
+                if (focusSkipCounter < 121) lblSkipCounter.Text = focusSkipCounter.ToString();
+                else lblSkipCounter.Text = "On";
+
+                lblHDOP.Text = hdopData.ToString("N1");
+            }
 
         }
 
@@ -551,7 +556,7 @@ namespace AgIO
 
             if (focusSkipCounter != 0)
             {
-                lblFromGPS.Text = traffic.cntrGPSOut == 0 ? "---" : (traffic.cntrGPSOut).ToString();
+                lblFromGPS.Text = traffic.cntrGPSOut == 0 ? "---" : ((traffic.cntrGPSOut>>1)).ToString();
 
                 //reset all counters
                 traffic.cntrGPSOut = 0;

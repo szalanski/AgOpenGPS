@@ -29,7 +29,7 @@ namespace AgIO
         private int sendGGAInterval = 0;
         private string GGASentence;
 
-        public uint tripBytes = 0;
+        public uint tripBytes = 0, tripCounts = 0;
         private int toUDP_Port = 0;
         private int NTRIP_Watchdog = 100;
 
@@ -76,12 +76,14 @@ namespace AgIO
 
             if (isNTRIP_RequiredOn)
             {
-                //pbarNtripMenu.Value = unchecked((byte)(tripBytes * 0.02));
-                lblNTRIPBytes.Text = ((tripBytes >> 10)).ToString("###,###,### kb");
-
                 //Bypass if sleeping
                 if (focusSkipCounter != 0)
                 {
+                    //lblToGPS.Text = tripCounts.ToString();
+
+                    //pbarNtripMenu.Value = unchecked((byte)(tripBytes * 0.02));
+                    lblNTRIPBytes.Text = ((tripBytes>>10)).ToString("###,###,### kb");
+
                     //update byte counter and up counter
                     if (ntripCounter > 59) btnStartStopNtrip.Text = (ntripCounter >> 6) + " Min";
                     else if (ntripCounter < 60 && ntripCounter > 22) btnStartStopNtrip.Text = ntripCounter + " Secs";
@@ -372,9 +374,9 @@ namespace AgIO
                 else
                 {
                     // If no data was recieved then the connection is probably dead
-                    Console.WriteLine("Client {0}, disconnected", clientSocket.RemoteEndPoint);
-                    clientSocket.Shutdown(SocketShutdown.Both);
-                    clientSocket.Close();
+                    //Console.WriteLine("Client {0}, disconnected", clientSocket.RemoteEndPoint);
+                    //clientSocket.Shutdown(SocketShutdown.Both);
+                    //clientSocket.Close();
                 }
             }
             catch (Exception)
@@ -385,9 +387,12 @@ namespace AgIO
 
         public void OnAddMessage(byte[] data)
         {
+            //send it
+            SendUDPMessage(data, epNtrip);
+
             //update gui with stats
             tripBytes += (uint)data.Length;
-
+            
             if (isViewAdvanced && isNTRIP_RequiredOn)
             {
                 int mess = 0;
@@ -430,10 +435,13 @@ namespace AgIO
             //reset watchdog since we have updated data
             NTRIP_Watchdog = 0;
 
-            lblToGPS.Text = data.Length.ToString();
-            
-            //send it
-            SendUDPMessage(data, epNtrip);
+            if (focusSkipCounter != 0)
+            {
+                tripCounts += (uint)data.Length;
+                if (tripCounts > 9999) tripCounts -= 10000;
+
+                lblToGPS.Text = tripCounts.ToString();
+            }
         }
 
         public void SendGGA()

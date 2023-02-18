@@ -90,6 +90,7 @@ namespace AgIO
             this.btnGPSData = new System.Windows.Forms.Button();
             this.btnUDP = new System.Windows.Forms.Button();
             this.btnHelp = new System.Windows.Forms.Button();
+            this.lblHDOP = new System.Windows.Forms.Label();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -951,6 +952,19 @@ namespace AgIO
             this.btnHelp.UseVisualStyleBackColor = true;
             this.btnHelp.Click += new System.EventHandler(this.btnHelp_Click);
             // 
+            // lblHDOP
+            // 
+            this.lblHDOP.BackColor = System.Drawing.Color.Transparent;
+            this.lblHDOP.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblHDOP.ForeColor = System.Drawing.Color.White;
+            this.lblHDOP.Location = new System.Drawing.Point(167, 260);
+            this.lblHDOP.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblHDOP.Name = "lblHDOP";
+            this.lblHDOP.Size = new System.Drawing.Size(48, 18);
+            this.lblHDOP.TabIndex = 523;
+            this.lblHDOP.Text = "-";
+            this.lblHDOP.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // FormLoop
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 18F);
@@ -1008,6 +1022,7 @@ namespace AgIO
             this.Controls.Add(this.lblToGPS);
             this.Controls.Add(this.lblFromGPS);
             this.Controls.Add(this.btnGPSData);
+            this.Controls.Add(this.lblHDOP);
             this.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -1085,6 +1100,7 @@ namespace AgIO
         private System.Windows.Forms.Button btnHelp;
         private System.Windows.Forms.ToolStripMenuItem toolStripSerialMonitor;
         private System.Windows.Forms.ToolStripMenuItem toolStripUDPMonitor;
+        private System.Windows.Forms.Label lblHDOP;
     }
 }
 
