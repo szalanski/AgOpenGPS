@@ -118,7 +118,7 @@ namespace AgIO
             }
 
             //small view
-            this.Width = 428;
+            this.Width = 370;
 
             LoadLoopback();
 
@@ -220,7 +220,7 @@ namespace AgIO
                 Controls.Remove(pictureBox1);
                 pictureBox1.Dispose();
                 oneSecondLoopTimer.Interval = 1000;
-                this.Width = 428;
+                this.Width = 370;
                 this.Height = 500;
                 return;
             }
@@ -432,7 +432,7 @@ namespace AgIO
             }
             else
             {
-                this.Width = 428;
+                this.Width = 370;
                 isViewAdvanced = false;
                 btnSlide.BackgroundImage = Properties.Resources.ArrowGrnRight;
                 aList.Clear();
