@@ -125,8 +125,6 @@ namespace AgIO
             isSendNMEAToUDP = Properties.Settings.Default.setUDP_isSendNMEAToUDP;
             isPluginUsed = Properties.Settings.Default.setUDP_isUsePluginApp;
 
-            packetSizeNTRIP = Properties.Settings.Default.setNTRIP_packetSize;
-
             ConfigureNTRIP();
 
             isConnectedIMU = cboxIsIMUModule.Checked = Properties.Settings.Default.setMod_isIMUConnected;

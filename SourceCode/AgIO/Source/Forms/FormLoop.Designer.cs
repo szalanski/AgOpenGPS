@@ -48,7 +48,6 @@ namespace AgIO
             this.toolStripEthernet = new System.Windows.Forms.ToolStripMenuItem();
             this.deviceManagerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsMenuStrip = new System.Windows.Forms.ToolStripDropDownButton();
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblSteerAngle = new System.Windows.Forms.Label();
             this.lblNTRIP_IP = new System.Windows.Forms.Label();
             this.lblMount = new System.Windows.Forms.Label();
@@ -203,9 +202,8 @@ namespace AgIO
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(64, 64);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripDropDownButton1,
-            this.settingsMenuStrip,
-            this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(77, 410);
+            this.settingsMenuStrip});
+            this.statusStrip1.Location = new System.Drawing.Point(86, 410);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 11, 0);
             this.statusStrip1.Size = new System.Drawing.Size(188, 70);
@@ -298,12 +296,6 @@ namespace AgIO
             this.settingsMenuStrip.ShowDropDownArrow = false;
             this.settingsMenuStrip.Size = new System.Drawing.Size(90, 68);
             this.settingsMenuStrip.Click += new System.EventHandler(this.settingsMenuStrip_Click);
-            // 
-            // toolStripStatusLabel1
-            // 
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(151, 65);
-            this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
             // 
             // lblSteerAngle
             // 
@@ -895,7 +887,7 @@ namespace AgIO
             this.btnRelayTest.Image = global::AgIO.Properties.Resources.TestRelays;
             this.btnRelayTest.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnRelayTest.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.btnRelayTest.Location = new System.Drawing.Point(484, 311);
+            this.btnRelayTest.Location = new System.Drawing.Point(484, 315);
             this.btnRelayTest.Margin = new System.Windows.Forms.Padding(4);
             this.btnRelayTest.Name = "btnRelayTest";
             this.btnRelayTest.Size = new System.Drawing.Size(61, 73);
@@ -977,7 +969,7 @@ namespace AgIO
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(90)))));
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.ClientSize = new System.Drawing.Size(733, 475);
             this.Controls.Add(this.btnHelp);
@@ -1109,7 +1101,6 @@ namespace AgIO
         private System.Windows.Forms.ToolStripMenuItem toolStripSerialMonitor;
         private System.Windows.Forms.ToolStripMenuItem toolStripUDPMonitor;
         private System.Windows.Forms.Label lblHDOP;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
     }
 }
 

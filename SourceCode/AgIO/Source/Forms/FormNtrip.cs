@@ -211,9 +211,6 @@ namespace AgIO
             Properties.Settings.Default.setNTRIP_isHTTP10 = cboxHTTP.Text == "1.0";
             Properties.Settings.Default.setNTRIP_isTCP = checkBoxusetcp.Checked;
 
-            mf.packetSizeNTRIP = Convert.ToInt32(comboboxPacketSize.Text);
-            Properties.Settings.Default.setNTRIP_packetSize = Convert.ToInt32(comboboxPacketSize.Text);
-
             Properties.Settings.Default.Save();
 
             if (!ntripStatusChanged)

@@ -25,7 +25,7 @@ namespace AgIO.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool setUDP_isOn {
             get {
                 return ((bool)(this["setUDP_isOn"]));
@@ -121,7 +121,7 @@ namespace AgIO.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool setNTRIP_isOn {
             get {
                 return ((bool)(this["setNTRIP_isOn"]));
@@ -344,18 +344,6 @@ namespace AgIO.Properties {
             }
             set {
                 this["setUDP_isUsePluginApp"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("256")]
-        public int setNTRIP_packetSize {
-            get {
-                return ((int)(this["setNTRIP_packetSize"]));
-            }
-            set {
-                this["setNTRIP_packetSize"] = value;
             }
         }
         

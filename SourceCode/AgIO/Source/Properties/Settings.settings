@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="setUDP_isOn" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
+      <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="setIP_thisPort" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">9999</Value>
@@ -27,7 +27,7 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="setNTRIP_isOn" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
+      <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="setNTRIP_sendGGAInterval" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">10</Value>
@@ -82,9 +82,6 @@
     </Setting>
     <Setting Name="setUDP_isUsePluginApp" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
-    </Setting>
-    <Setting Name="setNTRIP_packetSize" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">256</Value>
     </Setting>
     <Setting Name="setMod_isIMUConnected" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
