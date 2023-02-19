@@ -11,7 +11,7 @@ namespace AgIO
     public partial class FormLoop
     {
         //for the NTRIP CLient counting
-        private int ntripCounter = 10;
+        private int ntripCounter = 18;
 
         private Socket clientSocket;                      // Server connection
         private byte[] casterRecBuffer = new byte[2800];    // Recieved data buffer
@@ -55,7 +55,7 @@ namespace AgIO
             //Have we NTRIP connection
             if (isNTRIP_RequiredOn && !isNTRIP_Connected && !isNTRIP_Connecting)
             {
-                if (!isNTRIP_Starting && ntripCounter > 20)
+                if (!isNTRIP_Starting && ntripCounter > 18)
                 {
                     StartNTRIP();
                 }
@@ -156,7 +156,7 @@ namespace AgIO
         {
             if (isNTRIP_RequiredOn)
             {
-                if (isLostFocus) ShowAgIO();                
+                //if (isLostFocus) ShowAgIO();                
                 
                 broadCasterIP = null;
                 string actualIP = Properties.Settings.Default.setNTRIP_casterURL.Trim();
@@ -193,7 +193,7 @@ namespace AgIO
                     }
 
                     //TimedMessageBox(2000, "NTRIP Not Connected", " Reconnect Request");
-                    ntripCounter = 15;
+                    ntripCounter = 16;
                     isNTRIP_Connected = false;
                     isNTRIP_Starting = false;
                     isNTRIP_Connecting = false;
@@ -259,7 +259,7 @@ namespace AgIO
         private void ReconnectRequest()
         {
             //TimedMessageBox(2000, "NTRIP Not Connected", " Reconnect Request");
-            ntripCounter = 15;
+            ntripCounter = 16;
             isNTRIP_Connected = false;
             isNTRIP_Starting = false;
             isNTRIP_Connecting = false;
