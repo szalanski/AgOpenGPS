@@ -74,48 +74,42 @@ namespace AgIO
                 }
             }
 
-            if (isNTRIP_RequiredOn)
+            if (focusSkipCounter != 0 && isNTRIP_RequiredOn)
             {
-                //Bypass if sleeping
-                if (focusSkipCounter != 0)
+                //pbarNtripMenu.Value = unchecked((byte)(tripBytes * 0.02));
+                lblNTRIPBytes.Text = ((tripBytes >> 10)).ToString("###,###,### kb");
+
+                //update byte counter and up counter
+                if (ntripCounter > 59) btnStartStopNtrip.Text = (ntripCounter >> 6) + " Min";
+                else if (ntripCounter < 60 && ntripCounter > 22) btnStartStopNtrip.Text = ntripCounter + " Secs";
+                else btnStartStopNtrip.Text = "In " + (Math.Abs(ntripCounter - 22)) + " secs";
+
+                //watchdog for Ntrip
+                if (isNTRIP_Connecting)
                 {
-                    //lblToGPS.Text = tripCounts.ToString();
-
-                    //pbarNtripMenu.Value = unchecked((byte)(tripBytes * 0.02));
-                    lblNTRIPBytes.Text = ((tripBytes>>10)).ToString("###,###,### kb");
-
-                    //update byte counter and up counter
-                    if (ntripCounter > 59) btnStartStopNtrip.Text = (ntripCounter >> 6) + " Min";
-                    else if (ntripCounter < 60 && ntripCounter > 22) btnStartStopNtrip.Text = ntripCounter + " Secs";
-                    else btnStartStopNtrip.Text = "In " + (Math.Abs(ntripCounter - 22)) + " secs";
-
-                    //watchdog for Ntrip
-                    if (isNTRIP_Connecting)
+                    lblWatch.Text = gStr.gsAuthourizing;
+                }
+                else
+                {
+                    if (isNTRIP_RequiredOn && NTRIP_Watchdog > 10)
                     {
-                        lblWatch.Text = gStr.gsAuthourizing;
+                        lblWatch.Text = gStr.gsWaiting;
                     }
                     else
                     {
-                        if (isNTRIP_RequiredOn && NTRIP_Watchdog > 10)
-                        {
-                            lblWatch.Text = gStr.gsWaiting;
-                        }
-                        else
-                        {
-                            lblWatch.Text = gStr.gsListening;
+                        lblWatch.Text = gStr.gsListening;
 
-                            if (isNTRIP_RequiredOn)
-                            {
-                                lblWatch.Text += " NTRIP";
-                            }
+                        if (isNTRIP_RequiredOn)
+                        {
+                            lblWatch.Text += " NTRIP";
                         }
                     }
+                }
 
-                    if (sendGGAInterval > 0 && isNTRIP_Sending)
-                    {
-                        lblWatch.Text = "Send GGA";
-                        isNTRIP_Sending = false;
-                    }
+                if (sendGGAInterval > 0 && isNTRIP_Sending)
+                {
+                    lblWatch.Text = "Send GGA";
+                    isNTRIP_Sending = false;
                 }
             }
         }
@@ -162,7 +156,8 @@ namespace AgIO
         {
             if (isNTRIP_RequiredOn)
             {
-                //broadCasterIP = Properties.Settings.Default.setNTRIP_casterIP; //Select correct Address
+                if (isLostFocus) ShowAgIO();                
+                
                 broadCasterIP = null;
                 string actualIP = Properties.Settings.Default.setNTRIP_casterURL.Trim();
 
@@ -274,6 +269,8 @@ namespace AgIO
             {
                 tmr.Dispose();
             }
+
+            ShowAgIO();
         }
 
         private void IncrementNTRIPWatchDog()

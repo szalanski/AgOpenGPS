@@ -133,14 +133,8 @@ namespace AgIO
             
             SetModulesOnOff();
 
+            oneSecondLoopTimer.Interval = 1000;
             oneSecondLoopTimer.Enabled = true;
-            pictureBox1.Visible = true;
-            pictureBox1.BringToFront();
-            pictureBox1.Width = 430;
-            pictureBox1.Height = 500;
-            pictureBox1.Left = 0;
-            pictureBox1.Top = 0;
-            //pictureBox1.Dock = DockStyle.Fill;
 
             //On or off the module rows
             SetModulesOnOff();
@@ -213,25 +207,7 @@ namespace AgIO
 
         private void oneSecondLoopTimer_Tick(object sender, EventArgs e)
         {
-            if (oneSecondLoopTimer.Interval > 1200)
-            {
-                Controls.Remove(pictureBox1);
-                pictureBox1.Dispose();
-                oneSecondLoopTimer.Interval = 1000;
-                this.Width = 370;
-                this.Height = 500;
-                return;
-            }
-
-            //to check if new data for subnet
-
             secondsSinceStart = (DateTime.Now - Process.GetCurrentProcess().StartTime).TotalSeconds;
-
-            if (focusSkipCounter != 0)
-            {
-                lblCurentLon.Text = longitude.ToString("N7");
-                lblCurrentLat.Text = latitude.ToString("N7");
-            }
 
             //do all the NTRIP routines
             DoNTRIPSecondRoutine();
@@ -277,7 +253,10 @@ namespace AgIO
                 {
                     lblNTRIPBytes.BackColor = Color.Transparent;
                 }
-            }
+
+                lblCurentLon.Text = longitude.ToString("N7");
+                lblCurrentLat.Text = latitude.ToString("N7");
+            }            
 
             #endregion
 
@@ -535,15 +514,6 @@ namespace AgIO
                 // Show window in forground.
                 SetForegroundWindow(processName[0].MainWindowHandle);
             }  
-            
-            //{
-            //    //Set foreground window
-            //    if (IsIconic(processName[0].MainWindowHandle))
-            //    {
-            //        ShowWindow(processName[0].MainWindowHandle, 9);
-            //    }
-            //    SetForegroundWindow(processName[0].MainWindowHandle);
-            //}
         }
 
         private void DoTraffic()
