@@ -821,8 +821,8 @@ namespace AgOpenGPS
                                 //if we are close enough to pattern, trigger.
                                 if ((distancePivotToTurnLine <= 1.0) && (distancePivotToTurnLine >= 0) && !yt.isYouTurnTriggered)
                                 {
-                                    yt.YouTurnTrigger();
                                     sounds.isBoundAlarming = false;
+                                    yt.YouTurnTrigger();
                                 }
                             }
                         }
@@ -835,7 +835,7 @@ namespace AgOpenGPS
                     if (yt.isYouTurnBtnOn)
                     {
                         yt.ResetCreatedYouTurn();
-                        sim.stepDistance = 0 / 17.86;
+                        //sim.stepDistance = 0 / 17.86;
                     }
                 }
             }
