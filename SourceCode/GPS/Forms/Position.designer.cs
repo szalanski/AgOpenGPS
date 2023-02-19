@@ -778,7 +778,7 @@ namespace AgOpenGPS
                     mc.isOutOfBounds = false;
 
                     //do the auto youturn logic if everything is on.
-                    if (yt.isYouTurnBtnOn && isAutoSteerBtnOn)
+                    if (yt.isYouTurnBtnOn)
                     {
                         //if we are too much off track > 1.3m, kill the diagnostic creation, start again
                         if (crossTrackError > 1300 && !yt.isYouTurnTriggered)

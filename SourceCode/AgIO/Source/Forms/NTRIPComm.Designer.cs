@@ -269,8 +269,6 @@ namespace AgIO
             {
                 tmr.Dispose();
             }
-
-            ShowAgIO();
         }
 
         private void IncrementNTRIPWatchDog()

@@ -249,7 +249,7 @@ namespace AgOpenGPS
 
                 if (ABLine.isBtnABLineOn || curve.isBtnCurveOn)
                 {
-                    if (!isAutoSteerBtnOn) btnAutoSteer.PerformClick();
+                    //if (!isAutoSteerBtnOn) btnAutoSteer.PerformClick();
                 }
                 else return;
 
