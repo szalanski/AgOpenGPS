@@ -29,35 +29,19 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.btnSerialCancel = new System.Windows.Forms.Button();
             this.textBoxRcv = new System.Windows.Forms.TextBox();
-            this.btnLog = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.btnFileSave = new System.Windows.Forms.Button();
-            this.btnClear = new System.Windows.Forms.Button();
-            this.btnLogNMEA = new System.Windows.Forms.Button();
             this.lblSteerAngle = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.btnLogNTRIP = new System.Windows.Forms.Button();
             this.lblPGNGuide = new System.Windows.Forms.Label();
+            this.btnPause = new System.Windows.Forms.Button();
+            this.btnLogNTRIP = new System.Windows.Forms.Button();
+            this.btnLogNMEA = new System.Windows.Forms.Button();
+            this.btnClear = new System.Windows.Forms.Button();
+            this.btnFileSave = new System.Windows.Forms.Button();
+            this.btnLog = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            // 
-            // btnSerialCancel
-            // 
-            this.btnSerialCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSerialCancel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnSerialCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnSerialCancel.FlatAppearance.BorderSize = 0;
-            this.btnSerialCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSerialCancel.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSerialCancel.Image = global::AgIO.Properties.Resources.OK64;
-            this.btnSerialCancel.Location = new System.Drawing.Point(434, 232);
-            this.btnSerialCancel.Name = "btnSerialCancel";
-            this.btnSerialCancel.Size = new System.Drawing.Size(65, 54);
-            this.btnSerialCancel.TabIndex = 71;
-            this.btnSerialCancel.UseVisualStyleBackColor = true;
-            this.btnSerialCancel.Click += new System.EventHandler(this.btnSerialCancel_Click);
             // 
             // textBoxRcv
             // 
@@ -73,74 +57,14 @@
             this.textBoxRcv.Name = "textBoxRcv";
             this.textBoxRcv.ReadOnly = true;
             this.textBoxRcv.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBoxRcv.Size = new System.Drawing.Size(485, 194);
+            this.textBoxRcv.Size = new System.Drawing.Size(390, 194);
             this.textBoxRcv.TabIndex = 539;
             this.textBoxRcv.WordWrap = false;
-            // 
-            // btnLog
-            // 
-            this.btnLog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnLog.BackColor = System.Drawing.Color.LightGreen;
-            this.btnLog.FlatAppearance.BorderSize = 0;
-            this.btnLog.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnLog.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnLog.Image = global::AgIO.Properties.Resources.LogNMEA;
-            this.btnLog.Location = new System.Drawing.Point(332, 232);
-            this.btnLog.Name = "btnLog";
-            this.btnLog.Size = new System.Drawing.Size(78, 54);
-            this.btnLog.TabIndex = 541;
-            this.btnLog.UseVisualStyleBackColor = false;
-            this.btnLog.Click += new System.EventHandler(this.btnLog_Click);
             // 
             // timer1
             // 
             this.timer1.Interval = 333;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
-            // btnFileSave
-            // 
-            this.btnFileSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnFileSave.BackColor = System.Drawing.Color.Transparent;
-            this.btnFileSave.FlatAppearance.BorderSize = 0;
-            this.btnFileSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnFileSave.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnFileSave.Image = global::AgIO.Properties.Resources.VehFileSave;
-            this.btnFileSave.Location = new System.Drawing.Point(89, 233);
-            this.btnFileSave.Name = "btnFileSave";
-            this.btnFileSave.Size = new System.Drawing.Size(53, 53);
-            this.btnFileSave.TabIndex = 542;
-            this.btnFileSave.UseVisualStyleBackColor = false;
-            this.btnFileSave.Click += new System.EventHandler(this.btnFileSave_Click);
-            // 
-            // btnClear
-            // 
-            this.btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClear.BackColor = System.Drawing.Color.Transparent;
-            this.btnClear.FlatAppearance.BorderSize = 0;
-            this.btnClear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnClear.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnClear.Image = global::AgIO.Properties.Resources.Trash;
-            this.btnClear.Location = new System.Drawing.Point(12, 233);
-            this.btnClear.Name = "btnClear";
-            this.btnClear.Size = new System.Drawing.Size(53, 53);
-            this.btnClear.TabIndex = 543;
-            this.btnClear.UseVisualStyleBackColor = false;
-            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
-            // 
-            // btnLogNMEA
-            // 
-            this.btnLogNMEA.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnLogNMEA.BackColor = System.Drawing.Color.Transparent;
-            this.btnLogNMEA.FlatAppearance.BorderSize = 0;
-            this.btnLogNMEA.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnLogNMEA.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnLogNMEA.Image = global::AgIO.Properties.Resources.Nmea;
-            this.btnLogNMEA.Location = new System.Drawing.Point(243, 233);
-            this.btnLogNMEA.Name = "btnLogNMEA";
-            this.btnLogNMEA.Size = new System.Drawing.Size(65, 53);
-            this.btnLogNMEA.TabIndex = 544;
-            this.btnLogNMEA.UseVisualStyleBackColor = false;
-            this.btnLogNMEA.Click += new System.EventHandler(this.btnLogNMEA_Click);
             // 
             // lblSteerAngle
             // 
@@ -174,12 +98,43 @@
             this.label2.BackColor = System.Drawing.Color.Transparent;
             this.label2.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label2.Location = new System.Drawing.Point(310, 8);
+            this.label2.Location = new System.Drawing.Point(285, 8);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(41, 18);
             this.label2.TabIndex = 547;
             this.label2.Text = "PGN";
+            // 
+            // lblPGNGuide
+            // 
+            this.lblPGNGuide.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblPGNGuide.AutoSize = true;
+            this.lblPGNGuide.BackColor = System.Drawing.Color.Transparent;
+            this.lblPGNGuide.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPGNGuide.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.lblPGNGuide.Location = new System.Drawing.Point(331, 8);
+            this.lblPGNGuide.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblPGNGuide.Name = "lblPGNGuide";
+            this.lblPGNGuide.Size = new System.Drawing.Size(73, 18);
+            this.lblPGNGuide.TabIndex = 549;
+            this.lblPGNGuide.Text = "Guide ->";
+            this.lblPGNGuide.Click += new System.EventHandler(this.lblPGNGuide_Click);
+            // 
+            // btnPause
+            // 
+            this.btnPause.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnPause.BackColor = System.Drawing.Color.Transparent;
+            this.btnPause.BackgroundImage = global::AgIO.Properties.Resources.Pause;
+            this.btnPause.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnPause.FlatAppearance.BorderSize = 0;
+            this.btnPause.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnPause.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnPause.Location = new System.Drawing.Point(345, 232);
+            this.btnPause.Name = "btnPause";
+            this.btnPause.Size = new System.Drawing.Size(56, 53);
+            this.btnPause.TabIndex = 550;
+            this.btnPause.UseVisualStyleBackColor = false;
+            this.btnPause.Click += new System.EventHandler(this.btnPause_Click);
             // 
             // btnLogNTRIP
             // 
@@ -189,34 +144,81 @@
             this.btnLogNTRIP.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnLogNTRIP.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnLogNTRIP.Image = global::AgIO.Properties.Resources.NtripSettings;
-            this.btnLogNTRIP.Location = new System.Drawing.Point(166, 233);
+            this.btnLogNTRIP.Location = new System.Drawing.Point(42, 233);
             this.btnLogNTRIP.Name = "btnLogNTRIP";
-            this.btnLogNTRIP.Size = new System.Drawing.Size(53, 53);
+            this.btnLogNTRIP.Size = new System.Drawing.Size(83, 53);
             this.btnLogNTRIP.TabIndex = 548;
             this.btnLogNTRIP.UseVisualStyleBackColor = false;
             this.btnLogNTRIP.Click += new System.EventHandler(this.btnLogNTRIP_Click);
             // 
-            // lblPGNGuide
+            // btnLogNMEA
             // 
-            this.lblPGNGuide.AutoSize = true;
-            this.lblPGNGuide.BackColor = System.Drawing.Color.Transparent;
-            this.lblPGNGuide.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblPGNGuide.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.lblPGNGuide.Location = new System.Drawing.Point(381, 8);
-            this.lblPGNGuide.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lblPGNGuide.Name = "lblPGNGuide";
-            this.lblPGNGuide.Size = new System.Drawing.Size(73, 18);
-            this.lblPGNGuide.TabIndex = 549;
-            this.lblPGNGuide.Text = "Guide ->";
-            this.lblPGNGuide.Click += new System.EventHandler(this.lblPGNGuide_Click);
+            this.btnLogNMEA.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnLogNMEA.BackColor = System.Drawing.Color.Transparent;
+            this.btnLogNMEA.FlatAppearance.BorderSize = 0;
+            this.btnLogNMEA.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnLogNMEA.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnLogNMEA.Image = global::AgIO.Properties.Resources.Nmea;
+            this.btnLogNMEA.Location = new System.Drawing.Point(141, 233);
+            this.btnLogNMEA.Name = "btnLogNMEA";
+            this.btnLogNMEA.Size = new System.Drawing.Size(83, 53);
+            this.btnLogNMEA.TabIndex = 544;
+            this.btnLogNMEA.UseVisualStyleBackColor = false;
+            this.btnLogNMEA.Click += new System.EventHandler(this.btnLogNMEA_Click);
+            // 
+            // btnClear
+            // 
+            this.btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnClear.BackColor = System.Drawing.Color.Transparent;
+            this.btnClear.FlatAppearance.BorderSize = 0;
+            this.btnClear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnClear.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnClear.Image = global::AgIO.Properties.Resources.Trash;
+            this.btnClear.Location = new System.Drawing.Point(-119, 233);
+            this.btnClear.Name = "btnClear";
+            this.btnClear.Size = new System.Drawing.Size(64, 53);
+            this.btnClear.TabIndex = 543;
+            this.btnClear.UseVisualStyleBackColor = false;
+            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
+            // 
+            // btnFileSave
+            // 
+            this.btnFileSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnFileSave.BackColor = System.Drawing.Color.Transparent;
+            this.btnFileSave.FlatAppearance.BorderSize = 0;
+            this.btnFileSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnFileSave.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnFileSave.Image = global::AgIO.Properties.Resources.VehFileSave;
+            this.btnFileSave.Location = new System.Drawing.Point(-40, 233);
+            this.btnFileSave.Name = "btnFileSave";
+            this.btnFileSave.Size = new System.Drawing.Size(64, 53);
+            this.btnFileSave.TabIndex = 542;
+            this.btnFileSave.UseVisualStyleBackColor = false;
+            this.btnFileSave.Click += new System.EventHandler(this.btnFileSave_Click);
+            // 
+            // btnLog
+            // 
+            this.btnLog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnLog.BackColor = System.Drawing.Color.LightGreen;
+            this.btnLog.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnLog.FlatAppearance.BorderSize = 0;
+            this.btnLog.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnLog.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnLog.Image = global::AgIO.Properties.Resources.ScanNetwork;
+            this.btnLog.Location = new System.Drawing.Point(240, 232);
+            this.btnLog.Name = "btnLog";
+            this.btnLog.Size = new System.Drawing.Size(83, 53);
+            this.btnLog.TabIndex = 541;
+            this.btnLog.UseVisualStyleBackColor = false;
+            this.btnLog.Click += new System.EventHandler(this.btnLog_Click);
             // 
             // FormUDPMonitor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(90)))));
-            this.ClientSize = new System.Drawing.Size(504, 291);
-            this.ControlBox = false;
+            this.ClientSize = new System.Drawing.Size(409, 291);
+            this.Controls.Add(this.btnPause);
             this.Controls.Add(this.lblPGNGuide);
             this.Controls.Add(this.btnLogNTRIP);
             this.Controls.Add(this.label2);
@@ -227,13 +229,11 @@
             this.Controls.Add(this.btnFileSave);
             this.Controls.Add(this.btnLog);
             this.Controls.Add(this.textBoxRcv);
-            this.Controls.Add(this.btnSerialCancel);
             this.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(465, 307);
             this.Name = "FormUDPMonitor";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "UDP Monitor";
@@ -245,7 +245,6 @@
         }
 
         #endregion
-        private System.Windows.Forms.Button btnSerialCancel;
         private System.Windows.Forms.TextBox textBoxRcv;
         private System.Windows.Forms.Button btnLog;
         private System.Windows.Forms.Timer timer1;
@@ -257,5 +256,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btnLogNTRIP;
         private System.Windows.Forms.Label lblPGNGuide;
+        private System.Windows.Forms.Button btnPause;
     }
 }

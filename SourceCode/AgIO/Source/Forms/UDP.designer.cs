@@ -228,19 +228,6 @@ namespace AgIO
         {
             if (isUDPNetworkConnected)
             {
-                if (isUDPMonitorOn)
-                {
-                    if (epNtrip != null && endPoint.Port == epNtrip.Port)
-                    {
-                        if (isNTRIPLogOn)
-                            logUDPSentence.Append(DateTime.Now.ToString("ss.fff\t") + endPoint.ToString() + "\t" + " > NTRIP\r\n");
-                    }
-                    else
-                    {
-                        logUDPSentence.Append(DateTime.Now.ToString("ss.fff\t") + endPoint.ToString() + "\t" + " > " + byteData[3].ToString() + "\r\n");
-                    }
-                }
-
                 try
                 {
                     // Send packet to the zero
@@ -255,6 +242,12 @@ namespace AgIO
                     //WriteErrorLog("Sending UDP Message" + e.ToString());
                     //MessageBox.Show("Send Error: " + e.Message, "UDP Client", MessageBoxButtons.OK,
                     //MessageBoxIcon.Error);
+                }
+
+                if (isUDPMonitorOn)
+                {
+                    if (epNtrip != null && endPoint.Port != epNtrip.Port) 
+                        logUDPSentence.Append(DateTime.Now.ToString("ss.fff\t") + endPoint.ToString() + "\t" + " > " + byteData[3].ToString() + "\r\n");
                 }
             }
         }
@@ -416,7 +409,7 @@ namespace AgIO
                     rawBuffer += Encoding.ASCII.GetString(data);
                     ParseNMEA(ref rawBuffer);
 
-                    if (isUDPMonitorOn && isGPSLogOn)
+                    if (isGPSLogOn)
                     {
                         logUDPSentence.Append(DateTime.Now.ToString("ss.fff\t") + System.Text.Encoding.ASCII.GetString(data));
                     }

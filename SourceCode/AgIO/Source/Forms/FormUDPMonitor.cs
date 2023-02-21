@@ -17,8 +17,6 @@ namespace AgIO
         //class variables
         private readonly FormLoop mf = null;
 
-        private bool logOn = false;
-
         public FormUDPMonitor(Form callingForm)
         {
             //get copy of the calling main form
@@ -29,32 +27,21 @@ namespace AgIO
         private void FormUDp_Load(object sender, EventArgs e)
         {
             mf.isUDPMonitorOn = true;
+            mf.isLogNMEA = false;
+            mf.isNTRIPLogOn = false;
+
             timer1.Enabled = true;
-            logOn = true;
         }
 
 
         private void btnSerialCancel_Click(object sender, EventArgs e)
         {
             mf.isUDPMonitorOn = false;
-            Close();
-        }
+            mf.isLogNMEA = false;
+            mf.isNTRIPLogOn = false;
+            timer1.Enabled = false;
 
-        private void btnLog_Click(object sender, EventArgs e)
-        {
-            logOn = !logOn;
-            if (logOn)
-            {
-                btnLog.BackColor = Color.LightGreen;
-                mf.isUDPMonitorOn = true;
-                timer1.Enabled = true;
-            }
-            else
-            {
-                btnLog.BackColor = Color.Salmon;
-                mf.isUDPMonitorOn = false;
-                timer1.Enabled = false;
-            }
+            Close();
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -76,6 +63,10 @@ namespace AgIO
         private void FormUDPMonitor_FormClosing(object sender, FormClosingEventArgs e)
         {
             mf.isUDPMonitorOn = false;
+            mf.isLogNMEA = false;
+            mf.isNTRIPLogOn = false;
+
+            timer1.Enabled = false;
         }
 
         private void btnClear_Click(object sender, EventArgs e)
@@ -90,15 +81,46 @@ namespace AgIO
 
             if (mf.isGPSLogOn) btnLogNMEA.BackColor = Color.LightGreen;
             else btnLogNMEA.BackColor = Color.Transparent;
+
+            DoLogTimerUpdate();
         }
+
+        private void btnLog_Click(object sender, EventArgs e)
+        {
+            mf.isUDPMonitorOn = !mf.isUDPMonitorOn;
+            if (mf.isUDPMonitorOn)
+            {
+                btnLog.BackColor = Color.LightGreen;
+            }
+            else
+            {
+                btnLog.BackColor = Color.Transparent;
+            }
+
+            DoLogTimerUpdate();
+        }
+
+        private void DoLogTimerUpdate()
+        {
+            if (mf.isGPSLogOn || mf.isUDPMonitorOn || mf.isNTRIPLogOn)
+            {
+                timer1.Start();
+            }
+            else
+            {
+                timer1.Stop();
+            }
+                
+                    }
 
         private void btnLogNTRIP_Click(object sender, EventArgs e)
         {
-
             mf.isNTRIPLogOn = !mf.isNTRIPLogOn;
 
             if (mf.isNTRIPLogOn) btnLogNTRIP.BackColor = Color.LightGreen;
             else btnLogNTRIP.BackColor = Color.Transparent;
+
+            DoLogTimerUpdate();
         }
 
         private void lblPGNGuide_Click(object sender, EventArgs e)
@@ -106,6 +128,20 @@ namespace AgIO
             var form = new FormPGN();
                 form.Show(this);
 
+        }
+
+        private void btnPause_Click(object sender, EventArgs e)
+        {
+            if (timer1.Enabled)
+            {
+                timer1.Enabled = false;
+                btnPause.BackgroundImage = Properties.Resources.Play;
+            }
+            else
+            {
+                timer1.Enabled = true;
+                btnPause.BackgroundImage = Properties.Resources.Pause;
+            }
         }
     }
 }

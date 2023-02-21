@@ -438,6 +438,11 @@ namespace AgIO
                 if (tripCounts > 9999) tripCounts -= 10000;
 
                 lblToGPS.Text = tripCounts.ToString();
+
+                if (isNTRIPLogOn && epNtrip != null)
+                {
+                    logUDPSentence.Append(DateTime.Now.ToString("ss.fff\t") + epNtrip.ToString() + "\t" + " > NTRIP\r\n");
+                }
             }
         }
 
