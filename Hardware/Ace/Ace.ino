@@ -10,15 +10,20 @@
 
 #include "zNMEAParser.h"
 
-/************************* User Settings *************************/
-
 HardwareSerial* SerialIMU = &Serial1;   //IMU BNO-085
 
 //Status LED's
 constexpr auto GGAReceivedLED = 13;         //Teensy onboard LED
 
+//timers
 elapsedMillis gpsLostTimer;
 elapsedMillis LEDTimer;
+elapsedMillis imuDelayTimer;
+
+bool isGGA_Updated = false;
+
+// position of imu
+bool isSwapXY = true;
 
 //Roomba Vac mode for BNO085 and data
 BNO_rvc rvc = BNO_rvc();
@@ -32,9 +37,6 @@ ADC* adcWAS = new ADC();
 
 //Used to set CPU speed
 extern "C" uint32_t set_arm_clock(uint32_t frequency); // required prototype
-
-//  we are using BNO085
-bool useBNO08x = true;
 
 /* A parser is declared with 3 handlers at most */
 NMEAParser<2> parser;
@@ -76,24 +78,27 @@ void setup()
 
 void loop()
 {
-    //read any NMEA sent via udp
-    udpNMEA();
-
     //check if new bnoData and if true, send WAS value
     if (rvc.read(&bnoData))
     {
         SampleWAS();
     }
 
-    //GGA timeout, turn off GPS LED's etc
-    if (gpsLostTimer > 10000) //GGA age over 10sec
+    //wait 40 msec then update imu data for next PANDA sentence
+    if (isGGA_Updated && imuDelayTimer > 40)
     {
-        //digitalWrite(GPSRED_LED, LOW);
-        //digitalWrite(GPSGREEN_LED, LOW);
+        imuHandler();
+        isGGA_Updated = false;
     }
 
-    //check for AgIO Sent 
-    ReceiveUDP_AgIO();
+    //read any NMEA sent via udp 5120
+    udpNMEA();
+
+    //check for AgIO Sending 8888 
+    //ReceiveUDP_PGN(); *** We don't need all that other data and pgns ***
+
+    //check for Hello Sent 7777
+    ReceiveUDP_Hello();
 
     if (LEDTimer > 2000)
     {
@@ -101,6 +106,13 @@ void loop()
 
         //Do the LED Routine
         LEDRoutine();
+    }
+
+    //GGA timeout, turn off GPS LED's etc
+    if (gpsLostTimer > 10000) //GGA age over 10sec
+    {
+        //digitalWrite(GPSRED_LED, LOW);
+        //digitalWrite(GPSGREEN_LED, LOW);
     }
 
 }//End Loop

@@ -301,7 +301,7 @@ namespace AgIO
             DoTraffic();
 
             //send a hello to modules
-            SendUDPMessage(helloFromAgIO, epModule);
+            SendUDPMessage(helloFromAgIO, epHello);
 
 
             if (isLogNMEA)
@@ -320,7 +320,6 @@ namespace AgIO
 
                 lblHDOP.Text = hdopData.ToString("N1");
             }
-
         }
 
         private void TenSecondLoop()

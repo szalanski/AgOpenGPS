@@ -63,13 +63,11 @@ void GGA_Handler() //Rec'd GGA
     // time of last DGPS update
     parser.getArg(12, ageDGPS);
 
+    //we have new GGA sentence
+    isGGA_Updated = true;
 
-    //Get IMU data ready
-    if (useBNO08x)
-    {
-        imuHandler();
-        //Serial.println(bnoData.yawX10);
-    }
+    //reset imu timer
+    imuDelayTimer = 0;
 
     //build the PANDA sentence
     BuildNmea();
@@ -93,38 +91,47 @@ void VTG_Handler()
 void imuHandler()
 {
     double angVel;
-    
-    if (useBNO08x)
-    {
-        // Fill rest of Panda Sentence - Heading
-        itoa(bnoData.yawX10, imuHeading, 10);
 
+    // Fill rest of Panda Sentence - Heading
+    itoa(bnoData.yawX10, imuHeading, 10);
+
+    if (isSwapXY)
+    {
+        // the pitch x100
+        itoa(bnoData.pitchX10, imuRoll, 10);
+
+        // the roll x100
+        itoa(bnoData.rollX10, imuPitch, 10);
+    }
+    else
+    {
         // the pitch x100
         itoa(bnoData.pitchX10, imuPitch, 10);
 
         // the roll x100
         itoa(bnoData.rollX10, imuRoll, 10);
+    }
 
-        //Serial.print(rvc.angCounter);
-        //Serial.print(", ");
-        //Serial.print(bnoData.angVel);
-        //Serial.print(", ");
-        // YawRate
-        if (rvc.angCounter > 0)
-        {
-            angVel = ((double)bnoData.angVel) / (double)rvc.angCounter;
-            angVel *= 10.0;
-            rvc.angCounter = 0;
-            bnoData.angVel = (int16_t)angVel;
-        }
-        else
-        {
-            bnoData.angVel = 0;
-        }
-
-        itoa(bnoData.angVel, imuYawRate, 10);
+    //Serial.print(rvc.angCounter);
+    //Serial.print(", ");
+    //Serial.print(bnoData.angVel);
+    //Serial.print(", ");
+    
+    // YawRate
+    if (rvc.angCounter > 0)
+    {
+        angVel = ((double)bnoData.angVel) / (double)rvc.angCounter;
+        angVel *= 10.0;
+        rvc.angCounter = 0;
+        bnoData.angVel = (int16_t)angVel;
+    }
+    else
+    {
         bnoData.angVel = 0;
     }
+
+    itoa(bnoData.angVel, imuYawRate, 10);
+    bnoData.angVel = 0;
 }
 
 void BuildNmea(void)
@@ -194,7 +201,7 @@ void BuildNmea(void)
     if (udp.isRunning)   
     {
         //send char stream
-        udp.SendUdpChar(nmea, strlen(nmea), udp.moduleIP, udp.portAgIO);
+        udp.SendUdpChar(nmea, strlen(nmea), udp.ipAddress, udp.portAgIO_9999);
     }
     else
     {

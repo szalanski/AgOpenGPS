@@ -56,15 +56,22 @@ namespace AgIO
             Properties.Settings.Default.eth_loopTwo.ToString() + "." +
             Properties.Settings.Default.eth_loopThree.ToString() + "." +
             Properties.Settings.Default.eth_loopFour.ToString()), 16666);
-        
+
+        //UDP
         public IPEndPoint epModule = new IPEndPoint(IPAddress.Parse(
                 Properties.Settings.Default.etIP_SubnetOne.ToString() + "." +
                 Properties.Settings.Default.etIP_SubnetTwo.ToString() + "." +
                 Properties.Settings.Default.etIP_SubnetThree.ToString() + ".255"), 8888);
-        private IPEndPoint epNtrip;
 
-        public IPEndPoint epModuleSet = new IPEndPoint(IPAddress.Parse("255.255.255.255"), 8888);
+        public IPEndPoint epHello = new IPEndPoint(IPAddress.Parse(
+                Properties.Settings.Default.etIP_SubnetOne.ToString() + "." +
+                Properties.Settings.Default.etIP_SubnetTwo.ToString() + "." +
+                Properties.Settings.Default.etIP_SubnetThree.ToString() + ".255"), 7777);
+
+        public IPEndPoint epModuleSet = new IPEndPoint(IPAddress.Parse("255.255.255.255"), 7777);
         public byte[] ipAutoSet = { 192, 168, 5 };
+
+        private IPEndPoint epNtrip;
 
         //class for counting bytes
         public CTraffic traffic = new CTraffic();

@@ -1,46 +1,46 @@
 // Buffer For Receiving 8888 UDP Data
-uint8_t agioUdpData[UDP_TX_PACKET_MAX_SIZE];
+uint8_t helloUdpData[UDP_TX_PACKET_MAX_SIZE];
 
 //Heart beat hello AgIO
 uint8_t helloFromIMU[] = { 128, 129, 121, 121, 5, 0, 0, 0, 0, 0, 71 };
 
 // UDP Receive sent from AgIO - sent to port 8888
-void ReceiveUDP_AgIO()
+void ReceiveUDP_Hello()
 {
     // When ethernet is not running, return directly. parsePacket() will block when we don't
-    if (udp.isRunning)    
+    if (udp.isRunning)
     {
         //get data from AgIO sent by 9999 to this 8888
-        uint16_t len = udp.AgIO.parsePacket();
-        
+        uint16_t len = udp.Hello.parsePacket();
+
         //make sure from AgIO
-        if (udp.AgIO.remotePort() == 9999)
+        if (udp.Hello.remotePort() == 9999)
         {
             // Check for len > 4, because we check byte 0, 1, 2 and 3
             if (len > 4)
             {
-                udp.AgIO.read(agioUdpData, UDP_TX_PACKET_MAX_SIZE);
+                udp.Hello.read(helloUdpData, UDP_TX_PACKET_MAX_SIZE);
 
                 //Hello Sent from AgIO - reply imu
-                if (agioUdpData[0] == 128 && agioUdpData[1] == 129 && agioUdpData[2] == 127)
+                if (helloUdpData[0] == 128 && helloUdpData[1] == 129 && helloUdpData[2] == 127)
                 {
                     //hello
-                    if (agioUdpData[3] == 200) // Hello from AgIO                                    
+                    if (helloUdpData[3] == 200) // Hello from AgIO                                    
                     {
-                        udp.SendUdpByte(helloFromIMU, sizeof(helloFromIMU), udp.moduleIP, udp.portAgIO);
+                        udp.SendUdpByte(helloFromIMU, sizeof(helloFromIMU), udp.ipAddress, udp.portAgIO_9999);
                     }
 
                     //Scan Modules
-                    else if (agioUdpData[3] == 202)
+                    else if (helloUdpData[3] == 202)
                     {
                         //make really sure this is the reply pgn
-                        if (agioUdpData[4] == 3 && agioUdpData[5] == 202 && agioUdpData[6] == 202)
+                        if (helloUdpData[4] == 3 && helloUdpData[5] == 202 && helloUdpData[6] == 202)
                         {
-                            IPAddress rem_ip = udp.AgIO.remoteIP();
+                            IPAddress rem_ip = udp.PGN.remoteIP();
 
                             //scan reply back to AgIO
-                            uint8_t scanReply[] = { 128, 129, udp.moduleIdent, 203, 4,
-                                udp.moduleIP[0], udp.moduleIP[1], udp.moduleIP[2], udp.moduleIdent,
+                            uint8_t scanReply[] = { 128, 129, udp.thisIP, 203, 4,
+                                udp.ipAddress[0], udp.ipAddress[1], udp.ipAddress[2], udp.thisIP,
                                 rem_ip[0],rem_ip[1],rem_ip[2], 23 };
 
                             //checksum
@@ -59,14 +59,14 @@ void ReceiveUDP_AgIO()
                         }
                     }// end 202
 
-                    else if (agioUdpData[3] == 201)
+                    else if (helloUdpData[3] == 201)
                     {
                         //make really sure this is the subnet pgn
-                        if (agioUdpData[4] == 5 && agioUdpData[5] == 201 && agioUdpData[6] == 201)
+                        if (helloUdpData[4] == 5 && helloUdpData[5] == 201 && helloUdpData[6] == 201)
                         {
-                            udp.moduleIP[0] = agioUdpData[7];
-                            udp.moduleIP[1] = agioUdpData[8];
-                            udp.moduleIP[2] = agioUdpData[9];
+                            udp.ipAddress[0] = helloUdpData[7];
+                            udp.ipAddress[1] = helloUdpData[8];
+                            udp.ipAddress[2] = helloUdpData[9];
 
                             //save in EEPROM and restart
                             udp.SaveModuleIP();
@@ -75,9 +75,9 @@ void ReceiveUDP_AgIO()
                         }
                     }//end 201
                 } //end if 80 81 7F
-
             }
         }
     }
 }
+
 

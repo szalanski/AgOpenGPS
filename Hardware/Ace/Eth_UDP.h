@@ -22,6 +22,49 @@ public:
 	Eth_UDP();
 	~Eth_UDP();
 
+	//udp sent to all on subnet set
+	IPAddress ipAddress;
+
+	//GPS/IMU/WAS module is x.x.x.120
+	byte thisIP = 120;
+
+	//MAC address of this module of this module
+	byte mac[6] = { 0x00, 0x00, 0x56, 0x00, 0x00, 0x78 };
+
+
+	// GPS listens to
+	unsigned int portNMEA_5120 = 5120;
+
+	// Autosteer listens to 
+	unsigned int portModule_8888 = 8888;
+
+	//This module listens to AgIO hello
+	unsigned int portHello_7777 = 7777;
+
+	// AgIO listens to
+	unsigned int portAgIO_9999 = 9999;
+
+
+
+	//In port 5120 - only used for external gps sent via udp
+	EthernetUDP NMEA;
+
+	//Port 8888   Out to Modules
+	EthernetUDP PGN;
+
+	//AgIO sends hello and scan on 7777
+	EthernetUDP Hello;
+
+	//Auto set on in ethernet setup
+	bool isRunning = true;
+
+	//EEPROM
+	int16_t EEP_NetRead;
+
+	// if not in eeprom, overwrite
+	const int EEP_Net = 2410;
+
+
 	//intialize all the ethernet
 	void Start();
 
@@ -34,41 +77,6 @@ public:
 	//store the ip of this module in EEPROM
 	void SaveModuleIP();
 
-	//MAC address of this module of this module
-	byte mac[6] = { 0x00, 0x00, 0x56, 0x00, 0x00, 0x78 };
-
-	// GPS listens to
-	unsigned int portNMEA = 5120;
-
-	// Autosteer listens to 
-	unsigned int portModule = 8888;
-
-	// AgIO listens to
-	unsigned int portAgIO = 9999;
-
-	char GPS_packetBuffer[256];       // buffer for receiving GGA and VTG
-
-	//In port 5120 - only used for external gps sent via udp
-	EthernetUDP NMEA;
-
-	//In Port 8888   Out to AgIO - 9999 The main talker
-	EthernetUDP AgIO;
-
-	//Auto set on in ethernet setup
-	bool isRunning = true;
-
-	//udp sent to all on subnet set
-	IPAddress moduleIP;
-	//IPAddress steerModuleIP;
-
-	//GPS/IMU/WAS module is 120
-	byte moduleIdent = 120;
-
-	//EEPROM
-	int16_t EEP_NetRead;
-
-	// if not in eeprom, overwrite
-	const int EEP_Net = 2410;
 };
 
 //extern EtherClass Ether;
