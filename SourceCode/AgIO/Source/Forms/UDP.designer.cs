@@ -69,6 +69,7 @@ namespace AgIO
                 Properties.Settings.Default.etIP_SubnetThree.ToString() + ".255"), 7777);
 
         public IPEndPoint epModuleSet = new IPEndPoint(IPAddress.Parse("255.255.255.255"), 7777);
+
         public byte[] ipAutoSet = { 192, 168, 5 };
 
         private IPEndPoint epNtrip;
@@ -253,8 +254,19 @@ namespace AgIO
 
                 if (isUDPMonitorOn)
                 {
-                    if (epNtrip != null && endPoint.Port != epNtrip.Port) 
+                    //it isn't ntrip
+                    if (epNtrip == null)
+                    {
                         logUDPSentence.Append(DateTime.Now.ToString("ss.fff\t") + endPoint.ToString() + "\t" + " > " + byteData[3].ToString() + "\r\n");
+                    }
+                    else
+                    {
+                        //make sure not ntrip
+                        if (endPoint.Port != epNtrip.Port)
+                        {
+                            logUDPSentence.Append(DateTime.Now.ToString("ss.fff\t") + endPoint.ToString() + "\t" + " > " + byteData[3].ToString() + "\r\n");
+                        }
+                    }
                 }
             }
         }

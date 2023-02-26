@@ -36,7 +36,7 @@ void ReceiveUDP_Hello()
                         //make really sure this is the reply pgn
                         if (helloUdpData[4] == 3 && helloUdpData[5] == 202 && helloUdpData[6] == 202)
                         {
-                            IPAddress rem_ip = udp.PGN.remoteIP();
+                            IPAddress rem_ip = udp.Hello.remoteIP();
 
                             //scan reply back to AgIO
                             uint8_t scanReply[] = { 128, 129, udp.thisIP, 203, 4,

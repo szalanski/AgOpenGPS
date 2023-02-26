@@ -45,7 +45,7 @@ NMEAParser<2> parser;
 void setup()
 {
     delay(500);                         //Small delay so serial can monitor start up
-    set_arm_clock(150000000);           //Set CPU speed to 150mhz
+    //set_arm_clock(600000000);           //Set CPU speed to 150mhz
     
     //Create the serial ports
     SerialSetup();

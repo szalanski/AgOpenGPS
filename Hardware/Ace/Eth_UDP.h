@@ -24,9 +24,10 @@ public:
 
 	//udp sent to all on subnet set
 	IPAddress ipAddress;
+	IPAddress steerAddress;
 
-	//GPS/IMU/WAS module is x.x.x.120
-	byte thisIP = 120;
+	//GPS/IMU/WAS module is x.x.x.121
+	byte thisIP = 121;
 
 	//MAC address of this module of this module
 	byte mac[6] = { 0x00, 0x00, 0x56, 0x00, 0x00, 0x78 };

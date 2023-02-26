@@ -180,6 +180,9 @@ namespace AgIO
                                     {
                                         scanSocket.Bind(new IPEndPoint(info.Address, 9999));
                                         scanSocket.SendTo(scanModules, 0, scanModules.Length, SocketFlags.None, mf.epModuleSet);
+                                        if (mf.isUDPMonitorOn)
+                                            mf.logUDPSentence.Append(DateTime.Now.ToString("ss.fff\t") + mf.epModuleSet.ToString() + "\t" + " > " + data[3].ToString() + "\r\n");
+                                       
                                     }
                                     catch (Exception ex)
                                     {
@@ -246,6 +249,9 @@ namespace AgIO
                                         {
                                             scanSocket.Bind(new IPEndPoint(info.Address, 9999));
                                             scanSocket.SendTo(sendIPToModules, 0, sendIPToModules.Length, SocketFlags.None, mf.epModuleSet);
+                                            if (mf.isUDPMonitorOn)
+                                                mf.logUDPSentence.Append(DateTime.Now.ToString("ss.fff\t") + mf.epModuleSet.ToString() + "\t" + " > " + sendIPToModules[3].ToString() + "\r\n");
+
                                         }
                                         catch (Exception ex)
                                         {

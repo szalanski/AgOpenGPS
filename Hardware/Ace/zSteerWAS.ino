@@ -4,7 +4,7 @@
 #define ANALOG_SENSOR_PIN A1    //ADC1
 
 //WAS pgn
-uint8_t wasPGN_249[] = { 128, 129, 120, 249, 8, 0, 0, 0, 0, 0, 0, 0, 0, 71 };
+uint8_t wasPGN_249[] = { 128, 129, 121, 249, 8, 0, 0, 0, 0, 0, 0, 0, 0, 71 };
 int8_t wasPGN_249_Size = sizeof(wasPGN_249) - 1;
 
 int16_t helloSteerPosition = 0;
@@ -16,7 +16,6 @@ void SampleWAS()
 {
 	// R2 = (VOUT * R1) / (VIN - VOUT)
 	steeringPosition = adcWAS->adc0->analogRead(WAS_SENSOR_PIN);
-	helloSteerPosition = adcWAS->adc0->analogRead(ANALOG_SENSOR_PIN);
 
 	wasPGN_249[5] = (uint8_t)steeringPosition;
 	wasPGN_249[6] = (uint8_t)(steeringPosition >> 8);
@@ -29,7 +28,7 @@ void SampleWAS()
 	wasPGN_249[wasPGN_249_Size] = CK_A;
 
 	//send to autosteer module
-	udp.SendUdpByte(wasPGN_249, sizeof(wasPGN_249), udp.ipAddress, udp.portModule_8888);
+	udp.SendUdpByte(wasPGN_249, sizeof(wasPGN_249), udp.steerAddress, udp.portModule_8888);
 }
 
 void ADC_Setup()

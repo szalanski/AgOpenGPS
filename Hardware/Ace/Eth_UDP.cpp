@@ -46,6 +46,9 @@ void Eth_UDP::Start()
     //set this module net IP to broadcast
     ipAddress[3] = 255;
 
+    steerAddress = ipAddress;
+    steerAddress[3] = 126;
+
     Serial.print("\r\nEthernet Broadcast IP: "); Serial.println(ipAddress);
 
     Serial.print("\r\nAgIO listening to port: "); Serial.println(portAgIO_9999);
@@ -61,9 +64,10 @@ void Eth_UDP::Start()
     if (Ethernet.linkStatus() == LinkOFF)
     {
         Serial.println("\r\nEthernet cable is not connected.");
+        return;
     }
 
-    Serial.println("\r\nEthernet status OK");
+    Serial.println("\r\nEthernet status OK\r\n");
 
     // init UPD GPS (5120) Port
     if (NMEA.begin(portNMEA_5120))
@@ -83,7 +87,7 @@ void Eth_UDP::Start()
     // init UPD Port getting Hello and scan (7777) from AgIO
     if (Hello.begin(portHello_7777)) // AOGAutoSteerPortipPort
     {
-        Serial.print("Ethernet Hello listening to port: ");
+        Serial.print("Ethernet Hello Scan listening to port: ");
         Serial.println(portHello_7777);
     }
 }

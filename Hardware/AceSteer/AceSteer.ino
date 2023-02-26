@@ -10,20 +10,13 @@
     #include <EthernetUdp.h>
     #include <EEPROM.h> 
 
-    // BNO08x definitions
-    #define REPORT_INTERVAL 90 //Report interval in ms (same as the delay at the bottom)
+    #define WATCHDOG_LIMIT 20
 
-    //   ***********  Motor drive connections  **************888
-    //Connect ground only for cytron, Connect Ground and +5v for IBT2
-    
     //Dir1 for Cytron Dir, Both L and R enable for IBT2
     #define DIR1_RL_ENABLE  4  //PD4
 
     //PWM1 for Cytron PWM, Left PWM for IBT2
     #define PWM1_LPWM  3  //PD3
-
-    //Not Connected for Cytron, Right PWM for IBT2
-    #define PWM2_RPWM  9 //D9
 
     //--------------------------- Switch Input Pins ------------------------
     #define STEERSW_PIN 6 //PD6
@@ -80,7 +73,7 @@
     uint32_t lastTime = LOOP_TIME;
     uint32_t currentTime = LOOP_TIME;
 
-    uint8_t watchdogTimer = 50, WATCHDOG_FORCE_VALUE = 20;
+    uint8_t watchdogTimer = 50;
 
     //Heart beat hello AgIO
     uint8_t helloFromAutoSteer[] = { 128, 129, 126, 126, 5, 0, 0, 0, 0, 0, 71 };
@@ -164,6 +157,8 @@
 
     // An EthernetUDP instance to let us send and receive packets over UDP
     EthernetUDP Udp;
+    EthernetUDP Hello;
+
 
     void setup()
     {
@@ -189,7 +184,7 @@
         if (steerConfig.CytronDriver) pinMode(PWM2_RPWM, OUTPUT);
 
         //set up communication
-        Serial.begin(38400);
+        Serial.begin(115200);
 
         EEPROM.get(0, EEread);              // read identifier
 
@@ -239,6 +234,9 @@
         // start UDP listen to module port
         Udp.begin(8888);
 
+        // start UDP listen to hello port
+        Hello.begin(7777);
+
         Serial.println("This IP:");
         Serial.print(myip[0]);
         Serial.print(".");
@@ -264,7 +262,7 @@
             encEnable = true;
 
             //If connection lost to AgOpenGPS, the watchdog will count up and turn off steering
-            if (watchdogTimer < 20) watchdogTimer++;
+            if (watchdogTimer < 30) watchdogTimer++;
 
             steerSwitch = 0;  //default to on
 
@@ -345,327 +343,321 @@
         //This runs continuously, outside of the timed loop, keeps checking for new udpData
         CheckUDP();
 
+        CheckHello();
+
 
     } // end of main loop
 
 //callback when received packets
-  void CheckUDP(void)
-  {
-      int packetSize = Udp.parsePacket();
-
-      if (packetSize > 4)
-      {
-          //read into buffer
-          Udp.readBytes(udpData, packetSize);
-
-          uint16_t rem_port = Udp.remotePort();
-
-          if (rem_port == 5120)
-          {
-              //coming from GPS
-              if (udpData[0] == 128 && udpData[1] == 129 && udpData[2] == 120) //IMU/WAS PGN
-              {
-                  //Stream from WAS and IMU
-                  if (udpData[3] == 249)
-                  {
-                      steeringPosition = (udpData[5] | udpData[6] << 8);
-                      helloSteerPosition = steeringPosition - 2048;
-
-                      //Serial.println(steeringPosition);
-
-                      if (steerConfig.InvertWAS)
-                      {
-                          steeringPosition = (steeringPosition - 2048 - steerSettings.wasOffset);
-                          steerAngleActual = (float)(steeringPosition) / -steerSettings.steerSensorCounts;
-                      }
-                      else
-                      {
-                          steeringPosition = (steeringPosition - 2048 + steerSettings.wasOffset);
-                          steerAngleActual = (float)(steeringPosition) / steerSettings.steerSensorCounts;
-                      }
-
-                      //Ackerman fix
-                      if (steerAngleActual < 0) steerAngleActual = (steerAngleActual * steerSettings.AckermanFix);
-
-                      //get steering position       
-
-                      if (watchdogTimer < WATCHDOG_FORCE_VALUE)
-                      {
-                          //Enable H Bridge for IBT2, hyd aux, etc for cytron
-                          if (steerConfig.CytronDriver)
-                          {
-                              if (steerConfig.IsRelayActiveHigh)
-                              {
-                                  digitalWrite(PWM2_RPWM, 0);
-                              }
-                              else
-                              {
-                                  digitalWrite(PWM2_RPWM, 1);
-                              }
-                          }
-                          else digitalWrite(DIR1_RL_ENABLE, 1);
-
-                          steerAngleError = steerAngleActual - steerAngleSetPoint;   //calculate the steering error
-                          //if (abs(steerAngleError)< steerSettings.lowPWM) steerAngleError = 0;
-
-                          calcSteeringPID();  //do the pid
-                          motorDrive();       //out to motors the pwm value
-                      }
-                      else
-                      {
-                          //we've lost the comm to AgOpenGPS, or just stop request
-                          //Disable H Bridge for IBT2, hyd aux, etc for cytron
-                          if (steerConfig.CytronDriver)
-                          {
-                              if (steerConfig.IsRelayActiveHigh)
-                              {
-                                  digitalWrite(PWM2_RPWM, 1);
-                              }
-                              else
-                              {
-                                  digitalWrite(PWM2_RPWM, 0);
-                              }
-                          }
-                          else digitalWrite(DIR1_RL_ENABLE, 0); //IBT2
-
-                          pwmDrive = 0; //turn off steering motor
-                          motorDrive(); //out to motors the pwm value
-                          pulseCount = 0;
-                      }
-                  }
-                  return;
-              }
-          }
-          
-          else if (rem_port == 9999)
-          {
-              //Coming from agio
-              if (udpData[0] == 128 && udpData[1] == 129 && udpData[2] == 127) //Data
-              {
-                  if (udpData[3] == 254)
-                  {
-                      gpsSpeed = ((float)(udpData[5] | udpData[6] << 8)) * 0.1;
-
-                      guidanceStatus = udpData[7];
-
-                      //Bit 8,9    set point steer angle * 100 is sent
-                      steerAngleSetPoint = ((float)(udpData[8] | udpData[9] << 8)) * 0.01; //high low bytes
-
-                      //Serial.println(gpsSpeed); 
-
-                      if ((bitRead(guidanceStatus, 0) == 0) || (gpsSpeed < 0.1) || (steerSwitch == 1))
-                      {
-                          watchdogTimer = WATCHDOG_FORCE_VALUE; //turn off steering motor
-                      }
-                      else          //valid conditions to turn on autosteer
-                      {
-                          watchdogTimer = 0;  //reset watchdog
-                      }
+    void CheckUDP(void)
+    {
+        int packetSize = Udp.parsePacket();
+
+        if (packetSize > 4)
+        {
+            //read into buffer
+            Udp.readBytes(udpData, packetSize);
+
+            uint16_t rem_port = Udp.remotePort();
+
+            //Serial.print("This Port:  "); Serial.println(rem_port);
+
+            //coming from IMU_WAS
+            //if (rem_port == 5120)
+            {
+                if (udpData[0] == 128 && udpData[1] == 129 && udpData[2] == 121) //IMU/WAS PGN
+                {
+                    //Stream from WAS and IMU
+                    if (udpData[3] == 249)
+                    {
+                        
+                        steeringPosition = (udpData[5] | udpData[6] << 8);
+                        helloSteerPosition = steeringPosition - 2048;
+
+                        if (steerConfig.InvertWAS)
+                        {
+                            steeringPosition = (steeringPosition - 2048 - steerSettings.wasOffset);
+                            steerAngleActual = (float)(steeringPosition) / -steerSettings.steerSensorCounts;
+                        }
+                        else
+                        {
+                            steeringPosition = (steeringPosition - 2048 + steerSettings.wasOffset);
+                            steerAngleActual = (float)(steeringPosition) / steerSettings.steerSensorCounts;
+                        }
+
+                        //Ackerman fix
+                        if (steerAngleActual < 0) steerAngleActual = (steerAngleActual * steerSettings.AckermanFix);
+                        
+                        if (watchdogTimer < WATCHDOG_LIMIT)
+                        {
+                            steerAngleError = steerAngleActual - steerAngleSetPoint;   //calculate the steering error
+                            calcSteeringPID();  //do the pid
+                            motorDrive();       //out to motors the pwm value
+                        }
+                        else
+                        {
+                            //we've lost the comm to AgOpenGPS, or just stop request
+                            pwmDrive = 0; //turn off steering motor
+                            motorDrive(); //out to motors the pwm value
+                            pulseCount = 0;
+                        }
+                    }
+                    return;
+                }
+            }
+
+            if (rem_port == 9999)
+            {
+                //Coming from agio
+                if (udpData[0] == 128 && udpData[1] == 129 && udpData[2] == 127) //Data
+                {
+                    if (udpData[3] == 254)
+                    {
+                        gpsSpeed = ((float)(udpData[5] | udpData[6] << 8)) * 0.1;
+
+                        guidanceStatus = udpData[7];
+
+                        //Bit 8,9    set point steer angle * 100 is sent
+                        steerAngleSetPoint = ((float)(udpData[8] | udpData[9] << 8)) * 0.01; //high low bytes
+
+                        //Serial.println(gpsSpeed); 
+
+                        if ((bitRead(guidanceStatus, 0) == 0) || (gpsSpeed < 0.1) || (steerSwitch == 1))
+                        {
+                            watchdogTimer = WATCHDOG_LIMIT; //turn off steering motor
+                        }
+                        else          //valid conditions to turn on autosteer
+                        {
+                            watchdogTimer = 0;  //reset watchdog
+                        }
+
+                        //Bit 10 Tram 
+                        xte = udpData[10];
+
+                        //Bit 11
+                        relay = udpData[11];
+
+                        //Bit 12
+                        relayHi = udpData[12];
+
+                        //-------------------------------------------
+                        //Send to agopenGPS
+
+                        int16_t sa = (int16_t)(steerAngleActual * 100);
+
+                        PGN_253[5] = (uint8_t)sa;
+                        PGN_253[6] = sa >> 8;
+
+                        //heading         
+                        PGN_253[7] = (uint8_t)9999;
+                        PGN_253[8] = 9999 >> 8;
 
-                      //Bit 10 Tram 
-                      xte = udpData[10];
+                        //roll
+                        PGN_253[9] = (uint8_t)8888;
+                        PGN_253[10] = 8888 >> 8;
 
-                      //Bit 11
-                      relay = udpData[11];
+                        PGN_253[11] = switchByte;
+                        PGN_253[12] = (uint8_t)pwmDisplay;
 
-                      //Bit 12
-                      relayHi = udpData[12];
+                        //checksum
+                        int16_t CK_A = 0;
+                        for (uint8_t i = 2; i < PGN_253_Size; i++)
+                            CK_A = (CK_A + PGN_253[i]);
 
-                      //-------------------------------------------
-                      //Send to agopenGPS
+                        PGN_253[PGN_253_Size] = CK_A;
 
-                      int16_t sa = (int16_t)(steerAngleActual * 100);
+                        //off to AOG
+                        Udp.beginPacket(ipDestination, portDestination);
+                        Udp.write(PGN_253, sizeof(PGN_253));
+                        Udp.endPacket();
 
-                      PGN_253[5] = (uint8_t)sa;
-                      PGN_253[6] = sa >> 8;
+                        //Steer Data 2 -------------------------------------------------
+                        if (steerConfig.PressureSensor || steerConfig.CurrentSensor)
+                        {
+                            if (aog2Count++ > 2)
+                            {
+                                //Send fromAutosteer2
+                                PGN_250[5] = (byte)sensorReading;
 
-                      //heading         
-                      PGN_253[7] = (uint8_t)9999;
-                      PGN_253[8] = 9999 >> 8;
+                                //add the checksum for AOG2
+                                CK_A = 0;
+                                for (uint8_t i = 2; i < PGN_250_Size; i++)
+                                {
+                                    CK_A = (CK_A + PGN_250[i]);
+                                }
+                                PGN_250[PGN_250_Size] = CK_A;
 
-                      //roll
-                      PGN_253[9] = (uint8_t)8888;
-                      PGN_253[10] = 8888 >> 8;
+                                //off to AOG
+                                Udp.beginPacket(ipDestination, portDestination);
+                                Udp.write(PGN_250, sizeof(PGN_250));
+                                Udp.endPacket();
 
-                      PGN_253[11] = switchByte;
-                      PGN_253[12] = (uint8_t)pwmDisplay;
+                                aog2Count = 0;
+                            }
+                        }
 
-                      //checksum
-                      int16_t CK_A = 0;
-                      for (uint8_t i = 2; i < PGN_253_Size; i++)
-                          CK_A = (CK_A + PGN_253[i]);
+                        //Serial.println(steerAngleActual); 
+                        //--------------------------------------------------------------------------    
+                    }
 
-                      PGN_253[PGN_253_Size] = CK_A;
+                    //steer settings
+                    else if (udpData[3] == 252)
+                    {
+                        //PID values
+                        steerSettings.Kp = udpData[5];   // read Kp from AgOpenGPS
 
-                      //off to AOG
-                      Udp.beginPacket(ipDestination, portDestination);
-                      Udp.write(PGN_253, sizeof(PGN_253));
-                      Udp.endPacket();
+                        steerSettings.highPWM = udpData[6]; // read high pwm
 
-                      //Steer Data 2 -------------------------------------------------
-                      if (steerConfig.PressureSensor || steerConfig.CurrentSensor)
-                      {
-                          if (aog2Count++ > 2)
-                          {
-                              //Send fromAutosteer2
-                              PGN_250[5] = (byte)sensorReading;
+                        steerSettings.lowPWM = udpData[7];   // read lowPWM from AgOpenGPS              
 
-                              //add the checksum for AOG2
-                              CK_A = 0;
-                              for (uint8_t i = 2; i < PGN_250_Size; i++)
-                              {
-                                  CK_A = (CK_A + PGN_250[i]);
-                              }
-                              PGN_250[PGN_250_Size] = CK_A;
+                        steerSettings.minPWM = udpData[8]; //read the minimum amount of PWM for instant on
 
-                              //off to AOG
-                              Udp.beginPacket(ipDestination, portDestination);
-                              Udp.write(PGN_250, sizeof(PGN_250));
-                              Udp.endPacket();
+                        float temp = steerSettings.minPWM;
+                        temp *= 1.2;
+                        steerSettings.lowPWM = (uint8_t)temp;
+
+                        steerSettings.steerSensorCounts = udpData[9]; //sent as setting displayed in AOG
 
-                              aog2Count = 0;
-                          }
-                      }
-
-                      //Serial.println(steerAngleActual); 
-                      //--------------------------------------------------------------------------    
-                  }
-
-                  else if (udpData[3] == 200) // Hello from AgIO
-                  {
-                      int16_t sa = (int16_t)(steerAngleActual * 100);
-
-                      helloFromAutoSteer[5] = (uint8_t)sa;
-                      helloFromAutoSteer[6] = sa >> 8;
-
-                      helloFromAutoSteer[7] = (uint8_t)helloSteerPosition;
-                      helloFromAutoSteer[8] = helloSteerPosition >> 8;
-                      helloFromAutoSteer[9] = switchByte;
-
-                      Udp.beginPacket(ipDestination, portDestination);
-                      Udp.write(helloFromAutoSteer, sizeof(helloFromAutoSteer));
-                      Udp.endPacket();
-                  }
-
-                  //steer settings
-                  else if (udpData[3] == 252)
-                  {
-                      //PID values
-                      steerSettings.Kp = udpData[5];   // read Kp from AgOpenGPS
-
-                      steerSettings.highPWM = udpData[6]; // read high pwm
-
-                      steerSettings.lowPWM = udpData[7];   // read lowPWM from AgOpenGPS              
-
-                      steerSettings.minPWM = udpData[8]; //read the minimum amount of PWM for instant on
-
-                      float temp = steerSettings.minPWM;
-                      temp *= 1.2;
-                      steerSettings.lowPWM = (uint8_t)temp;
-
-                      steerSettings.steerSensorCounts = udpData[9]; //sent as setting displayed in AOG
-
-                      steerSettings.wasOffset = (udpData[10]);  //read was zero offset Lo
-
-                      steerSettings.wasOffset |= (udpData[11] << 8);  //read was zero offset Hi
-
-                      steerSettings.AckermanFix = (float)udpData[12] * 0.01;
-
-                      //crc
-                      //udpData[13];
-
-                      //store in EEPROM
-                      EEPROM.put(10, steerSettings);
-
-                      // for PWM High to Low interpolator
-                      highLowPerDeg = ((float)(steerSettings.highPWM - steerSettings.lowPWM)) / LOW_HIGH_DEGREES;
-                  }
-
-                  else if (udpData[3] == 251)  //251 FB - SteerConfig
-                  {
-                      uint8_t sett = udpData[5]; //setting0
-
-                      if (bitRead(sett, 0)) steerConfig.InvertWAS = 1; else steerConfig.InvertWAS = 0;
-                      if (bitRead(sett, 1)) steerConfig.IsRelayActiveHigh = 1; else steerConfig.IsRelayActiveHigh = 0;
-                      if (bitRead(sett, 2)) steerConfig.MotorDriveDirection = 1; else steerConfig.MotorDriveDirection = 0;
-                      if (bitRead(sett, 3)) steerConfig.SingleInputWAS = 1; else steerConfig.SingleInputWAS = 0;
-                      if (bitRead(sett, 4)) steerConfig.CytronDriver = 1; else steerConfig.CytronDriver = 0;
-                      if (bitRead(sett, 5)) steerConfig.SteerSwitch = 1; else steerConfig.SteerSwitch = 0;
-                      if (bitRead(sett, 6)) steerConfig.SteerButton = 1; else steerConfig.SteerButton = 0;
-                      if (bitRead(sett, 7)) steerConfig.ShaftEncoder = 1; else steerConfig.ShaftEncoder = 0;
-
-                      steerConfig.PulseCountMax = udpData[6];
-
-                      //was speed
-                      //udpData[7]; 
-
-                      sett = udpData[8]; //setting1 - Danfoss valve etc
-
-                      if (bitRead(sett, 0)) steerConfig.IsDanfoss = 1; else steerConfig.IsDanfoss = 0;
-                      if (bitRead(sett, 1)) steerConfig.PressureSensor = 1; else steerConfig.PressureSensor = 0;
-                      if (bitRead(sett, 2)) steerConfig.CurrentSensor = 1; else steerConfig.CurrentSensor = 0;
-
-                      //crc
-                      //udpData[13];        
-
-                      EEPROM.put(40, steerConfig);
-
-                      //reset the arduino
-                      resetFunc();
-                  }
-
-                  //set subnet
-                  else if (udpData[3] == 201)
-                  {
-                      //make really sure this is the subnet pgn
-                      if (udpData[4] == 5 && udpData[5] == 201 && udpData[6] == 201)
-                      {
-                          networkAddress.ipOne = udpData[7];
-                          networkAddress.ipTwo = udpData[8];
-                          networkAddress.ipThree = udpData[9];
-
-                          //save in EEPROM and restart
-                          EEPROM.put(60, networkAddress);
-                          resetFunc();
-                      }
-                  }//end 201
-
-                  //scan reply
-                  else if (udpData[3] == 202)
-                  {
-                      //make really sure this is the reply pgn
-                      if (udpData[4] == 3 && udpData[5] == 202 && udpData[6] == 202)
-                      {
-                          IPAddress rem_ip = Udp.remoteIP();
-
-                          //scan pgn return
-                          uint8_t scanReply[] = { 128, 129, 126, 203, 7,
-                              networkAddress.ipOne, networkAddress.ipTwo, networkAddress.ipThree, 126,
-                               rem_ip[0],rem_ip[1],rem_ip[2] , 23 };
-
-                          //checksum
-                          int16_t CK_A = 0;
-                          for (uint8_t i = 2; i < sizeof(scanReply) - 1; i++)
-                          {
-                              CK_A = (CK_A + scanReply[i]);
-                          }
-                          scanReply[sizeof(scanReply) - 1] = CK_A;
-
-                          static uint8_t ipDest[] = { 255,255,255,255 };
-                          uint16_t portDest = 9999; //AOG port that listens
-
-                          //off to AOG
-                          Udp.beginPacket(ipDest, portDest);
-                          Udp.write(scanReply, sizeof(scanReply));
-                          Udp.endPacket();
-                      }
-                  }
-
-              } //end if 80 81 7F 
-          }
-      }
-
-  } //end udp callback
+                        steerSettings.wasOffset = (udpData[10]);  //read was zero offset Lo
+
+                        steerSettings.wasOffset |= (udpData[11] << 8);  //read was zero offset Hi
+
+                        steerSettings.AckermanFix = (float)udpData[12] * 0.01;
+
+                        //crc
+                        //udpData[13];
+
+                        //store in EEPROM
+                        EEPROM.put(10, steerSettings);
+
+                        // for PWM High to Low interpolator
+                        highLowPerDeg = ((float)(steerSettings.highPWM - steerSettings.lowPWM)) / LOW_HIGH_DEGREES;
+                    }
+
+                    else if (udpData[3] == 251)  //251 FB - SteerConfig
+                    {
+                        uint8_t sett = udpData[5]; //setting0
+
+                        if (bitRead(sett, 0)) steerConfig.InvertWAS = 1; else steerConfig.InvertWAS = 0;
+                        if (bitRead(sett, 1)) steerConfig.IsRelayActiveHigh = 1; else steerConfig.IsRelayActiveHigh = 0;
+                        if (bitRead(sett, 2)) steerConfig.MotorDriveDirection = 1; else steerConfig.MotorDriveDirection = 0;
+                        if (bitRead(sett, 3)) steerConfig.SingleInputWAS = 1; else steerConfig.SingleInputWAS = 0;
+                        if (bitRead(sett, 4)) steerConfig.CytronDriver = 1; else steerConfig.CytronDriver = 0;
+                        if (bitRead(sett, 5)) steerConfig.SteerSwitch = 1; else steerConfig.SteerSwitch = 0;
+                        if (bitRead(sett, 6)) steerConfig.SteerButton = 1; else steerConfig.SteerButton = 0;
+                        if (bitRead(sett, 7)) steerConfig.ShaftEncoder = 1; else steerConfig.ShaftEncoder = 0;
+
+                        steerConfig.PulseCountMax = udpData[6];
+
+                        //was speed
+                        //udpData[7]; 
+
+                        sett = udpData[8]; //setting1 - Danfoss valve etc
+
+                        if (bitRead(sett, 0)) steerConfig.IsDanfoss = 1; else steerConfig.IsDanfoss = 0;
+                        if (bitRead(sett, 1)) steerConfig.PressureSensor = 1; else steerConfig.PressureSensor = 0;
+                        if (bitRead(sett, 2)) steerConfig.CurrentSensor = 1; else steerConfig.CurrentSensor = 0;
+
+                        //crc
+                        //udpData[13];        
+
+                        EEPROM.put(40, steerConfig);
+
+                        //reset the arduino
+                        resetFunc();
+                    }
+
+                } //end if 80 81 7F 
+            }
+        }
+
+    } //end udp callback
+
+//callback when received packets
+    void CheckHello(void)
+    {
+        int packetSize = Hello.parsePacket();
+
+        if (packetSize > 4)
+        {
+            //read into buffer
+            Hello.readBytes(udpData, packetSize);
+
+            uint16_t rem_port = Hello.remotePort();
+
+            if (rem_port == 9999)
+            {
+                //Coming from agio
+                if (udpData[0] == 128 && udpData[1] == 129 && udpData[2] == 127) //Data
+                {
+                    if (udpData[3] == 200) // Hello from AgIO
+                    {
+                        int16_t sa = (int16_t)(steerAngleActual * 100);
+
+                        helloFromAutoSteer[5] = (uint8_t)sa;
+                        helloFromAutoSteer[6] = sa >> 8;
+
+                        helloFromAutoSteer[7] = (uint8_t)helloSteerPosition;
+                        helloFromAutoSteer[8] = helloSteerPosition >> 8;
+                        helloFromAutoSteer[9] = switchByte;
+
+                        Hello.beginPacket(ipDestination, portDestination);
+                        Hello.write(helloFromAutoSteer, sizeof(helloFromAutoSteer));
+                        Hello.endPacket();
+                    }
+
+                    //set subnet
+                    else if (udpData[3] == 201)
+                    {
+                        //make really sure this is the subnet pgn
+                        if (udpData[4] == 5 && udpData[5] == 201 && udpData[6] == 201)
+                        {
+                            networkAddress.ipOne = udpData[7];
+                            networkAddress.ipTwo = udpData[8];
+                            networkAddress.ipThree = udpData[9];
+
+                            //save in EEPROM and restart
+                            EEPROM.put(60, networkAddress);
+                            resetFunc();
+                        }
+                    }//end 201
+
+                    //scan reply
+                    else if (udpData[3] == 202)
+                    {
+                        //make really sure this is the reply pgn
+                        if (udpData[4] == 3 && udpData[5] == 202 && udpData[6] == 202)
+                        {
+                            IPAddress rem_ip = Udp.remoteIP();
+
+                            //scan pgn return
+                            uint8_t scanReply[] = { 128, 129, 126, 203, 7,
+                                networkAddress.ipOne, networkAddress.ipTwo, networkAddress.ipThree, 126,
+                                 rem_ip[0],rem_ip[1],rem_ip[2] , 23 };
+
+                            //checksum
+                            int16_t CK_A = 0;
+                            for (uint8_t i = 2; i < sizeof(scanReply) - 1; i++)
+                            {
+                                CK_A = (CK_A + scanReply[i]);
+                            }
+                            scanReply[sizeof(scanReply) - 1] = CK_A;
+
+                            static uint8_t ipDest[] = { 255,255,255,255 };
+                            uint16_t portDest = 9999; //AOG port that listens
+
+                            //off to AOG
+                            Hello.beginPacket(ipDest, portDest);
+                            Hello.write(scanReply, sizeof(scanReply));
+                            Hello.endPacket();
+                        }
+                    }
+
+                } //end if 80 81 7F 
+            }
+        }
+
+    } //end udp callback
 
 
 //ISR Steering Wheel Encoder
