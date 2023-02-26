@@ -34,7 +34,7 @@ public:
 
 
 	// this modules listens to GPS sent on
-	unsigned int portNMEA_5120 = 5120;
+	unsigned int portNMEA_2211 = 2211;  // Why 2211? 22XX=GPS then 2211=GPS1 2222=GPS2 2233=RTCM3 corrections easy to remember.
 
 	//This module listens to hello sent by AgIO
 	unsigned int portHello_7777 = 7777;

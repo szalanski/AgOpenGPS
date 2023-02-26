@@ -44,8 +44,8 @@ NMEAParser<2> parser;
 // Setup procedure ------------------------
 void setup()
 {
-    delay(500);                         //Small delay so serial can monitor start up
-    //set_arm_clock(600000000);           //Set CPU speed to 150mhz
+    delay(100);                         //Small delay so serial can monitor start up, 100 works why wait
+    //set_arm_clock(600000000);           //Set CPU speed to 600mhz, 450mhz is also a good choice.
     
     //Create the serial ports
     SerialSetup();
@@ -72,8 +72,8 @@ void setup()
     Serial.println("\r\nStarting Ethernet...\r\n");
     udp.Start();
 
-    Serial.println("\r\nEnd setup, waiting for GPS...\r\n");
-    delay(4000);
+    Serial.println("\r\nEnd setup, waiting for GPS...\r\n"); 
+    delay(100);
 }
 
 void loop()

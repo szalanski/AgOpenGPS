@@ -9,7 +9,7 @@ Eth_UDP::Eth_UDP(void)
 {
     navAddress[0] = 192;
     navAddress[1] = 168;
-    navAddress[2] = 1;
+    navAddress[2] = 5; // .5 The Default Subnet of AOG
     navAddress[3] = thisIP;
 
     EEPROM.get(60, EEP_NetRead);              // read identifier
@@ -71,11 +71,11 @@ void Eth_UDP::Start()
     Serial.println("\r\nEthernet status OK\r\n");
 
     // init UPD GPS (5120) Port
-    if (NMEA.begin(portNMEA_5120))
+    if (NMEA.begin(portNMEA_2211))
     {
         isRunning = true;
         Serial.print("Ethernet GPS UDP listening on port: ");
-        Serial.println(portNMEA_5120);
+        Serial.println(portNMEA_2211);
     }
 
     // init UPD Port getting AutoSteer (8888) data from AGIO

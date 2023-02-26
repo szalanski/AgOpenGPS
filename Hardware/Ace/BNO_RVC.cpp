@@ -69,7 +69,7 @@ bool BNO_rvc::read(BNO_rvcData* bnoData)
 	bnoData->pitchX10 = (int16_t)((float)temp * DEGREE_SCALE);
 
 	temp = buffer[5] + (buffer[6] << 8);
-	bnoData->rollX10 = (int16_t)((float)temp * DEGREE_SCALE);
+	bnoData->rollX10 = (int16_t)((float)temp * DEGREE_SCALE); //Confirmed X as stock direction of travel
 
 	return true;
 }
