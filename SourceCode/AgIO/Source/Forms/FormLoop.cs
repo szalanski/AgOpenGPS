@@ -261,7 +261,7 @@ namespace AgIO
             #endregion
 
             //every couple or so seconds
-            if ((secondsSinceStart - twoSecondTimer) > 2)
+            if ((secondsSinceStart - twoSecondTimer) > 1.5)
             {
                 TwoSecondLoop();
                 twoSecondTimer = secondsSinceStart;

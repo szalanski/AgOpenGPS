@@ -138,23 +138,22 @@ namespace AgIO
 
                 words = nextNMEASentence.Split(',');
 
-                if (isLogNMEA)
-                {
-                    string timNow = DateTime.UtcNow.ToString("HHmmss.fff ", CultureInfo.InvariantCulture);
-                    logNMEASentence.Append(timNow + " " + nextNMEASentence + "\r\n");
-
-                    //double timD = Convert.ToDouble(timNow);
-                    //double timS = Convert.ToDouble(words[1]);
-
-                    //logNMEASentence.Append((timD-timS).ToString("N3", CultureInfo.InvariantCulture) + " ")
-                    //    .Append(timNow + " " + nextNMEASentence + "\r\n");
-
-                }
-
                 //parse them accordingly
                 if (words.Length < 3) break;
 
-                if ((words[0] == "$GPGGA" || words[0] == "$GNGGA") && words.Length > 13)
+                if (words[0] == "$PANDA" && words.Length > 14)
+                {
+                    ParsePANDA();
+                    if (isGPSSentencesOn) pandaSentence = nextNMEASentence;
+                }
+
+                else if (words[0] == "$PAOGI" && words.Length > 14)
+                {
+                    ParseOGI();
+                    if (isGPSSentencesOn) paogiSentence = nextNMEASentence;
+                }
+
+                else if ((words[0] == "$GPGGA" || words[0] == "$GNGGA") && words.Length > 13)
                 {
                     ParseGGA();
                     if (isGPSSentencesOn) ggaSentence = nextNMEASentence;
@@ -184,18 +183,6 @@ namespace AgIO
                     if (isGPSSentencesOn) hpdSentence = nextNMEASentence;
                 }
 
-                else if (words[0] == "$PAOGI" && words.Length > 14)
-                {
-                    ParseOGI();
-                    if (isGPSSentencesOn) paogiSentence = nextNMEASentence;
-                }
-
-                else if (words[0] == "$PANDA" && words.Length > 14)
-                {
-                    ParsePANDA();
-                    if (isGPSSentencesOn) pandaSentence = nextNMEASentence;
-                }
-
                 else if (words[0] == "$GPHDT" || words[0] == "$GNHDT")
                 {
                     ParseHDT();
@@ -217,6 +204,20 @@ namespace AgIO
                 {
                     ParseSTI032(); //there is also an $PSTI,030,... wich contains different data!
                 }
+
+                if (isLogNMEA)
+                {
+                    string timNow = DateTime.UtcNow.ToString("HHmmss.fff ", CultureInfo.InvariantCulture);
+                    logNMEASentence.Append(timNow + " " + nextNMEASentence + "\r\n");
+
+                    //double timD = Convert.ToDouble(timNow);
+                    //double timS = Convert.ToDouble(words[1]);
+
+                    //logNMEASentence.Append((timD-timS).ToString("N3", CultureInfo.InvariantCulture) + " ")
+                    //    .Append(timNow + " " + nextNMEASentence + "\r\n");
+
+                }
+
             }// while still data
 
             if (isNMEAToSend)

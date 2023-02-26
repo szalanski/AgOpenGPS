@@ -262,7 +262,7 @@ namespace AgIO
                     else
                     {
                         //make sure not ntrip
-                        if (endPoint.Port != epNtrip.Port)
+                        if (endPoint != epNtrip)
                         {
                             logUDPSentence.Append(DateTime.Now.ToString("ss.fff\t") + endPoint.ToString() + "\t" + " > " + byteData[3].ToString() + "\r\n");
                         }
@@ -318,101 +318,114 @@ namespace AgIO
         {
             try
             {
+                //Hello and scan reply
                 if (data[0] == 0x80 && data[1] == 0x81)
                 {
-                    //module return via udp sent to AOG
-                    SendToLoopBackMessageAOG(data);
-
-                    //module data also sent to VR
-                    if (isPluginUsed) SendToLoopBackMessageVR(data);
-
-                    //check for Scan and Hello
-                    if (data[3] == 126 && data.Length == 11)
+                    switch (data[3])
                     {
-                        traffic.helloFromAutoSteer = 0;
-                        if (isViewAdvanced)
-                        {
-                            double actualSteerAngle = (Int16)((data[6] << 8) + data[5]);
-                            lblSteerAngle.Text = (actualSteerAngle * 0.01).ToString("N1");
-                            lblWASCounts.Text = ((Int16)((data[8] << 8) + data[7])).ToString();
+                        case 126:
+                            {
+                                traffic.helloFromAutoSteer = 0;
+                                if (isViewAdvanced)
+                                {
+                                    double actualSteerAngle = (Int16)((data[6] << 8) + data[5]);
+                                    lblSteerAngle.Text = (actualSteerAngle * 0.01).ToString("N1");
+                                    lblWASCounts.Text = ((Int16)((data[8] << 8) + data[7])).ToString();
 
-                            lblSwitchStatus.Text = ((data[9] & 2) == 2).ToString();
-                            lblWorkSwitchStatus.Text = ((data[9] & 1) == 1).ToString();
-                        }
-                    }
+                                    lblSwitchStatus.Text = ((data[9] & 2) == 2).ToString();
+                                    lblWorkSwitchStatus.Text = ((data[9] & 1) == 1).ToString();
+                                }
+                                break;
+                            }
+                        case 123:
+                            {
+                                traffic.helloFromMachine = 0;
 
-                    else if (data[3] == 123 && data.Length == 11)
-                    {
-                        traffic.helloFromMachine = 0;
+                                if (isViewAdvanced)
+                                {
+                                    lbl1To8.Text = Convert.ToString(data[5], 2).PadLeft(8, '0');
+                                    lbl9To16.Text = Convert.ToString(data[6], 2).PadLeft(8, '0');
+                                }
+                                break;
+                            }
 
-                        if (isViewAdvanced)
-                        {
-                            lbl1To8.Text = Convert.ToString(data[5], 2).PadLeft(8, '0');
-                            lbl9To16.Text = Convert.ToString(data[6], 2).PadLeft(8, '0');
-                        }
-                    }
+                        case 121:
+                            {
+                                traffic.helloFromNav = 0;
+                                break;
+                            }
 
-                    else if (data[3] == 121 && data.Length == 11)
-                        traffic.helloFromNav = 0;
+                        case 203:
+                            {
+                                if (data[2] == 126)  //steer module
+                                {
+                                    scanReply.steerIP = data[5].ToString() + "." + data[6].ToString() + "." + data[7].ToString() + "." + data[8].ToString();
 
-                    //scan Reply
-                    else if (data[3] == 203 && data.Length == 13) //
-                    {
-                        if (data[2] == 126)  //steer module
-                        {
-                            scanReply.steerIP = data[5].ToString() + "." + data[6].ToString() + "." + data[7].ToString() + "." + data[8].ToString();
+                                    scanReply.subnet[0] = data[09];
+                                    scanReply.subnet[1] = data[10];
+                                    scanReply.subnet[2] = data[11];
 
-                            scanReply.subnet[0] = data[09];
-                            scanReply.subnet[1] = data[10];
-                            scanReply.subnet[2] = data[11];
+                                    scanReply.subnetStr = data[9].ToString() + "." + data[10].ToString() + "." + data[11].ToString();
 
-                            scanReply.subnetStr = data[9].ToString() + "." + data[10].ToString() + "." + data[11].ToString();
+                                    scanReply.isNewData = true;
+                                    scanReply.isNewSteer = true;
+                                }
+                                //
+                                else if (data[2] == 123)   //machine module
+                                {
+                                    scanReply.machineIP = data[5].ToString() + "." + data[6].ToString() + "." + data[7].ToString() + "." + data[8].ToString();
 
-                            scanReply.isNewData = true;
-                            scanReply.isNewSteer = true;
-                        }
-                        //
-                        else if (data[2] == 123)   //machine module
-                        {
-                            scanReply.machineIP = data[5].ToString() + "." + data[6].ToString() + "." + data[7].ToString() + "." + data[8].ToString();
+                                    scanReply.subnet[0] = data[09];
+                                    scanReply.subnet[1] = data[10];
+                                    scanReply.subnet[2] = data[11];
 
-                            scanReply.subnet[0] = data[09];
-                            scanReply.subnet[1] = data[10];
-                            scanReply.subnet[2] = data[11];
+                                    scanReply.subnetStr = data[9].ToString() + "." + data[10].ToString() + "." + data[11].ToString();
 
-                            scanReply.subnetStr = data[9].ToString() + "." + data[10].ToString() + "." + data[11].ToString();
+                                    scanReply.isNewData = true;
+                                    scanReply.isNewMachine = true;
 
-                            scanReply.isNewData = true;
-                            scanReply.isNewMachine = true;
+                                }
+                                else if (data[2] == 121)   //Nav Module
+                                {
+                                    scanReply.Nav_IP = data[5].ToString() + "." + data[6].ToString() + "." + data[7].ToString() + "." + data[8].ToString();
 
-                        }
-                        else if (data[2] == 121)   //Nav Module
-                        {
-                            scanReply.Nav_IP = data[5].ToString() + "." + data[6].ToString() + "." + data[7].ToString() + "." + data[8].ToString();
+                                    scanReply.subnet[0] = data[09];
+                                    scanReply.subnet[1] = data[10];
+                                    scanReply.subnet[2] = data[11];
 
-                            scanReply.subnet[0] = data[09];
-                            scanReply.subnet[1] = data[10];
-                            scanReply.subnet[2] = data[11];
+                                    scanReply.subnetStr = data[9].ToString() + "." + data[10].ToString() + "." + data[11].ToString();
 
-                            scanReply.subnetStr = data[9].ToString() + "." + data[10].ToString() + "." + data[11].ToString();
+                                    scanReply.isNewData = true;
+                                    scanReply.isNewNav = true;
+                                }
 
-                            scanReply.isNewData = true;
-                            scanReply.isNewNav = true;
-                        }
+                                else if (data[2] == 120)    //GPS module
+                                {
+                                    scanReply.GPS_IP = data[5].ToString() + "." + data[6].ToString() + "." + data[7].ToString() + "." + data[8].ToString();
 
-                        else if (data[2] == 120)    //GPS module
-                        {
-                            scanReply.GPS_IP = data[5].ToString() + "." + data[6].ToString() + "." + data[7].ToString() + "." + data[8].ToString();
+                                    scanReply.subnet[0] = data[09];
+                                    scanReply.subnet[1] = data[10];
+                                    scanReply.subnet[2] = data[11];
 
-                            scanReply.subnet[0] = data[09];
-                            scanReply.subnet[1] = data[10];
-                            scanReply.subnet[2] = data[11];
+                                    scanReply.subnetStr = data[9].ToString() + "." + data[10].ToString() + "." + data[11].ToString();
 
-                            scanReply.subnetStr = data[9].ToString() + "." + data[10].ToString() + "." + data[11].ToString();
+                                    scanReply.isNewData = true;
+                                    scanReply.isNewGPS = true;
+                                }
 
-                            scanReply.isNewData = true;
-                            scanReply.isNewGPS = true;
-                        }
+                                break;
+                            }
+
+                        default:
+                            {
+                                //module return via udp sent to AOG
+                                SendToLoopBackMessageAOG(data);
+
+                                //module data also sent to VR
+                                if (isPluginUsed) SendToLoopBackMessageVR(data);
+
+                                break;
+                            }
                     }
 
                     if (isUDPMonitorOn)
@@ -422,6 +435,7 @@ namespace AgIO
 
                 } // end of pgns
 
+                //GPS sentences
                 else if (data[0] == 36 && (data[1] == 71 || data[1] == 80 || data[1] == 75))
                 {
                     traffic.cntrGPSOut += data.Length;
