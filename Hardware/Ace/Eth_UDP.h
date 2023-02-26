@@ -23,24 +23,24 @@ public:
 	~Eth_UDP();
 
 	//udp sent to all on subnet set
-	IPAddress ipAddress;
+	IPAddress navAddress;
 	IPAddress steerAddress;
 
-	//GPS/IMU/WAS module is x.x.x.121
+	//Nav module is x.x.x.121
 	byte thisIP = 121;
 
 	//MAC address of this module of this module
 	byte mac[6] = { 0x00, 0x00, 0x56, 0x00, 0x00, 0x78 };
 
 
-	// GPS listens to
+	// this modules listens to GPS sent on
 	unsigned int portNMEA_5120 = 5120;
 
-	// Autosteer listens to 
-	unsigned int portModule_8888 = 8888;
-
-	//This module listens to AgIO hello
+	//This module listens to hello sent by AgIO
 	unsigned int portHello_7777 = 7777;
+
+	// Autosteer Module listens to 
+	unsigned int portSteer_8888 = 8888;
 
 	// AgIO listens to
 	unsigned int portAgIO_9999 = 9999;

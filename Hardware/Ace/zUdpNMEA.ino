@@ -1,5 +1,5 @@
 /*
-*UDP Receive sent from GPS SOurce - sent to port 5120
+*UDP Receive sent from GPS Source - listen on port 5120
 *
 * Character data
 */

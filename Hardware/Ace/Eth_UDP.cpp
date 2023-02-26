@@ -7,25 +7,25 @@
 //constructor
 Eth_UDP::Eth_UDP(void) 
 {
-    ipAddress[0] = 192;
-    ipAddress[1] = 168;
-    ipAddress[2] = 1;
-    ipAddress[3] = thisIP;
+    navAddress[0] = 192;
+    navAddress[1] = 168;
+    navAddress[2] = 1;
+    navAddress[3] = thisIP;
 
     EEPROM.get(60, EEP_NetRead);              // read identifier
 
     if (EEP_NetRead != EEP_Net)            // check on first start and write EEPROM
     {
         EEPROM.put(60, EEP_Net);
-        EEPROM.put(62, ipAddress[0]);
-        EEPROM.put(63, ipAddress[1]);
-        EEPROM.put(64, ipAddress[2]);
+        EEPROM.put(62, navAddress[0]);
+        EEPROM.put(63, navAddress[1]);
+        EEPROM.put(64, navAddress[2]);
     }
     else
     {
-        EEPROM.get(62, ipAddress[0]);
-        EEPROM.get(63, ipAddress[1]);
-        EEPROM.get(64, ipAddress[2]);
+        EEPROM.get(62, navAddress[0]);
+        EEPROM.get(63, navAddress[1]);
+        EEPROM.get(64, navAddress[2]);
     }
 }
 
@@ -39,17 +39,18 @@ void Eth_UDP::Start()
     Serial.println("Initializing ethernet with static IP address");
 
     // Start Ethernet with IP from settings
-    Ethernet.begin(mac, ipAddress); 
+    Ethernet.begin(mac, navAddress); 
 
     Serial.print("\r\nEthernet IP of module: "); Serial.println(Ethernet.localIP());
 
     //set this module net IP to broadcast
-    ipAddress[3] = 255;
+    navAddress[3] = 255;
 
-    steerAddress = ipAddress;
+    //build the Steer module Address
+    steerAddress = navAddress;
     steerAddress[3] = 126;
 
-    Serial.print("\r\nEthernet Broadcast IP: "); Serial.println(ipAddress);
+    Serial.print("\r\nEthernet Broadcast IP: "); Serial.println(navAddress);
 
     Serial.print("\r\nAgIO listening to port: "); Serial.println(portAgIO_9999);
 
@@ -78,14 +79,14 @@ void Eth_UDP::Start()
     }
 
     // init UPD Port getting AutoSteer (8888) data from AGIO
-    if (PGN.begin(portModule_8888))
+    if (PGN.begin(portSteer_8888))
     {
         Serial.print("Ethernet PGN UDP listening to port: ");
-        Serial.println(portModule_8888);
+        Serial.println(portSteer_8888);
     }
 
     // init UPD Port getting Hello and scan (7777) from AgIO
-    if (Hello.begin(portHello_7777)) // AOGAutoSteerPortipPort
+    if (Hello.begin(portHello_7777))
     {
         Serial.print("Ethernet Hello Scan listening to port: ");
         Serial.println(portHello_7777);
@@ -109,9 +110,9 @@ void Eth_UDP::SendUdpChar(char* _charBuf, uint8_t _length, IPAddress _ip, uint16
 void Eth_UDP::SaveModuleIP(void)
 {
     //ID stored in 60
-    EEPROM.put(62, ipAddress[0]);
-    EEPROM.put(63, ipAddress[1]);
-    EEPROM.put(64, ipAddress[2]);
+    EEPROM.put(62, navAddress[0]);
+    EEPROM.put(63, navAddress[1]);
+    EEPROM.put(64, navAddress[2]);
 }
 
 //EtherClass Ether;

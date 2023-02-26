@@ -28,7 +28,7 @@ void SampleWAS()
 	wasPGN_249[wasPGN_249_Size] = CK_A;
 
 	//send to autosteer module
-	udp.SendUdpByte(wasPGN_249, sizeof(wasPGN_249), udp.steerAddress, udp.portModule_8888);
+	udp.SendUdpByte(wasPGN_249, sizeof(wasPGN_249), udp.steerAddress, udp.portSteer_8888);
 }
 
 void ADC_Setup()

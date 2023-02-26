@@ -1,9 +1,6 @@
 // Conversion to Hexidecimal
 const char* asciiHex = "0123456789ABCDEF";
 
-//Swap BNO08x roll & pitch?
-const bool swapRollPitch = false;
-
 // the new PANDA sentence buffer
 char nmea[100];
 
@@ -201,7 +198,7 @@ void BuildNmea(void)
     if (udp.isRunning)   
     {
         //send char stream
-        udp.SendUdpChar(nmea, strlen(nmea), udp.ipAddress, udp.portAgIO_9999);
+        udp.SendUdpChar(nmea, strlen(nmea), udp.navAddress, udp.portAgIO_9999);
     }
     else
     {

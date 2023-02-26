@@ -2,7 +2,7 @@
 uint8_t helloUdpData[UDP_TX_PACKET_MAX_SIZE];
 
 //Heart beat hello AgIO
-uint8_t helloFromIMU[] = { 128, 129, 121, 121, 5, 0, 0, 0, 0, 0, 71 };
+uint8_t helloFromNav[] = { 128, 129, 121, 121, 5, 0, 0, 0, 0, 0, 71 };
 
 // UDP Receive sent from AgIO - sent to port 8888
 void ReceiveUDP_Hello()
@@ -27,7 +27,7 @@ void ReceiveUDP_Hello()
                     //hello
                     if (helloUdpData[3] == 200) // Hello from AgIO                                    
                     {
-                        udp.SendUdpByte(helloFromIMU, sizeof(helloFromIMU), udp.ipAddress, udp.portAgIO_9999);
+                        udp.SendUdpByte(helloFromNav, sizeof(helloFromNav), udp.navAddress, udp.portAgIO_9999);
                     }
 
                     //Scan Modules
@@ -40,7 +40,7 @@ void ReceiveUDP_Hello()
 
                             //scan reply back to AgIO
                             uint8_t scanReply[] = { 128, 129, udp.thisIP, 203, 4,
-                                udp.ipAddress[0], udp.ipAddress[1], udp.ipAddress[2], udp.thisIP,
+                                udp.navAddress[0], udp.navAddress[1], udp.navAddress[2], udp.thisIP,
                                 rem_ip[0],rem_ip[1],rem_ip[2], 23 };
 
                             //checksum
@@ -64,9 +64,9 @@ void ReceiveUDP_Hello()
                         //make really sure this is the subnet pgn
                         if (helloUdpData[4] == 5 && helloUdpData[5] == 201 && helloUdpData[6] == 201)
                         {
-                            udp.ipAddress[0] = helloUdpData[7];
-                            udp.ipAddress[1] = helloUdpData[8];
-                            udp.ipAddress[2] = helloUdpData[9];
+                            udp.navAddress[0] = helloUdpData[7];
+                            udp.navAddress[1] = helloUdpData[8];
+                            udp.navAddress[2] = helloUdpData[9];
 
                             //save in EEPROM and restart
                             udp.SaveModuleIP();
