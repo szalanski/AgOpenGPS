@@ -83,7 +83,7 @@
     <Setting Name="setUDP_isUsePluginApp" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="setMod_isIMUConnected" Type="System.Boolean" Scope="User">
+    <Setting Name="setMod_isNavConnected" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="setMod_isMachineConnected" Type="System.Boolean" Scope="User">

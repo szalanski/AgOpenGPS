@@ -13,7 +13,7 @@ namespace AgIO
         public int cntrGPSInBytes = 0;
         public int cntrGPSOut = 0;
 
-        public uint helloFromMachine = 99, helloFromAutoSteer = 99, helloFromIMU = 99;
+        public uint helloFromMachine = 99, helloFromAutoSteer = 99, helloFromNav = 99;
     }
 
     public class CScanReply
@@ -21,12 +21,12 @@ namespace AgIO
         public string steerIP =   "";
         public string machineIP = "";
         public string GPS_IP =    "";
-        public string IMU_IP =    "";
+        public string Nav_IP =    "";
         public string subnetStr = "";
 
         public byte[] subnet = { 0, 0, 0 };
 
-        public bool isNewSteer, isNewMachine, isNewGPS, isNewIMU;
+        public bool isNewSteer, isNewMachine, isNewGPS, isNewNav;
 
         public bool isNewData = false;
     }
@@ -353,7 +353,7 @@ namespace AgIO
                     }
 
                     else if (data[3] == 121 && data.Length == 11)
-                        traffic.helloFromIMU = 0;
+                        traffic.helloFromNav = 0;
 
                     //scan Reply
                     else if (data[3] == 203 && data.Length == 13) //
@@ -386,9 +386,9 @@ namespace AgIO
                             scanReply.isNewMachine = true;
 
                         }
-                        else if (data[2] == 121)   //IMU Module
+                        else if (data[2] == 121)   //Nav Module
                         {
-                            scanReply.IMU_IP = data[5].ToString() + "." + data[6].ToString() + "." + data[7].ToString() + "." + data[8].ToString();
+                            scanReply.Nav_IP = data[5].ToString() + "." + data[6].ToString() + "." + data[7].ToString() + "." + data[8].ToString();
 
                             scanReply.subnet[0] = data[09];
                             scanReply.subnet[1] = data[10];
@@ -397,7 +397,7 @@ namespace AgIO
                             scanReply.subnetStr = data[9].ToString() + "." + data[10].ToString() + "." + data[11].ToString();
 
                             scanReply.isNewData = true;
-                            scanReply.isNewIMU = true;
+                            scanReply.isNewNav = true;
                         }
 
                         else if (data[2] == 120)    //GPS module

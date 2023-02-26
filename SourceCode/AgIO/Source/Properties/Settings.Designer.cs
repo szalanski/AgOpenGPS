@@ -350,12 +350,12 @@ namespace AgIO.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool setMod_isIMUConnected {
+        public bool setMod_isNavConnected {
             get {
-                return ((bool)(this["setMod_isIMUConnected"]));
+                return ((bool)(this["setMod_isNavConnected"]));
             }
             set {
-                this["setMod_isIMUConnected"] = value;
+                this["setMod_isNavConnected"] = value;
             }
         }
         

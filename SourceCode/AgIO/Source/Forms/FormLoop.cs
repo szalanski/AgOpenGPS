@@ -57,8 +57,8 @@ namespace AgIO
         //usually 256 - send ntrip to serial in chunks
         public int packetSizeNTRIP;
 
-        public bool lastHelloGPS, lastHelloAutoSteer, lastHelloMachine, lastHelloIMU;
-        public bool isConnectedIMU, isConnectedSteer, isConnectedMachine;
+        public bool lastHelloGPS, lastHelloAutoSteer, lastHelloMachine, lastHelloNav;
+        public bool isConnectedNav, isConnectedSteer, isConnectedMachine;
 
         //is the fly out displayed
         public bool isViewAdvanced = false;
@@ -127,7 +127,7 @@ namespace AgIO
 
             ConfigureNTRIP();
 
-            isConnectedIMU = cboxIsIMUModule.Checked = Properties.Settings.Default.setMod_isIMUConnected;
+            isConnectedNav = cboxIsNavModule.Checked = Properties.Settings.Default.setMod_isNavConnected;
             isConnectedSteer = cboxIsSteerModule.Checked = Properties.Settings.Default.setMod_isSteerConnected;
             isConnectedMachine = cboxIsMachineModule.Checked = Properties.Settings.Default.setMod_isMachineConnected;
             
@@ -142,15 +142,15 @@ namespace AgIO
 
         public void SetModulesOnOff()
         {
-            if (isConnectedIMU)
+            if (isConnectedNav)
             {
-                btnIMU.Visible = true; 
-                cboxIsIMUModule.BackgroundImage = Properties.Resources.Cancel64;
+                btnNav.Visible = true; 
+                cboxIsNavModule.BackgroundImage = Properties.Resources.Cancel64;
             }
             else
             {
-                btnIMU.Visible = false;
-                cboxIsIMUModule.BackgroundImage = Properties.Resources.AddNew;
+                btnNav.Visible = false;
+                cboxIsNavModule.BackgroundImage = Properties.Resources.AddNew;
             }
 
             if (isConnectedMachine)
@@ -175,7 +175,7 @@ namespace AgIO
                 cboxIsSteerModule.BackgroundImage = Properties.Resources.AddNew;
             }
 
-            Properties.Settings.Default.setMod_isIMUConnected = isConnectedIMU;
+            Properties.Settings.Default.setMod_isNavConnected = isConnectedNav;
             Properties.Settings.Default.setMod_isSteerConnected = isConnectedSteer;
             Properties.Settings.Default.setMod_isMachineConnected = isConnectedMachine;
 
@@ -458,15 +458,15 @@ namespace AgIO
                 }
             }
 
-            if (isConnectedIMU)
+            if (isConnectedNav)
             {
-                currentHello = traffic.helloFromIMU < 3;
+                currentHello = traffic.helloFromNav < 3;
 
-                if (currentHello != lastHelloIMU)
+                if (currentHello != lastHelloNav)
                 {
-                    if (currentHello) btnIMU.BackColor = Color.LimeGreen;
-                    else btnIMU.BackColor = Color.Red;
-                    lastHelloIMU = currentHello;
+                    if (currentHello) btnNav.BackColor = Color.LimeGreen;
+                    else btnNav.BackColor = Color.Red;
+                    lastHelloNav = currentHello;
                     ShowAgIO();
                 }
             }
@@ -519,7 +519,7 @@ namespace AgIO
         {
             traffic.helloFromMachine++;
             traffic.helloFromAutoSteer++;
-            traffic.helloFromIMU++;
+            traffic.helloFromNav++;
 
             if (focusSkipCounter != 0)
             {
@@ -656,9 +656,9 @@ namespace AgIO
             tripBytes = 0;
         }
 
-        private void cboxIsIMUModule_Click(object sender, EventArgs e)
+        private void cboxIsNavModule_Click(object sender, EventArgs e)
         {
-            isConnectedIMU = cboxIsIMUModule.Checked;
+            isConnectedNav = cboxIsNavModule.Checked;
             SetModulesOnOff();
         }
 

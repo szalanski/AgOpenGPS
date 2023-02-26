@@ -81,10 +81,10 @@ namespace AgIO
                 lblNewSubnet.Text = mf.scanReply.subnetStr;
             }
 
-            if (mf.scanReply.isNewIMU)
+            if (mf.scanReply.isNewNav)
             {
-                lblIMU_IP.Text = mf.scanReply.IMU_IP;
-                mf.scanReply.isNewIMU = false;
+                lblNav_IP.Text = mf.scanReply.Nav_IP;
+                mf.scanReply.isNewNav = false;
                 lblNewSubnet.Text = mf.scanReply.subnetStr;
             }
 
@@ -106,8 +106,8 @@ namespace AgIO
                 if (mf.btnGPS.BackColor == Color.LimeGreen) lblBtnGPS.BackColor = Color.LimeGreen;
                 else lblBtnGPS.BackColor = Color.Red;
 
-                if (mf.btnIMU.BackColor == Color.LimeGreen) lblBtnIMU.BackColor = Color.LimeGreen;
-                else lblBtnIMU.BackColor = Color.Red;
+                if (mf.btnNav.BackColor == Color.LimeGreen) lblBtnNav.BackColor = Color.LimeGreen;
+                else lblBtnNav.BackColor = Color.Red;
             }
 
             if (tickCounter > 5)
@@ -127,7 +127,7 @@ namespace AgIO
         {
             tboxNets.Text = "";
 
-            lblSteerIP.Text = lblMachineIP.Text = lblGPSIP.Text = lblIMU_IP.Text = lblNewSubnet.Text = "";
+            lblSteerIP.Text = lblMachineIP.Text = lblGPSIP.Text = lblNav_IP.Text = lblNewSubnet.Text = "";
             mf.scanReply.isNewData = false;
 
             bool isSubnetMatchCard = false;

@@ -298,6 +298,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="AgIO_ico.ico" />
+    <None Include="btnImages\Nav.png" />
     <None Include="btnImages\Play.png" />
     <None Include="btnImages\PGN.png" />
     <None Include="btnImages\Pause.png" />

@@ -51,10 +51,10 @@
             this.label11 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.lblBtnIMU = new System.Windows.Forms.Label();
+            this.lblBtnNav = new System.Windows.Forms.Label();
             this.lblBtnGPS = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
-            this.lblIMU_IP = new System.Windows.Forms.Label();
+            this.lblNav_IP = new System.Windows.Forms.Label();
             this.lblBtnMachine = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
             this.lblGPSIP = new System.Windows.Forms.Label();
@@ -354,11 +354,11 @@
             this.tableLayoutPanel1.ColumnCount = 3;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 114F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tableLayoutPanel1.Controls.Add(this.lblBtnIMU, 2, 0);
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 31F));
+            this.tableLayoutPanel1.Controls.Add(this.lblBtnNav, 2, 0);
             this.tableLayoutPanel1.Controls.Add(this.lblBtnGPS, 2, 2);
             this.tableLayoutPanel1.Controls.Add(this.label18, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.lblIMU_IP, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.lblNav_IP, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.lblBtnMachine, 2, 3);
             this.tableLayoutPanel1.Controls.Add(this.label15, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.lblGPSIP, 1, 2);
@@ -377,18 +377,18 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(359, 177);
             this.tableLayoutPanel1.TabIndex = 519;
             // 
-            // lblBtnIMU
+            // lblBtnNav
             // 
-            this.lblBtnIMU.AutoSize = true;
-            this.lblBtnIMU.BackColor = System.Drawing.Color.White;
-            this.lblBtnIMU.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblBtnIMU.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBtnIMU.Location = new System.Drawing.Point(331, 1);
-            this.lblBtnIMU.Name = "lblBtnIMU";
-            this.lblBtnIMU.Size = new System.Drawing.Size(24, 43);
-            this.lblBtnIMU.TabIndex = 533;
-            this.lblBtnIMU.Text = "-";
-            this.lblBtnIMU.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblBtnNav.AutoSize = true;
+            this.lblBtnNav.BackColor = System.Drawing.Color.White;
+            this.lblBtnNav.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblBtnNav.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblBtnNav.Location = new System.Drawing.Point(330, 1);
+            this.lblBtnNav.Name = "lblBtnNav";
+            this.lblBtnNav.Size = new System.Drawing.Size(25, 43);
+            this.lblBtnNav.TabIndex = 533;
+            this.lblBtnNav.Text = "-";
+            this.lblBtnNav.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblBtnGPS
             // 
@@ -396,9 +396,9 @@
             this.lblBtnGPS.BackColor = System.Drawing.Color.White;
             this.lblBtnGPS.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblBtnGPS.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBtnGPS.Location = new System.Drawing.Point(331, 89);
+            this.lblBtnGPS.Location = new System.Drawing.Point(330, 89);
             this.lblBtnGPS.Name = "lblBtnGPS";
-            this.lblBtnGPS.Size = new System.Drawing.Size(24, 43);
+            this.lblBtnGPS.Size = new System.Drawing.Size(25, 43);
             this.lblBtnGPS.TabIndex = 532;
             this.lblBtnGPS.Text = "-";
             this.lblBtnGPS.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -416,18 +416,18 @@
             this.label18.Text = "Nav";
             this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // lblIMU_IP
+            // lblNav_IP
             // 
-            this.lblIMU_IP.AutoSize = true;
-            this.lblIMU_IP.BackColor = System.Drawing.Color.White;
-            this.lblIMU_IP.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblIMU_IP.Font = new System.Drawing.Font("Tahoma", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblIMU_IP.Location = new System.Drawing.Point(119, 1);
-            this.lblIMU_IP.Name = "lblIMU_IP";
-            this.lblIMU_IP.Size = new System.Drawing.Size(205, 43);
-            this.lblIMU_IP.TabIndex = 526;
-            this.lblIMU_IP.Text = "..";
-            this.lblIMU_IP.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblNav_IP.AutoSize = true;
+            this.lblNav_IP.BackColor = System.Drawing.Color.White;
+            this.lblNav_IP.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblNav_IP.Font = new System.Drawing.Font("Tahoma", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblNav_IP.Location = new System.Drawing.Point(119, 1);
+            this.lblNav_IP.Name = "lblNav_IP";
+            this.lblNav_IP.Size = new System.Drawing.Size(204, 43);
+            this.lblNav_IP.TabIndex = 526;
+            this.lblNav_IP.Text = "..";
+            this.lblNav_IP.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblBtnMachine
             // 
@@ -435,9 +435,9 @@
             this.lblBtnMachine.BackColor = System.Drawing.Color.White;
             this.lblBtnMachine.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblBtnMachine.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBtnMachine.Location = new System.Drawing.Point(331, 133);
+            this.lblBtnMachine.Location = new System.Drawing.Point(330, 133);
             this.lblBtnMachine.Name = "lblBtnMachine";
-            this.lblBtnMachine.Size = new System.Drawing.Size(24, 43);
+            this.lblBtnMachine.Size = new System.Drawing.Size(25, 43);
             this.lblBtnMachine.TabIndex = 531;
             this.lblBtnMachine.Text = "-";
             this.lblBtnMachine.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -463,7 +463,7 @@
             this.lblGPSIP.Font = new System.Drawing.Font("Tahoma", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblGPSIP.Location = new System.Drawing.Point(119, 89);
             this.lblGPSIP.Name = "lblGPSIP";
-            this.lblGPSIP.Size = new System.Drawing.Size(205, 43);
+            this.lblGPSIP.Size = new System.Drawing.Size(204, 43);
             this.lblGPSIP.TabIndex = 530;
             this.lblGPSIP.Text = "..";
             this.lblGPSIP.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -476,7 +476,7 @@
             this.lblSteerIP.Font = new System.Drawing.Font("Tahoma", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSteerIP.Location = new System.Drawing.Point(119, 45);
             this.lblSteerIP.Name = "lblSteerIP";
-            this.lblSteerIP.Size = new System.Drawing.Size(205, 43);
+            this.lblSteerIP.Size = new System.Drawing.Size(204, 43);
             this.lblSteerIP.TabIndex = 526;
             this.lblSteerIP.Text = "..";
             this.lblSteerIP.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -487,9 +487,9 @@
             this.lblBtnSteer.BackColor = System.Drawing.Color.White;
             this.lblBtnSteer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblBtnSteer.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBtnSteer.Location = new System.Drawing.Point(331, 45);
+            this.lblBtnSteer.Location = new System.Drawing.Point(330, 45);
             this.lblBtnSteer.Name = "lblBtnSteer";
-            this.lblBtnSteer.Size = new System.Drawing.Size(24, 43);
+            this.lblBtnSteer.Size = new System.Drawing.Size(25, 43);
             this.lblBtnSteer.TabIndex = 521;
             this.lblBtnSteer.Text = "-";
             this.lblBtnSteer.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -515,7 +515,7 @@
             this.lblMachineIP.Font = new System.Drawing.Font("Tahoma", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblMachineIP.Location = new System.Drawing.Point(119, 133);
             this.lblMachineIP.Name = "lblMachineIP";
-            this.lblMachineIP.Size = new System.Drawing.Size(205, 43);
+            this.lblMachineIP.Size = new System.Drawing.Size(204, 43);
             this.lblMachineIP.TabIndex = 528;
             this.lblMachineIP.Text = "..";
             this.lblMachineIP.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -752,9 +752,9 @@
         private System.Windows.Forms.Label lblSteerIP;
         private System.Windows.Forms.Label lblGPSIP;
         private System.Windows.Forms.Label lblMachineIP;
-        private System.Windows.Forms.Label lblIMU_IP;
+        private System.Windows.Forms.Label lblNav_IP;
         private System.Windows.Forms.Label lblNewSubnet;
-        private System.Windows.Forms.Label lblBtnIMU;
+        private System.Windows.Forms.Label lblBtnNav;
         private System.Windows.Forms.Label lblBtnGPS;
         private System.Windows.Forms.Label lblBtnMachine;
         private System.Windows.Forms.Label lblBtnSteer;
