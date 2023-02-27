@@ -347,6 +347,8 @@
 
           if (udpData[3] == 200) // Hello from AgIO
           {
+              helloSteerPosition = counter;
+              counter=0;
               int16_t sa = (int16_t)(steerAngleActual * 100);
 
               helloFromAutoSteer[5] = (uint8_t)sa;
