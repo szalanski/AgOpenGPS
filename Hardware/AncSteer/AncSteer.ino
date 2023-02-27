@@ -5,17 +5,38 @@
     * Like all Arduino code - copied from somewhere else :)
     * So don't claim it as your own
     */
-
-    #include <Wire.h>
     #include <EEPROM.h> 
     #include "EtherCard_AOG.h"
     #include <IPAddress.h>
 
-    ////////////////// User Settings /////////////////////////  
+    #define WATCHDOG_LIMIT 20
+
+    //   ***********  Motor drive connections  **************888
+    //Connect ground only for cytron, Connect Ground and +5v for IBT2
+    
+    //Dir1 for Cytron Dir, Both L and R enable for IBT2
+    #define DIR1_RL_ENABLE  4  //PD4
+
+    //PWM1 for Cytron PWM, Left PWM for IBT2
+    #define PWM1_LPWM  3  //PD3
+
+    //--------------------------- Switch Input Pins ------------------------
+    #define STEERSW_PIN 6 //PD6
+    #define WORKSW_PIN 7  //PD7
+    #define REMOTE_PIN 8  //PB0
+ 
+    //ethercard 10,11,12,13  
+    // Arduino Nano = 10 depending how CS of Ethernet Controller ENC28J60 is Connected
+    #define CS_Pin 10
+
+    //Define sensor pin for current or pressure sensor
+    #define ANALOG_SENSOR_PIN A0
+
+    #define CONST_180_DIVIDED_BY_PI 57.2957795130823
 
     //How many degrees before decreasing Max PWM
     #define LOW_HIGH_DEGREES 3.0
-
+    ////////////////// User Settings /////////////////////////
     /*  PWM Frequency -> 
     *   490hz (default) = 0
     *   122hz = 1
@@ -24,7 +45,7 @@
     #define PWM_Frequency 0
   
     // Change this number to reset and reload default parameters To EEPROM
-    #define EEP_Ident 0x3378
+    #define EEP_Ident 0x3377
 
     struct ConfigIP {
         uint8_t ipOne = 192;
@@ -56,48 +77,16 @@
     // ethernet mac address - must be unique on your network - 126 = 7E
     static uint8_t mymac[] = { 0x00,0x00,0x56,0x00,0x00,0x7E };
 
-    // Address of CMPS14 shifted right one bit for arduino wire library
-    #define CMPS14_ADDRESS 0x60
-
-    // BNO08x definitions
-    #define REPORT_INTERVAL 90 //Report interval in ms (same as the delay at the bottom)
-
-    //   ***********  Motor drive connections  **************888
-    //Connect ground only for cytron, Connect Ground and +5v for IBT2
-    
-    //Dir1 for Cytron Dir, Both L and R enable for IBT2
-    #define DIR1_RL_ENABLE  4  //PD4
-
-    //PWM1 for Cytron PWM, Left PWM for IBT2
-    #define PWM1_LPWM  3  //PD3
-
-    //Not Connected for Cytron, Right PWM for IBT2
-    #define PWM2_RPWM  9 //D9
-
-    //--------------------------- Switch Input Pins ------------------------
-    #define STEERSW_PIN 6 //PD6
-    #define WORKSW_PIN 7  //PD7
-    #define REMOTE_PIN 8  //PB0
- 
-    //ethercard 10,11,12,13  
-    // Arduino Nano = 10 depending how CS of Ethernet Controller ENC28J60 is Connected
-    #define CS_Pin 10
-
-    //Define sensor pin for current or pressure sensor
-    #define ANALOG_SENSOR_PIN A0
-
-    #define CONST_180_DIVIDED_BY_PI 57.2957795130823
   
     uint8_t Ethernet::buffer[200]; // udp send and receive buffer
     
     //loop time variables in microseconds  
-    const uint16_t LOOP_TIME = 25;  //40Hz    
+    const uint16_t LOOP_TIME = 200;  //40Hz    
     uint32_t lastTime = LOOP_TIME;
     uint32_t currentTime = LOOP_TIME;
 
-    const uint16_t WATCHDOG_THRESHOLD = 100;
-    const uint16_t WATCHDOG_FORCE_VALUE = WATCHDOG_THRESHOLD + 2; // Should be greater than WATCHDOG_THRESHOLD
-    uint8_t watchdogTimer = WATCHDOG_FORCE_VALUE;
+    uint8_t watchdogTimer = 21;
+    uint16_t counter = 0;
 
     //Heart beat hello AgIO
     uint8_t helloFromAutoSteer[] = { 128, 129, 126, 126, 5, 0, 0, 0, 0, 0, 71 };
@@ -111,9 +100,6 @@
     uint8_t PGN_250[] = { 128, 129, 126, 250, 8, 0, 0, 0, 0, 0,0,0,0, 12 };
     int8_t PGN_250_Size = sizeof(PGN_250) - 1;
 
-    uint8_t aog2Count = 0;
-    float sensorReading, sensorSample;
- 
     //EEPROM
     int16_t EEread = 0;
 
@@ -125,6 +111,9 @@
     //Switches
     uint8_t remoteSwitch = 0, workSwitch = 0, steerSwitch = 1, switchByte = 0;
 
+    uint8_t aog2Count = 0;
+    float sensorReading, sensorSample;
+ 
     //On Off
     uint8_t guidanceStatus = 0;
     uint8_t prevGuidanceStatus = 0;
@@ -146,7 +135,7 @@
     float highLowPerDeg = 0; 
 
     //Steer switch button  ***********************************************************************************************************
-    uint8_t currentState = 1, reading, previous = 0;
+    uint8_t reading = 1, previous = 1;
     uint8_t pulseCount = 0; // Steering Wheel Encoder
     bool encEnable = false; //debounce flag
     uint8_t thisEnc = 0, lastEnc = 0;
@@ -203,8 +192,6 @@
       pinMode(STEERSW_PIN, INPUT_PULLUP);
       pinMode(REMOTE_PIN, INPUT_PULLUP);
       pinMode(DIR1_RL_ENABLE, OUTPUT);
-
-      if (steerConfig.CytronDriver) pinMode(PWM2_RPWM, OUTPUT);
 
       //set up communication
       Serial.begin(115200);
@@ -272,7 +259,7 @@
           encEnable = true;
 
           //If connection lost to AgOpenGPS, the watchdog will count up and turn off steering
-          if (watchdogTimer++ > 250) watchdogTimer = WATCHDOG_FORCE_VALUE;
+          if (watchdogTimer < 30) watchdogTimer++;
 
           //read all the switches
           workSwitch = digitalRead(WORKSW_PIN);  // read work switch
@@ -284,75 +271,46 @@
           else if (steerConfig.SteerButton == 1)     //steer Button momentary
           {
               reading = digitalRead(STEERSW_PIN);
-              if (reading == LOW && previous == HIGH)
+              if (reading != previous)
               {
-                  if (currentState == 1)
+                  if (reading == LOW && previous == HIGH)
                   {
-                      currentState = 0;
-                      steerSwitch = 0;
+                      //on
+                      if (steerSwitch == 0) steerSwitch = 1;
+                      else (steerSwitch = 0);
                   }
-                  else
-                  {
-                      currentState = 1;
-                      steerSwitch = 1;
-                  }
-              }
-              previous = reading;
-          }
-          else                                      // No steer switch and no steer button
-          {
-              // So set the correct value. When guidanceStatus = 1, 
-              // it should be on because the button is pressed in the GUI
-              // But the guidancestatus should have set it off first
-              if (guidanceStatusChanged && guidanceStatus == 1 && steerSwitch == 1 && previous == 0)
-              {
-                  steerSwitch = 0;
-                  previous = 1;
-              }
-
-              // This will set steerswitch off and make the above check wait until the guidanceStatus has gone to 0
-              if (guidanceStatusChanged && guidanceStatus == 0 && steerSwitch == 0 && previous == 1)
-              {
-                  steerSwitch = 1;
-                  previous = 0;
+                  previous = reading;
               }
           }
 
-          if (steerConfig.ShaftEncoder && pulseCount >= steerConfig.PulseCountMax)
-          {
-              steerSwitch = 1; // reset values like it turned off
-              currentState = 1;
-              previous = 0;
-          }
+          //if (steerConfig.ShaftEncoder && pulseCount >= steerConfig.PulseCountMax)
+          //{
+          //    steerSwitch = 1; // it turned off
+          //}
 
-          // Pressure sensor?
-          if (steerConfig.PressureSensor)
-          {
-              sensorSample = (float)analogRead(ANALOG_SENSOR_PIN);
-              sensorSample *= 0.25;
-              sensorReading = sensorReading * 0.6 + sensorSample * 0.4;
-              if (sensorReading >= steerConfig.PulseCountMax)
-              {
-                  steerSwitch = 1; // reset values like it turned off
-                  currentState = 1;
-                  previous = 0;
-              }
-          }
+          // //Pressure sensor?
+          //if (steerConfig.PressureSensor)
+          //{
+          //    sensorSample = (float)analogRead(ANALOG_SENSOR_PIN);
+          //    sensorSample *= 0.25;
+          //    sensorReading = sensorReading * 0.6 + sensorSample * 0.4;
+          //    if (sensorReading >= steerConfig.PulseCountMax)
+          //    {
+          //        steerSwitch = 1; // it turned off
+          //    }
+          //}
 
-          //Current sensor?
-          if (steerConfig.CurrentSensor)
-          {
-              sensorSample = (float)analogRead(ANALOG_SENSOR_PIN);
-              sensorSample = (abs(512 - sensorSample)) * 0.5;
-              sensorReading = sensorReading * 0.7 + sensorSample * 0.3;
-              if (sensorReading >= steerConfig.PulseCountMax)
-              {
-                  steerSwitch = 1; // reset values like it turned off
-                  currentState = 1;
-                  previous = 0;
-              }
-          }
-
+          ////Current sensor?
+          //if (steerConfig.CurrentSensor)
+          //{
+          //    sensorSample = (float)analogRead(ANALOG_SENSOR_PIN);
+          //    sensorSample = (abs(512 - sensorSample)) * 0.5;
+          //    sensorReading = sensorReading * 0.7 + sensorSample * 0.3;
+          //    if (sensorReading >= steerConfig.PulseCountMax)
+          //    {
+          //        steerSwitch = 1; // it turned off
+          //    }
+          //}
 
           remoteSwitch = digitalRead(REMOTE_PIN); //read auto steer enable switch open = 0n closed = Off
           switchByte = 0;
@@ -360,39 +318,117 @@
           switchByte |= (steerSwitch << 1);   //put steerswitch status in bit 1 position
           switchByte |= workSwitch;
 
-          /*
-          #if Relay_Type == 1
-              SetRelays();       //turn on off section relays
-          #elif Relay_Type == 2
-              SetuTurnRelays();  //turn on off uTurn relays
-          #endif
-          */
-
- 
+          //check encoder counter
+          if (steerConfig.ShaftEncoder)
+          {
+              if (encEnable)
+              {
+                  thisEnc = digitalRead(REMOTE_PIN);
+                  if (thisEnc != lastEnc)
+                  {
+                      lastEnc = thisEnc;
+                      if (lastEnc) EncoderFunc();
+                  }
+              }
+          }
 
       } //end of timed loop
 
-      //This runs continuously, outside of the timed loop, keeps checking for new udpData, turn sense
-      delay(1);
 
-      //this must be called for ethercard functions to work. Calls udpSteerRecv() defined way below.
+      //called for ethercard functions to work. Calls udpSteerRecv() 
       ether.packetLoop(ether.packetReceive());
-
-      if (encEnable)
-      {
-          thisEnc = digitalRead(REMOTE_PIN);
-          if (thisEnc != lastEnc)
-          {
-              lastEnc = thisEnc;
-              if (lastEnc) EncoderFunc();
-          }
-      }
 
   } // end of main loop
 
-    void udpSteerRecv2(uint16_t dest_port, uint8_t src_ip[IP_LEN], uint16_t src_port, uint8_t* udpData, uint16_t len)
+  void udpSteerRecv2(uint16_t dest_port, uint8_t src_ip[IP_LEN], uint16_t src_port, uint8_t* udpData, uint16_t len)
   {
-  
+      if (udpData[0] == 128 && udpData[1] == 129 && udpData[2] == 127) //IMU/WAS PGN
+      {
+
+          if (udpData[3] == 200) // Hello from AgIO
+          {
+              int16_t sa = (int16_t)(steerAngleActual * 100);
+
+              helloFromAutoSteer[5] = (uint8_t)sa;
+              helloFromAutoSteer[6] = sa >> 8;
+
+              helloFromAutoSteer[7] = (uint8_t)helloSteerPosition;
+              helloFromAutoSteer[8] = helloSteerPosition >> 8;
+              helloFromAutoSteer[9] = switchByte;
+
+              ether.sendUdp(helloFromAutoSteer, sizeof(helloFromAutoSteer), portMy, ipDestination, portDestination);
+          }
+
+          else if (udpData[3] == 201)
+          {
+              //make really sure this is the subnet pgn
+              if (udpData[4] == 5 && udpData[5] == 201 && udpData[6] == 201)
+              {
+                  networkAddress.ipOne = udpData[7];
+                  networkAddress.ipTwo = udpData[8];
+                  networkAddress.ipThree = udpData[9];
+
+                  Serial.print("\r\n Subnet Changed to: ");
+                  Serial.print(udpData[7]); Serial.print(" . ");
+                  Serial.print(udpData[8]); Serial.print(" . ");
+                  Serial.print(udpData[9]); Serial.println();
+
+                  delay(100);
+
+                  //save in EEPROM and restart
+                  EEPROM.put(60, networkAddress);
+                  resetFunc();
+              }
+          }//end FB
+
+          //scan reply
+          else if (udpData[3] == 202)
+          {
+              //make really sure this is the reply pgn
+              if (udpData[4] == 3 && udpData[5] == 202 && udpData[6] == 202)
+              {
+                  uint8_t scanReply[] = { 128, 129, 126, 203, 7,
+                      networkAddress.ipOne, networkAddress.ipTwo, networkAddress.ipThree, 126,
+                      src_ip[0], src_ip[1], src_ip[2], 23 };
+
+                  //checksum
+                  int16_t CK_A = 0;
+                  for (uint8_t i = 2; i < sizeof(scanReply) - 1; i++)
+                  {
+                      CK_A = (CK_A + scanReply[i]);
+                  }
+                  scanReply[sizeof(scanReply) - 1] = CK_A;
+
+                  static uint8_t ipDest[] = { 255,255,255,255 };
+                  uint16_t portDest = 9999; //AOG port that listens
+
+                  Serial.print("\r\nAdapter IP: ");
+                  Serial.print(src_ip[0]); Serial.print(" . ");
+                  Serial.print(src_ip[1]); Serial.print(" . ");
+                  Serial.print(src_ip[2]); Serial.print(" . ");
+                  Serial.print(src_ip[3]);
+
+                  //off to AOG
+                  ether.sendUdp(scanReply, sizeof(scanReply), portMy, ipDest, portDest);
+
+                  Serial.print("\r\n Module IP: ");
+                  Serial.print(src_ip[0]); Serial.print(" . ");
+                  Serial.print(src_ip[1]); Serial.print(" . ");
+                  Serial.print(src_ip[2]); Serial.print(" . ");
+                  Serial.print(src_ip[3]); Serial.println();
+
+                  Serial.print("CurrentSensor: ");
+                  Serial.println(sensorReading);
+                  Serial.print("Steer Counts: ");
+                  Serial.println(helloSteerPosition);
+                  Serial.print("Switch Byte: ");
+                  Serial.println(switchByte);
+                  Serial.println(" --------- ");
+              }
+
+
+          }
+      }
   }
 
 //callback when received packets
@@ -406,7 +442,49 @@
       //for (int16_t i = 0; i < len; i++) {
       //Serial.print(udpData[i],HEX); Serial.print("\t"); } Serial.println(len);
       */
+
       //if (sizeof(udpData) < 5) return;
+      if (udpData[0] == 128 && udpData[1] == 129 && udpData[2] == 121) //IMU/WAS PGN
+      {
+          //Stream from WAS and IMU
+          if (udpData[3] == 249)
+          {
+              counter++;
+
+              steeringPosition = (udpData[5] | udpData[6] << 8);
+              //helloSteerPosition = steeringPosition - 2048;
+
+              if (steerConfig.InvertWAS)
+              {
+                  steeringPosition = (steeringPosition - 2048 - steerSettings.wasOffset);
+                  steerAngleActual = (float)(steeringPosition) / -steerSettings.steerSensorCounts;
+              }
+              else
+              {
+                  steeringPosition = (steeringPosition - 2048 + steerSettings.wasOffset);
+                  steerAngleActual = (float)(steeringPosition) / steerSettings.steerSensorCounts;
+              }
+
+              //Ackerman fix
+              if (steerAngleActual < 0) steerAngleActual = (steerAngleActual * steerSettings.AckermanFix);
+
+              if (watchdogTimer < WATCHDOG_LIMIT)
+              {
+                  steerAngleError = steerAngleActual - steerAngleSetPoint;   //calculate the steering error
+                  calcSteeringPID();  //do the pid
+                  motorDrive();       //out to motors the pwm value
+              }
+              else
+              {
+                  //we've lost the comm to AgOpenGPS, or just stop request
+                  pwmDrive = 0; //turn off steering motor
+                  motorDrive(); //out to motors the pwm value
+                  pulseCount = 0;
+              }
+          }
+          return;
+      }
+
 
       if (udpData[0] == 128 && udpData[1] == 129 && udpData[2] == 127) //Data
       {
@@ -414,10 +492,7 @@
           {
               gpsSpeed = ((float)(udpData[5] | udpData[6] << 8)) * 0.1;
 
-              prevGuidanceStatus = guidanceStatus;
-
               guidanceStatus = udpData[7];
-              guidanceStatusChanged = (guidanceStatus != prevGuidanceStatus);
 
               //Bit 8,9    set point steer angle * 100 is sent
               steerAngleSetPoint = ((float)(udpData[8] | udpData[9] << 8)) * 0.01; //high low bytes
@@ -426,7 +501,7 @@
 
               if ((bitRead(guidanceStatus, 0) == 0) || (gpsSpeed < 0.1) || (steerSwitch == 1))
               {
-                  watchdogTimer = WATCHDOG_FORCE_VALUE; //turn off steering motor
+                  watchdogTimer = WATCHDOG_LIMIT; //turn off steering motor
               }
               else          //valid conditions to turn on autosteer
               {
@@ -450,8 +525,6 @@
               PGN_253[5] = (uint8_t)sa;
               PGN_253[6] = sa >> 8;
 
-
-              {
                   //heading         
                   PGN_253[7] = (uint8_t)9999;
                   PGN_253[8] = 9999 >> 8;
@@ -459,7 +532,6 @@
                   //roll
                   PGN_253[9] = (uint8_t)8888;
                   PGN_253[10] = 8888 >> 8;
-              }
 
               PGN_253[11] = switchByte;
               PGN_253[12] = (uint8_t)pwmDisplay;
@@ -498,20 +570,6 @@
 
               //Serial.println(steerAngleActual); 
               //--------------------------------------------------------------------------    
-          }
-
-          else if (udpData[3] == 200) // Hello from AgIO
-          {
-              int16_t sa = (int16_t)(steerAngleActual * 100);
-
-              helloFromAutoSteer[5] = (uint8_t)sa;
-              helloFromAutoSteer[6] = sa >> 8;
-
-              helloFromAutoSteer[7] = (uint8_t)helloSteerPosition;
-              helloFromAutoSteer[8] = helloSteerPosition >> 8;
-              helloFromAutoSteer[9] = switchByte;
-
-              ether.sendUdp(helloFromAutoSteer, sizeof(helloFromAutoSteer), portMy, ipDestination, portDestination);
           }
 
           //steer settings
@@ -580,74 +638,6 @@
 
               //reset the arduino
               resetFunc();
-          }
-
-          else if (udpData[3] == 201)
-          {
-              //make really sure this is the subnet pgn
-              if (udpData[4] == 5 && udpData[5] == 201 && udpData[6] == 201)
-              {
-                  networkAddress.ipOne = udpData[7];
-                  networkAddress.ipTwo = udpData[8];
-                  networkAddress.ipThree = udpData[9];
-
-                  Serial.print("\r\n Subnet Changed to: ");
-                  Serial.print(udpData[7]); Serial.print(" . ");
-                  Serial.print(udpData[8]); Serial.print(" . ");
-                  Serial.print(udpData[9]); Serial.println();
-
-                  delay(100);
-
-                  //save in EEPROM and restart
-                  EEPROM.put(60, networkAddress);
-                  resetFunc();
-              }
-          }//end FB
-
-          //scan reply
-          else if (udpData[3] == 202)
-          {
-              //make really sure this is the reply pgn
-              if (udpData[4] == 3 && udpData[5] == 202 && udpData[6] == 202)
-              {
-                  uint8_t scanReply[] = { 128, 129, 126, 203, 7,
-                      networkAddress.ipOne, networkAddress.ipTwo, networkAddress.ipThree, 126,
-                      src_ip[0], src_ip[1], src_ip[2], 23 };
-
-                  //checksum
-                  int16_t CK_A = 0;
-                  for (uint8_t i = 2; i < sizeof(scanReply) - 1; i++)
-                  {
-                      CK_A = (CK_A + scanReply[i]);
-                  }
-                  scanReply[sizeof(scanReply)-1] = CK_A;
-
-                  static uint8_t ipDest[] = { 255,255,255,255 };
-                  uint16_t portDest = 9999; //AOG port that listens
-
-                  Serial.print("\r\nAdapter IP: ");
-                  Serial.print(src_ip[0]); Serial.print(" . ");
-                  Serial.print(src_ip[1]); Serial.print(" . ");
-                  Serial.print(src_ip[2]); Serial.print(" . ");
-                  Serial.print(src_ip[3]);
-                  
-                  //off to AOG
-                  ether.sendUdp(scanReply, sizeof(scanReply), portMy, ipDest, portDest);
-
-                  Serial.print("\r\n Module IP: ");
-                  Serial.print(src_ip[0]); Serial.print(" . ");
-                  Serial.print(src_ip[1]); Serial.print(" . ");
-                  Serial.print(src_ip[2]); Serial.print(" . ");
-                  Serial.print(src_ip[3]); Serial.println();
- 
-                  Serial.print("CurrentSensor: ");
-                  Serial.println(sensorReading);
-                  Serial.print("Steer Counts: ");
-                  Serial.println(helloSteerPosition);
-                  Serial.print("Switch Byte: ");
-                  Serial.println(switchByte);
-                  Serial.println(" --------- ");
-              }
           }
 
       } //end if 80 81 7F  
