@@ -177,14 +177,14 @@
       //PWM rate settings
       if (PWM_Frequency == 1)
       {
-          TCCR2B = TCCR2B & B11111000 | B00000110;    // set timer 2 to 256 for PWM frequency of   122.55 Hz
-          TCCR1B = TCCR1B & B11111000 | B00000100;    // set timer 1 to 256 for PWM frequency of   122.55 Hz
+          TCCR2B = (TCCR2B & B11111000) | B00000110;    // set timer 2 to 256 for PWM frequency of   122.55 Hz
+          TCCR1B = (TCCR1B & B11111000) | B00000100;    // set timer 1 to 256 for PWM frequency of   122.55 Hz
       }
 
       else if (PWM_Frequency == 2)
       {
-          TCCR1B = TCCR1B & B11111000 | B00000010;    // set timer 1 to 8 for PWM frequency of  3921.16 Hz
-          TCCR2B = TCCR2B & B11111000 | B00000010;    // set timer 2 to 8 for PWM frequency of  3921.16 Hx
+          TCCR1B = (TCCR1B & B11111000) | B00000010;    // set timer 1 to 8 for PWM frequency of  3921.16 Hz
+          TCCR2B = (TCCR2B & B11111000) | B00000010;    // set timer 2 to 8 for PWM frequency of  3921.16 Hx
       }
 
       //keep pulled high and drag low to activate, noise free safe   
@@ -240,7 +240,7 @@
 
       //register to port 8888
       ether.udpServerListenOnPort(&udpSteerRecv, 8888);
-      ether.udpServerListenOnPort(&udpSteerRecv2, 7777);
+      ether.udpServerListenOnPort(&udpHelloRecv, 7777);
 
       Serial.println("\r\nSetup complete, waiting for AgOpenGPS");
 
@@ -340,7 +340,7 @@
 
   } // end of main loop
 
-  void udpSteerRecv2(uint16_t dest_port, uint8_t src_ip[IP_LEN], uint16_t src_port, uint8_t* udpData, uint16_t len)
+  void udpHelloRecv(uint16_t dest_port, uint8_t src_ip[IP_LEN], uint16_t src_port, uint8_t* udpData, uint16_t len)
   {
       if (udpData[0] == 128 && udpData[1] == 129 && udpData[2] == 127) //IMU/WAS PGN
       {

@@ -89,7 +89,7 @@ typedef void (*UdpServerCallback)(
     uint16_t dest_port,    ///< Port the packet was sent to
     uint8_t src_ip[IP_LEN],    ///< IP address of the sender
     uint16_t src_port,    ///< Port the packet was sent from
-    const char *data,   ///< UDP payload data
+    byte *data,   ///< UDP payload data
     uint16_t len);        ///< Length of the payload data
 
 /** This type definition defines the structure of a DHCP Option callback function */
@@ -442,7 +442,7 @@ public:
     *     @param  dip Pointer to 4 byte destination IP address
     *     @param  dport Destination port
     */
-    static void sendUdp (const char *data, uint8_t len, uint16_t sport,
+    static void sendUdp (byte *data, uint8_t len, uint16_t sport,
                          const uint8_t *dip, uint16_t dport);
 
     /**   @brief  Resister the function to handle ping events
