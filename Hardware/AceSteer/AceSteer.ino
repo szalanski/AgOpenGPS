@@ -67,6 +67,8 @@
     // ethernet mac address - must be unique on your network - 126 = 7E
     static uint8_t mymac[] = { 0x00,0x00,0x56,0x00,0x00,0x7E };
     uint8_t udpData[64];
+
+    uint16_t counter = 0;
       
     //loop time variables in microseconds  
     const uint16_t LOOP_TIME = 200;  //40Hz    
@@ -181,8 +183,6 @@
         pinMode(REMOTE_PIN, INPUT_PULLUP);
         pinMode(DIR1_RL_ENABLE, OUTPUT);
 
-        if (steerConfig.CytronDriver) pinMode(PWM2_RPWM, OUTPUT);
-
         //set up communication
         Serial.begin(115200);
 
@@ -264,7 +264,7 @@
             //If connection lost to AgOpenGPS, the watchdog will count up and turn off steering
             if (watchdogTimer < 30) watchdogTimer++;
 
-            steerSwitch = 0;  //default to on
+            //steerSwitch = 0;  //default to on
 
             //read all the switches
             workSwitch = digitalRead(WORKSW_PIN);  // read work switch
@@ -276,47 +276,46 @@
             else if (steerConfig.SteerButton == 1)     //steer Button momentary
             {
                 reading = digitalRead(STEERSW_PIN);
-                if (reading == LOW && previous == HIGH)
+                if (reading != previous)
                 {
-                    //on
-                    steerSwitch = 0;
-                }
-                else
-                {
-                    //off
-                    steerSwitch = 1;
-                }
-                previous = reading;
-            }
-
-            if (steerConfig.ShaftEncoder && pulseCount >= steerConfig.PulseCountMax)
-            {
-                steerSwitch = 1; // it turned off
-            }
-
-            // Pressure sensor?
-            if (steerConfig.PressureSensor)
-            {
-                sensorSample = (float)analogRead(ANALOG_SENSOR_PIN);
-                sensorSample *= 0.25;
-                sensorReading = sensorReading * 0.6 + sensorSample * 0.4;
-                if (sensorReading >= steerConfig.PulseCountMax)
-                {
-                    steerSwitch = 1; // it turned off
+                    if (reading == LOW && previous == HIGH)
+                    {
+                        //on
+                        if (steerSwitch == 0) steerSwitch = 1;
+                        else (steerSwitch = 0);
+                    }
+                    previous = reading;
                 }
             }
 
-            //Current sensor?
-            if (steerConfig.CurrentSensor)
-            {
-                sensorSample = (float)analogRead(ANALOG_SENSOR_PIN);
-                sensorSample = (abs(512 - sensorSample)) * 0.5;
-                sensorReading = sensorReading * 0.7 + sensorSample * 0.3;
-                if (sensorReading >= steerConfig.PulseCountMax)
-                {
-                    steerSwitch = 1; // it turned off
-                }
-            }
+            //if (steerConfig.ShaftEncoder && pulseCount >= steerConfig.PulseCountMax)
+            //{
+            //    steerSwitch = 1; // it turned off
+            //}
+
+            // //Pressure sensor?
+            //if (steerConfig.PressureSensor)
+            //{
+            //    sensorSample = (float)analogRead(ANALOG_SENSOR_PIN);
+            //    sensorSample *= 0.25;
+            //    sensorReading = sensorReading * 0.6 + sensorSample * 0.4;
+            //    if (sensorReading >= steerConfig.PulseCountMax)
+            //    {
+            //        steerSwitch = 1; // it turned off
+            //    }
+            //}
+
+            ////Current sensor?
+            //if (steerConfig.CurrentSensor)
+            //{
+            //    sensorSample = (float)analogRead(ANALOG_SENSOR_PIN);
+            //    sensorSample = (abs(512 - sensorSample)) * 0.5;
+            //    sensorReading = sensorReading * 0.7 + sensorSample * 0.3;
+            //    if (sensorReading >= steerConfig.PulseCountMax)
+            //    {
+            //        steerSwitch = 1; // it turned off
+            //    }
+            //}
 
             remoteSwitch = digitalRead(REMOTE_PIN); //read auto steer enable switch open = 0n closed = Off
             switchByte = 0;
@@ -370,9 +369,10 @@
                     //Stream from WAS and IMU
                     if (udpData[3] == 249)
                     {
-                        
+                        counter++;
+
                         steeringPosition = (udpData[5] | udpData[6] << 8);
-                        helloSteerPosition = steeringPosition - 2048;
+                        //helloSteerPosition = steeringPosition - 2048;
 
                         if (steerConfig.InvertWAS)
                         {
@@ -592,6 +592,9 @@
                 {
                     if (udpData[3] == 200) // Hello from AgIO
                     {
+                        helloSteerPosition = counter;
+                        counter = 0;
+
                         int16_t sa = (int16_t)(steerAngleActual * 100);
 
                         helloFromAutoSteer[5] = (uint8_t)sa;
