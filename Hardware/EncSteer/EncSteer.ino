@@ -20,6 +20,9 @@
     //PWM1 for Cytron PWM, Left PWM for IBT2
     #define PWM1_LPWM  3  //PD3
 
+    //Not Connected for Cytron, Right PWM for IBT2  
+    #define PWM2_RPWM  9 //D9
+
     //--------------------------- Switch Input Pins ------------------------
     #define STEERSW_PIN 6 //PD6
     #define WORKSW_PIN 7  //PD7
@@ -193,6 +196,8 @@
       pinMode(REMOTE_PIN, INPUT_PULLUP);
       pinMode(DIR1_RL_ENABLE, OUTPUT);
 
+      if (steerConfig.CytronDriver) pinMode(PWM2_RPWM, OUTPUT);
+
       //set up communication
       Serial.begin(115200);
 
@@ -300,17 +305,17 @@
           //    }
           //}
 
-          ////Current sensor?
-          //if (steerConfig.CurrentSensor)
-          //{
-          //    sensorSample = (float)analogRead(ANALOG_SENSOR_PIN);
-          //    sensorSample = (abs(512 - sensorSample)) * 0.5;
-          //    sensorReading = sensorReading * 0.7 + sensorSample * 0.3;
-          //    if (sensorReading >= steerConfig.PulseCountMax)
-          //    {
-          //        steerSwitch = 1; // it turned off
-          //    }
-          //}
+          //Current sensor ACS712 A0
+          if (steerConfig.CurrentSensor)
+          {
+              sensorSample = (float)analogRead(ANALOG_SENSOR_PIN);
+              sensorSample = (abs(512 - sensorSample)) * 0.5;
+              sensorReading = sensorReading * 0.7 + sensorSample * 0.3;
+              if (sensorReading >= steerConfig.PulseCountMax)
+              {
+                  steerSwitch = 1; // it turned off
+              }
+          }
 
           remoteSwitch = digitalRead(REMOTE_PIN); //read auto steer enable switch open = 0n closed = Off
           switchByte = 0;
@@ -331,6 +336,21 @@
                   }
               }
           }
+
+
+        //Enable H Bridge for IBT2, hyd aux, etc for cytron freewheel mod
+        if (steerConfig.CytronDriver) 
+        {
+          if (steerConfig.IsRelayActiveHigh) 
+          {
+            digitalWrite(PWM2_RPWM, 0); 
+          }
+          else  
+          {
+            digitalWrite(PWM2_RPWM, 1);       
+          }        
+        }
+        else digitalWrite(DIR1_RL_ENABLE, 1);
 
       } //end of timed loop
 
