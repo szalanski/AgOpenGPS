@@ -202,18 +202,15 @@
             TCCR1B = (TCCR1B & B11111000) | B00000100;    // set timer 1 to 256 for PWM frequency of   122.55 Hz
         }
 
-<<<<<<< HEAD:Hardware/EncSteer/EncSteer.ino
       if (steerConfig.CytronDriver) pinMode(PWM2_RPWM, OUTPUT);
 
       //set up communication
       Serial.begin(115200);
-=======
         else if (PWM_Frequency == 2)
         {
             TCCR1B = (TCCR1B & B11111000) | B00000010;    // set timer 1 to 8 for PWM frequency of  3921.16 Hz
             TCCR2B = (TCCR2B & B11111000) | B00000010;    // set timer 2 to 8 for PWM frequency of  3921.16 Hx
         }
->>>>>>> ee5f72bce27f16e3e12870a123528b79692118b3:SourceCode/Hardware/EncSteer/EncSteer.ino
 
         //keep pulled high and drag low to activate, noise free safe   
         pinMode(WORKSW_PIN, INPUT_PULLUP);
