@@ -175,104 +175,81 @@
     //reset function
     void(* resetFunc) (void) = 0;
   
-    void setup()
-    {
-        //Timer1
-          //------ Set PWM frequency for D9 & D10 ------------------------------
-       //TCCR1B = (TCCR1B & 0b11111000) | 0x01; //31.37255 [kHz]
-        //TCCR1B = (TCCR1B & 0b11111000) | 0x02; //3.92116 [kHz]
-        //TCCR1B = (TCCR1B & 0b11111000) | 0x03; //490.20 [Hz]
-        //TCCR1B = (TCCR1B & 0b11111000) | 0x04; //122.55 [Hz]
-        //TCCR1B = (TCCR1B & 0b11111000) | 0x05; //30.64 [Hz]
+  void setup()
+  {
+      //PWM rate settings
+      if (PWM_Frequency == 1)
+      {
+          TCCR2B = (TCCR2B & B11111000) | B00000110;    // set timer 2 to 256 for PWM frequency of   122.55 Hz
+          TCCR1B = (TCCR1B & B11111000) | B00000100;    // set timer 1 to 256 for PWM frequency of   122.55 Hz
+      }
 
-        //Timer2
-        //------- Set PWM frequency for D3 & D11 ------------------------------
-          //TCCR2B = (TCCR2B & 0b11111000) | 0x01; //31.37255 [kHz]
-        //TCCR2B = (TCCR2B & 0b11111000) | 0x02; //3.92116 [kHz]
-        //TCCR2B = (TCCR2B & 0b11111000) | 0x03; //980.39 [Hz]
-        //TCCR2B = (TCCR2B & 0b11111000) | 0x04; //490.20 [Hz]
-        //TCCR2B = (TCCR2B & 0b11111000) | 0x05; //245.10 [Hz]
-        //TCCR2B = (TCCR2B & 0b11111000) | 0x06; //122.55 [Hz]
-        //TCCR2B = (TCCR2B & 0b11111000) | 0x07; //30.64 [Hz]
+      else if (PWM_Frequency == 2)
+      {
+          TCCR1B = (TCCR1B & B11111000) | B00000010;    // set timer 1 to 8 for PWM frequency of  3921.16 Hz
+          TCCR2B = (TCCR2B & B11111000) | B00000010;    // set timer 2 to 8 for PWM frequency of  3921.16 Hx
+      }
 
-        //PWM rate settings
-        if (PWM_Frequency == 1)
-        {
-            TCCR2B = (TCCR2B & B11111000) | B00000110;    // set timer 2 to 256 for PWM frequency of   122.55 Hz
-            TCCR1B = (TCCR1B & B11111000) | B00000100;    // set timer 1 to 256 for PWM frequency of   122.55 Hz
-        }
+      //keep pulled high and drag low to activate, noise free safe   
+      pinMode(WORKSW_PIN, INPUT_PULLUP);
+      pinMode(STEERSW_PIN, INPUT_PULLUP);
+      pinMode(REMOTE_PIN, INPUT_PULLUP);
+      pinMode(DIR1_RL_ENABLE, OUTPUT);
 
-<<<<<<< HEAD:Hardware/EncSteer/EncSteer.ino
       if (steerConfig.CytronDriver) pinMode(PWM2_RPWM, OUTPUT);
 
       //set up communication
       Serial.begin(115200);
-=======
-        else if (PWM_Frequency == 2)
-        {
-            TCCR1B = (TCCR1B & B11111000) | B00000010;    // set timer 1 to 8 for PWM frequency of  3921.16 Hz
-            TCCR2B = (TCCR2B & B11111000) | B00000010;    // set timer 2 to 8 for PWM frequency of  3921.16 Hx
-        }
->>>>>>> ee5f72bce27f16e3e12870a123528b79692118b3:SourceCode/Hardware/EncSteer/EncSteer.ino
 
-        //keep pulled high and drag low to activate, noise free safe   
-        pinMode(WORKSW_PIN, INPUT_PULLUP);
-        pinMode(STEERSW_PIN, INPUT_PULLUP);
-        pinMode(REMOTE_PIN, INPUT_PULLUP);
-        pinMode(DIR1_RL_ENABLE, OUTPUT);
+      EEPROM.get(0, EEread);              // read identifier
 
-        //set up communication
-        Serial.begin(115200);
+      if (EEread != EEP_Ident)   // check on first start and write EEPROM
+      {
+          EEPROM.put(0, EEP_Ident);
+          EEPROM.put(10, steerSettings);
+          EEPROM.put(40, steerConfig);
+          EEPROM.put(60, networkAddress);
+      }
+      else
+      {
+          EEPROM.get(10, steerSettings);     // read the Settings
+          EEPROM.get(40, steerConfig);
+          EEPROM.get(60, networkAddress);
+      }
 
-        EEPROM.get(0, EEread);              // read identifier
+      // for PWM High to Low interpolator
+      highLowPerDeg = ((float)(steerSettings.highPWM - steerSettings.lowPWM)) / LOW_HIGH_DEGREES;
 
-        if (EEread != EEP_Ident)   // check on first start and write EEPROM
-        {
-            EEPROM.put(0, EEP_Ident);
-            EEPROM.put(10, steerSettings);
-            EEPROM.put(40, steerConfig);
-            EEPROM.put(60, networkAddress);
-        }
-        else
-        {
-            EEPROM.get(10, steerSettings);     // read the Settings
-            EEPROM.get(40, steerConfig);
-            EEPROM.get(60, networkAddress);
-        }
+      if (ether.begin(sizeof Ethernet::buffer, mymac, CS_Pin) == 0)
+          Serial.println(F("Failed to access Ethernet controller"));
 
-        // for PWM High to Low interpolator
-        highLowPerDeg = ((float)(steerSettings.highPWM - steerSettings.lowPWM)) / LOW_HIGH_DEGREES;
+      //grab the ip from EEPROM
+      myip[0] = networkAddress.ipOne;
+      myip[1] = networkAddress.ipTwo;
+      myip[2] = networkAddress.ipThree;
 
-        if (ether.begin(sizeof Ethernet::buffer, mymac, CS_Pin) == 0)
-            Serial.println(F("Failed to access Ethernet controller"));
+      gwip[0] = networkAddress.ipOne;
+      gwip[1] = networkAddress.ipTwo;
+      gwip[2] = networkAddress.ipThree;
 
-        //grab the ip from EEPROM
-        myip[0] = networkAddress.ipOne;
-        myip[1] = networkAddress.ipTwo;
-        myip[2] = networkAddress.ipThree;
+      ipDestination[0] = networkAddress.ipOne;
+      ipDestination[1] = networkAddress.ipTwo;
+      ipDestination[2] = networkAddress.ipThree;
 
-        gwip[0] = networkAddress.ipOne;
-        gwip[1] = networkAddress.ipTwo;
-        gwip[2] = networkAddress.ipThree;
+      Serial.println();
+      //set up connection
+      ether.staticSetup(myip, gwip, myDNS, mask);
+      ether.printIp("_IP_: ", ether.myip);
+      ether.printIp("GWay: ", ether.gwip);
+      ether.printIp("AgIO: ", ipDestination);
 
-        ipDestination[0] = networkAddress.ipOne;
-        ipDestination[1] = networkAddress.ipTwo;
-        ipDestination[2] = networkAddress.ipThree;
+      //register to port 8888
+      ether.udpServerListenOnPort(&udpSteerRecv, 8888);
+      ether.udpServerListenOnPort(&udpHelloRecv, 7777);
 
-        Serial.println();
-        //set up connection
-        ether.staticSetup(myip, gwip, myDNS, mask);
-        ether.printIp("_IP_: ", ether.myip);
-        ether.printIp("GWay: ", ether.gwip);
-        ether.printIp("AgIO: ", ipDestination);
+      Serial.println("\r\nSetup complete, waiting for AgOpenGPS");
 
-        //register to port 8888
-        ether.udpServerListenOnPort(&udpSteerRecv, 8888);
-        ether.udpServerListenOnPort(&udpHelloRecv, 7777);
-
-        Serial.println("\r\nSetup complete, waiting for AgOpenGPS");
-
-    }// End of Setup
+  }// End of Setup
 
   void loop()
   {
