@@ -182,6 +182,7 @@ namespace AgOpenGPS
             double latK = 0;
             double easting = 0;
             double norting = 0;
+            string shortName = "";
             int existcurve = curve.numCurveLines;
             curve.refList?.Clear();
            //curve.numCurveLines
@@ -191,6 +192,8 @@ namespace AgOpenGPS
             try
             {
                 doc.Load(_fileName);
+                shortName = Path.GetFileName(_fileName);
+                shortName = shortName.Substring(0, shortName.Length - 4);
 
                 XmlElement root = doc.DocumentElement;
                 XmlNodeList elemList = root.GetElementsByTagName("coordinates");
@@ -288,8 +291,9 @@ namespace AgOpenGPS
                     int idx = curve.curveArr.Count - 1;
 
                     //create a name
-                    curve.curveArr[idx].Name = (Math.Round(glm.toDegrees(curve.aveLineHeading), 1)).ToString(CultureInfo.InvariantCulture)
-                         + "\u00B0" + FindDirection(curve.aveLineHeading) + DateTime.Now.ToString("hh:mm:ss", CultureInfo.InvariantCulture);
+                    curve.curveArr[idx].Name = shortName;
+                    //curve.curveArr[idx].Name = (Math.Round(glm.toDegrees(curve.aveLineHeading), 1)).ToString(CultureInfo.InvariantCulture)
+                    //     + "\u00B0" + FindDirection(curve.aveLineHeading) + DateTime.Now.ToString("hh:mm:ss", CultureInfo.InvariantCulture);
 
                     curve.curveArr[idx].aveHeading = curve.aveLineHeading;
 
