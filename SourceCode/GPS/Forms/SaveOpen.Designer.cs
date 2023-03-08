@@ -197,10 +197,16 @@ namespace AgOpenGPS
 
                 XmlElement root = doc.DocumentElement;
                 XmlNodeList elemList = root.GetElementsByTagName("coordinates");
-                XmlNodeList namelist = root.GetElementsByTagName("name");
+                XmlNodeList namelist = root.GetElementsByTagName("SimpleData");
                 XmlNodeList desclist = root.GetElementsByTagName("description");
-                
-                for (int i = 0; i < elemList.Count; i++)
+
+                if (namelist.Count > 4)
+                {
+                    shortName = namelist[4].InnerText;
+                }
+               
+
+                    for (int i = 0; i < elemList.Count; i++)
                 {
                     // XmlNodeList inner = elemList[f].GetElementsByTagName("Placemark");
                     int g = namelist.Count - elemList.Count;
