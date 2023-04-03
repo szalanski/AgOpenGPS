@@ -8,27 +8,35 @@ namespace AgOpenGPS
         public class CPGN_D0
         {
             /// <summary>
-            ///  Latitude Longitude 8 bytes as modified float
-            ///  double lat = (encodedAngle / (0x7FFFFFFF / 90.0));
-            ///  double lon = (encodedAngle / (0x7FFFFFFF / 180.0));
+            ///  Latitude Longitude 8 bytes (ISOBUS CAN PGN 65267)
+            ///  double lat = (((double)encodedAngle * 0.0000001) - 210);
+            ///  double lon = (((double)encodedAngle * 0.0000001) - 210);
             /// </summary>
-            public byte[] latLong = new byte[] { 0x80, 0x81, 0x7F, 0xD0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0xCC };
+            public byte[] latLong = new byte[] { 0x80, 0x81, 0x7F, 0xD0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xCC };
 
 
-            public void LoadLatitudeLongitude(double lat, double lon)
+            public void LoadLatitudeLongitude(double lat, double lon, double heading, double altitude)
             {
                 
-                int encodedAngle = (int)(lat * (0x7FFFFFFF / 90.0));
-                //double angle = (encodedAngle / (0x7FFFFFFF / 90.0));
+                uint encodedAngle = (uint)((lat + 210) * 10000000);
 
                 byte[] lat6 = BitConverter.GetBytes(encodedAngle);
                 Array.Copy(lat6, 0, latLong, 5, 4);
 
-                encodedAngle = (int)(lon * (0x7FFFFFFF / 180.0));
-                //double angle = (encodedAngle / (0x7FFFFFFF / 180.0));
+                encodedAngle = (uint)((lon + 210) * 10000000);
 
                 lat6 = BitConverter.GetBytes(encodedAngle);
                 Array.Copy(lat6, 0, latLong, 9, 4);
+
+                ushort encoded_uint16 = (ushort)(heading * 128); //degrees;
+
+                byte[] byteInt16 = BitConverter.GetBytes(encoded_uint16);
+                Array.Copy(byteInt16, 0, latLong, 13, 2);
+
+                if (altitude < 0) altitude = 0;
+                encoded_uint16 = (ushort)(altitude * 100); //altitude;
+                byteInt16 = BitConverter.GetBytes(encoded_uint16);
+                Array.Copy(byteInt16, 0, latLong, 15, 2);
             }
         }
 
@@ -472,7 +480,7 @@ namespace AgOpenGPS
         /// <summary>
         /// LatitudeLongitude - D0 - 
         /// </summary>
-        //public CPGN_D0 p_208 = new CPGN_D0();
+        public CPGN_D0 p_208 = new CPGN_D0();
 
     }
 }

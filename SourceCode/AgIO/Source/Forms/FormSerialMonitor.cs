@@ -79,9 +79,10 @@ namespace AgIO
             try { sp.Open(); }
             catch (Exception e)
             {
+                //Console.WriteLine(e.Message);
                 //WriteErrorLog("Opening Machine Port" + e.ToString());
 
-                //MessageBox.Show(e.Message + "\n\r" + "\n\r" + "Go to Settings -> COM Ports to Fix", "No Arduino Port Active");
+                MessageBox.Show(e.Message + "\n\r" + "\n\r" + "Go to Settings -> COM Ports to Fix", "No Arduino Port Active");
 
 
                 //Properties.Settings.Default.setPort_wasConnected = false;
@@ -232,7 +233,10 @@ namespace AgIO
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            textBoxRcv.AppendText(mf.logMonitorSentence.ToString());
+            if (mf.isPGNLogOn)
+            {
+                textBoxRcv.AppendText(mf.logMonitorSentence.ToString());
+            }
             mf.logMonitorSentence.Clear();
         }
 
