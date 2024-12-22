@@ -109,7 +109,7 @@ namespace AgOpenGPS
                     //draw patches of sections
 
                     //direction marker width
-                    double factor = 0.32;
+                    double factor = 0.37;
 
                     GL.LineWidth(2);
 
@@ -1029,7 +1029,7 @@ namespace AgOpenGPS
                 if (end >= tool.rpWidth)
                     end = tool.rpWidth - 1;
 
-                totalPixel = 1;
+                totalPixel = 0;
                 tagged = 0;
 
                 for (int pos = start; pos <= end; pos++)
@@ -1037,15 +1037,22 @@ namespace AgOpenGPS
                     startHeight = (int)(tool.lookAheadDistanceOffPixelsLeft + (mOff * pos)) * tool.rpWidth + pos;
                     endHeight = (int)(tool.lookAheadDistanceOnPixelsLeft + (mOn * pos)) * tool.rpWidth + pos;
 
-                    for (int a = startHeight; a <= endHeight; a += tool.rpWidth)
+                    //for (int a = startHeight; a <= endHeight; a += tool.rpWidth)
                     {
-                        totalPixel++;
-                        if (grnPixels[a] == 0) tagged++;
+                        //totalPixel++;
+                        if (grnPixels[endHeight] == 0) tagged++;
+                        if (grnPixels[startHeight] == 128) totalPixel++;
                     }
                 }
 
                 //determine if meeting minimum coverage
-                section[j].isSectionRequiredOn = ((tagged * 100) / totalPixel > (100 - tool.minCoverage));
+                totalPixel --;
+                //if (tagged != 0)
+                section[j].isSectionRequiredOn = true;
+
+                //check for off
+                if (tagged == 0 && totalPixel == (end-start))
+                    section[j].isSectionRequiredOn = false;
 
                 //logic if in or out of boundaries or headland
                 if (bnd.bndList.Count > 0)
