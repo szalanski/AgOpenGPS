@@ -276,7 +276,7 @@ namespace AgOpenGPS
             if (mf.isJobStarted)
             {
                 //look ahead lines
-                GL.LineWidth(1);
+                GL.LineWidth(3);
                 GL.Begin(PrimitiveType.Lines);
 
                 //lookahead section on
@@ -300,6 +300,8 @@ namespace AgOpenGPS
 
                 GL.End();
 
+
+                //lookahead shading
                 ////draw the triangle in each triangle strip
                 //GL.Begin(PrimitiveType.Triangles);
 
@@ -335,6 +337,9 @@ namespace AgOpenGPS
             double hite = mf.camera.camSetDistance / -150;
             if (hite > 12) hite = 12;
             if (hite < 1) hite = 1;
+
+            //TooDoo
+            hite = 0.2;
 
             {
                 for (int j = 0; j < numOfSections; j++)

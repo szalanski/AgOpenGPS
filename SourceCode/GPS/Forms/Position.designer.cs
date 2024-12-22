@@ -926,27 +926,27 @@ namespace AgOpenGPS
                     }
                 }
 
-                double tanSteerAngle = Math.Tan(glm.toRadians(((double)(guidanceLineSteerAngle)) * 0.01));
-                double tanActSteerAngle = Math.Tan(glm.toRadians(mc.actualSteerAngleDegrees));
+                //double tanSteerAngle = Math.Tan(glm.toRadians(((double)(guidanceLineSteerAngle)) * 0.01));
+                //double tanActSteerAngle = Math.Tan(glm.toRadians(mc.actualSteerAngleDegrees));
 
-                setAngVel = 0.277777 * avgSpeed * tanSteerAngle / vehicle.wheelbase;
-                actAngVel = glm.toDegrees(0.277777 * avgSpeed * tanActSteerAngle / vehicle.wheelbase);
+                //setAngVel = 0.277777 * avgSpeed * tanSteerAngle / vehicle.wheelbase;
+                //actAngVel = glm.toDegrees(0.277777 * avgSpeed * tanActSteerAngle / vehicle.wheelbase);
 
 
-                isMaxAngularVelocity = false;
-                //greater then settings rads/sec limit steer angle
-                if (Math.Abs(setAngVel) > vehicle.maxAngularVelocity)
-                {
-                    setAngVel = vehicle.maxAngularVelocity;
-                    tanSteerAngle = 3.6 * setAngVel * vehicle.wheelbase / avgSpeed;
-                    if (guidanceLineSteerAngle < 0)
-                        guidanceLineSteerAngle = (short)(glm.toDegrees(Math.Atan(tanSteerAngle)) * -100);
-                    else
-                        guidanceLineSteerAngle = (short)(glm.toDegrees(Math.Atan(tanSteerAngle)) * 100);
-                    isMaxAngularVelocity = true;
-                }
+                //isMaxAngularVelocity = false;
+                ////greater then settings rads/sec limit steer angle
+                //if (Math.Abs(setAngVel) > vehicle.maxAngularVelocity)
+                //{
+                //    setAngVel = vehicle.maxAngularVelocity;
+                //    tanSteerAngle = 3.6 * setAngVel * vehicle.wheelbase / avgSpeed;
+                //    if (guidanceLineSteerAngle < 0)
+                //        guidanceLineSteerAngle = (short)(glm.toDegrees(Math.Atan(tanSteerAngle)) * -100);
+                //    else
+                //        guidanceLineSteerAngle = (short)(glm.toDegrees(Math.Atan(tanSteerAngle)) * 100);
+                //    isMaxAngularVelocity = true;
+                //}
 
-                setAngVel = glm.toDegrees(setAngVel);
+                //setAngVel = glm.toDegrees(setAngVel);
 
                 if (isChangingDirection && ahrs.imuHeading == 99999)
                     p_254.pgn[p_254.status] = 0;
@@ -1319,30 +1319,31 @@ namespace AgOpenGPS
 
             //used to increase triangle countExit when going around corners, less on straight
             //pick the slow moving side edge of tool
-            double distance = tool.width * 0.5;
-            if (distance > 5) distance = 5;
+            double distance = tool.width*0.75;
+            if (distance > 8) distance = 8;
 
             //whichever is less
             if (tool.farLeftSpeed < tool.farRightSpeed)
             {
-                double twist = tool.farLeftSpeed / tool.farRightSpeed;
+                double twist = tool.farLeftSpeed * (tool.width / 50) / tool.farRightSpeed * (50/ tool.width);
                 twist *= twist;
-                if (twist < 0.3) twist = 0.3;
-                sectionTriggerStepDistance = distance * twist * twist;
+                if (twist < 0.2) twist = 0.2;
+                sectionTriggerStepDistance = distance * twist;
             }
             else
             {
-                double twist = tool.farRightSpeed / tool.farLeftSpeed;
+                double twist = tool.farRightSpeed * (tool.width / 50) / tool.farLeftSpeed * (50 / tool.width);
                 twist *= twist;
-                if (twist < 0.3) twist = 0.3;
+                if (twist < 0.2) twist = 0.2;
 
-                sectionTriggerStepDistance = distance * twist * twist;
+                sectionTriggerStepDistance = distance * twist;
             }
 
-            //finally fixed distance for making a curve line
-            if (!curve.isRecordingCurve) sectionTriggerStepDistance = sectionTriggerStepDistance + 0.75;
+            if (sectionTriggerStepDistance < 1) sectionTriggerStepDistance = 1;
+            //if (sectionTriggerStepDistance > 5) sectionTriggerStepDistance = 5;
 
-            if (sectionTriggerStepDistance < 1.0) sectionTriggerStepDistance = 1.0;
+            //finally fixed distance for making a curve line
+            if (curve.isRecordingCurve) sectionTriggerStepDistance *= 0.5;
 
             //precalc the sin and cos of heading * -1
             sinSectionHeading = Math.Sin(-toolPivotPos.heading);
