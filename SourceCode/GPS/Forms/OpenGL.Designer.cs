@@ -12,6 +12,9 @@ namespace AgOpenGPS
         //extracted Near, Far, Right, Left clipping planes of frustum
         public double[] frustum = new double[24];
 
+        //Set isBeta to true if this version is a betaversion
+        private bool isBeta = true;
+        //
         private bool isInit = false;
         private double fovy = 0.7;
         private double camDistanceFactor = -4;
@@ -505,6 +508,8 @@ namespace AgOpenGPS
                             sounds.isRTKAlarming = false;
                         }
                     }
+
+                    if (isBeta) DrawBeta();
 
                     if (pn.age > pn.ageAlarm) DrawAge();
 
@@ -2719,7 +2724,14 @@ namespace AgOpenGPS
             font.DrawText(-oglMain.Width / 3, oglMain.Height/3, "RTK Fix Lost", 2);
         }
 
-        private void DrawAge()
+        private void DrawBeta()
+        {
+            GL.Color3(1f, 1f, 1f);
+            font.DrawText(-oglMain.Width / 2.1, oglMain.Height / 1.4, "TEST VERSION ONLY!!", 1.5);
+
+        }
+
+         private void DrawAge()
         {
             GL.Color3(0.9752f, 0.52f, 0.0f);
             font.DrawText(oglMain.Width / 4, 60, "Age:" + pn.age.ToString("N1"), 1.5);
