@@ -19,6 +19,137 @@ namespace AgOpenGPS
 {
     public partial class FormGPS
     {
+        #region Nozzzle
+        private void cboxRate1Rate2Select_Click(object sender, EventArgs e)
+        {
+            if (cboxRate1Rate2Select.Checked)
+            {
+                nozz.volumePerAreaSetSelected = Properties.Settings.Default.setNozzleSettings.volumePerAreaSet2;
+            }
+            else
+            {
+                nozz.volumePerAreaSetSelected = Properties.Settings.Default.setNozzleSettings.volumePerAreaSet1;
+            }
+
+            cboxRate1Rate2Select.Text = nozz.volumePerAreaSetSelected + nozz.unitsPerArea;
+        }
+
+        private void cboxSprayAutoManual_Click(object sender, EventArgs e)
+        {
+            if (cboxSprayAutoManual.Checked)
+            {
+                cboxSprayAutoManual.Text = "Auto";
+                nozz.isSprayAutoMode = true;
+
+                p_225.pgn[p_225.auto] = 1;
+            }
+            else
+            {
+                cboxSprayAutoManual.Text = "Manual";
+                nozz.isSprayAutoMode = false;
+
+                //manual mode 
+                p_225.pgn[p_225.auto] = 0;
+            }
+
+            SendPgnToLoop(p_225.pgn);
+        }
+
+        private void btnSprayVolumeTotal_Click(object sender, EventArgs e)
+        {
+            nozz.isAppliedUnitsNotTankDisplayed = !nozz.isAppliedUnitsNotTankDisplayed;
+            if (!nozz.isAppliedUnitsNotTankDisplayed)
+                lbl_Volume.Text = "Tank " + nozz.unitsApplied;
+            else
+                lbl_Volume.Text = "App " + nozz.unitsApplied;
+        }
+
+        private void btnSprayRate_Click(object sender, EventArgs e)
+        {
+            using (var form = new FormNozSettings(this))
+            {
+                form.ShowDialog(this);
+            }
+
+            if (cboxRate1Rate2Select.Checked)
+            {
+                nozz.volumePerAreaSetSelected = Properties.Settings.Default.setNozzleSettings.volumePerAreaSet2;
+            }
+            else
+            {
+                nozz.volumePerAreaSetSelected = Properties.Settings.Default.setNozzleSettings.volumePerAreaSet1;
+            }
+
+            cboxRate1Rate2Select.Text = nozz.volumePerAreaSetSelected + nozz.unitsPerArea;
+        }
+
+        private void btnNozConfig_Click(object sender, EventArgs e)
+        {
+            Form f = Application.OpenForms["FormNozConfig"];
+
+            if (f != null)
+            {
+                f.Focus();
+                return;
+            }
+
+            Form form = new FormNozConfig(this);
+            form.Show(this);
+        }
+
+
+        private void btnSprayFlyout_Click(object sender, EventArgs e)
+        {
+            Form f = Application.OpenForms["FormNozConfig"];
+
+            if (f != null)
+            {
+                f.Focus();
+                return;
+            }
+
+            Form form = new FormNozConfig(this);
+            form.Show(this);
+        }
+
+        private void btnSprayRateDn_Click(object sender, EventArgs e)
+        {
+            if (!nozz.isSprayAutoMode)
+            {
+                p_225.pgn[p_225.dn] = 1;
+
+                SendPgnToLoop(p_225.pgn);
+
+                p_225.pgn[p_225.dn] = 0;
+            }
+            else
+            {
+                nozz.volumePerAreaSetSelected -= nozz.rateNudge;
+                if (nozz.volumePerAreaSetSelected < 2) nozz.volumePerAreaSetSelected = 2;
+                cboxRate1Rate2Select.Text = nozz.volumePerAreaSetSelected.ToString("N1") + nozz.unitsPerArea;
+            }
+        }
+
+        private void btnSprayRateUp_Click(object sender, EventArgs e)
+        {
+            if (!nozz.isSprayAutoMode)
+            {
+                p_225.pgn[p_225.up] = 1;
+
+                SendPgnToLoop(p_225.pgn);
+
+                p_225.pgn[p_225.up] = 0;
+            }
+            else
+            {
+                nozz.volumePerAreaSetSelected += nozz.rateNudge;
+                cboxRate1Rate2Select.Text = nozz.volumePerAreaSetSelected.ToString("N1") + nozz.unitsPerArea;
+            }
+        }
+
+        #endregion
+
+
         #region Right Menu
         public bool isABCyled = false;
         private void btnContour_Click(object sender, EventArgs e)
@@ -156,7 +287,7 @@ namespace AgOpenGPS
                         if (sounds.isSteerSoundOn) sounds.sndAutoSteerOff.Play();
                     }
 
-                    SystemEventWriter("Steer Off, Above Max Safe Speed for Autosteer");
+                    LogEventWriter("Steer Off, Above Max Safe Speed for Autosteer");
 
                     if (isMetric)
                         TimedMessageBox(3000, "AutoSteer Disabled", "Above Maximum Safe Steering Speed: " + vehicle.maxSteerSpeed.ToString("N0") + " Kmh");
@@ -203,7 +334,7 @@ namespace AgOpenGPS
             if (bnd.bndList.Count == 0)
             {
                 TimedMessageBox(2000, gStr.gsNoBoundary, gStr.gsCreateABoundaryFirst);
-                SystemEventWriter("Uturn attempted without boundary");
+                LogEventWriter("Uturn attempted without boundary");
                 return;
             }
 
@@ -485,7 +616,7 @@ namespace AgOpenGPS
                     TimedMessageBox(2500, "No GPS", "No GPS Position Found");
 
                 }
-                SystemEventWriter("No GPS Position, Field Closed");
+                LogEventWriter("No GPS Position, Field Closed");
                 return;
             }
 
@@ -591,12 +722,11 @@ namespace AgOpenGPS
                         TimedMessageBox(2500, "High Field Start Distance Warning", "Field Start is "
                         + distance.ToString("N1") + " km From current position");
 
-                        SystemEventWriter("High Field Start Distance Warning");
+                        LogEventWriter("High Field Start Distance Warning");
                     }
 
-                    FileSaveSystemEvents();
-                    sbSystemEvents.Clear();
-                    sbSystemEvents.Append(currentFieldDirectory + " *Opened* " + (DateTime.Now.ToLongDateString()) + '\r');
+                    LogEventWriter(" *Opened* " + currentFieldDirectory);
+                    LogEventWriter(DateTime.Now.ToString("f", CultureInfo.CreateSpecificCulture(Settings.Default.setF_culture)));
                 }
             }
 
@@ -644,10 +774,8 @@ namespace AgOpenGPS
             ExportFieldAs_ISOXMLv3();
             ExportFieldAs_ISOXMLv4();
 
-            SystemEventWriter(currentFieldDirectory + " ** Closed **");
-
-            FileSaveSystemEvents();
-            sbSystemEvents.Clear();
+            LogEventWriter(currentFieldDirectory + " ** Closed **");
+            LogEventWriter(DateTime.Now.ToString("f", CultureInfo.CreateSpecificCulture(Settings.Default.setF_culture)));
 
             Settings.Default.setF_CurrentDir = currentFieldDirectory;
             Settings.Default.Save();
@@ -758,7 +886,7 @@ namespace AgOpenGPS
             {
                 btnAutoSteer.PerformClick();
                 TimedMessageBox(2000, gStr.gsGuidanceStopped, "Paths Enabled");
-                SystemEventWriter("Autosteer On While Enable Paths");
+                LogEventWriter("Autosteer On While Enable Paths");
             }
 
             DisableYouTurnButtons();
@@ -970,6 +1098,10 @@ namespace AgOpenGPS
                 f1.Close();
             }
 
+            //Nozzz
+            if (isNozzleApp) panelNavigation.Location = new System.Drawing.Point(250, 100);
+            else panelNavigation.Location = new System.Drawing.Point(90, 100);
+
             if (panelNavigation.Visible)
             {
                 panelNavigation.Visible = false;
@@ -988,19 +1120,7 @@ namespace AgOpenGPS
         }
         private void btnStartAgIO_Click(object sender, EventArgs e)
         {
-            //byte[] data = { 0x80, 0x81, 0x7f, 0xDD, 6, 4, 0, 98,99,100,101, 0xCC };
-
-            //if (isHardwareMessages)
-            //{
-            //    lblHardwareMessage.Text = System.Text.Encoding.UTF8.GetString(data, 7, data[4] - 2);
-            //    lblHardwareMessage.Visible = true;
-            //    hardwareLineCounter = data[5] * 10;
-            //}
-            //else
-            //{
-            //    lblHardwareMessage.Visible = false;
-            //    hardwareLineCounter = 0;
-            //}
+            LogEventWriter("AgIO Manually Started");
 
             Process[] processName = Process.GetProcessesByName("AgIO");
             if (processName.Length == 0)
@@ -1022,6 +1142,8 @@ namespace AgOpenGPS
                 catch
                 {
                     TimedMessageBox(2000, "No File Found", "Can't Find AgIO");
+                    LogEventWriter("AgIO Not Found");
+
                 }
             }
             else
@@ -1163,9 +1285,9 @@ namespace AgOpenGPS
 
             form.Top = this.Top + this.Height / 2 - GPSDataWindowTopOffset;
             if (isPanelBottomHidden)
-                form.Left = this.Left + 2;
+                form.Left = this.Left + 5 + (isNozzleApp?tlpNozzle.Width:0);
             else
-                form.Left = this.Left + GPSDataWindowLeft;
+                form.Left = this.Left + GPSDataWindowLeft + 5 + (isNozzleApp ? tlpNozzle.Width : 0);
 
 
             Form ff = Application.OpenForms["FormGPS"];
@@ -1199,9 +1321,9 @@ namespace AgOpenGPS
 
             form.Top = this.Top + this.Height / 2 - GPSDataWindowTopOffset;
             if (isPanelBottomHidden)
-                form.Left = this.Left + 2;
+                form.Left = this.Left + 5 + (isNozzleApp ? tlpNozzle.Width : 0);
             else
-                form.Left = this.Left + GPSDataWindowLeft;
+                form.Left = this.Left + GPSDataWindowLeft + 5 + (isNozzleApp ? tlpNozzle.Width : 0); 
 
             Form ff = Application.OpenForms["FormGPS"];
             ff.Focus();
@@ -1340,6 +1462,38 @@ namespace AgOpenGPS
             }
         }
 
+        private void nozzleAppToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (isJobStarted)
+            {
+                TimedMessageBox(2000, gStr.gsFieldIsOpen, gStr.gsCloseFieldFirst);
+                LogEventWriter("Turning Nozzle on or off while open field");
+                return;
+            }
+
+            isNozzleApp = !isNozzleApp;
+
+            if (isNozzleApp)
+            {
+                TimedMessageBox(2000, "", "Nozzle App On");
+                LogEventWriter("Turning Nozzle App On");
+            }
+            else
+            {
+                TimedMessageBox(2000, "", "Nozzle App Off");
+                LogEventWriter("Turning Nozzle App Off");
+            }
+
+
+            nozzleAppToolStripMenuItem.Checked = isNozzleApp;
+            Settings.Default.setApp_isNozzleApp = isNozzleApp;
+            Settings.Default.Save();
+
+            LoadSettings();
+
+            PanelsAndOGLSize();
+        }
+
         private void kioskModeToolStrip_Click(object sender, EventArgs e)
         {
             isKioskMode = !isKioskMode;
@@ -1406,7 +1560,7 @@ namespace AgOpenGPS
                     Settings.Default.Save();
 
                     //save event
-                    SystemEventWriter("Reset ALL event occured" );
+                    LogEventWriter("Reset ALL event occured" );
                     FileSaveSystemEvents();
 
                     MessageBox.Show(gStr.gsProgramWillExitPleaseRestart);
@@ -1707,6 +1861,17 @@ namespace AgOpenGPS
                 System.Environment.Exit(1);
             }
         }
+        private void systemLogViewerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FileSaveSystemEvents();
+            sbSystemEvents.Clear();
+
+            FileInfo txtfile = new FileInfo(logsDirectory + "zSystemEventsLog_log.txt");
+            if (txtfile.Exists)
+            {
+                Process.Start("notepad.exe", txtfile.FullName);
+            }
+        }
 
         #endregion
 
@@ -1994,7 +2159,7 @@ namespace AgOpenGPS
                         FileCreateContour();
                         FileCreateSections();
 
-                        SystemEventWriter("All Section Mapping Deleted");
+                        LogEventWriter("All Section Mapping Deleted");
                     }
                     else
                     {
@@ -2264,7 +2429,7 @@ namespace AgOpenGPS
                 }
                 else
                 {
-                    lastSimGuidanceAngle = (double)guidanceLineSteerAngle * 0.01 * 0.75;
+                    lastSimGuidanceAngle = (double)guidanceLineSteerAngle * 0.01 * 0.9;
                     sim.DoSimTick(lastSimGuidanceAngle);
                 }
             }
@@ -2279,7 +2444,7 @@ namespace AgOpenGPS
             {
                 btnAutoSteer.PerformClick();
                 TimedMessageBox(2000, gStr.gsGuidanceStopped, "Sim Reverse Touched");
-                SystemEventWriter("Steer Off, Sim Reverse Activated");
+                LogEventWriter("Steer Off, Sim Reverse Activated");
             }
         }
         private void hsbarSteerAngle_Scroll(object sender, ScrollEventArgs e)

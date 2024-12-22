@@ -724,7 +724,7 @@ namespace AgOpenGPS
                                 {
                                     mf.btnAutoSteer.PerformClick();
                                     mf.TimedMessageBox(2000, gStr.gsGuidanceStopped, gStr.gsPastEndOfCurve);
-                                    mf.SystemEventWriter("Autosteer Stop, Past End of Curve");
+                                    mf.LogEventWriter("Autosteer Stop, Past End of Curve");
 
                                 }
                             }
@@ -734,7 +734,7 @@ namespace AgOpenGPS
                                 {
                                     mf.btnAutoSteer.PerformClick();
                                     mf.TimedMessageBox(2000, gStr.gsGuidanceStopped, gStr.gsPastEndOfCurve);
-                                    mf.SystemEventWriter("Autosteer Stop, Past End of Curve");
+                                    mf.LogEventWriter("Autosteer Stop, Past End of Curve");
                                 }
                             }
                         }
@@ -863,6 +863,8 @@ namespace AgOpenGPS
                     GL.LineWidth(mf.ABLine.lineWidth*3);
                     GL.Color3(0,0,0);
 
+                    //GL.Enable(EnableCap.LineSmooth);
+
                     //ablines and curves are a line - the rest a loop
                     if (mf.trk.gArr[mf.trk.idx].mode <= TrackMode.Curve)
                     {
@@ -917,6 +919,8 @@ namespace AgOpenGPS
                         GL.Vertex3(goalPointCu.easting, goalPointCu.northing, 0.0);
                         GL.End();
                     }
+
+                    //GL.Disable(EnableCap.LineSmooth);
 
                     mf.yt.DrawYouTurn();
 
