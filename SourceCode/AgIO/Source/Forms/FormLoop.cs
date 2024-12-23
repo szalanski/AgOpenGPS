@@ -379,10 +379,10 @@ namespace AgIO
 
             Settings.Default.Save();
 
-            if (profileFileName != "Default Profile")
+            //if (profileFileName != "Default Profile")
                 SettingsIO.ExportSettings(profileDirectory + profileFileName + ".xml");
-            else
-                YesMessageBox("Using Default Profile" + "\r\n\r\n" + "Changes will NOT be Saved");
+            //else
+                //YesMessageBox("Using Default Profile" + "\r\n\r\n" + "Changes will NOT be Saved");
 
 
             if (loopBackSocket != null)
