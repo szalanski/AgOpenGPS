@@ -370,12 +370,11 @@ namespace AgOpenGPS
 
             mf.ABLine.desHeading = mf.pivotAxlePos.heading;
 
-            timer1.Enabled = true;
-
             btnEnter_AB.Enabled = true;
             nudHeading.Enabled = true;
            
             nudHeading.Value = (decimal)(glm.toDegrees(mf.ABLine.desHeading));
+            timer1.Enabled = true;
         }
 
         private void nudHeading_Click(object sender, EventArgs e)
