@@ -921,7 +921,7 @@ namespace AgOpenGPS
             lblHardwareMessage.BringToFront();
             isHardwareMessages = Properties.Settings.Default.setDisplay_isHardwareMessages;
 
-            if ((int) PowerState.GetPowerLineStatus() == 1)
+            if (SystemInformation.PowerStatus.PowerLineStatus == PowerLineStatus.Online)
             {
                 btnChargeStatus.BackColor = Color.YellowGreen;
             }
