@@ -2740,8 +2740,7 @@ namespace AgOpenGPS
         private void DrawBeta()
         {
             GL.Color3(1f, 1f, 1f);
-            font.DrawText(-oglMain.Width / 2.1, oglMain.Height / 1.4, "TEST VERSION ONLY!!", 1.5);
-
+            font.DrawText(-oglMain.Width / 2.1, oglMain.Height / 1.4, "Testing v" + currentVersionStr, 1.3);
         }
 
          private void DrawAge()
