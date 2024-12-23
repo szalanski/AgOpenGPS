@@ -9002,13 +9002,14 @@
             this.chkSectionLines.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.chkSectionLines.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkSectionLines.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.chkSectionLines.BackgroundImage = global::AgOpenGPS.Properties.Resources.ConD_SectionHighlights;
+            this.chkSectionLines.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.chkSectionLines.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.chkSectionLines.FlatAppearance.BorderSize = 2;
             this.chkSectionLines.FlatAppearance.CheckedBackColor = System.Drawing.Color.LightGreen;
             this.chkSectionLines.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.chkSectionLines.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.chkSectionLines.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkSectionLines.Image = global::AgOpenGPS.Properties.Resources.ConD_SectionHighlights;
             this.chkSectionLines.Location = new System.Drawing.Point(417, 276);
             this.chkSectionLines.Name = "chkSectionLines";
             this.chkSectionLines.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -9075,6 +9076,7 @@
             this.chkDirectionMarkers.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.chkDirectionMarkers.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkDirectionMarkers.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.chkDirectionMarkers.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.chkDirectionMarkers.Checked = true;
             this.chkDirectionMarkers.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkDirectionMarkers.FlatAppearance.BorderColor = System.Drawing.Color.Black;
