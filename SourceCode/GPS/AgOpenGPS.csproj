@@ -994,6 +994,7 @@
     <None Include="btnImages\Config\ConD_DirectionMarker.png" />
     <None Include="btnImages\BoundaryRecordPivot.png" />
     <None Include="btnImages\BoundaryRecordTool.png" />
+    <None Include="btnImages\Config\ConD_SectionHighlights.png" />
     <Content Include="License.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

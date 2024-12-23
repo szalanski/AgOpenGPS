@@ -57,6 +57,7 @@ namespace AgOpenGPS
         public bool isDay = true, isDayTime = true, isBrightnessOn = true;
         public bool isLogElevation = false, isDirectionMarkers;
         public bool isKeyboardOn = true, isAutoStartAgIO = true, isSvennArrowOn = true, isTermsAccepted = false;
+        public bool isSectionlinesOn = true;
 
         public bool isLightBarNotSteerBar = false;
 
@@ -546,6 +547,8 @@ namespace AgOpenGPS
             cboxpRowWidth.SelectedIndex = (Properties.Settings.Default.set_youSkipWidth - 1);
             btnYouSkipEnable.Image = Resources.YouSkipOff;
             isNudgeOn = Properties.Settings.Default.setFeatures.isABLineOn;
+
+            isSectionlinesOn = Properties.Settings.Default.setDisplay_isSectionLinesOn;
 
             if (isMetric)
             {

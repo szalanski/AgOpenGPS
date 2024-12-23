@@ -264,6 +264,7 @@ namespace AgOpenGPS
             chkDisplayKeyboard.Checked = mf.isKeyboardOn;
             chkDisplayLogElevation.Checked = mf.isLogElevation;
             chkDirectionMarkers.Checked = Properties.Settings.Default.setTool_isDirectionMarkers;
+            chkSectionLines.Checked = Properties.Settings.Default.setDisplay_isSectionLinesOn;
 
             if (mf.isMetric) rbtnDisplayMetric.Checked = true;
             else rbtnDisplayImperial.Checked = true;

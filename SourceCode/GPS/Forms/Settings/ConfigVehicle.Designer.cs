@@ -467,6 +467,7 @@ namespace AgOpenGPS
             mf.isLogElevation = chkDisplayLogElevation.Checked;
 
             mf.isDirectionMarkers = chkDirectionMarkers.Checked;
+            mf.isSectionlinesOn = chkSectionLines.Checked;
 
             //mf.timeToShowMenus = (int)nudMenusOnTime.Value;
 
@@ -491,6 +492,7 @@ namespace AgOpenGPS
             Properties.Settings.Default.setTool_isDirectionMarkers = mf.isDirectionMarkers;
 
             Properties.Settings.Default.setAS_numGuideLines = mf.ABLine.numGuideLines;
+            Properties.Settings.Default.setDisplay_isSectionLinesOn = mf.isSectionlinesOn;
 
             Properties.Settings.Default.Save();
         }
