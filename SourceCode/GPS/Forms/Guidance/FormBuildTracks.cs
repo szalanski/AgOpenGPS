@@ -765,10 +765,14 @@ namespace AgOpenGPS
             btnALine.Enabled = false;
 
             btnEnter_AB.Enabled = true;
+
+            timer1.Enabled = true;
         }
 
         private void btnBLine_Click(object sender, EventArgs e)
         {
+            timer1.Enabled = false;
+
             mf.ABLine.desPtB = new vec2(mf.pivotAxlePos.easting, mf.pivotAxlePos.northing);
 
             btnBLine.BackColor = System.Drawing.Color.Teal;
@@ -786,6 +790,8 @@ namespace AgOpenGPS
 
         private void btnEnter_AB_Click(object sender, EventArgs e)
         {
+            timer1.Enabled = false;
+
             mf.ABLine.isMakingABLine = false;
             mf.trk.gArr.Add(new CTrk());
 
@@ -840,8 +846,8 @@ namespace AgOpenGPS
 
             mf.ABLine.desPtA = new vec2(mf.pivotAxlePos.easting, mf.pivotAxlePos.northing);
 
-            mf.ABLine.desPtB.easting = mf.ABLine.desPtA.easting + (Math.Sin(mf.pivotAxlePos.heading) * 200);
-            mf.ABLine.desPtB.northing = mf.ABLine.desPtA.northing + (Math.Cos(mf.pivotAxlePos.heading) * 200);
+            mf.ABLine.desPtB.easting = mf.ABLine.desPtA.easting + (Math.Sin(mf.pivotAxlePos.heading) * 1);
+            mf.ABLine.desPtB.northing = mf.ABLine.desPtA.northing + (Math.Cos(mf.pivotAxlePos.heading) * 1);
 
             mf.ABLine.desLineEndA.easting = mf.ABLine.desPtA.easting - (Math.Sin(mf.pivotAxlePos.heading) * 1000);
             mf.ABLine.desLineEndA.northing = mf.ABLine.desPtA.northing - (Math.Cos(mf.pivotAxlePos.heading) * 1000);
@@ -855,10 +861,15 @@ namespace AgOpenGPS
             nudHeading.Enabled = true;
            
             nudHeading.Value = (decimal)(glm.toDegrees(mf.ABLine.desHeading));
+
+            timer1.Enabled = true;
+
         }
 
         private void nudHeading_Click(object sender, EventArgs e)
         {
+            timer1.Enabled = false;
+
             if (mf.KeypadToNUD((NudlessNumericUpDown)sender, this))
             {
                 //original A pt. 
@@ -878,6 +889,8 @@ namespace AgOpenGPS
 
         private void btnEnter_APlus_Click(object sender, EventArgs e)
         {
+            timer1.Enabled = false;
+
             mf.ABLine.isMakingABLine = false;
             mf.trk.gArr.Add(new CTrk());
 
@@ -914,6 +927,21 @@ namespace AgOpenGPS
         }
 
         #endregion
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            mf.ABLine.desPtB = new vec2(mf.pivotAxlePos.easting, mf.pivotAxlePos.northing);
+
+            mf.ABLine.desHeading = Math.Atan2(mf.ABLine.desPtB.easting - mf.ABLine.desPtA.easting,
+               mf.ABLine.desPtB.northing - mf.ABLine.desPtA.northing);
+            if (mf.ABLine.desHeading < 0) mf.ABLine.desHeading += glm.twoPI;
+
+            mf.ABLine.desLineEndA.easting = mf.ABLine.desPtA.easting - (Math.Sin(mf.ABLine.desHeading) * 1000);
+            mf.ABLine.desLineEndA.northing = mf.ABLine.desPtA.northing - (Math.Cos(mf.ABLine.desHeading) * 1000);
+
+            mf.ABLine.desLineEndB.easting = mf.ABLine.desPtA.easting + (Math.Sin(mf.ABLine.desHeading) * 1000);
+            mf.ABLine.desLineEndB.northing = mf.ABLine.desPtA.northing + (Math.Cos(mf.ABLine.desHeading) * 1000);
+        }
 
         #region KML Curve and line
 
