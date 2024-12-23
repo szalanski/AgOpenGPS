@@ -68,9 +68,7 @@ namespace AgOpenGPS
         public uint[] texture;
 
         //the currentversion of software
-        public string currentVersionStr, inoVersionStr;
-
-        public int inoVersionInt;
+        public string currentVersionStr;
 
         //create instance of a stopwatch for timing of frames and NMEA hz determination
         private readonly Stopwatch swFrame = new Stopwatch();
@@ -451,11 +449,6 @@ namespace AgOpenGPS
             currentVersionStr = Application.ProductVersion.ToString(CultureInfo.InvariantCulture);
 
             string[] fullVers = currentVersionStr.Split('.');
-            int inoV = int.Parse(fullVers[0], CultureInfo.InvariantCulture);
-            inoV += int.Parse(fullVers[1], CultureInfo.InvariantCulture);
-            inoV += int.Parse(fullVers[2], CultureInfo.InvariantCulture);
-            inoVersionInt = inoV;
-            inoVersionStr = inoV.ToString();
 
             if (Settings.Default.setF_workingDirectory == "Default")
                 baseDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\AgOpenGPS\\";

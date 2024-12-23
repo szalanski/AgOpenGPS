@@ -3166,5 +3166,17 @@ namespace AgOpenGPS.Properties {
                 this["setBnd_isDrawPivot"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool setDisplay_isSectionLinesOn {
+            get {
+                return ((bool)(this["setDisplay_isSectionLinesOn"]));
+            }
+            set {
+                this["setDisplay_isSectionLinesOn"] = value;
+            }
+        }
     }
 }
