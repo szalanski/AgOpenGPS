@@ -170,7 +170,7 @@ namespace AgOpenGPS
                         }
                         catch (Exception)
                         {
-                            FormTimedMessage form = new FormTimedMessage(2000, gStr.gsFieldFileIsCorrupt, gStr.gsChooseADifferentField);
+                            mf.TimedMessageBox(2000, gStr.gsFieldFileIsCorrupt, gStr.gsChooseADifferentField);
                         }
                     }
                 }
@@ -206,8 +206,7 @@ namespace AgOpenGPS
             }
             else //no fields found
             {
-                FormTimedMessage form2 = new FormTimedMessage(2000, gStr.gsNoFieldsFound, gStr.gsFieldNotOpen);
-                form2.Show(this);
+                mf.TimedMessageBox(2000, gStr.gsNoFieldsFound, gStr.gsFieldNotOpen);
             }
         }
 

@@ -621,8 +621,7 @@ namespace AgOpenGPS
                     {
                         hdl.tracksArr?.Clear();
 
-                        var form = new FormTimedMessage(2000, "Headline Error", "Lines Deleted");
-                        form.Show(this);
+                        TimedMessageBox(2000, "Headline Error", "Lines Deleted");
 
                         dirField = fieldsDirectory + currentFieldDirectory + "\\";
                         directoryName = Path.GetDirectoryName(dirField).ToString(CultureInfo.InvariantCulture);
@@ -821,8 +820,7 @@ namespace AgOpenGPS
                     }
                     catch (Exception er)
                     {
-                        var form = new FormTimedMessage(2000, gStr.gsCurveLineFileIsCorrupt, gStr.gsButFieldIsLoaded);
-                        form.Show(this);
+                        TimedMessageBox(2000, gStr.gsCurveLineFileIsCorrupt, gStr.gsButFieldIsLoaded);
                         WriteErrorLog("Load Curve Line" + er.ToString());
                     }
                 }
@@ -988,8 +986,8 @@ namespace AgOpenGPS
                     }
                     catch (Exception er)
                     {
-                        var form = new FormTimedMessage(2000, gStr.gsCurveLineFileIsCorrupt, gStr.gsButFieldIsLoaded);
-                        form.Show(this);
+                        TimedMessageBox(2000, gStr.gsCurveLineFileIsCorrupt, gStr.gsButFieldIsLoaded);
+                        
                         WriteErrorLog("Load Curve Line" + er.ToString());
                     }
                 }
@@ -1090,8 +1088,8 @@ namespace AgOpenGPS
                     }
                     catch (Exception er)
                     {
-                        var form = new FormTimedMessage(2000, "AB Line Corrupt", "Please delete it!!!");
-                        form.Show(this);
+                        TimedMessageBox(2000, "AB Line Corrupt", "Please delete it!!!");
+                        
                         WriteErrorLog("FieldOpen, Loading ABLine, Corrupt ABLine File" + er);
                     }
                 }
@@ -1219,9 +1217,9 @@ namespace AgOpenGPS
                 {
                     WriteErrorLog("While Opening Field" + e.ToString());
 
-                    var form = new FormTimedMessage(2000, gStr.gsFieldFileIsCorrupt, gStr.gsChooseADifferentField);
+                    TimedMessageBox(2000, gStr.gsFieldFileIsCorrupt, gStr.gsChooseADifferentField);
 
-                    form.Show(this);
+                    
                     JobClose();
                     return;
                 }
@@ -1238,8 +1236,8 @@ namespace AgOpenGPS
             fileAndDirectory = fieldsDirectory + currentFieldDirectory + "\\Sections.txt";
             if (!File.Exists(fileAndDirectory))
             {
-                var form = new FormTimedMessage(2000, gStr.gsMissingSectionFile, gStr.gsButFieldIsLoaded);
-                form.Show(this);
+                TimedMessageBox(2000, gStr.gsMissingSectionFile, gStr.gsButFieldIsLoaded);
+                
                 //return;
             }
             else
@@ -1300,8 +1298,8 @@ namespace AgOpenGPS
                     {
                         WriteErrorLog("Section file" + e.ToString());
 
-                        var form = new FormTimedMessage(2000, "Section File is Corrupt", gStr.gsButFieldIsLoaded);
-                        form.Show(this);
+                        TimedMessageBox(2000, "Section File is Corrupt", gStr.gsButFieldIsLoaded);
+                        
                     }
 
                 }
@@ -1321,8 +1319,8 @@ namespace AgOpenGPS
             fileAndDirectory = fieldsDirectory + currentFieldDirectory + "\\Contour.txt";
             if (!File.Exists(fileAndDirectory))
             {
-                var form = new FormTimedMessage(2000, gStr.gsMissingContourFile, gStr.gsButFieldIsLoaded);
-                form.Show(this);
+                TimedMessageBox(2000, gStr.gsMissingContourFile, gStr.gsButFieldIsLoaded);
+                
                 //return;
             }
             
@@ -1363,8 +1361,8 @@ namespace AgOpenGPS
                     {
                         WriteErrorLog("Loading Contour file" + e.ToString());
 
-                        var form = new FormTimedMessage(2000, gStr.gsContourFileIsCorrupt, gStr.gsButFieldIsLoaded);
-                        form.Show(this);
+                        TimedMessageBox(2000, gStr.gsContourFileIsCorrupt, gStr.gsButFieldIsLoaded);
+                        
                     }
                 }
             }
@@ -1376,8 +1374,8 @@ namespace AgOpenGPS
             fileAndDirectory = fieldsDirectory + currentFieldDirectory + "\\Flags.txt";
             if (!File.Exists(fileAndDirectory))
             {
-                var form = new FormTimedMessage(2000, gStr.gsMissingFlagsFile, gStr.gsButFieldIsLoaded);
-                form.Show(this);
+                TimedMessageBox(2000, gStr.gsMissingFlagsFile, gStr.gsButFieldIsLoaded);
+                
             }
 
             else
@@ -1440,8 +1438,8 @@ namespace AgOpenGPS
 
                     catch (Exception e)
                     {
-                        var form = new FormTimedMessage(2000, gStr.gsFlagFileIsCorrupt, gStr.gsButFieldIsLoaded);
-                        form.Show(this);
+                        TimedMessageBox(2000, gStr.gsFlagFileIsCorrupt, gStr.gsButFieldIsLoaded);
+                        
                         WriteErrorLog("FieldOpen, Loading Flags, Corrupt Flag File" + e.ToString());
                     }
                 }
@@ -1452,8 +1450,8 @@ namespace AgOpenGPS
             fileAndDirectory = fieldsDirectory + currentFieldDirectory + "\\Boundary.txt";
             if (!File.Exists(fileAndDirectory))
             {
-                var form = new FormTimedMessage(2000, gStr.gsMissingBoundaryFile, gStr.gsButFieldIsLoaded);
-                form.Show(this);
+                TimedMessageBox(2000, gStr.gsMissingBoundaryFile, gStr.gsButFieldIsLoaded);
+                
             }
             else
             {
@@ -1535,8 +1533,8 @@ namespace AgOpenGPS
 
                     catch (Exception e)
                     {
-                        var form = new FormTimedMessage(2000, gStr.gsBoundaryLineFilesAreCorrupt, gStr.gsButFieldIsLoaded);
-                        form.Show(this);
+                        TimedMessageBox(2000, gStr.gsBoundaryLineFilesAreCorrupt, gStr.gsButFieldIsLoaded);
+                        
                         WriteErrorLog("Load Boundary Line" + e.ToString());
                     }
                 }
@@ -1586,8 +1584,8 @@ namespace AgOpenGPS
 
                     catch (Exception e)
                     {
-                        var form = new FormTimedMessage(2000, "Headland File is Corrupt", "But Field is Loaded");
-                        form.Show(this);
+                        TimedMessageBox(2000, "Headland File is Corrupt", "But Field is Loaded");
+                        
                         WriteErrorLog("Load Headland Loop" + e.ToString());
                     }
                 }
@@ -1701,8 +1699,8 @@ namespace AgOpenGPS
 
                     catch (Exception e)
                     {
-                        var form = new FormTimedMessage(2000, "Tram is corrupt", gStr.gsButFieldIsLoaded);
-                        form.Show(this);
+                        TimedMessageBox(2000, "Tram is corrupt", gStr.gsButFieldIsLoaded);
+                        
                         WriteErrorLog("Load Boundary Line" + e.ToString());
                     }
                 }
@@ -1754,8 +1752,8 @@ namespace AgOpenGPS
 
                     catch (Exception e)
                     {
-                        var form = new FormTimedMessage(2000, gStr.gsRecordedPathFileIsCorrupt, gStr.gsButFieldIsLoaded);
-                        form.Show(this);
+                        TimedMessageBox(2000, gStr.gsRecordedPathFileIsCorrupt, gStr.gsButFieldIsLoaded);
+                        
                         WriteErrorLog("Load Recorded Path" + e.ToString());
                     }
                 }
@@ -1830,8 +1828,7 @@ namespace AgOpenGPS
 
             if (!isJobStarted)
             {
-                using (var form = new FormTimedMessage(3000, gStr.gsFieldNotOpen, gStr.gsCreateNewField))
-                { form.Show(this); }
+                TimedMessageBox(3000, gStr.gsFieldNotOpen, gStr.gsCreateNewField);
                 return;
             }
             string myFileName, dirField;
@@ -1875,8 +1872,8 @@ namespace AgOpenGPS
 
             //if (!isJobStarted)
             //{
-            //    using (var form = new FormTimedMessage(3000, "Ooops, Job Not Started", "Start a Job First"))
-            //    { form.Show(this); }
+            //    using (TimedMessageBox(3000, "Ooops, Job Not Started", "Start a Job First"))
+            //    {  }
             //    return;
             //}
 
@@ -2317,8 +2314,8 @@ namespace AgOpenGPS
 
                     catch (Exception e)
                     {
-                        var form = new FormTimedMessage(2000, gStr.gsRecordedPathFileIsCorrupt, gStr.gsButFieldIsLoaded);
-                        form.Show(this);
+                        TimedMessageBox(2000, gStr.gsRecordedPathFileIsCorrupt, gStr.gsButFieldIsLoaded);
+                        
                         WriteErrorLog("Load Recorded Path" + e.ToString());
                     }
                 }

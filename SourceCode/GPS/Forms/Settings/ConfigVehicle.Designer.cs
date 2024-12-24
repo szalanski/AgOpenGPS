@@ -147,8 +147,7 @@ namespace AgOpenGPS
             }
             else
             {
-                var form = new FormTimedMessage(2000, gStr.gsFieldIsOpen, gStr.gsCloseFieldFirst);
-                form.Show(this);
+                mf.TimedMessageBox(2000, gStr.gsFieldIsOpen, gStr.gsCloseFieldFirst);
                 UpdateVehicleListView();
             }
 
@@ -179,8 +178,7 @@ namespace AgOpenGPS
                         }
                         else
                         {
-                            var form = new FormTimedMessage(2000, "Vehicle In Use", "Select Different Vehicle");
-                            form.Show(this);
+                            mf.TimedMessageBox(2000, "Vehicle In Use", "Select Different Vehicle");
                         }
                     }
                     else
@@ -229,8 +227,7 @@ namespace AgOpenGPS
             }
             else
             {
-                var form = new FormTimedMessage(2000, gStr.gsFieldIsOpen, gStr.gsCloseFieldFirst);
-                form.Show(this);
+                mf.TimedMessageBox(2000, gStr.gsFieldIsOpen, gStr.gsCloseFieldFirst);
                 tboxVehicleNameSave.Enabled = false;
             }
         }
@@ -416,8 +413,7 @@ namespace AgOpenGPS
             }
             else
             {
-                var form = new FormTimedMessage(2000, gStr.gsFieldIsOpen, gStr.gsCloseFieldFirst);
-                form.Show(this);
+                mf.TimedMessageBox(2000, gStr.gsFieldIsOpen, gStr.gsCloseFieldFirst);
                 UpdateVehicleListView();
             }
         }

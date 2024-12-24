@@ -276,7 +276,7 @@ namespace AgOpenGPS
 
             if (!File.Exists(fileStr))
             {
-                _ = new FormTimedMessage(2000, gStr.gsFieldFileIsCorrupt, gStr.gsChooseADifferentField);
+               mf.TimedMessageBox(2000, gStr.gsFieldFileIsCorrupt, gStr.gsChooseADifferentField);
                 return;
             }
 
@@ -325,8 +325,7 @@ namespace AgOpenGPS
                 {
                     mf.WriteErrorLog("While Opening Field" + ex);
 
-                    FormTimedMessage form = new FormTimedMessage(2000, gStr.gsFieldFileIsCorrupt, gStr.gsChooseADifferentField);
-                    form.Show(this);
+                    mf.TimedMessageBox(2000, gStr.gsFieldFileIsCorrupt, gStr.gsChooseADifferentField);
                     mf.JobClose();
                     return;
                 }

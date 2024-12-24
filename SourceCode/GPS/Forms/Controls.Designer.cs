@@ -321,8 +321,7 @@ namespace AgOpenGPS
                 }
                 else
                 {
-                    var form = new FormTimedMessage(2000, (gStr.gsNoGuidanceLines), (gStr.gsTurnOnContourOrMakeABLine));
-                    form.Show(this);
+                    TimedMessageBox(2000, (gStr.gsNoGuidanceLines), (gStr.gsTurnOnContourOrMakeABLine));
                 }
             }
         }
@@ -469,7 +468,7 @@ namespace AgOpenGPS
             }
             else
             {
-                var form = new FormTimedMessage(1500, gStr.gsNoABLineActive, gStr.gsPleaseEnterABLine);
+                TimedMessageBox(1500, gStr.gsNoABLineActive, gStr.gsPleaseEnterABLine);
                 return;
             }
             if (flp1.Visible)
@@ -506,7 +505,7 @@ namespace AgOpenGPS
             }
             else
             {
-                var form = new FormTimedMessage(1500, gStr.gsNoABLineActive, gStr.gsPleaseEnterABLine);
+                TimedMessageBox(1500, gStr.gsNoABLineActive, gStr.gsPleaseEnterABLine);
                 return;
             }
 
@@ -794,8 +793,7 @@ namespace AgOpenGPS
 
             if (trk.idx == -1)
             {
-                var form = new FormTimedMessage(1500, gStr.gsNoABLineActive, gStr.gsPleaseEnterABLine);
-                form.Show(this);
+                TimedMessageBox(1500, gStr.gsNoABLineActive, gStr.gsPleaseEnterABLine);
                 panelRight.Enabled = true;
                 return;
             }
@@ -1411,8 +1409,7 @@ namespace AgOpenGPS
         {
             if (isJobStarted)
             {
-                var form = new FormTimedMessage(2000, gStr.gsFieldIsOpen, gStr.gsCloseFieldFirst);
-                form.Show(this);
+                TimedMessageBox(2000, gStr.gsFieldIsOpen, gStr.gsCloseFieldFirst);
                 return;
             }
 
@@ -1734,8 +1731,7 @@ namespace AgOpenGPS
         {
             if (Restart && isJobStarted)
             {
-                var form = new FormTimedMessage(2000, gStr.gsFieldIsOpen, gStr.gsCloseFieldFirst);
-                form.Show(this);
+                TimedMessageBox(2000, gStr.gsFieldIsOpen, gStr.gsCloseFieldFirst);
                 return;
             }
 
