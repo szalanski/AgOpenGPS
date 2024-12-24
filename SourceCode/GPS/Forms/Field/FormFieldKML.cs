@@ -355,8 +355,7 @@ namespace AgOpenGPS
                     //create the field file header info
                     if (!mf.isJobStarted)
                     {
-                        using (FormTimedMessage form = new FormTimedMessage(3000, gStr.gsFieldNotOpen, gStr.gsCreateNewField))
-                        { form.Show(this); }
+                        mf.TimedMessageBox(3000, gStr.gsFieldNotOpen, gStr.gsCreateNewField);
                         return;
                     }
                     string myFileName, dirField;

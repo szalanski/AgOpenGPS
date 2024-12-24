@@ -1403,6 +1403,7 @@ namespace AgOpenGPS
         {
             FormTimedMessage form = new FormTimedMessage(timeout, s1, s2);
             form.Show(this);
+            this.Activate();
         }
 
         public void YesMessageBox(string s1)

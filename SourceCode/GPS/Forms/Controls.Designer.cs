@@ -321,8 +321,7 @@ namespace AgOpenGPS
                 }
                 else
                 {
-                    var form = new FormTimedMessage(2000, (gStr.gsNoGuidanceLines), (gStr.gsTurnOnContourOrMakeABLine));
-                    form.Show(this);
+                    TimedMessageBox(2000, (gStr.gsNoGuidanceLines), (gStr.gsTurnOnContourOrMakeABLine));
                 }
             }
         }
@@ -469,7 +468,7 @@ namespace AgOpenGPS
             }
             else
             {
-                var form = new FormTimedMessage(1500, gStr.gsNoABLineActive, gStr.gsPleaseEnterABLine);
+                TimedMessageBox(1500, gStr.gsNoABLineActive, gStr.gsPleaseEnterABLine);
                 return;
             }
             if (flp1.Visible)
@@ -477,7 +476,9 @@ namespace AgOpenGPS
                 flp1.Visible = false;
             }
 
-            panelRight.Visible = false; 
+            panelRight.Visible = false;
+
+            this.Activate();
         }
         private void btnTracksOff_Click(object sender, EventArgs e)
         {
@@ -506,7 +507,7 @@ namespace AgOpenGPS
             }
             else
             {
-                var form = new FormTimedMessage(1500, gStr.gsNoABLineActive, gStr.gsPleaseEnterABLine);
+                TimedMessageBox(1500, gStr.gsNoABLineActive, gStr.gsPleaseEnterABLine);
                 return;
             }
 
@@ -514,6 +515,8 @@ namespace AgOpenGPS
             {
                 flp1.Visible = false;
             }
+
+            this.Activate();
 
         }
         private void btnBuildTracks_Click(object sender, EventArgs e)
@@ -560,6 +563,7 @@ namespace AgOpenGPS
             {
                 flp1.Visible = false;
             }
+            this.Activate();
         }
 
         private void btnABDraw_Click(object sender, EventArgs e)
@@ -794,8 +798,7 @@ namespace AgOpenGPS
 
             if (trk.idx == -1)
             {
-                var form = new FormTimedMessage(1500, gStr.gsNoABLineActive, gStr.gsPleaseEnterABLine);
-                form.Show(this);
+                TimedMessageBox(1500, gStr.gsNoABLineActive, gStr.gsPleaseEnterABLine);
                 panelRight.Enabled = true;
                 return;
             }
@@ -858,6 +861,7 @@ namespace AgOpenGPS
                     {
                         Form form2 = new FormBoundaryPlayer(this);
                         form2.Show(this);
+                        this.Activate();
                     }
                     diaRes = form.DialogResult;
                 }
@@ -1171,6 +1175,7 @@ namespace AgOpenGPS
             //form.Top = 0;
             //form.Left = 0;
             form.Show(this);
+            this.Activate();
 
         }
         private void btnConfig_Click(object sender, EventArgs e)
@@ -1405,14 +1410,14 @@ namespace AgOpenGPS
             using (var form = new FormEnterFlag(this))
             {
                 form.ShowDialog(this);
+                this.Activate();
             }
         }
         private void setWorkingDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (isJobStarted)
             {
-                var form = new FormTimedMessage(2000, gStr.gsFieldIsOpen, gStr.gsCloseFieldFirst);
-                form.Show(this);
+                TimedMessageBox(2000, gStr.gsFieldIsOpen, gStr.gsCloseFieldFirst);
                 return;
             }
 
@@ -1734,8 +1739,7 @@ namespace AgOpenGPS
         {
             if (Restart && isJobStarted)
             {
-                var form = new FormTimedMessage(2000, gStr.gsFieldIsOpen, gStr.gsCloseFieldFirst);
-                form.Show(this);
+                TimedMessageBox(2000, gStr.gsFieldIsOpen, gStr.gsCloseFieldFirst);
                 return;
             }
 
@@ -2221,11 +2225,13 @@ namespace AgOpenGPS
         {
             Form form = new FormEventViewer(this);
             form.Show(this);
+            this.Activate();
         }
         private void webcamToolStrip_Click(object sender, EventArgs e)
         {
             Form form = new FormWebCam();
             form.Show(this);
+            this.Activate();
         }
         private void offsetFixToolStrip_Click(object sender, EventArgs e)
         {

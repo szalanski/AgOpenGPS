@@ -78,6 +78,7 @@ namespace AgOpenGPS
             btnBCurve.Enabled = false;
             btnPausePlay.Enabled = false;
             mf.curve.desList?.Clear();
+            mf.Activate();
         }
 
         private void btnzAPlus_Click(object sender, EventArgs e)
@@ -88,6 +89,7 @@ namespace AgOpenGPS
             btnAPlus.Enabled = true;
             mf.curve.desList?.Clear();
             nudHeading.Enabled = false;
+            mf.Activate();
         }
 
         private void btnzABLine_Click(object sender, EventArgs e)
@@ -99,6 +101,7 @@ namespace AgOpenGPS
             btnBLine.Enabled = false;
             btnPausePlay.Enabled = false;
             mf.curve.desList?.Clear();
+            mf.Activate();
         }
 
         #endregion
@@ -109,6 +112,7 @@ namespace AgOpenGPS
             isRefRightSide = !isRefRightSide;
             btnRefSideCurve.Image = isRefRightSide ?
             Properties.Resources.BoundaryRight : Properties.Resources.BoundaryLeft;
+            mf.Activate();
         }
 
         private void btnACurve_Click(object sender, System.EventArgs e)
@@ -132,6 +136,7 @@ namespace AgOpenGPS
                 mf.curve.isMakingCurve = true;
                 mf.curve.isRecordingCurve = true;
             }
+            mf.Activate();
         }
 
         private void btnBCurve_Click(object sender, System.EventArgs e)
@@ -216,6 +221,7 @@ namespace AgOpenGPS
                 panelName.Visible = false;
                 panelChoose.Visible = false;
             }
+            mf.Activate();
         }
 
         private void btnPausePlayCurve_Click(object sender, EventArgs e)
@@ -236,6 +242,7 @@ namespace AgOpenGPS
             }
 
             btnBCurve.Enabled = mf.curve.desList.Count > 3;
+            mf.Activate();
         }
 
         #endregion
@@ -246,6 +253,7 @@ namespace AgOpenGPS
             isRefRightSide = !isRefRightSide;
             btnRefSideAB.Image = isRefRightSide ?
             Properties.Resources.BoundaryRight : Properties.Resources.BoundaryLeft;
+            mf.Activate();
         }
 
         private void btnALine_Click(object sender, EventArgs e)
@@ -270,6 +278,7 @@ namespace AgOpenGPS
             btnALine.Enabled = false;
 
             btnEnter_AB.Enabled = true;
+            mf.Activate();
         }
 
         private void btnBLine_Click(object sender, EventArgs e)
@@ -287,6 +296,7 @@ namespace AgOpenGPS
 
             mf.ABLine.desLineEndB.easting = mf.ABLine.desPtA.easting + (Math.Sin(mf.ABLine.desHeading) * 1000);
             mf.ABLine.desLineEndB.northing = mf.ABLine.desPtA.northing + (Math.Cos(mf.ABLine.desHeading) * 1000);
+            mf.Activate();
         }
 
         private void btnEnter_AB_Click(object sender, EventArgs e)
@@ -326,6 +336,7 @@ namespace AgOpenGPS
             }
             panelABLine.Visible = false;
             panelName.Visible = true;
+            mf.Activate();
         }
 
         #endregion
@@ -351,6 +362,7 @@ namespace AgOpenGPS
             isRefRightSide = !isRefRightSide;
             btnRefSideAPlus.Image = isRefRightSide ?
             Properties.Resources.BoundaryRight : Properties.Resources.BoundaryLeft;
+            mf.Activate();
         }
 
         private void btnAPlus_Click(object sender, EventArgs e)
@@ -375,6 +387,7 @@ namespace AgOpenGPS
            
             nudHeading.Value = (decimal)(glm.toDegrees(mf.ABLine.desHeading));
             timer1.Enabled = true;
+            mf.Activate();
         }
 
         private void nudHeading_Click(object sender, EventArgs e)
@@ -396,6 +409,7 @@ namespace AgOpenGPS
                 mf.ABLine.desLineEndB.easting = mf.ABLine.desPtA.easting + (Math.Sin(mf.ABLine.desHeading) * 1000);
                 mf.ABLine.desLineEndB.northing = mf.ABLine.desPtA.northing + (Math.Cos(mf.ABLine.desHeading) * 1000);
             }
+        mf.Activate();
         }
 
         private void btnEnter_APlus_Click(object sender, EventArgs e)
@@ -435,6 +449,7 @@ namespace AgOpenGPS
 
             panelAPlus.Visible = false;
             panelName.Visible = true;
+            mf.Activate();
         }
 
         #endregion
@@ -455,6 +470,7 @@ namespace AgOpenGPS
             mf.curve.isRecordingCurve = false;
 
             Close();
+            mf.Activate();
         }
 
         private void textBox_Click(object sender, EventArgs e)
@@ -534,7 +550,7 @@ namespace AgOpenGPS
             {
                 mf.curve.desList.Add(arr[i]);
             }
+            mf.Activate();
         }
-
     }
 }

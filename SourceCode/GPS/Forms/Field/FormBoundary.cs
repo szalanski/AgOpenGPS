@@ -55,6 +55,15 @@ namespace AgOpenGPS
             }
         }
 
+        private void FormBoundary_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (!isClosing)
+            {
+                e.Cancel = true;
+                return;
+            }
+        }
+
         private void UpdateChart()
         {
             int inner = 1;
@@ -295,15 +304,6 @@ namespace AgOpenGPS
             panelChoose.Dock = DockStyle.Fill;
 
             this.Size = new Size(245,350);
-        }
-
-        private void FormBoundary_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (!isClosing)
-            {
-                e.Cancel = true;
-                return;
-            }
         }
 
         private void btnLoadBoundaryFromGE_Click(object sender, EventArgs e)
