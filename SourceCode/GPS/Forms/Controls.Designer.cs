@@ -476,7 +476,9 @@ namespace AgOpenGPS
                 flp1.Visible = false;
             }
 
-            panelRight.Visible = false; 
+            panelRight.Visible = false;
+
+            this.Activate();
         }
         private void btnTracksOff_Click(object sender, EventArgs e)
         {
@@ -513,6 +515,8 @@ namespace AgOpenGPS
             {
                 flp1.Visible = false;
             }
+
+            this.Activate();
 
         }
         private void btnBuildTracks_Click(object sender, EventArgs e)
@@ -559,6 +563,7 @@ namespace AgOpenGPS
             {
                 flp1.Visible = false;
             }
+            this.Activate();
         }
 
         private void btnABDraw_Click(object sender, EventArgs e)
@@ -856,6 +861,7 @@ namespace AgOpenGPS
                     {
                         Form form2 = new FormBoundaryPlayer(this);
                         form2.Show(this);
+                        this.Activate();
                     }
                     diaRes = form.DialogResult;
                 }
@@ -1169,6 +1175,7 @@ namespace AgOpenGPS
             //form.Top = 0;
             //form.Left = 0;
             form.Show(this);
+            this.Activate();
 
         }
         private void btnConfig_Click(object sender, EventArgs e)
@@ -1403,6 +1410,7 @@ namespace AgOpenGPS
             using (var form = new FormEnterFlag(this))
             {
                 form.ShowDialog(this);
+                this.Activate();
             }
         }
         private void setWorkingDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2217,11 +2225,13 @@ namespace AgOpenGPS
         {
             Form form = new FormEventViewer(this);
             form.Show(this);
+            this.Activate();
         }
         private void webcamToolStrip_Click(object sender, EventArgs e)
         {
             Form form = new FormWebCam();
             form.Show(this);
+            this.Activate();
         }
         private void offsetFixToolStrip_Click(object sender, EventArgs e)
         {
