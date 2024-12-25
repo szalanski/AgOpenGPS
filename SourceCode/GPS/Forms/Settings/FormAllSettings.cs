@@ -5,6 +5,7 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Globalization;
+using System.IO;
 using System.Reflection.Emit;
 using System.Windows.Forms;
 
@@ -166,7 +167,7 @@ namespace AgOpenGPS
         {
             Bitmap bm = new Bitmap(this.Width, this.Height);
             this.DrawToBitmap(bm, new Rectangle(0, 0, this.Width, this.Height));
-            bm.Save(mf.baseDirectory + "//AllSet.PNG", ImageFormat.Png);
+            bm.Save(Path.Combine(mf.baseDirectory, "AllSet.PNG"), ImageFormat.Png);
             System.Diagnostics.Process.Start("explorer.exe", mf.baseDirectory);
             mf.LogEventWriter("View All Settings to PNG");
             Close();

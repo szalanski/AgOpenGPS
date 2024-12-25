@@ -206,11 +206,9 @@ namespace AgOpenGPS
         private void btnBuildFields_Click(object sender, EventArgs e)
         {
             mf.currentFieldDirectory = tboxFieldName.Text.Trim();
-            string dirNewField = mf.fieldsDirectory + mf.currentFieldDirectory + "\\";
+            string directoryName = Path.Combine(mf.fieldsDirectory, mf.currentFieldDirectory);
 
             //create new field files.
-            string directoryName = Path.GetDirectoryName(dirNewField);
-
             if ((!string.IsNullOrEmpty(directoryName)) && (Directory.Exists(directoryName)))
             {
                 MessageBox.Show(gStr.gsChooseADifferentName, gStr.gsDirectoryExists, MessageBoxButtons.OK, MessageBoxIcon.Stop);
@@ -320,18 +318,17 @@ namespace AgOpenGPS
                         mf.TimedMessageBox(3000, gStr.gsFieldNotOpen, gStr.gsCreateNewField);
                         return;
                     }
-                    string myFileName, dirField;
+                    string myFileName;
 
                     //get the directory and make sure it exists, create if not
-                    dirField = mf.fieldsDirectory + mf.currentFieldDirectory + "\\";
-                    directoryName = Path.GetDirectoryName(dirField);
+                    directoryName = Path.Combine(mf.fieldsDirectory, mf.currentFieldDirectory);
 
                     if ((directoryName.Length > 0) && (!Directory.Exists(directoryName)))
                     { Directory.CreateDirectory(directoryName); }
 
                     myFileName = "Field.txt";
 
-                    using (StreamWriter writer = new StreamWriter(dirField + myFileName))
+                    using (StreamWriter writer = new StreamWriter(Path.Combine(directoryName, myFileName)))
                     {
                         //Write out the date
                         writer.WriteLine(DateTime.Now.ToString("yyyy-MMMM-dd hh:mm:ss tt", CultureInfo.InvariantCulture));

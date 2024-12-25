@@ -271,9 +271,7 @@ namespace AgIO
             if (processName.Length == 0)
             {
                 //Start application here
-                DirectoryInfo di = new DirectoryInfo(Application.StartupPath);
-                string strPath = di.ToString();
-                strPath += "\\ModSim.exe";
+                string strPath = Path.Combine(Application.StartupPath, "ModSim.exe");
 
                 try
                 {
@@ -421,9 +419,7 @@ namespace AgIO
             if (processName.Length == 0)
             {
                 //Start application here
-                DirectoryInfo di = new DirectoryInfo(Application.StartupPath);
-                string strPath = di.ToString();
-                strPath += "\\AgOpenGPS.exe";
+                string strPath = Path.Combine(Application.StartupPath, "AgOpenGPS.exe");
 
                 try
                 {
@@ -451,9 +447,7 @@ namespace AgIO
             if (processName.Length == 0)
             {
                 //Start application here
-                DirectoryInfo di = new DirectoryInfo(Application.StartupPath);
-                string strPath = di.ToString();
-                strPath += "\\GPS_Out.exe";
+                string strPath = Path.Combine(Application.StartupPath, "GPS_Out.exe");
 
                 try
                 {
