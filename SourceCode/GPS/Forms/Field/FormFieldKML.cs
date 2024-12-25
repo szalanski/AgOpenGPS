@@ -200,14 +200,16 @@ namespace AgOpenGPS
                     btnSave.Enabled = true;
                     btnLoadKML.Enabled = false;
                 }
-                catch (Exception)
+                catch (Exception ee)
                 {
                     btnSave.Enabled = false;
                     btnLoadKML.Enabled = false;
+                    mf.TimedMessageBox(2000, gStr.gsErrorreadingKML, gStr.gsChooseBuildDifferentone);
+                    mf.LogEventWriter("New Field, Error Reading KML" + ee.ToString());
                     return;
                 }
             }
-
+             
             mf.bnd.isOkToAddPoints = false;
         }
 
@@ -288,9 +290,10 @@ namespace AgOpenGPS
                         }
                     }
                 }
-                catch (Exception)
+                catch (Exception et)
                 {
-                    mf.TimedMessageBox(2000, "Exception", "Catch Exception");
+                    mf.TimedMessageBox(2000, "Exception", "Error Finding Lat Lon");
+                    mf.LogEventWriter("Lat Lon Exception Reading KML " + et.ToString());
                     return;
                 }
             }
@@ -400,7 +403,7 @@ namespace AgOpenGPS
             }
             catch (Exception ex)
             {
-                mf.WriteErrorLog("Creating new field " + ex);
+                mf.LogEventWriter("Creating new kml field " + ex.ToString());
 
                 MessageBox.Show(gStr.gsError, ex.ToString());
                 mf.currentFieldDirectory = "";

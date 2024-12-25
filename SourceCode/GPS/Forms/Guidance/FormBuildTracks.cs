@@ -1132,8 +1132,9 @@ namespace AgOpenGPS
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ed)
             {
+                mf.LogEventWriter("Tracks from KML " + ed.ToString());
                 return;
             }
 

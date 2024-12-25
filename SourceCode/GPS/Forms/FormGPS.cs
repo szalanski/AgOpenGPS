@@ -1339,26 +1339,6 @@ namespace AgOpenGPS
             GL.MatrixMode(MatrixMode.Modelview);
         }
 
-        //All the files that need to be saved when closing field or app
-        //an error log called by all try catches
-        public void WriteErrorLog(string strErrorText)
-        {
-            try
-            {
-                //set up file and folder if it doesn't exist
-                const string strFileName = "Error Log.txt";
-                //string strPath = Application.StartupPath;
-
-                //Write out the error appending to existing
-                File.AppendAllText(baseDirectory + "\\" + strFileName, strErrorText + " - " +
-                    DateTime.Now.ToString() + "\r\n\r\n");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error in WriteErrorLog: " + ex.Message, "Error Logging", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            }
-        }
-
         //message box pops up with info then goes away
         public void TimedMessageBox(int timeout, string s1, string s2)
         {

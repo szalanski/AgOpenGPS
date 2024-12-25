@@ -90,11 +90,11 @@ namespace AgOpenGPS
                                 fileList.Add("Error");
                             }
                         }
-                        catch (Exception)
+                        catch (Exception eg)
                         {
                             MessageBox.Show(fieldDirectory + " is Damaged, Please Delete, Field.txt is Broken", gStr.gsFileError,
                             MessageBoxButtons.OK, MessageBoxIcon.Error);
-
+                            mf.LogEventWriter("Field.txt is Broken" + eg.ToString());
                             fileList.Add(fieldDirectory);
                             fileList.Add("Error");
                         }
@@ -175,6 +175,7 @@ namespace AgOpenGPS
                         catch (Exception)
                         {
                             area = 0;
+                            mf.LogEventWriter("Field.txt is Broken" + e.ToString());
                         }
                     }
                     if (area == 0) fileList.Add("No Bndry");
@@ -402,7 +403,7 @@ namespace AgOpenGPS
                         {
                             MessageBox.Show(fieldDirectory + " is Damaged, Please Delete, Field.txt is Broken", gStr.gsFileError,
                             MessageBoxButtons.OK, MessageBoxIcon.Error);
-
+                            mf.LogEventWriter("Field.txt is Broken" + e.ToString());
                             fileList.Add(fieldDirectory);
                             fileList.Add("Error");
                         }
@@ -481,6 +482,7 @@ namespace AgOpenGPS
                             catch (Exception)
                             {
                                 area = 0;
+                                mf.LogEventWriter("Field.txt is Broken" + e.ToString());
                             }
                         }
                         if (area == 0) fileList.Add("No Bndry");

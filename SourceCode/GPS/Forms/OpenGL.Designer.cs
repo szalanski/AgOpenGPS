@@ -936,6 +936,9 @@ namespace AgOpenGPS
             //slope of the look ahead line
             double mOn = 0, mOff = 0;
 
+            double theta = mOn = (tool.lookAheadDistanceOnPixelsRight - tool.lookAheadDistanceOnPixelsLeft) / tool.rpWidth;
+            double deg = glm.toDegrees(Math.Atan(theta));
+
             //tram and hydraulics
             if (tram.displayMode > 0 && tool.width > vehicle.trackWidth)
             {

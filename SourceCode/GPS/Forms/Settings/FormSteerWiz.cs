@@ -283,10 +283,11 @@ namespace AgOpenGPS
                         hsbarCountsPerDegree.Value = (int)cpd;
                         lblCPDError.Text = "CPD set to: " + hsbarCountsPerDegree.Value.ToString();
                     }
-                    catch (Exception)
+                    catch (Exception ed)
                     {
                         hsbarCountsPerDegree.Value = 100;
                         lblCPDError.Text = "Error, CPD set to 100";
+                        mf.LogEventWriter("Error, CPD set to 100" + ed.ToString());
                     }
                 }
             }
@@ -317,10 +318,11 @@ namespace AgOpenGPS
                         hsbarAckerman.Value = (int)((steerAngleLeft / Math.Abs(startAngleLeft)) * 100);
                         lblAckermannError.Text = "Ackermann Set to: " + hsbarAckerman.Value.ToString();
                     }
-                    catch (Exception)
+                    catch (Exception eh)
                     {
                         hsbarAckerman.Value = 100;
                         lblAckermannError.Text = "Error, Ackermann set to 100";
+                        mf.LogEventWriter("Error, Ackermann set to 100"+ eh.ToString());
                     }
                 }
             }

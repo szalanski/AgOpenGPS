@@ -96,11 +96,11 @@ namespace AgOpenGPS
                                 fileList.Add("Error");
                             }
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
                             MessageBox.Show(fieldDirectory + " is Damaged, Please Delete, Field.txt is Broken", gStr.gsFileError,
                             MessageBoxButtons.OK, MessageBoxIcon.Error);
-
+                            mf.LogEventWriter(fieldDirectory + " is Damaged, Please Delete,Field.txt is Broken" + ex.ToString());
                             fileList.Add(fieldDirectory);
                             fileList.Add("Error");
                         }
@@ -178,12 +178,17 @@ namespace AgOpenGPS
                                 }
                             }
                         }
-                        catch (Exception)
+                        catch (Exception ef)
                         {
                             area = 0;
+                            mf.LogEventWriter(fieldDirectory + " Boundary.Txt error " + ef.ToString());
                         }
                     }
-                    if (area == 0) fileList.Add("No Bndry");
+                    if (area == 0)
+                    {
+                        fileList.Add("No Bndry");
+                        mf.LogEventWriter("Boundary is Broken, no Area");
+                    }
                     else fileList.Add(Math.Round(area, 1).ToString("N1").PadLeft(10));
                 }
                 else
@@ -192,6 +197,7 @@ namespace AgOpenGPS
                     MessageBox.Show(fieldDirectory + " is Damaged, Missing Boundary.Txt " +
                         "               \r\n Delete Field or Fix ", gStr.gsFileError,
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    mf.LogEventWriter(fieldDirectory + " is Damaged, Missing Boundary.Txt ");
                 }
 
                 filename = dir + "\\Field.txt";
@@ -323,7 +329,7 @@ namespace AgOpenGPS
                 }
                 catch (Exception ex)
                 {
-                    mf.WriteErrorLog("While Opening Field" + ex);
+                    mf.LogEventWriter("While Opening Field" + ex);
 
                     mf.TimedMessageBox(2000, gStr.gsFieldFileIsCorrupt, gStr.gsChooseADifferentField);
                     mf.JobClose();
