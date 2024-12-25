@@ -411,40 +411,38 @@ namespace AgOpenGPS
 
             string[] fullVers = currentVersionStr.Split('.');
 
-            if (Settings.Default.setF_workingDirectory == "Default")
-                baseDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\AgOpenGPS\\";
-            else baseDirectory = Settings.Default.setF_workingDirectory + "\\AgOpenGPS\\";
+            string workingDirectory = Settings.Default.setF_workingDirectory == "Default"
+                ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
+                : Settings.Default.setF_workingDirectory;
+
+            baseDirectory = Path.Combine(workingDirectory, "AgOpenGPS");
 
             //get the fields directory, if not exist, create
-            fieldsDirectory = baseDirectory + "Fields\\";
-            string dir = Path.GetDirectoryName(fieldsDirectory);
-            if (!string.IsNullOrEmpty(dir) && !Directory.Exists(dir)) { Directory.CreateDirectory(dir);
+            fieldsDirectory = Path.Combine(baseDirectory, "Fields");
+            if (!string.IsNullOrEmpty(fieldsDirectory) && !Directory.Exists(fieldsDirectory)) { Directory.CreateDirectory(fieldsDirectory);
                 sbSystemEvents.Append("Fields Dir Created\r");
             }
 
             //get the fields directory, if not exist, create
-            vehiclesDirectory = baseDirectory + "Vehicles\\";
-            dir = Path.GetDirectoryName(vehiclesDirectory);
-            if (!string.IsNullOrEmpty(dir) && !Directory.Exists(dir)) { Directory.CreateDirectory(dir);
+            vehiclesDirectory = Path.Combine(baseDirectory, "Vehicles");
+            if (!string.IsNullOrEmpty(vehiclesDirectory) && !Directory.Exists(vehiclesDirectory)) { Directory.CreateDirectory(vehiclesDirectory);
                 sbSystemEvents.Append("Vehicles Dir Created\r");
             }
 
             //get the fields directory, if not exist, create
-            logsDirectory = baseDirectory + "Logs\\";
-            dir = Path.GetDirectoryName(logsDirectory);
-            if (!string.IsNullOrEmpty(dir) && !Directory.Exists(dir)) { Directory.CreateDirectory(dir);
+            logsDirectory = Path.Combine(baseDirectory, "Logs");
+            if (!string.IsNullOrEmpty(logsDirectory) && !Directory.Exists(logsDirectory)) { Directory.CreateDirectory(logsDirectory);
                 sbSystemEvents.Append("Logs Dir Created\r");
             }
 
             //get the abLines directory, if not exist, create
-            ablinesDirectory = baseDirectory + "ABLines\\";
-            dir = Path.GetDirectoryName(fieldsDirectory);
-            if (!string.IsNullOrEmpty(dir) && !Directory.Exists(dir)) { Directory.CreateDirectory(dir);
+            ablinesDirectory = Path.Combine(baseDirectory, "ABLines");
+            if (!string.IsNullOrEmpty(ablinesDirectory) && !Directory.Exists(ablinesDirectory)) { Directory.CreateDirectory(ablinesDirectory);
                 sbSystemEvents.Append("ABLines Dir Created\r");
             }
 
             //system event log file
-            FileInfo txtfile = new FileInfo(logsDirectory + "zSystemEventsLog_log.txt");
+            FileInfo txtfile = new FileInfo(Path.Combine(logsDirectory, "zSystemEventsLog_log.txt"));
             if (txtfile.Exists)
             {
                 if (txtfile.Length > (500000))       // ## NOTE: 0.5MB max file size
@@ -456,7 +454,7 @@ namespace AgOpenGPS
                     //create some extra space
                     lines /= 30;
 
-                    using (StreamReader reader = new StreamReader(logsDirectory + "zSystemEventsLog_log.txt"))
+                    using (StreamReader reader = new StreamReader(Path.Combine(logsDirectory, "zSystemEventsLog_log.txt")))
                     {
                         try
                         {
@@ -474,7 +472,7 @@ namespace AgOpenGPS
                         catch { }
                     }
 
-                    using (StreamWriter writer = new StreamWriter(logsDirectory + "zSystemEventsLog_log.txt"))
+                    using (StreamWriter writer = new StreamWriter(Path.Combine(logsDirectory, "zSystemEventsLog_log.txt")))
                     {
                         writer.WriteLine(sbF);
                     }
@@ -488,11 +486,9 @@ namespace AgOpenGPS
             //make sure current field directory exists, null if not
             currentFieldDirectory = Settings.Default.setF_CurrentDir;
 
-            string curDir;
             if (currentFieldDirectory != "")
             {
-                curDir = fieldsDirectory + currentFieldDirectory + "//";
-                dir = Path.GetDirectoryName(curDir);
+                string dir = Path.Combine(fieldsDirectory, currentFieldDirectory);
                 if (!string.IsNullOrEmpty(dir) && !Directory.Exists(dir))
                 {
                     currentFieldDirectory = "";
@@ -502,24 +498,24 @@ namespace AgOpenGPS
                 }
             }
 
-            DirectoryInfo dinfo = new DirectoryInfo(vehiclesDirectory + vehicleFileName);
-            FileInfo[] Files = dinfo.GetFiles("*.xml");
+            DirectoryInfo dinfo = new DirectoryInfo(Path.Combine(vehiclesDirectory, vehicleFileName));
+            FileInfo[] vehicleFiles = dinfo.GetFiles("*.xml");
 
-            if (Files.Length == 0)
+            if (vehicleFiles.Length == 0)
             {
-                SettingsIO.ExportAll(vehiclesDirectory + vehicleFileName + "Default Vehicle.xml");
+                SettingsIO.ExportAll(Path.Combine(vehiclesDirectory, vehicleFileName, "Default Vehicle.xml"));
                 sbSystemEvents.Append("Empty Vehicles Dir, Default Vehicle.xml Created\r");
-            }
 
-            dinfo = new DirectoryInfo(vehiclesDirectory + vehicleFileName);
-            FileInfo[] Filess = dinfo.GetFiles("*.xml");
+                //get list of files again, because it just changed by exporting the default vehicle
+                vehicleFiles = dinfo.GetFiles("*.xml");
+            }
 
             bool isDefault = false;
             bool isVehicleExist = false;
 
             vehicleFileName = Settings.Default.setVehicle_vehicleName;
 
-            foreach (FileInfo file in Filess)
+            foreach (FileInfo file in vehicleFiles)
             {
                 string temp = Path.GetFileNameWithoutExtension(file.Name).Trim();
                 if (temp == "Default Vehicle")
@@ -535,7 +531,7 @@ namespace AgOpenGPS
 
             if (!isDefault)
             {
-                SettingsIO.ExportAll(vehiclesDirectory + vehicleFileName + "Default Vehicle.xml");
+                SettingsIO.ExportAll(Path.Combine(vehiclesDirectory, vehicleFileName, "Default Vehicle.xml"));
                 sbSystemEvents.Append("Missing Default Vehicle.xml, Created\r");
             }
 
@@ -597,9 +593,7 @@ namespace AgOpenGPS
                 if (processName.Length == 0)
                 {
                     //Start application here
-                    DirectoryInfo di = new DirectoryInfo(Application.StartupPath);
-                    string strPath = di.ToString();
-                    strPath += "\\AgIO.exe";
+                    string strPath = Path.Combine(Application.StartupPath, "AgIO.exe");
                     try
                     {
                         ProcessStartInfo processInfo = new ProcessStartInfo
@@ -752,7 +746,7 @@ namespace AgOpenGPS
             FileSaveSystemEvents();
 
             //save current vehicle
-            SettingsIO.ExportAll(vehiclesDirectory + vehicleFileName + ".XML");
+            SettingsIO.ExportAll(Path.Combine(vehiclesDirectory, vehicleFileName + ".XML"));
 
             if (displayBrightness.isWmiMonitor)
                 displayBrightness.SetBrightness(Settings.Default.setDisplay_brightnessSystem);
@@ -1350,7 +1344,7 @@ namespace AgOpenGPS
                 //string strPath = Application.StartupPath;
 
                 //Write out the error appending to existing
-                File.AppendAllText(baseDirectory + "\\" + strFileName, strErrorText + " - " +
+                File.AppendAllText(Path.Combine(baseDirectory, strFileName), strErrorText + " - " +
                     DateTime.Now.ToString() + "\r\n\r\n");
             }
             catch (Exception ex)

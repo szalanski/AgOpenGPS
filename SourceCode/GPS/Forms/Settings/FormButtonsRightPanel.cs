@@ -212,9 +212,7 @@ namespace AgOpenGPS
         {
             Process[] processName = Process.GetProcessesByName("BobsYourUncle");
             //Start application here
-            DirectoryInfo di = new DirectoryInfo(Application.StartupPath);
-            string strPath = di.ToString();
-            strPath += "\\Buttons.mp4";
+            string strPath = Path.Combine(Application.StartupPath, "Buttons.mp4");
 
             try
             {

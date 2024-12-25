@@ -4,6 +4,7 @@ using AgOpenGPS.Culture;
 using Microsoft.Win32;
 using System;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 
 namespace AgOpenGPS
@@ -136,7 +137,7 @@ namespace AgOpenGPS
             mf.LoadSettings();
 
             //save current vehicle
-            SettingsIO.ExportAll(mf.vehiclesDirectory + mf.vehicleFileName + ".XML");
+            SettingsIO.ExportAll(Path.Combine(mf.vehiclesDirectory, mf.vehicleFileName + ".XML"));
         }
 
         private void FixMinMaxSpinners()

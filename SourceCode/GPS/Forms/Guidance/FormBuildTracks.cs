@@ -980,7 +980,7 @@ namespace AgOpenGPS
                     Filter = "KML files (*.KML)|*.KML",
 
                     //the initial directory, fields, for the open dialog
-                    InitialDirectory = mf.fieldsDirectory + mf.currentFieldDirectory
+                    InitialDirectory = Path.Combine(mf.fieldsDirectory, mf.currentFieldDirectory)
                 };
 
                 //was a file selected

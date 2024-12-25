@@ -3,6 +3,7 @@ using AgOpenGPS.Properties;
 using System;
 using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 
 namespace AgOpenGPS
@@ -428,7 +429,7 @@ namespace AgOpenGPS
             Properties.Settings.Default.Save();
 
             //save current vehicle
-            SettingsIO.ExportAll(mf.vehiclesDirectory + mf.vehicleFileName + ".XML");
+            SettingsIO.ExportAll(Path.Combine(mf.vehiclesDirectory, mf.vehicleFileName + ".XML"));
         }
 
         private void tabSettings_Enter(object sender, EventArgs e)
@@ -630,7 +631,7 @@ namespace AgOpenGPS
                 Properties.Settings.Default.Save();
 
                 //save current vehicle
-                SettingsIO.ExportAll(mf.vehiclesDirectory + mf.vehicleFileName + ".XML");
+                SettingsIO.ExportAll(Path.Combine(mf.vehiclesDirectory, mf.vehicleFileName + ".XML"));
 
                 FormSteer_Load(this, e);
 

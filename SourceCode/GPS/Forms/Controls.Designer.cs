@@ -1130,9 +1130,8 @@ namespace AgOpenGPS
             if (processName.Length == 0)
             {
                 //Start application here
-                DirectoryInfo di = new DirectoryInfo(Application.StartupPath);
-                string strPath = di.ToString();
-                strPath += "\\AgIO.exe";
+                string strPath = Path.Combine(Application.StartupPath, "AgIO.exe");
+
                 try
                 {
                     //TimedMessageBox(2000, "Please Wait", "Starting AgIO");
@@ -1638,7 +1637,7 @@ namespace AgOpenGPS
             {
                 form.ShowDialog(this);
             }
-            SettingsIO.ExportAll(vehiclesDirectory + vehicleFileName + ".XML");
+            SettingsIO.ExportAll(Path.Combine(vehiclesDirectory, vehicleFileName + ".XML"));
         }
         private void colorsSectionToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1648,7 +1647,7 @@ namespace AgOpenGPS
                 {
                     form.ShowDialog(this);
                 }
-                SettingsIO.ExportAll(vehiclesDirectory + vehicleFileName + ".XML");
+                SettingsIO.ExportAll(Path.Combine(vehiclesDirectory, vehicleFileName + ".XML"));
             }
             else
             {
@@ -1870,7 +1869,7 @@ namespace AgOpenGPS
             FileSaveSystemEvents();
             sbSystemEvents.Clear();
 
-            FileInfo txtfile = new FileInfo(logsDirectory + "zSystemEventsLog_log.txt");
+            FileInfo txtfile = new FileInfo(Path.Combine(logsDirectory, "zSystemEventsLog_log.txt"));
             if (txtfile.Exists)
             {
                 Process.Start("notepad.exe", txtfile.FullName);
@@ -2334,9 +2333,8 @@ namespace AgOpenGPS
         }
         private void lblHz_Click(object sender, EventArgs e)
         {
-            DirectoryInfo di = new DirectoryInfo(Application.StartupPath);
-            string strPath = di.ToString();
-            strPath += "\\OGL.exe";
+            string strPath = Path.Combine(Application.StartupPath, "OGL.exe");
+
             try
             {
                 ProcessStartInfo processInfo = new ProcessStartInfo();
@@ -2391,7 +2389,7 @@ namespace AgOpenGPS
                 FileSaveSingleFlagKML(flagNumberPicked);
 
                 //Process.Start(@"C:\Program Files (x86)\Google\Google Earth\client\googleearth", workingDirectory + currentFieldDirectory + "\\Flags.KML");
-                Process.Start(fieldsDirectory + currentFieldDirectory + "\\Flag.KML");
+                Process.Start(Path.Combine(fieldsDirectory, currentFieldDirectory, "Flag.KML"));
             }
         }
 
