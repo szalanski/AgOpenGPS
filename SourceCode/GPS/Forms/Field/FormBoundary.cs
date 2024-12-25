@@ -413,8 +413,9 @@ namespace AgOpenGPS
                         mf.btnABDraw.Visible = true;
                         UpdateChart();
                     }
-                    catch (Exception)
+                    catch (Exception ed)
                     {
+                        mf.LogEventWriter("Load Boundary from GE " + ed.ToString());
                         return;
                     }
                 }
