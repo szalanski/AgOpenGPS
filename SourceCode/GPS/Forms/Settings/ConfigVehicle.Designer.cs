@@ -21,7 +21,7 @@ namespace AgOpenGPS
         {
             if (tboxVehicleNameSave.Text.Trim().Length > 0)
             {
-                SettingsIO.ExportAll(mf.vehiclesDirectory + tboxVehicleNameSave.Text.Trim() + ".XML");
+                SettingsIO.ExportAll(Path.Combine(mf.vehiclesDirectory, tboxVehicleNameSave.Text.Trim() + ".XML"));
 
                 mf.vehicleFileName = tboxVehicleNameSave.Text.Trim();
                 Properties.Settings.Default.setVehicle_vehicleName = mf.vehicleFileName;
@@ -50,7 +50,7 @@ namespace AgOpenGPS
             if (!mf.isJobStarted)
             {
                 //save current vehicle
-                SettingsIO.ExportAll(mf.vehiclesDirectory + mf.vehicleFileName + ".XML");
+                SettingsIO.ExportAll(Path.Combine(mf.vehiclesDirectory, mf.vehicleFileName + ".XML"));
 
                 if (lvVehicles.SelectedItems.Count > 0)
                 {
@@ -65,7 +65,7 @@ namespace AgOpenGPS
 
                         if (result3 == DialogResult.Yes)
                         {
-                            bool success = SettingsIO.ImportAll(mf.vehiclesDirectory + lvVehicles.SelectedItems[0].SubItems[0].Text + ".XML");
+                            bool success = SettingsIO.ImportAll(Path.Combine(mf.vehiclesDirectory, lvVehicles.SelectedItems[0].SubItems[0].Text + ".XML"));
                             if (!success) return;
 
                             mf.vehicleFileName = lvVehicles.SelectedItems[0].SubItems[0].Text;
@@ -173,7 +173,7 @@ namespace AgOpenGPS
                             MessageBoxDefaultButton.Button2);
                             if (result3 == DialogResult.Yes)
                             {
-                                File.Delete(mf.vehiclesDirectory + lvVehicles.SelectedItems[0].SubItems[0].Text + ".XML");
+                                File.Delete(Path.Combine(mf.vehiclesDirectory, lvVehicles.SelectedItems[0].SubItems[0].Text + ".XML"));
                             }
                         }
                         else
@@ -406,7 +406,7 @@ namespace AgOpenGPS
                         MessageBoxDefaultButton.Button2);
                     if (result3 == DialogResult.Yes)
                     {
-                        SettingsIO.ExportAll(mf.vehiclesDirectory + lvVehicles.SelectedItems[0].SubItems[0].Text + ".XML");
+                        SettingsIO.ExportAll(Path.Combine(mf.vehiclesDirectory, lvVehicles.SelectedItems[0].SubItems[0].Text + ".XML"));
                     }
                     UpdateVehicleListView();
                 }

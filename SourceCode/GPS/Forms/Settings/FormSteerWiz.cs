@@ -1,6 +1,7 @@
 ﻿using AgOpenGPS.Culture;
 using System;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 
 namespace AgOpenGPS
@@ -249,7 +250,7 @@ namespace AgOpenGPS
             Properties.Settings.Default.Save();
 
             //save current vehicle
-            SettingsIO.ExportAll(mf.vehiclesDirectory + mf.vehicleFileName + ".XML");
+            SettingsIO.ExportAll(Path.Combine(mf.vehiclesDirectory, mf.vehicleFileName + ".XML"));
         }
 
         private void Timer1_Tick(object sender, EventArgs e)
@@ -603,7 +604,7 @@ namespace AgOpenGPS
             counter251 = 2;
 
             //save current vehicle
-            SettingsIO.ExportAll(mf.vehiclesDirectory + mf.vehicleFileName + ".XML");
+            SettingsIO.ExportAll(Path.Combine(mf.vehiclesDirectory, mf.vehicleFileName + ".XML"));
 
             FormSteer_Load(this, e);
         }

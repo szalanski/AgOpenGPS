@@ -84,32 +84,34 @@ namespace AgIO
         //First run
         private void FormLoop_Load(object sender, EventArgs e)
         {
-            if (Settings.Default.setF_workingDirectory == "Default")
-                baseDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\AgOpenGPS\\";
-            else baseDirectory = Settings.Default.setF_workingDirectory + "\\AgOpenGPS\\";
+            string workingDirectory = Settings.Default.setF_workingDirectory == "Default"
+                ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
+                : Settings.Default.setF_workingDirectory;
+
+            baseDirectory = Path.Combine(workingDirectory, "AgOpenGPS");
 
             //get the fields directory, if not exist, create
-            profileDirectory = baseDirectory + "AgIO\\";
-            string dir = Path.GetDirectoryName(profileDirectory);
-            if (!string.IsNullOrEmpty(dir) && !Directory.Exists(dir)) { Directory.CreateDirectory(dir); }
+            profileDirectory = Path.Combine(baseDirectory, "AgIO");
+            DirectoryInfo profileDirectoryInfo = new DirectoryInfo(profileDirectory);
+            if (!profileDirectoryInfo.Exists)
+                profileDirectoryInfo.Create();
 
-            DirectoryInfo dinfo = new DirectoryInfo(profileDirectory);
-            FileInfo[] Files = dinfo.GetFiles("*.xml");
+            FileInfo[] profileFiles = profileDirectoryInfo.GetFiles("*.xml");
 
-            if (Files.Length == 0)
+            if (profileFiles.Length == 0)
             {
-                SettingsIO.ExportSettings(profileDirectory + "Default Profile.xml");
-            }
+                SettingsIO.ExportSettings(Path.Combine(profileDirectory, "Default Profile.xml"));
 
-            dinfo = new DirectoryInfo(profileDirectory);
-            FileInfo[] Filess = dinfo.GetFiles("*.xml");
+                //get list of files again, because it just changed by exporting the default profile
+                profileFiles = profileDirectoryInfo.GetFiles("*.xml");
+            }
 
             bool isDefault = false;
             bool isProfileExist = false;
 
             profileFileName = Settings.Default.setConfig_profileName;
 
-            foreach (FileInfo file in Filess)
+            foreach (FileInfo file in profileFiles)
             {
                 string temp = Path.GetFileNameWithoutExtension(file.Name).Trim();
                 if (temp == "Default Profile")
@@ -124,7 +126,7 @@ namespace AgIO
             }
 
             if (!isDefault)
-                SettingsIO.ExportSettings(profileDirectory + "Default Profile.xml");
+                SettingsIO.ExportSettings(Path.Combine(profileDirectory, "Default Profile.xml"));
 
             if (!isProfileExist)
             {
@@ -380,7 +382,7 @@ namespace AgIO
             Settings.Default.Save();
 
             //if (profileFileName != "Default Profile")
-                SettingsIO.ExportSettings(profileDirectory + profileFileName + ".xml");
+                SettingsIO.ExportSettings(Path.Combine(profileDirectory, profileFileName + ".xml"));
             //else
                 //YesMessageBox("Using Default Profile" + "\r\n\r\n" + "Changes will NOT be Saved");
 
