@@ -374,6 +374,8 @@ namespace AgOpenGPS
 
             //Application rate controller
             nozz = new CNozzle(this);
+
+            isLineSmooth = Properties.Settings.Default.setDisplay_isLineSmooth;
         }
 
         private void FormGPS_Load(object sender, EventArgs e)

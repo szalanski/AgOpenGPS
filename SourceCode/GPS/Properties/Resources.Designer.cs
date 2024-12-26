@@ -1082,6 +1082,16 @@ namespace AgOpenGPS.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap ConD_LineSmooth {
+            get {
+                object obj = ResourceManager.GetObject("ConD_LineSmooth", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ConD_LogElevation {
             get {
                 object obj = ResourceManager.GetObject("ConD_LogElevation", resourceCulture);
