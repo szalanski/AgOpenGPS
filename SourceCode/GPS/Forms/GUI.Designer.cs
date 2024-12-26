@@ -12,6 +12,7 @@ using System.Reflection;
 using System.Collections.Generic;
 using AgOpenGPS.Culture;
 using System.Text;
+using AgOpenGPS.Helpers;
 
 namespace AgOpenGPS
 {
@@ -802,7 +803,7 @@ namespace AgOpenGPS
                 }
             }
 
-            if (!IsOnScreen(Location, Size, 1))
+            if (!ScreenHelper.IsOnScreen(Bounds))
             {
                 Top = 0;
                 Left = 0;
