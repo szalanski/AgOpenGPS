@@ -5,10 +5,10 @@ on:
   # but only for the dev branch
   push:
     branches:
-      - dev
-      - feature/*
-      - release/*
-      - master
+      - develop
+      # - feature/*
+      # - release/*
+      # - master
 
 env:
   # Path to the solution file relative to the root of the project.https://github.com/farmerbriantee/AgOpenGPS/network/members
