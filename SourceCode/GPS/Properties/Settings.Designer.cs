@@ -3178,5 +3178,17 @@ namespace AgOpenGPS.Properties {
                 this["setDisplay_isSectionLinesOn"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool setDisplay_isLineSmooth {
+            get {
+                return ((bool)(this["setDisplay_isLineSmooth"]));
+            }
+            set {
+                this["setDisplay_isLineSmooth"] = value;
+            }
+        }
     }
 }

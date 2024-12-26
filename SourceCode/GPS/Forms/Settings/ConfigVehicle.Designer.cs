@@ -464,6 +464,7 @@ namespace AgOpenGPS
 
             mf.isDirectionMarkers = chkDirectionMarkers.Checked;
             mf.isSectionlinesOn = chkSectionLines.Checked;
+            mf.isLineSmooth = chkLineSmooth.Checked;
 
             //mf.timeToShowMenus = (int)nudMenusOnTime.Value;
 
@@ -489,6 +490,7 @@ namespace AgOpenGPS
 
             Properties.Settings.Default.setAS_numGuideLines = mf.ABLine.numGuideLines;
             Properties.Settings.Default.setDisplay_isSectionLinesOn = mf.isSectionlinesOn;
+            Properties.Settings.Default.setDisplay_isLineSmooth = mf.isLineSmooth;
 
             Properties.Settings.Default.Save();
         }
