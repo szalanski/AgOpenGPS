@@ -742,7 +742,7 @@ namespace AgOpenGPS
             #region Draw to Back Buffer
 
             //patch color
-            GL.Color3(0.0f, 0.5f, 0.0f);
+            GL.Color3((byte)0, (byte)127, (byte)0);
 
             //to draw or not the triangle patch
             bool isDraw;
@@ -1048,7 +1048,7 @@ namespace AgOpenGPS
                     {
                         //totalPixel++;
                         if (grnPixels[endHeight] == 0) tagged++;
-                        if (grnPixels[startHeight] == 128) totalPixel++;
+                        if (grnPixels[startHeight] == 127) totalPixel++;
                     }
                 }
 
