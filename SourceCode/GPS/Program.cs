@@ -27,6 +27,52 @@ namespace AgOpenGPS
                 Settings.Default.Save();
             }
 
+            string workingDirectory = Settings.Default.setF_workingDirectory == "Default"
+                ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
+                : Settings.Default.setF_workingDirectory;
+
+            string baseDirectory = Path.Combine(workingDirectory, "AgOpenGPS");
+
+            //get the fields directory, if not exist, create
+            string vehiclesDirectory = Path.Combine(baseDirectory, "Vehicles");
+            if (!string.IsNullOrEmpty(vehiclesDirectory) && !Directory.Exists(vehiclesDirectory))
+            {
+                Directory.CreateDirectory(vehiclesDirectory);
+
+                //be sure at default settings
+                Settings.Default.Reset();
+                Settings.Default.Save();
+            }
+
+            //keep for later to load settings
+            string vehicleFileName = Settings.Default.setVehicle_vehicleName;
+
+            //reset to default Vehicle and save
+            Settings.Default.Reset();
+            Settings.Default.Save();
+
+            //what's in the vehicle directory
+            DirectoryInfo dinfo = new DirectoryInfo(vehiclesDirectory);
+            FileInfo[] vehicleFiles = dinfo.GetFiles("*.xml");
+
+            bool isVehicleExist = false;
+
+            foreach (FileInfo file in vehicleFiles)
+            {
+                string temp = Path.GetFileNameWithoutExtension(file.Name).Trim();
+
+                if (temp == vehicleFileName)
+                {
+                    isVehicleExist = true;
+                }
+            }
+
+            //does current vehicle exist?
+            if (isVehicleExist)
+            {
+                SettingsIO.ImportAll(Path.Combine(vehiclesDirectory, vehicleFileName + ".XML"));
+            }
+
             //opening the subkey
             RegistryKey regKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\AgOpenGPS");
 

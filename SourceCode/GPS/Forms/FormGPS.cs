@@ -374,12 +374,11 @@ namespace AgOpenGPS
 
             //Application rate controller
             nozz = new CNozzle(this);
-
-            isLineSmooth = Properties.Settings.Default.setDisplay_isLineSmooth;
         }
 
         private void FormGPS_Load(object sender, EventArgs e)
         {
+
             this.MouseWheel += ZoomByMouseWheel;
 
             sbSystemEvents.Append("\r");
@@ -410,8 +409,6 @@ namespace AgOpenGPS
             SetLanguage(Settings.Default.setF_culture, false);
 
             currentVersionStr = Application.ProductVersion.ToString(CultureInfo.InvariantCulture);
-
-            string[] fullVers = currentVersionStr.Split('.');
 
             string workingDirectory = Settings.Default.setF_workingDirectory == "Default"
                 ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
@@ -500,50 +497,6 @@ namespace AgOpenGPS
                 }
             }
 
-            DirectoryInfo dinfo = new DirectoryInfo(Path.Combine(vehiclesDirectory, vehicleFileName));
-            FileInfo[] vehicleFiles = dinfo.GetFiles("*.xml");
-
-            if (vehicleFiles.Length == 0)
-            {
-                SettingsIO.ExportAll(Path.Combine(vehiclesDirectory, vehicleFileName, "Default Vehicle.xml"));
-                sbSystemEvents.Append("Empty Vehicles Dir, Default Vehicle.xml Created\r");
-
-                //get list of files again, because it just changed by exporting the default vehicle
-                vehicleFiles = dinfo.GetFiles("*.xml");
-            }
-
-            bool isDefault = false;
-            bool isVehicleExist = false;
-
-            vehicleFileName = Settings.Default.setVehicle_vehicleName;
-
-            foreach (FileInfo file in vehicleFiles)
-            {
-                string temp = Path.GetFileNameWithoutExtension(file.Name).Trim();
-                if (temp == "Default Vehicle")
-                {
-                    isDefault = true;
-                }
-
-                if (temp == vehicleFileName)
-                {
-                    isVehicleExist = true;
-                }
-            }
-
-            if (!isDefault)
-            {
-                SettingsIO.ExportAll(Path.Combine(vehiclesDirectory, vehicleFileName, "Default Vehicle.xml"));
-                sbSystemEvents.Append("Missing Default Vehicle.xml, Created\r");
-            }
-
-            if (!isVehicleExist)
-            {
-                vehicleFileName = "Default Vehicle";
-                Settings.Default.setVehicle_vehicleName = vehicleFileName;
-                Settings.Default.Save();
-                sbSystemEvents.Append("Set Vehicle Not Found, Default Vehicle Loaded\r");
-            }
 
             sbSystemEvents.Append("Program Directory: " + (baseDirectory) + "\r");
             sbSystemEvents.Append("Fields Directory: " + (fieldsDirectory) + "\r");
@@ -673,6 +626,21 @@ namespace AgOpenGPS
                             Close();
                         }
                     }
+                }
+            }
+
+            if (vehicleFileName == "Default Vehicle")
+            {
+                LogEventWriter("Using Default Vehicle At Start Warning");
+
+                YesMessageBox("Using Default Vehicle" + "\r\n\r\n" + "Load Existing Vehicle or Save As a New One !!!"
+                    + "\r\n\r\n" + "Changes will NOT be Saved for Default Vehicle");
+            
+                SettingsIO.ExportAll(Path.Combine(vehiclesDirectory, "Default Vehicle.xml"));
+
+                using (FormConfig form = new FormConfig(this))
+                {
+                    form.ShowDialog(this);
                 }
             }
         }

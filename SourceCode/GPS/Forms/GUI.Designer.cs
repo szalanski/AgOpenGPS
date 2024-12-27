@@ -675,6 +675,7 @@ namespace AgOpenGPS
 
             isTextureOn = Settings.Default.setDisplay_isTextureOn;
             isLogElevation = Settings.Default.setDisplay_isLogElevation;
+            isLineSmooth = Properties.Settings.Default.setDisplay_isLineSmooth;
 
             isGridOn = Settings.Default.setMenu_isGridOn;
             isBrightnessOn = Settings.Default.setDisplay_isBrightnessOn;
@@ -931,14 +932,6 @@ namespace AgOpenGPS
             }
 
             //jumpDistanceAlarm = Settings.Default.setGPS_jumpFixAlarmDistance;
-
-            if (vehicleFileName == "Default Vehicle")
-            {
-                LogEventWriter("Using Default Vehicle At Start Warning");
-
-                YesMessageBox("Using Default Vehicle" + "\r\n\r\n" + "Load Existing Vehicle or Save a New One !!!"
-                    + "\r\n\r\n" + "Changes will NOT be Saved");
-            }
         }
 
         public void PanelUpdateRightAndBottom()
