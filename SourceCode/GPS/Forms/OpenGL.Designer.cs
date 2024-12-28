@@ -12,8 +12,6 @@ namespace AgOpenGPS
         //extracted Near, Far, Right, Left clipping planes of frustum
         public double[] frustum = new double[24];
 
-        //Set isBeta to true if this version is a betaversion
-        private bool isBeta = true;
         //
         private bool isInit = false;
         private double fovy = 0.7;
@@ -513,7 +511,8 @@ namespace AgOpenGPS
                         }
                     }
 
-                    if (isBeta) DrawBeta();
+                    bool isPreRelease = !string.IsNullOrEmpty(GitVersionInformation.PreReleaseTag);
+                    if (isPreRelease) DrawBeta();
 
                     if (pn.age > pn.ageAlarm) DrawAge();
 
@@ -2747,7 +2746,7 @@ namespace AgOpenGPS
         private void DrawBeta()
         {
             GL.Color3(1f, 1f, 1f);
-            font.DrawText(-oglMain.Width / 2.1, oglMain.Height / 1.4, "Beta Testing v" + currentVersionStr, 1.3);
+            font.DrawText(-oglMain.Width / 2.1, oglMain.Height / 1.2, "Beta Testing v" + GitVersionInformation.SemVer, 0.8);
         }
 
          private void DrawAge()
