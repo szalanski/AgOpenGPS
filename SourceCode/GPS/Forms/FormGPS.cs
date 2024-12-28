@@ -65,9 +65,6 @@ namespace AgOpenGPS
         //texture holders
         public uint[] texture;
 
-        //the currentversion of software
-        public string currentVersionStr;
-
         //create instance of a stopwatch for timing of frames and NMEA hz determination
         private readonly Stopwatch swFrame = new Stopwatch();
 
@@ -407,8 +404,6 @@ namespace AgOpenGPS
 
             //set the language to last used
             SetLanguage(Settings.Default.setF_culture, false);
-
-            currentVersionStr = Application.ProductVersion.ToString(CultureInfo.InvariantCulture);
 
             string workingDirectory = Settings.Default.setF_workingDirectory == "Default"
                 ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
