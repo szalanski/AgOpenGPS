@@ -41,6 +41,8 @@ namespace AgOpenGPS
                 SectionFeetInchesTotalWidthLabelUpdate();
             }
 
+            btnVehicleSave.BackColor = Color.Transparent;
+
             UpdateVehicleListView();
             UpdateSummary();
         }
@@ -54,95 +56,87 @@ namespace AgOpenGPS
 
                 if (lvVehicles.SelectedItems.Count > 0)
                 {
-                    if (lvVehicles.SelectedItems[0].SubItems[0].Text.Trim() != "Default Vehicle")
+                    DialogResult result3 = MessageBox.Show(
+                        "Load: " + lvVehicles.SelectedItems[0].SubItems[0].Text + ".XML",
+                        gStr.gsSaveAndReturn,
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question,
+                        MessageBoxDefaultButton.Button2);
+
+                    if (result3 == DialogResult.Yes)
                     {
-                        DialogResult result3 = MessageBox.Show(
-                            "Load: " + lvVehicles.SelectedItems[0].SubItems[0].Text + ".XML",
-                            gStr.gsSaveAndReturn,
-                            MessageBoxButtons.YesNo,
-                            MessageBoxIcon.Question,
-                            MessageBoxDefaultButton.Button2);
+                        bool success = SettingsIO.ImportAll(Path.Combine(mf.vehiclesDirectory, lvVehicles.SelectedItems[0].SubItems[0].Text + ".XML"));
+                        if (!success) return;
 
-                        if (result3 == DialogResult.Yes)
-                        {
-                            bool success = SettingsIO.ImportAll(Path.Combine(mf.vehiclesDirectory, lvVehicles.SelectedItems[0].SubItems[0].Text + ".XML"));
-                            if (!success) return;
+                        mf.vehicleFileName = lvVehicles.SelectedItems[0].SubItems[0].Text;
+                        Properties.Settings.Default.setVehicle_vehicleName = mf.vehicleFileName;
+                        Properties.Settings.Default.Save();
 
-                            mf.vehicleFileName = lvVehicles.SelectedItems[0].SubItems[0].Text;
-                            Properties.Settings.Default.setVehicle_vehicleName = mf.vehicleFileName;
-                            Properties.Settings.Default.Save();
+                        LoadBrandImage();
 
-                            LoadBrandImage();
+                        mf.vehicle = new CVehicle(mf);
+                        mf.tool = new CTool(mf);
 
-                            mf.vehicle = new CVehicle(mf);
-                            mf.tool = new CTool(mf);
+                        //reset AOG
+                        mf.LoadSettings();
 
-                            //reset AOG
-                            mf.LoadSettings();
+                        SectionFeetInchesTotalWidthLabelUpdate();
 
-                            SectionFeetInchesTotalWidthLabelUpdate();
+                        //Form Steer Settings
+                        mf.p_252.pgn[mf.p_252.countsPerDegree] = unchecked((byte)Properties.Settings.Default.setAS_countsPerDegree);
+                        mf.p_252.pgn[mf.p_252.ackerman] = unchecked((byte)Properties.Settings.Default.setAS_ackerman);
 
-                            //Form Steer Settings
-                            mf.p_252.pgn[mf.p_252.countsPerDegree] = unchecked((byte)Properties.Settings.Default.setAS_countsPerDegree);
-                            mf.p_252.pgn[mf.p_252.ackerman] = unchecked((byte)Properties.Settings.Default.setAS_ackerman);
+                        mf.p_252.pgn[mf.p_252.wasOffsetHi] = unchecked((byte)(Properties.Settings.Default.setAS_wasOffset >> 8));
+                        mf.p_252.pgn[mf.p_252.wasOffsetLo] = unchecked((byte)(Properties.Settings.Default.setAS_wasOffset));
 
-                            mf.p_252.pgn[mf.p_252.wasOffsetHi] = unchecked((byte)(Properties.Settings.Default.setAS_wasOffset >> 8));
-                            mf.p_252.pgn[mf.p_252.wasOffsetLo] = unchecked((byte)(Properties.Settings.Default.setAS_wasOffset));
+                        mf.p_252.pgn[mf.p_252.highPWM] = unchecked((byte)Properties.Settings.Default.setAS_highSteerPWM);
+                        mf.p_252.pgn[mf.p_252.lowPWM] = unchecked((byte)Properties.Settings.Default.setAS_lowSteerPWM);
+                        mf.p_252.pgn[mf.p_252.gainProportional] = unchecked((byte)Properties.Settings.Default.setAS_Kp);
+                        mf.p_252.pgn[mf.p_252.minPWM] = unchecked((byte)Properties.Settings.Default.setAS_minSteerPWM);
 
-                            mf.p_252.pgn[mf.p_252.highPWM] = unchecked((byte)Properties.Settings.Default.setAS_highSteerPWM);
-                            mf.p_252.pgn[mf.p_252.lowPWM] = unchecked((byte)Properties.Settings.Default.setAS_lowSteerPWM);
-                            mf.p_252.pgn[mf.p_252.gainProportional] = unchecked((byte)Properties.Settings.Default.setAS_Kp);
-                            mf.p_252.pgn[mf.p_252.minPWM] = unchecked((byte)Properties.Settings.Default.setAS_minSteerPWM);
+                        mf.SendPgnToLoop(mf.p_252.pgn);
 
-                            mf.SendPgnToLoop(mf.p_252.pgn);
+                        //machine module settings
+                        mf.p_238.pgn[mf.p_238.set0] = Properties.Settings.Default.setArdMac_setting0;
+                        mf.p_238.pgn[mf.p_238.raiseTime] = Properties.Settings.Default.setArdMac_hydRaiseTime;
+                        mf.p_238.pgn[mf.p_238.lowerTime] = Properties.Settings.Default.setArdMac_hydLowerTime;
 
-                            //machine module settings
-                            mf.p_238.pgn[mf.p_238.set0] = Properties.Settings.Default.setArdMac_setting0;
-                            mf.p_238.pgn[mf.p_238.raiseTime] = Properties.Settings.Default.setArdMac_hydRaiseTime;
-                            mf.p_238.pgn[mf.p_238.lowerTime] = Properties.Settings.Default.setArdMac_hydLowerTime;
+                        mf.SendPgnToLoop(mf.p_238.pgn);
 
-                            mf.SendPgnToLoop(mf.p_238.pgn);
+                        //steer config
+                        mf.p_251.pgn[mf.p_251.set0] = Properties.Settings.Default.setArdSteer_setting0;
+                        mf.p_251.pgn[mf.p_251.set1] = Properties.Settings.Default.setArdSteer_setting1;
+                        mf.p_251.pgn[mf.p_251.maxPulse] = Properties.Settings.Default.setArdSteer_maxPulseCounts;
+                        mf.p_251.pgn[mf.p_251.minSpeed] = unchecked((byte)(Properties.Settings.Default.setAS_minSteerSpeed * 10));
 
-                            //steer config
-                            mf.p_251.pgn[mf.p_251.set0] = Properties.Settings.Default.setArdSteer_setting0;
-                            mf.p_251.pgn[mf.p_251.set1] = Properties.Settings.Default.setArdSteer_setting1;
-                            mf.p_251.pgn[mf.p_251.maxPulse] = Properties.Settings.Default.setArdSteer_maxPulseCounts;
-                            mf.p_251.pgn[mf.p_251.minSpeed] = unchecked((byte)(Properties.Settings.Default.setAS_minSteerSpeed * 10));
+                        if (Properties.Settings.Default.setAS_isConstantContourOn)
+                            mf.p_251.pgn[mf.p_251.angVel] = 1;
+                        else mf.p_251.pgn[mf.p_251.angVel] = 0;
 
-                            if (Properties.Settings.Default.setAS_isConstantContourOn)
-                                mf.p_251.pgn[mf.p_251.angVel] = 1;
-                            else mf.p_251.pgn[mf.p_251.angVel] = 0;
+                        mf.SendPgnToLoop(mf.p_251.pgn);
 
-                            mf.SendPgnToLoop(mf.p_251.pgn);
+                        //machine settings    
+                        mf.p_238.pgn[mf.p_238.set0] = Properties.Settings.Default.setArdMac_setting0;
+                        mf.p_238.pgn[mf.p_238.raiseTime] = Properties.Settings.Default.setArdMac_hydRaiseTime;
+                        mf.p_238.pgn[mf.p_238.lowerTime] = Properties.Settings.Default.setArdMac_hydLowerTime;
 
-                            //machine settings    
-                            mf.p_238.pgn[mf.p_238.set0] = Properties.Settings.Default.setArdMac_setting0;
-                            mf.p_238.pgn[mf.p_238.raiseTime] = Properties.Settings.Default.setArdMac_hydRaiseTime;
-                            mf.p_238.pgn[mf.p_238.lowerTime] = Properties.Settings.Default.setArdMac_hydLowerTime;
+                        mf.p_238.pgn[mf.p_238.user1] = Properties.Settings.Default.setArdMac_user1;
+                        mf.p_238.pgn[mf.p_238.user2] = Properties.Settings.Default.setArdMac_user2;
+                        mf.p_238.pgn[mf.p_238.user3] = Properties.Settings.Default.setArdMac_user3;
+                        mf.p_238.pgn[mf.p_238.user4] = Properties.Settings.Default.setArdMac_user4;
 
-                            mf.p_238.pgn[mf.p_238.user1] = Properties.Settings.Default.setArdMac_user1;
-                            mf.p_238.pgn[mf.p_238.user2] = Properties.Settings.Default.setArdMac_user2;
-                            mf.p_238.pgn[mf.p_238.user3] = Properties.Settings.Default.setArdMac_user3;
-                            mf.p_238.pgn[mf.p_238.user4] = Properties.Settings.Default.setArdMac_user4;
+                        mf.SendPgnToLoop(mf.p_238.pgn);
 
-                            mf.SendPgnToLoop(mf.p_238.pgn);
+                        //Send Pin configuration
+                        SendRelaySettingsToMachineModule();
 
-                            //Send Pin configuration
-                            SendRelaySettingsToMachineModule();
+                        ///Remind the user
+                        mf.TimedMessageBox(2500, "Steer and Machine Settings Sent", "Were Modules Connected?");
 
-                            ///Remind the user
-                            mf.TimedMessageBox(2500, "Steer and Machine Settings Sent", "Were Modules Connected?");
-
-                            mf.LogEventWriter("Vehicle Loaded: " + mf.vehicleFileName + ".XML");
-                        }
-
-                        UpdateVehicleListView();
+                        mf.LogEventWriter("Vehicle Loaded: " + mf.vehicleFileName + ".XML");
                     }
-                    else
-                    {
-                        mf.LogEventWriter("Attempted to Load Default Vehicle, Denied");
-                        mf.TimedMessageBox(2500, "Vehicle Load Denied", "Choose Another Vehicle or Create One");
-                    }
+
+                    UpdateVehicleListView();
                 }
             }
             else
@@ -200,7 +194,6 @@ namespace AgOpenGPS
             textboxSender.Text = Regex.Replace(textboxSender.Text, glm.fileRegex, "");
             textboxSender.SelectionStart = cursorPosition;
 
-            //btnVehicleSaveAs.Enabled = false;
             btnVehicleLoad.Enabled = false;
             btnVehicleDelete.Enabled = false;
 
@@ -209,12 +202,15 @@ namespace AgOpenGPS
             if (String.IsNullOrEmpty(tboxVehicleNameSave.Text.Trim()))
             {
                 btnVehicleSave.Enabled = false;
+                btnVehicleSave.BackColor = Color.Transparent;
             }
             else
             {
                 btnVehicleSave.Enabled = true;
+                btnVehicleSave.BackColor = Color.LimeGreen;
             }
         }
+
         private void tboxVehicleNameSave_Click(object sender, EventArgs e)
         {
             if (!mf.isJobStarted)
@@ -231,166 +227,137 @@ namespace AgOpenGPS
                 tboxVehicleNameSave.Enabled = false;
             }
         }
-        //private void tboxCreateNewVehicle_Click(object sender, EventArgs e)
-        //{
-        //    if (!mf.isJobStarted)
-        //    {
 
-        //        if (mf.isKeyboardOn)
-        //        {
-        //            mf.KeyboardToText((TextBox)sender, this);
-        //        }
-        //    }
-        //    else
-        //    {
-        //        var form = new FormTimedMessage(2000, gStr.gsFieldIsOpen, gStr.gsCloseFieldFirst);
-        //        form.Show(this);
-        //        tboxCreateNewVehicle.Enabled = false;
-        //    }
-        //}
+        private void tboxCreateNewVehicle_Click(object sender, EventArgs e)
+        {
+            if (!mf.isJobStarted)
+            {
 
-        //private void tboxCreateNewVehicle_TextChanged(object sender, EventArgs e)
-        //{
-        //    var textboxSender = (TextBox)sender;
-        //    var cursorPosition = textboxSender.SelectionStart;
-        //    textboxSender.Text = Regex.Replace(textboxSender.Text, glm.fileRegex, "");
-        //    textboxSender.SelectionStart = cursorPosition;
+                if (mf.isKeyboardOn)
+                {
+                    mf.KeyboardToText((TextBox)sender, this);
+                }
+            }
+            else
+            {
+                var form = new FormTimedMessage(2000, gStr.gsFieldIsOpen, gStr.gsCloseFieldFirst);
+                form.Show(this);
+                tboxCreateNewVehicle.Enabled = false;
+            }
+        }
 
-        //    btnVehicleSaveAs.Enabled = false;
-        //    btnVehicleLoad.Enabled = false;
-        //    btnVehicleDelete.Enabled = false;
+        private void tboxCreateNewVehicle_TextChanged(object sender, EventArgs e)
+        {
+            var textboxSender = (TextBox)sender;
+            var cursorPosition = textboxSender.SelectionStart;
+            textboxSender.Text = Regex.Replace(textboxSender.Text, glm.fileRegex, "");
+            textboxSender.SelectionStart = cursorPosition;
 
-        //    lvVehicles.SelectedItems.Clear();
+            btnVehicleSave.Enabled = false;
+            btnVehicleLoad.Enabled = false;
+            btnVehicleDelete.Enabled = false;
 
-        //    if (String.IsNullOrEmpty(tboxCreateNewVehicle.Text.Trim()))
-        //    {
-        //        btnVehicleNewSave.Enabled = false;
-        //    }
-        //    else
-        //    {
-        //        btnVehicleNewSave.Enabled = true;
-        //    }
-        //}
-        //private void btnVehicleNewSave_Click(object sender, EventArgs e)
-        //{
-        //    if (tboxCreateNewVehicle.Text.Trim().Length > 0)
-        //    {
-        //        //SettingsIO.ExportAll(mf.vehiclesDirectory + tboxCreateNewVehicle.Text.Trim() + ".XML");
+            lvVehicles.SelectedItems.Clear();
 
-        //        Settings.Default.Reset();
-        //        Settings.Default.Save();
+            if (String.IsNullOrEmpty(tboxCreateNewVehicle.Text.Trim()))
+            {
+                btnVehicleNewSave.Enabled = false;
+                btnVehicleNewSave.BackColor = Color.Transparent;
+            }
+            else
+            {
+                btnVehicleNewSave.Enabled = true;
+                btnVehicleNewSave.BackColor = Color.LimeGreen;
+            }
+        }
 
-        //        Properties.Settings.Default.setVehicle_vehicleName = tboxCreateNewVehicle.Text.Trim();
-        //        Properties.Settings.Default.setDisplay_isTermsAccepted = true;
+        private void btnVehicleNewSave_Click(object sender, EventArgs e)
+        {
+            btnVehicleNewSave.BackColor = Color.Transparent;
+            btnVehicleNewSave.Enabled = false;
 
-        //        Properties.Settings.Default.Save();
-        //        tboxCreateNewVehicle.Text = "";
-        //        btnVehicleNewSave.Enabled = false;
+            if (tboxCreateNewVehicle.Text.Trim().Length > 0)
+            {
+                SettingsIO.ExportAll(Path.Combine(mf.vehiclesDirectory, mf.vehicleFileName + ".XML"));
 
-        //        lblCurrentVehicle.Text = mf.vehicleFileName = Properties.Settings.Default.setVehicle_vehicleName;
+                Settings.Default.Reset();
+                Settings.Default.Save();
 
-        //        SettingsIO.ExportAll(mf.vehiclesDirectory + mf.vehicleFileName + ".XML");
-        //        LoadBrandImage();
+                Properties.Settings.Default.setVehicle_vehicleName = tboxCreateNewVehicle.Text.Trim();
 
-        //        mf.vehicle = new CVehicle(mf);
-        //        mf.tool = new CTool(mf);
+                Properties.Settings.Default.Save();
 
-        //        //reset AOG
-        //        mf.LoadSettings();
+                lblCurrentVehicle.Text = mf.vehicleFileName = Properties.Settings.Default.setVehicle_vehicleName;
+                tboxCreateNewVehicle.Text = "";
 
-        //        chkDisplaySky.Checked = mf.isSkyOn;
-        //        chkDisplayBrightness.Checked = mf.isBrightnessOn;
-        //        chkDisplayFloor.Checked = mf.isTextureOn;
-        //        chkDisplayGrid.Checked = mf.isGridOn;
-        //        chkDisplaySpeedo.Checked = mf.isSpeedoOn;
-        //        chkDisplayDayNight.Checked = mf.isAutoDayNight;
-        //        chkDisplayExtraGuides.Checked = mf.isSideGuideLines;
-        //        chkSvennArrow.Checked = mf.isSvennArrowOn;
-        //        chkDisplayLogNMEA.Checked = mf.isLogNMEA;
-        //        chkDisplayPolygons.Checked = mf.isDrawPolygons;
-        //        chkDisplayLightbar.Checked = mf.isLightbarOn;
-        //        chkDisplayKeyboard.Checked = mf.isKeyboardOn;
-        //        chkDisplayStartFullScreen.Checked = Properties.Settings.Default.setDisplay_isStartFullScreen;
+                LoadBrandImage();
 
-        //        if (mf.isMetric) rbtnDisplayMetric.Checked = true;
-        //        else rbtnDisplayImperial.Checked = true;
+                mf.vehicle = new CVehicle(mf);
+                mf.tool = new CTool(mf);
 
-        //        SaveDisplaySettings();
+                //reset AOG
+                mf.LoadSettings();
 
-        //        lblCurrentVehicle.Text = Properties.Settings.Default.setVehicle_vehicleName;
+                SectionFeetInchesTotalWidthLabelUpdate();
 
-        //        if (mf.isMetric)
-        //        {
-        //            lblInchesCm.Text = gStr.gsCentimeters;
-        //            lblFeetMeters.Text = gStr.gsMeters;
-        //            lblSecTotalWidthFeet.Visible = false;
-        //            lblSecTotalWidthInches.Visible = false;
-        //            lblSecTotalWidthMeters.Visible = true;
-        //        }
-        //        else
-        //        {
-        //            lblInchesCm.Text = gStr.gsInches;
-        //            lblFeetMeters.Text = "Feet";
-        //            lblSecTotalWidthFeet.Visible = true;
-        //            lblSecTotalWidthInches.Visible = true;
-        //            lblSecTotalWidthMeters.Visible = false;
-        //        }
+                //Form Steer Settings
+                mf.p_252.pgn[mf.p_252.countsPerDegree] = unchecked((byte)Properties.Settings.Default.setAS_countsPerDegree);
+                mf.p_252.pgn[mf.p_252.ackerman] = unchecked((byte)Properties.Settings.Default.setAS_ackerman);
 
-        //        if (mf.isMetric)
-        //        {
-        //            lblSecTotalWidthMeters.Text = (mf.tool.width * 100).ToString() + " cm";
-        //        }
-        //        else
-        //        {
-        //            double toFeet = mf.tool.width * 3.2808;
-        //            lblSecTotalWidthFeet.Text = Convert.ToString((int)toFeet) + "'";
-        //            double temp = Math.Round((toFeet - Math.Truncate(toFeet)) * 12, 0);
-        //            lblSecTotalWidthInches.Text = Convert.ToString(temp) + '"';
-        //        }
+                mf.p_252.pgn[mf.p_252.wasOffsetHi] = unchecked((byte)(Properties.Settings.Default.setAS_wasOffset >> 8));
+                mf.p_252.pgn[mf.p_252.wasOffsetLo] = unchecked((byte)(Properties.Settings.Default.setAS_wasOffset));
 
+                mf.p_252.pgn[mf.p_252.highPWM] = unchecked((byte)Properties.Settings.Default.setAS_highSteerPWM);
+                mf.p_252.pgn[mf.p_252.lowPWM] = unchecked((byte)Properties.Settings.Default.setAS_lowSteerPWM);
+                mf.p_252.pgn[mf.p_252.gainProportional] = unchecked((byte)Properties.Settings.Default.setAS_Kp);
+                mf.p_252.pgn[mf.p_252.minPWM] = unchecked((byte)Properties.Settings.Default.setAS_minSteerPWM);
 
-        //        //Form Steer Settings
-        //        mf.p_252.pgn[mf.p_252.countsPerDegree] = unchecked((byte)Properties.Settings.Default.setAS_countsPerDegree);
-        //        mf.p_252.pgn[mf.p_252.ackerman] = unchecked((byte)Properties.Settings.Default.setAS_ackerman);
+                mf.SendPgnToLoop(mf.p_252.pgn);
 
-        //        mf.p_252.pgn[mf.p_252.wasOffsetHi] = unchecked((byte)(Properties.Settings.Default.setAS_wasOffset >> 8));
-        //        mf.p_252.pgn[mf.p_252.wasOffsetLo] = unchecked((byte)(Properties.Settings.Default.setAS_wasOffset));
+                //machine module settings
+                mf.p_238.pgn[mf.p_238.set0] = Properties.Settings.Default.setArdMac_setting0;
+                mf.p_238.pgn[mf.p_238.raiseTime] = Properties.Settings.Default.setArdMac_hydRaiseTime;
+                mf.p_238.pgn[mf.p_238.lowerTime] = Properties.Settings.Default.setArdMac_hydLowerTime;
 
-        //        mf.p_252.pgn[mf.p_252.highPWM] = unchecked((byte)Properties.Settings.Default.setAS_highSteerPWM);
-        //        mf.p_252.pgn[mf.p_252.lowPWM] = unchecked((byte)Properties.Settings.Default.setAS_lowSteerPWM);
-        //        mf.p_252.pgn[mf.p_252.gainProportional] = unchecked((byte)Properties.Settings.Default.setAS_Kp);
-        //        mf.p_252.pgn[mf.p_252.minPWM] = unchecked((byte)Properties.Settings.Default.setAS_minSteerPWM);
+                mf.SendPgnToLoop(mf.p_238.pgn);
 
-        //        mf.SendPgnToLoop(mf.p_252.pgn);
+                //steer config
+                mf.p_251.pgn[mf.p_251.set0] = Properties.Settings.Default.setArdSteer_setting0;
+                mf.p_251.pgn[mf.p_251.set1] = Properties.Settings.Default.setArdSteer_setting1;
+                mf.p_251.pgn[mf.p_251.maxPulse] = Properties.Settings.Default.setArdSteer_maxPulseCounts;
+                mf.p_251.pgn[mf.p_251.minSpeed] = unchecked((byte)(Properties.Settings.Default.setAS_minSteerSpeed * 10));
 
-        //        //machine module settings
-        //        mf.p_238.pgn[mf.p_238.set0] = Properties.Settings.Default.setArdMac_setting0;
-        //        mf.p_238.pgn[mf.p_238.raiseTime] = Properties.Settings.Default.setArdMac_hydRaiseTime;
-        //        mf.p_238.pgn[mf.p_238.lowerTime] = Properties.Settings.Default.setArdMac_hydLowerTime;
+                if (Properties.Settings.Default.setAS_isConstantContourOn)
+                    mf.p_251.pgn[mf.p_251.angVel] = 1;
+                else mf.p_251.pgn[mf.p_251.angVel] = 0;
 
-        //        mf.SendPgnToLoop(mf.p_238.pgn);
+                mf.SendPgnToLoop(mf.p_251.pgn);
 
-        //        //steer config
-        //        mf.p_251.pgn[mf.p_251.set0] = Properties.Settings.Default.setArdSteer_setting0;
-        //        mf.p_251.pgn[mf.p_251.set1] = Properties.Settings.Default.setArdSteer_setting1;
-        //        mf.p_251.pgn[mf.p_251.maxPulse] = Properties.Settings.Default.setArdSteer_maxPulseCounts;
-        //        mf.p_251.pgn[mf.p_251.minSpeed] = 5; //0.5 kmh
+                //machine settings    
+                mf.p_238.pgn[mf.p_238.set0] = Properties.Settings.Default.setArdMac_setting0;
+                mf.p_238.pgn[mf.p_238.raiseTime] = Properties.Settings.Default.setArdMac_hydRaiseTime;
+                mf.p_238.pgn[mf.p_238.lowerTime] = Properties.Settings.Default.setArdMac_hydLowerTime;
 
-        //        if (Properties.Settings.Default.setAS_isConstantContourOn)
-        //            mf.p_251.pgn[mf.p_251.angVel] = 1;
-        //        else mf.p_251.pgn[mf.p_251.angVel] = 0;
+                mf.p_238.pgn[mf.p_238.user1] = Properties.Settings.Default.setArdMac_user1;
+                mf.p_238.pgn[mf.p_238.user2] = Properties.Settings.Default.setArdMac_user2;
+                mf.p_238.pgn[mf.p_238.user3] = Properties.Settings.Default.setArdMac_user3;
+                mf.p_238.pgn[mf.p_238.user4] = Properties.Settings.Default.setArdMac_user4;
 
-        //        mf.SendPgnToLoop(mf.p_251.pgn);
+                mf.SendPgnToLoop(mf.p_238.pgn);
 
-        //        //Send Pin configuration
-        //        SendRelaySettingsToMachineModule();
+                //Send Pin configuration
+                SendRelaySettingsToMachineModule();
 
-        //        ///Remind the user
-        //        mf.TimedMessageBox(2500, "Steer and Machine Settings Sent", "Were Modules Connected?");
+                ///Remind the user
+                mf.TimedMessageBox(2500, "Steer and Machine Settings Sent", "Were Modules Connected?");
 
-        //        UpdateVehicleListView();
-        //    }
-        //}
+                mf.LogEventWriter("New Vehicle Loaded: " + mf.vehicleFileName + ".XML");
+
+                SettingsIO.ExportAll(Path.Combine(mf.vehiclesDirectory, mf.vehicleFileName + ".XML"));
+            }
+
+            UpdateVehicleListView();
+        }        
 
         private void btnVehicleSaveAs_Click(object sender, EventArgs e)
         {

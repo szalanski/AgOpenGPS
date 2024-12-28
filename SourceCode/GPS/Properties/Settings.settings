@@ -234,7 +234,7 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="setAS_guidanceLookAheadTime" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">2.5</Value>
+      <Value Profile="(Default)">1.5</Value>
     </Setting>
     <Setting Name="setFeatures" Type="AgOpenGPS.CFeatureSettings" Scope="User">
       <Value Profile="(Default)" />
@@ -783,7 +783,7 @@
       <Value Profile="(Default)">0.8</Value>
     </Setting>
     <Setting Name="setVehicle_goalPointAcquireFactor" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">0.85</Value>
+      <Value Profile="(Default)">0.9</Value>
     </Setting>
     <Setting Name="setBnd_isDrawPivot" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
