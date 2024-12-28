@@ -603,7 +603,7 @@ namespace AgOpenGPS
             headingChartToolStripMenuItem.Text = gStr.gsHeadingChart;
             xTEChartToolStripMenuItem.Text = gStr.gsXTEChart;
 
-            btnChangeMappingColor.Text = Application.ProductVersion.ToString(CultureInfo.InvariantCulture);
+            btnChangeMappingColor.Text = GitVersionInformation.MajorMinorPatch;
             //btnChangeMappingColor.Text = btnChangeMappingColor.Text.Substring(2);
 
             hotkeys = new char[19];
