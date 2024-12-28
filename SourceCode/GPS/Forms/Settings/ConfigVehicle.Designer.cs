@@ -17,8 +17,18 @@ namespace AgOpenGPS
     public partial class FormConfig
     {
         #region Vehicle Save---------------------------------------------
-        private void btnVehicleSave_Click(object sender, EventArgs e)
+        private void btnVehicleSaveAs_Click(object sender, EventArgs e)
         {
+            btnVehicleSaveAs.BackColor = Color.Transparent;
+            btnVehicleSaveAs.Enabled = false;
+
+            if (tboxVehicleNameSave.Text.Trim().IndexOfAny(System.IO.Path.GetInvalidFileNameChars()) != -1)
+            {
+                tboxVehicleNameSave.Text = "";
+                mf.TimedMessageBox(3000, "Filename Error", "Invalid Charaters in Filename");
+                return;
+            }
+
             if (tboxVehicleNameSave.Text.Trim().Length > 0)
             {
                 SettingsIO.ExportAll(Path.Combine(mf.vehiclesDirectory, tboxVehicleNameSave.Text.Trim() + ".XML"));
@@ -28,7 +38,6 @@ namespace AgOpenGPS
                 Properties.Settings.Default.Save();
 
                 tboxVehicleNameSave.Text = "";
-                btnVehicleSave.Enabled = false;
 
                 LoadBrandImage();
 
@@ -41,7 +50,6 @@ namespace AgOpenGPS
                 SectionFeetInchesTotalWidthLabelUpdate();
             }
 
-            btnVehicleSave.BackColor = Color.Transparent;
 
             UpdateVehicleListView();
             UpdateSummary();
@@ -201,13 +209,13 @@ namespace AgOpenGPS
 
             if (String.IsNullOrEmpty(tboxVehicleNameSave.Text.Trim()))
             {
-                btnVehicleSave.Enabled = false;
-                btnVehicleSave.BackColor = Color.Transparent;
+                btnVehicleSaveAs.Enabled = false;
+                btnVehicleSaveAs.BackColor = Color.Transparent;
             }
             else
             {
-                btnVehicleSave.Enabled = true;
-                btnVehicleSave.BackColor = Color.LimeGreen;
+                btnVehicleSaveAs.Enabled = true;
+                btnVehicleSaveAs.BackColor = Color.LimeGreen;
             }
         }
 
@@ -253,7 +261,7 @@ namespace AgOpenGPS
             textboxSender.Text = Regex.Replace(textboxSender.Text, glm.fileRegex, "");
             textboxSender.SelectionStart = cursorPosition;
 
-            btnVehicleSave.Enabled = false;
+            btnVehicleSaveAs.Enabled = false;
             btnVehicleLoad.Enabled = false;
             btnVehicleDelete.Enabled = false;
 
@@ -275,6 +283,13 @@ namespace AgOpenGPS
         {
             btnVehicleNewSave.BackColor = Color.Transparent;
             btnVehicleNewSave.Enabled = false;
+
+            if (tboxCreateNewVehicle.Text.Trim().IndexOfAny(System.IO.Path.GetInvalidFileNameChars()) != -1)
+            {
+                tboxCreateNewVehicle.Text = "";
+                mf.TimedMessageBox(2000, "Filename Error", "Invalid Charaters in Filename");
+                return;
+            }
 
             if (tboxCreateNewVehicle.Text.Trim().Length > 0)
             {
@@ -358,32 +373,6 @@ namespace AgOpenGPS
 
             UpdateVehicleListView();
         }        
-
-        private void btnVehicleSaveAs_Click(object sender, EventArgs e)
-        {
-            if (!mf.isJobStarted)
-            {
-                if (lvVehicles.SelectedItems.Count > 0)
-                {
-                    DialogResult result3 = MessageBox.Show(
-                        "Overwrite: " + lvVehicles.SelectedItems[0].SubItems[0].Text + ".XML",
-                        gStr.gsSaveAndReturn,
-                        MessageBoxButtons.YesNo,
-                        MessageBoxIcon.Question,
-                        MessageBoxDefaultButton.Button2);
-                    if (result3 == DialogResult.Yes)
-                    {
-                        SettingsIO.ExportAll(Path.Combine(mf.vehiclesDirectory, lvVehicles.SelectedItems[0].SubItems[0].Text + ".XML"));
-                    }
-                    UpdateVehicleListView();
-                }
-            }
-            else
-            {
-                mf.TimedMessageBox(2000, gStr.gsFieldIsOpen, gStr.gsCloseFieldFirst);
-                UpdateVehicleListView();
-            }
-        }
 
         private void UpdateVehicleListView()
         {
