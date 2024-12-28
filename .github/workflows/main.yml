@@ -1,17 +1,16 @@
 name: Build and release
 
 on:
-  # Trigger the workflow on push or pull request,
-  # but only for the dev branch
   push:
     branches:
+      - master
       - develop
-      # - feature/*
-      # - release/*
-      # - master
+  pull_request:
+    branches:
+      - develop
 
 env:
-  # Path to the solution file relative to the root of the project.https://github.com/farmerbriantee/AgOpenGPS/network/members
+  # Path to the solution file relative to the root of the project.
   SOLUTION_FILE_PATH: ./SourceCode/AgOpenGPS.sln
 
   # Configuration type to build.
@@ -22,53 +21,66 @@ env:
 jobs:
   build:
     runs-on: windows-latest
+    outputs:
+      version: ${{ steps.variables.outputs.VERSION }}
+      prerelease: ${{ steps.variables.outputs.PRERELEASE }}
 
     steps:
-    - name: Install 7Zip PowerShell Module
-      shell: powershell
-      run: Install-Module 7Zip4PowerShell -Force
-         
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
         fetch-depth: 0
 
     - name: Add MSBuild to PATH
-      uses: microsoft/setup-msbuild@v1
+      uses: microsoft/setup-msbuild@v2
 
     - name: Restore NuGet packages
-      working-directory: ${{env.GITHUB_WORKSPACE}}
       run: nuget restore ${{env.SOLUTION_FILE_PATH}} -PackagesDirectory .\SourceCode\packages -source "https://api.nuget.org/v3/index.json"
 
     - name: Build
-      working-directory: ${{env.GITHUB_WORKSPACE}}
-      # Add additional options to the MSBuild command line here (like platform or verbosity level).
-      # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
       run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
 
-    - name: Directory Listing
-      shell: cmd
-      run: dir
-      
-    - name: Build Artifact AgOpenGPS
+    - name: Set variables
+      id: variables
+      run: |
+        echo "VERSION=${{env.GitVersion_SemVer}}" >> $env:GITHUB_OUTPUT
+        echo "PRERELEASE=${{env.GitVersion_PreReleaseTag != ''}}" >> $env:GITHUB_OUTPUT
+
+    - name: Create AgOpenGPS.zip
       shell: powershell
-      run: Compress-7Zip "AgOpenGPS" -ArchiveFileName "AgOpenGPS.zip" -Format Zip    
+      run: Compress-Archive -Path "AgOpenGPS" -Destination "AgOpenGPS.zip"
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: AgOpenGPS.zip
+        path: AgOpenGPS.zip
+
+  release:
+    needs: build
+    runs-on: windows-latest
+    if: github.event_name != 'pull_request'
+
+    steps:
+    - name: Download artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: AgOpenGPS.zip
 
     - name: Create Release
       id: create_release
-      uses: actions/create-release@latest
+      uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ env.GitVersion_SemVer }}
-        release_name: Release ${{ env.GitVersion_SemVer }}
+        tag_name: ${{ needs.build.outputs.version }}
+        release_name: Release ${{ needs.build.outputs.version }}
         body: |
           Automated Release by GitHub Action CI
         draft: false
-        prerelease: true
-               
-    - name: Upload Release Asset AgOpenGPS
-      id: upload-release-asset-agopengps
+        prerelease: ${{ needs.build.outputs.prerelease }}
+
+    - name: Upload Release Asset
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
