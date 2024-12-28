@@ -1196,17 +1196,17 @@ namespace AgOpenGPS
             //distance = glm.Distance(pn.fix, prevFix);
             //if (avgSpeed > 1)
 
-            if ((avgSpeed - previousSpeed  ) < -vehicle.panicStopSpeed && vehicle.panicStopSpeed != 0)
-            {
-                if (isBtnAutoSteerOn)
-                {
-                   btnAutoSteer.PerformClick();
-                    TimedMessageBox(2000, gStr.gsGuidanceStopped, "Panic Stop");
-                    LogEventWriter("Steer Off, Panic Stop Exceeded");
-                }
-            }
+            //if ((avgSpeed - previousSpeed  ) < -vehicle.panicStopSpeed && vehicle.panicStopSpeed != 0)
+            //{
+            //    if (isBtnAutoSteerOn)
+            //    {
+            //       btnAutoSteer.PerformClick();
+            //        TimedMessageBox(2000, gStr.gsGuidanceStopped, "Panic Stop");
+            //        LogEventWriter("Steer Off, Panic Stop Exceeded");
+            //    }
+            //}
 
-            previousSpeed = avgSpeed;   
+            //previousSpeed = avgSpeed;   
         }
 
         //all the hitch, pivot, section, trailing hitch, headings and fixes

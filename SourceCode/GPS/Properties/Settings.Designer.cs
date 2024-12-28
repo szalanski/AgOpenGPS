@@ -950,7 +950,7 @@ namespace AgOpenGPS.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("2.5")]
+        [global::System.Configuration.DefaultSettingValueAttribute("1.5")]
         public double setAS_guidanceLookAheadTime {
             get {
                 return ((double)(this["setAS_guidanceLookAheadTime"]));
@@ -3145,7 +3145,7 @@ namespace AgOpenGPS.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0.85")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.9")]
         public double setVehicle_goalPointAcquireFactor {
             get {
                 return ((double)(this["setVehicle_goalPointAcquireFactor"]));

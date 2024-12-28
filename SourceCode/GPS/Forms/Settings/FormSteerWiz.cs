@@ -22,7 +22,6 @@ namespace AgOpenGPS
             mf = callingForm as FormGPS;
             InitializeComponent();
             nudMaxCounts.Controls[0].Enabled = false;
-            nudPanicStopSpeed.Controls[0].Enabled = false;
 
             nudAntennaHeight.Controls[0].Enabled = false;
             nudAntennaOffset.Controls[0].Enabled = false;
@@ -113,8 +112,6 @@ namespace AgOpenGPS
             btnFreeDriveZero.Enabled = false;
             //hSBarFreeDrive.Value = 0;
             mf.vehicle.driveFreeSteerAngle = 0;
-
-            nudPanicStopSpeed.Value = (decimal)mf.vehicle.panicStopSpeed;
 
             toSend252 = false;
             toSend251 = false;
@@ -242,7 +239,6 @@ namespace AgOpenGPS
             Properties.Settings.Default.setAS_Kp = mf.p_252.pgn[mf.p_252.gainProportional] = unchecked((byte)hsbarProportionalGain.Value);
             Properties.Settings.Default.setAS_minSteerPWM = mf.p_252.pgn[mf.p_252.minPWM] = unchecked((byte)hsbarMinPWM.Value);
 
-            Properties.Settings.Default.setVehicle_panicStopSpeed = mf.vehicle.panicStopSpeed;
             hsbarSideHillComp.Value = (int)(Properties.Settings.Default.setAS_sideHillComp * 100);
 
             Properties.Settings.Default.setIMU_invertRoll = mf.ahrs.isRollInvert;
@@ -562,9 +558,6 @@ namespace AgOpenGPS
             Properties.Settings.Default.setAS_Kp = 120;
             Properties.Settings.Default.setAS_minSteerPWM = 25;
 
-            Properties.Settings.Default.setVehicle_panicStopSpeed = mf.vehicle.panicStopSpeed
-                = 0;
-
             Properties.Settings.Default.setArdSteer_setting0 = 56;
             Properties.Settings.Default.setArdSteer_setting1 = 0;
             Properties.Settings.Default.setArdMac_isDanfoss = false;
@@ -643,13 +636,6 @@ namespace AgOpenGPS
                     counter251 = 0;
                 }
             }
-        }
-
-        private void nudPanicStopSpeed_Click(object sender, EventArgs e)
-        {
-            //saved on close
-            mf.KeypadToNUD((NudlessNumericUpDown)sender, this);
-            mf.vehicle.panicStopSpeed = (double)nudPanicStopSpeed.Value;
         }
 
         private void cboxMotorDrive_SelectedIndexChanged(object sender, EventArgs e)
