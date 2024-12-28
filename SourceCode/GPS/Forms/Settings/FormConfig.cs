@@ -115,8 +115,8 @@ namespace AgOpenGPS
             tboxVehicleNameSave.Focus();
 
             label29.Text = gStr.gsSaveAs;
+            label162.Text = gStr.gsNew;
             UpdateSummary();
-            //label3.Text = gStr.gsCurrent;
 
             if (!mf.IsOnScreen(Location, Size, 1))
             {

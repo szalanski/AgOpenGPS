@@ -68,7 +68,7 @@ namespace AgOpenGPS
             }
 
             //does current vehicle exist?
-            if (isVehicleExist)
+            if (isVehicleExist && vehicleFileName != "Default Vehicle")
             {
                 SettingsIO.ImportAll(Path.Combine(vehiclesDirectory, vehicleFileName + ".XML"));
             }
