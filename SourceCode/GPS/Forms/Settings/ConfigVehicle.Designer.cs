@@ -17,17 +17,20 @@ namespace AgOpenGPS
     public partial class FormConfig
     {
         #region Vehicle Save---------------------------------------------
+
+        private static readonly Regex InvalidFileRegex = new Regex(string.Format("[{0}]", Regex.Escape(@"<>:""/\|?*")));
+
+        public static string SanitizeFileName(string fileName)
+        {
+            return InvalidFileRegex.Replace(fileName, string.Empty);
+        }
+
         private void btnVehicleSaveAs_Click(object sender, EventArgs e)
         {
             btnVehicleSaveAs.BackColor = Color.Transparent;
             btnVehicleSaveAs.Enabled = false;
 
-            if (tboxVehicleNameSave.Text.Trim().IndexOfAny(System.IO.Path.GetInvalidFileNameChars()) != -1)
-            {
-                tboxVehicleNameSave.Text = "";
-                mf.TimedMessageBox(3000, "Filename Error", "Invalid Charaters in Filename");
-                return;
-            }
+            tboxVehicleNameSave.Text = SanitizeFileName(tboxVehicleNameSave.Text.Trim());
 
             if (tboxVehicleNameSave.Text.Trim().Length > 0)
             {
@@ -284,12 +287,7 @@ namespace AgOpenGPS
             btnVehicleNewSave.BackColor = Color.Transparent;
             btnVehicleNewSave.Enabled = false;
 
-            if (tboxCreateNewVehicle.Text.Trim().IndexOfAny(System.IO.Path.GetInvalidFileNameChars()) != -1)
-            {
-                tboxCreateNewVehicle.Text = "";
-                mf.TimedMessageBox(2000, "Filename Error", "Invalid Charaters in Filename");
-                return;
-            }
+            tboxCreateNewVehicle.Text = SanitizeFileName(tboxCreateNewVehicle.Text.Trim());
 
             if (tboxCreateNewVehicle.Text.Trim().Length > 0)
             {
