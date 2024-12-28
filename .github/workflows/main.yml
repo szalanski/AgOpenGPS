@@ -52,7 +52,7 @@ jobs:
       
     - name: Build Artifact AgOpenGPS
       shell: powershell
-      run: Compress-7Zip "AgOpenGPS_v64" -ArchiveFileName "AgOpenGPS_v64.zip" -Format Zip    
+      run: Compress-7Zip "AgOpenGPS" -ArchiveFileName "AgOpenGPS.zip" -Format Zip    
 
     - name: Create Release
       id: create_release
@@ -74,6 +74,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./AgOpenGPS_v64.zip
-        asset_name: AgOpenGPS_v64.zip
+        asset_path: ./AgOpenGPS.zip
+        asset_name: AgOpenGPS.zip
         asset_content_type: application/zip
