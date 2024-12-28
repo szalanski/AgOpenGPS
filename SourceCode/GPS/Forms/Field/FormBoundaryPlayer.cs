@@ -171,7 +171,6 @@ namespace AgOpenGPS
                 btnAddPoint.Enabled = false;
                 btnDeleteLast.Enabled = false;
             }
-            mf.Focus();
         }
 
         private void btnAddPoint_Click(object sender, EventArgs e)
@@ -180,8 +179,6 @@ namespace AgOpenGPS
             mf.AddBoundaryPoint();
             mf.bnd.isOkToAddPoints = false;
             lblPoints.Text = mf.bnd.bndBeingMadePts.Count.ToString();
-
-            mf.Focus();
         }
 
         private void btnDeleteLast_Click(object sender, EventArgs e)
@@ -190,7 +187,6 @@ namespace AgOpenGPS
             if (ptCount > 0)
                 mf.bnd.bndBeingMadePts.RemoveAt(ptCount - 1);
             lblPoints.Text = mf.bnd.bndBeingMadePts.Count.ToString();
-            mf.Focus();
         }
 
         private void btnRestart_Click(object sender, EventArgs e)
@@ -205,7 +201,6 @@ namespace AgOpenGPS
                 mf.bnd.bndBeingMadePts?.Clear();
                 lblPoints.Text = mf.bnd.bndBeingMadePts.Count.ToString();
             }
-            mf.Focus();
         }
 
         private void btnLeftRight_Click(object sender, EventArgs e)

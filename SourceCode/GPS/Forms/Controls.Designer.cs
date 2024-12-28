@@ -861,7 +861,6 @@ namespace AgOpenGPS
                     {
                         Form form2 = new FormBoundaryPlayer(this);
                         form2.Show(this);
-                        this.Activate();
                     }
                     diaRes = form.DialogResult;
                 }
