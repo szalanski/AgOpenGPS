@@ -3,6 +3,7 @@
 using AgOpenGPS;
 using AgOpenGPS.Culture;
 using AgOpenGPS.Properties;
+using Microsoft.Win32;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using System;
@@ -429,12 +430,6 @@ namespace AgOpenGPS
                 sbSystemEvents.Append("Logs Dir Created\r");
             }
 
-            //get the abLines directory, if not exist, create
-            ablinesDirectory = Path.Combine(baseDirectory, "ABLines");
-            if (!string.IsNullOrEmpty(ablinesDirectory) && !Directory.Exists(ablinesDirectory)) { Directory.CreateDirectory(ablinesDirectory);
-                sbSystemEvents.Append("ABLines Dir Created\r");
-            }
-
             //system event log file
             FileInfo txtfile = new FileInfo(Path.Combine(logsDirectory, "zSystemEventsLog_log.txt"));
             if (txtfile.Exists)
@@ -633,6 +628,10 @@ namespace AgOpenGPS
             
                 SettingsIO.ExportAll(Path.Combine(vehiclesDirectory, "Default Vehicle.xml"));
 
+                RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgOpenGPS");
+                key.SetValue("VehicleFileName", Properties.Settings.Default.setVehicle_vehicleName);
+                key.Close();
+
                 using (FormConfig form = new FormConfig(this))
                 {
                     form.ShowDialog(this);
@@ -712,6 +711,11 @@ namespace AgOpenGPS
 
             //save current vehicle
             SettingsIO.ExportAll(Path.Combine(vehiclesDirectory, vehicleFileName + ".XML"));
+
+            RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgOpenGPS");
+            key.SetValue("VehicleFileName", Properties.Settings.Default.setVehicle_vehicleName);
+            key.SetValue("WorkingDirectory", Properties.Settings.Default.setF_workingDirectory);
+            key.Close();
 
             if (displayBrightness.isWmiMonitor)
                 displayBrightness.SetBrightness(Settings.Default.setDisplay_brightnessSystem);
