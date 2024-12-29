@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using AgOpenGPS.Culture;
 using AgOpenGPS.Properties;
+using Microsoft.Win32;
 using OpenTK.Graphics.OpenGL;
 
 namespace AgOpenGPS
@@ -39,6 +40,10 @@ namespace AgOpenGPS
                 mf.vehicleFileName = tboxVehicleNameSave.Text.Trim();
                 Properties.Settings.Default.setVehicle_vehicleName = mf.vehicleFileName;
                 Properties.Settings.Default.Save();
+
+                RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgOpenGPS");
+                key.SetValue("VehicleFileName", Properties.Settings.Default.setVehicle_vehicleName);
+                key.Close();
 
                 tboxVehicleNameSave.Text = "";
 
@@ -82,6 +87,10 @@ namespace AgOpenGPS
                         mf.vehicleFileName = lvVehicles.SelectedItems[0].SubItems[0].Text;
                         Properties.Settings.Default.setVehicle_vehicleName = mf.vehicleFileName;
                         Properties.Settings.Default.Save();
+
+                        RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgOpenGPS");
+                        key.SetValue("VehicleFileName", Properties.Settings.Default.setVehicle_vehicleName);
+                        key.Close();
 
                         LoadBrandImage();
 
@@ -367,6 +376,10 @@ namespace AgOpenGPS
                 mf.LogEventWriter("New Vehicle Loaded: " + mf.vehicleFileName + ".XML");
 
                 SettingsIO.ExportAll(Path.Combine(mf.vehiclesDirectory, mf.vehicleFileName + ".XML"));
+
+                RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgOpenGPS");
+                key.SetValue("VehicleFileName", Properties.Settings.Default.setVehicle_vehicleName);
+                key.Close();
             }
 
             UpdateVehicleListView();

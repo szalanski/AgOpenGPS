@@ -1438,6 +1438,10 @@ namespace AgOpenGPS
                 }
                 Settings.Default.Save();
 
+                RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgOpenGPS");
+                key.SetValue("WorkingDirectory", Settings.Default.setF_workingDirectory);
+                key.Close();
+
                 //restart program
                 MessageBox.Show(gStr.gsProgramWillExitPleaseRestart);
                 Close();
