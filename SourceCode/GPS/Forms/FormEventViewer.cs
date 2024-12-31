@@ -6,12 +6,10 @@ namespace AgOpenGPS
     public partial class FormEventViewer : Form
     {
         //class variables
-        private readonly FormGPS mf = null;
 
-        public FormEventViewer(Form callingForm)
+        public FormEventViewer()
         {
             //get copy of the calling main form
-            mf = callingForm as FormGPS;
             InitializeComponent();
         }
 
@@ -27,10 +25,10 @@ namespace AgOpenGPS
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if (rtbAutoSteerStopEvents.TextLength != mf.sbSystemEvents.Length)
+            if (rtbAutoSteerStopEvents.TextLength != Log.sbEvents.Length)
             {
                 rtbAutoSteerStopEvents.Clear();
-                rtbAutoSteerStopEvents.AppendText(mf.sbSystemEvents.ToString());
+                rtbAutoSteerStopEvents.AppendText(Log.sbEvents.ToString());
             }
         }
     }

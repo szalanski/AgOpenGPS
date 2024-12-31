@@ -260,7 +260,6 @@ namespace AgOpenGPS
             chkDisplayStartFullScreen.Checked = Properties.Settings.Default.setDisplay_isStartFullScreen;
             chkSvennArrow.Checked = mf.isSvennArrowOn;
             chkDisplayExtraGuides.Checked = mf.isSideGuideLines;
-            chkDisplayLogNMEA.Checked = mf.isLogNMEA;
             chkDisplayPolygons.Checked = mf.isDrawPolygons;
             chkDisplayKeyboard.Checked = mf.isKeyboardOn;
             chkDisplayLogElevation.Checked = mf.isLogElevation;
@@ -282,7 +281,7 @@ namespace AgOpenGPS
         private void rbtnDisplayImperial_Click(object sender, EventArgs e)
         {
             mf.TimedMessageBox(2000, "Units Set", "Imperial");
-            mf.LogEventWriter("Units To Imperial");
+            Log.EventWriter("Units To Imperial");
 
             mf.isMetric = false;
             Properties.Settings.Default.setMenu_isMetric = mf.isMetric;
@@ -294,7 +293,7 @@ namespace AgOpenGPS
         private void rbtnDisplayMetric_Click(object sender, EventArgs e)
         {
             mf.TimedMessageBox(2000, "Units Set", "Metric");
-            mf.LogEventWriter("Units to Metric");
+            Log.EventWriter("Units to Metric");
 
             mf.isMetric = true;
             Properties.Settings.Default.setMenu_isMetric = mf.isMetric;
