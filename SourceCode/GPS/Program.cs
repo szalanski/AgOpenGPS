@@ -43,7 +43,7 @@ namespace AgOpenGPS
                 key.Close();
             }
             string workingDirectory = regKey.GetValue("WorkingDirectory").ToString();
-            string baseDirectory = workingDirectory;
+            string baseDirectory;
 
 
             if (workingDirectory == "Default")
@@ -108,6 +108,11 @@ namespace AgOpenGPS
             if (isVehicleExist && vehicleFileName != "Default Vehicle")
             {
                 SettingsIO.ImportAll(Path.Combine(vehiclesDirectory, vehicleFileName + ".XML"));
+            }
+            else
+            {
+                vehicleFileName = "Default Vehicle";
+                Log.EventWriter("Vehicle file does not exist, Default Vehicle selected");
             }
 
             Properties.Settings.Default.setF_culture = language;

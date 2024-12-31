@@ -472,7 +472,7 @@ namespace AgOpenGPS
             }
             catch (Exception e)
             {
-                mf.LogEventWriter("Exception Build new offset curve" + e.ToString());
+                Log.EventWriter("Exception Build new offset curve" + e.ToString());
             }
 
             return newCurList;
@@ -516,14 +516,14 @@ namespace AgOpenGPS
                 else// Pure Pursuit ------------------------------------------
                 {
 
-                    double minDistA = double.MaxValue;
-                    double minDistB = double.MaxValue;
+                    double minDistA;
+                    double minDistB;
                     //close call hit
 
                     //If is a curve
                     if (mf.trk.gArr[mf.trk.idx].mode <= TrackMode.Curve)
                     {
-                        minDistA = minDistB = double.MaxValue;
+                        minDistB = double.MaxValue;
                         //close call hit
                         int cc, dd;
 
@@ -728,7 +728,7 @@ namespace AgOpenGPS
                                 {
                                     mf.btnAutoSteer.PerformClick();
                                     mf.TimedMessageBox(2000, gStr.gsGuidanceStopped, gStr.gsPastEndOfCurve);
-                                    mf.LogEventWriter("Autosteer Stop, Past End of Curve");
+                                    Log.EventWriter("Autosteer Stop, Past End of Curve");
 
                                 }
                             }
@@ -738,7 +738,7 @@ namespace AgOpenGPS
                                 {
                                     mf.btnAutoSteer.PerformClick();
                                     mf.TimedMessageBox(2000, gStr.gsGuidanceStopped, gStr.gsPastEndOfCurve);
-                                    mf.LogEventWriter("Autosteer Stop, Past End of Curve");
+                                    Log.EventWriter("Autosteer Stop, Past End of Curve");
                                 }
                             }
                         }

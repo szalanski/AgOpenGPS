@@ -153,7 +153,7 @@ namespace AgOpenGPS
                         ///Remind the user
                         mf.TimedMessageBox(2500, "Steer and Machine Settings Sent", "Were Modules Connected?");
 
-                        mf.LogEventWriter("Vehicle Loaded: " + mf.vehicleFileName + ".XML");
+                        Log.EventWriter("Vehicle Loaded: " + mf.vehicleFileName + ".XML");
                     }
 
                     UpdateVehicleListView();
@@ -197,7 +197,7 @@ namespace AgOpenGPS
                     }
                     else
                     {
-                        mf.LogEventWriter("Attempted to Delete Default Vehicle, Denied");
+                        Log.EventWriter("Attempted to Delete Default Vehicle, Denied");
                         mf.TimedMessageBox(2500, "Default Vehicle Delete Denied", "Choose Another Vehicle");
                     }
 
@@ -373,7 +373,7 @@ namespace AgOpenGPS
                 ///Remind the user
                 mf.TimedMessageBox(2500, "Steer and Machine Settings Sent", "Were Modules Connected?");
 
-                mf.LogEventWriter("New Vehicle Loaded: " + mf.vehicleFileName + ".XML");
+                Log.EventWriter("New Vehicle Loaded: " + mf.vehicleFileName + ".XML");
 
                 SettingsIO.ExportAll(Path.Combine(mf.vehiclesDirectory, mf.vehicleFileName + ".XML"));
 
@@ -421,7 +421,6 @@ namespace AgOpenGPS
             mf.isSpeedoOn = chkDisplaySpeedo.Checked;
             mf.isSideGuideLines = chkDisplayExtraGuides.Checked;
 
-            mf.isLogNMEA = chkDisplayLogNMEA.Checked;
             mf.isDrawPolygons = chkDisplayPolygons.Checked;
             mf.isKeyboardOn = chkDisplayKeyboard.Checked;
 

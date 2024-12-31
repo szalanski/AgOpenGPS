@@ -55,16 +55,16 @@ namespace AgOpenGPS
                 {
                     case 0xD6:
                         {
-                            if (udpWatch.ElapsedMilliseconds < udpWatchLimit)
-                            {
-                                udpWatchCounts++;
-                                if (isLogNMEA) pn.logNMEASentence.Append("*** "
-                                    + DateTime.UtcNow.ToString("ss.ff -> ", CultureInfo.InvariantCulture)
-                                    + udpWatch.ElapsedMilliseconds + "\r\n");
-                                return;
-                            }
-                            udpWatch.Reset();
-                            udpWatch.Start();
+                            //if (udpWatch.ElapsedMilliseconds < udpWatchLimit)
+                            //{
+                            //    udpWatchCounts++;
+                            //    pn.logNMEASentence.Append("*** "
+                            //        + DateTime.UtcNow.ToString("ss.ff -> ", CultureInfo.InvariantCulture)
+                            //        + udpWatch.ElapsedMilliseconds + "\r\n");
+                            //    return;
+                            //}
+                            //udpWatch.Reset();
+                            //udpWatch.Start();
 
                             double Lon = BitConverter.ToDouble(data, 5);
                             double Lat = BitConverter.ToDouble(data, 13);
@@ -160,11 +160,6 @@ namespace AgOpenGPS
 
                                 sentenceCounter = 0;
 
-                                if (isLogNMEA)
-                                    pn.logNMEASentence.Append(
-                                        DateTime.UtcNow.ToString("mm:ss.ff",CultureInfo.InvariantCulture)+ " " +
-                                        Lat.ToString("N7") + " " + Lon.ToString("N7") );
-
                                 UpdateFixPosition();
                             }
                         }
@@ -241,12 +236,6 @@ namespace AgOpenGPS
                             //Actual PWM
                             mc.pwmDisplay = data[12];
 
-                            if (isLogNMEA)
-                                pn.logNMEASentence.Append(
-                                    DateTime.UtcNow.ToString("mm:ss.ff", CultureInfo.InvariantCulture) + " AS " +
-                                    mc.actualSteerAngleDegrees.ToString("N1") + "\r\n"
-                                    );
-
                             break;
                         }
 
@@ -269,7 +258,7 @@ namespace AgOpenGPS
                                 lblHardwareMessage.Visible = true;
                                 hardwareLineCounter = data[5] * 10;
 
-                                LogEventWriter(lblHardwareMessage.Text);
+                                Log.EventWriter(lblHardwareMessage.Text);
 
                                 //color based on byte 6
                                 if (data[6] == 0) lblHardwareMessage.BackColor = Color.Salmon;
@@ -336,7 +325,7 @@ namespace AgOpenGPS
             catch (Exception ex)
             {
                 MessageBox.Show("Load Error: " + ex.Message, "UDP Server", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                LogEventWriter("Load UDP Server Error: " + ex.ToString());
+                Log.EventWriter("Load UDP Server Error: " + ex.ToString());
             }
         }
 
@@ -394,7 +383,7 @@ namespace AgOpenGPS
                 }
                 catch (Exception)
                 {
-                    //LogEventWriter("Sending UDP Message" + e.ToString());
+                    //Log.EventWriter("Sending UDP Message" + e.ToString());
                     //MessageBox.Show("Send Error: " + e.Message, "UDP Client", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
