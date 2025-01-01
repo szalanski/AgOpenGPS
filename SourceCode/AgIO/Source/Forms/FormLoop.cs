@@ -1,4 +1,5 @@
 ﻿using AgIO.Properties;
+using Microsoft.Win32;
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -74,7 +75,7 @@ namespace AgIO
         public string baseDirectory;
 
         //current directory of Comm storage
-        public string profileDirectory, profileFileName;
+        public string profileDirectory, profileName;
 
         public FormLoop()
         {
@@ -84,59 +85,11 @@ namespace AgIO
         //First run
         private void FormLoop_Load(object sender, EventArgs e)
         {
-            string workingDirectory = Settings.Default.setF_workingDirectory == "Default"
-                ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
-                : Settings.Default.setF_workingDirectory;
-
-            baseDirectory = Path.Combine(workingDirectory, "AgOpenGPS");
-
             //get the fields directory, if not exist, create
-            profileDirectory = Path.Combine(baseDirectory, "AgIO");
-            DirectoryInfo profileDirectoryInfo = new DirectoryInfo(profileDirectory);
-            if (!profileDirectoryInfo.Exists)
-                profileDirectoryInfo.Create();
+            profileDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), 
+                "AgOpenGPS", "AgIO");
 
-            FileInfo[] profileFiles = profileDirectoryInfo.GetFiles("*.xml");
-
-            if (profileFiles.Length == 0)
-            {
-                SettingsIO.ExportSettings(Path.Combine(profileDirectory, "Default Profile.xml"));
-
-                //get list of files again, because it just changed by exporting the default profile
-                profileFiles = profileDirectoryInfo.GetFiles("*.xml");
-            }
-
-            bool isDefault = false;
-            bool isProfileExist = false;
-
-            profileFileName = Settings.Default.setConfig_profileName;
-
-            foreach (FileInfo file in profileFiles)
-            {
-                string temp = Path.GetFileNameWithoutExtension(file.Name).Trim();
-                if (temp == "Default Profile")
-                {
-                    isDefault = true;
-                }
-
-                if (temp == profileFileName)
-                {
-                    isProfileExist = true;
-                }
-            }
-
-            if (!isDefault)
-                SettingsIO.ExportSettings(Path.Combine(profileDirectory, "Default Profile.xml"));
-
-            if (!isProfileExist)
-            {
-                profileFileName = "Default Profile";
-                Settings.Default.setConfig_profileName = profileFileName;
-                Settings.Default.Save();
-            }
-
-            //grab the current vehicle filename - make sure it exists
-
+            profileName = Settings.Default.setConfig_profileName;
 
             if (Settings.Default.setUDP_isOn)
             {
@@ -316,11 +269,23 @@ namespace AgIO
             cboxAutoRunGPS_Out.Checked = Properties.Settings.Default.setDisplay_isAutoRunGPS_Out;
             if (Properties.Settings.Default.setDisplay_isAutoRunGPS_Out) StartGPS_Out();
 
-            this.Text = "AgIO  Profile: " + profileFileName;
+            this.Text = "AgIO  Profile: " + profileName;
 
-            if (profileFileName == "Default Profile")
-                YesMessageBox("Using Default Profile" + "\r\n\r\n" + "Load Existing Profile or Save a New One !!!"
-                    + "\r\n\r\n" + "Changes will NOT be Saved");
+            if (profileName == "Default Profile")
+            {
+                Log.EventWriter("Using Default Profile At Start Warning");
+
+                if (profileName == "Default Profile")
+                    YesMessageBox("AgIO is Using Default Profile" + "\r\n\r\n" + "Load Existing Profile or Save a New One !!!"
+                        + "\r\n\r\n" + "Changes will NOT be Saved");
+
+                SettingsIO.ExportSettings(Path.Combine(profileDirectory, "Default Profile.xml"));
+
+                RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgIO");
+                key.SetValue("ProfileName", "Default Profile");
+                key.Close();
+            }
+
         }
 
         public void SetModulesOnOff()
@@ -381,10 +346,10 @@ namespace AgIO
 
             Settings.Default.Save();
 
-            //if (profileFileName != "Default Profile")
-                SettingsIO.ExportSettings(Path.Combine(profileDirectory, profileFileName + ".xml"));
-            //else
-                //YesMessageBox("Using Default Profile" + "\r\n\r\n" + "Changes will NOT be Saved");
+            if (profileName != "Default Profile")
+                SettingsIO.ExportSettings(Path.Combine(profileDirectory, profileName + ".xml"));
+            else
+                YesMessageBox("Using Default Profile" + "\r\n\r\n" + "Changes will NOT be Saved");
 
 
             if (loopBackSocket != null)

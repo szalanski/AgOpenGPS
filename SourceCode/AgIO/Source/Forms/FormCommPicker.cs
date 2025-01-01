@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.IO;
 using System.Windows.Forms;
 
@@ -59,11 +60,19 @@ namespace AgIO
             }
             else
             {
+                if (mf.profileName != "Default Profile")
+                    SettingsIO.ExportSettings(Path.Combine(mf.profileDirectory, mf.profileName + ".xml"));
+
                 SettingsIO.ImportSettings(Path.Combine(mf.profileDirectory, cboxEnv.SelectedItem.ToString().Trim() + ".xml"));
 
-                mf.profileFileName = cboxEnv.SelectedItem.ToString().Trim();
-                Properties.Settings.Default.setConfig_profileName = mf.profileFileName;
+                mf.profileName = cboxEnv.SelectedItem.ToString().Trim();
+                Properties.Settings.Default.setConfig_profileName = mf.profileName;
                 Properties.Settings.Default.Save();
+
+                RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgIO");
+                key.SetValue("ProfileName", mf.profileName);
+                key.Close();
+
                 DialogResult = DialogResult.OK;
                 Close();
             }
