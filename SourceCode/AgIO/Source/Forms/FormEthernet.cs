@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Windows.Forms;
 
 namespace AgIO
@@ -58,6 +59,9 @@ namespace AgIO
             //Properties.Settings.Default.setUDP_isSendNMEAToUDP = cboxIsSendNMEAToUDP.Checked;
 
             Properties.Settings.Default.Save();
+
+            if (RegistrySettings.profileName != "Default Profile")
+                SettingsIO.ExportSettings(Path.Combine(RegistrySettings.profileDirectory, RegistrySettings.profileName + ".xml"));
 
             mf.YesMessageBox("AgIO will Restart to Enable UDP Networking Features");
 

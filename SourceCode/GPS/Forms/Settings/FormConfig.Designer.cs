@@ -64,7 +64,7 @@
             this.btnVehicleNewSave = new System.Windows.Forms.Button();
             this.tboxCreateNewVehicle = new System.Windows.Forms.TextBox();
             this.label162 = new System.Windows.Forms.Label();
-            this.btnVehicleSaveAs = new System.Windows.Forms.Button();
+            this.btnVehicleSave = new System.Windows.Forms.Button();
             this.label173 = new System.Windows.Forms.Label();
             this.label172 = new System.Windows.Forms.Label();
             this.lblOverlap = new System.Windows.Forms.Label();
@@ -1241,7 +1241,7 @@
             this.tabSummary.Controls.Add(this.btnVehicleNewSave);
             this.tabSummary.Controls.Add(this.tboxCreateNewVehicle);
             this.tabSummary.Controls.Add(this.label162);
-            this.tabSummary.Controls.Add(this.btnVehicleSaveAs);
+            this.tabSummary.Controls.Add(this.btnVehicleSave);
             this.tabSummary.Controls.Add(this.label173);
             this.tabSummary.Controls.Add(this.label172);
             this.tabSummary.Controls.Add(this.lblOverlap);
@@ -1347,21 +1347,21 @@
             this.label162.Text = "New:";
             this.label162.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // btnVehicleSaveAs
+            // btnVehicleSave
             // 
-            this.btnVehicleSaveAs.BackColor = System.Drawing.Color.Transparent;
-            this.btnVehicleSaveAs.Enabled = false;
-            this.btnVehicleSaveAs.FlatAppearance.BorderSize = 0;
-            this.btnVehicleSaveAs.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Turquoise;
-            this.btnVehicleSaveAs.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnVehicleSaveAs.Font = new System.Drawing.Font("Tahoma", 15.75F);
-            this.btnVehicleSaveAs.Image = global::AgOpenGPS.Properties.Resources.FileSaveAs;
-            this.btnVehicleSaveAs.Location = new System.Drawing.Point(753, 9);
-            this.btnVehicleSaveAs.Name = "btnVehicleSaveAs";
-            this.btnVehicleSaveAs.Size = new System.Drawing.Size(93, 52);
-            this.btnVehicleSaveAs.TabIndex = 457;
-            this.btnVehicleSaveAs.UseVisualStyleBackColor = false;
-            this.btnVehicleSaveAs.Click += new System.EventHandler(this.btnVehicleSaveAs_Click);
+            this.btnVehicleSave.BackColor = System.Drawing.Color.Transparent;
+            this.btnVehicleSave.Enabled = false;
+            this.btnVehicleSave.FlatAppearance.BorderSize = 0;
+            this.btnVehicleSave.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Turquoise;
+            this.btnVehicleSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnVehicleSave.Font = new System.Drawing.Font("Tahoma", 15.75F);
+            this.btnVehicleSave.Image = global::AgOpenGPS.Properties.Resources.FileSaveAs;
+            this.btnVehicleSave.Location = new System.Drawing.Point(753, 9);
+            this.btnVehicleSave.Name = "btnVehicleSave";
+            this.btnVehicleSave.Size = new System.Drawing.Size(93, 52);
+            this.btnVehicleSave.TabIndex = 457;
+            this.btnVehicleSave.UseVisualStyleBackColor = false;
+            this.btnVehicleSave.Click += new System.EventHandler(this.btnVehicleSave_Click);
             // 
             // label173
             // 
@@ -9949,7 +9949,7 @@
         private NudlessNumericUpDown nudLookAheadOff;
         private NudlessNumericUpDown nudTurnOffDelay;
         private NudlessNumericUpDown nudLookAhead;
-        private System.Windows.Forms.Button btnVehicleSaveAs;
+        private System.Windows.Forms.Button btnVehicleSave;
         private System.Windows.Forms.Button btnVehicleLoad;
         private System.Windows.Forms.Button btnVehicleDelete;
         private System.Windows.Forms.ListView lvVehicles;

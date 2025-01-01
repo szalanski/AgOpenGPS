@@ -21,7 +21,7 @@ namespace AgIO
 
         private void FormCommPicker_Load(object sender, EventArgs e)
         {
-            DirectoryInfo dinfo = new DirectoryInfo(mf.profileDirectory);
+            DirectoryInfo dinfo = new DirectoryInfo(RegistrySettings.profileDirectory);
             FileInfo[] Files = dinfo.GetFiles("*.xml");
             if (Files.Length == 0)
             {
@@ -60,18 +60,17 @@ namespace AgIO
             }
             else
             {
-                if (mf.profileName != "Default Profile")
-                    SettingsIO.ExportSettings(Path.Combine(mf.profileDirectory, mf.profileName + ".xml"));
+                if (RegistrySettings.profileName != "Default Profile")
+                    SettingsIO.ExportSettings(Path.Combine(RegistrySettings.profileDirectory, RegistrySettings.profileName + ".xml"));
 
-                SettingsIO.ImportSettings(Path.Combine(mf.profileDirectory, cboxEnv.SelectedItem.ToString().Trim() + ".xml"));
+                SettingsIO.ImportSettings(Path.Combine(RegistrySettings.profileDirectory, cboxEnv.SelectedItem.ToString().Trim() + ".xml"));
 
-                mf.profileName = cboxEnv.SelectedItem.ToString().Trim();
-                Properties.Settings.Default.setConfig_profileName = mf.profileName;
+                RegistrySettings.profileName = cboxEnv.SelectedItem.ToString().Trim();
+
+                Properties.Settings.Default.setConfig_profileName = RegistrySettings.profileName;
                 Properties.Settings.Default.Save();
 
-                RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgIO");
-                key.SetValue("ProfileName", mf.profileName);
-                key.Close();
+                RegistrySettings.Save();
 
                 DialogResult = DialogResult.OK;
                 Close();

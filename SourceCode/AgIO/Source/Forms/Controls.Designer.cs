@@ -244,8 +244,13 @@ namespace AgIO
             using (var form = new FormCommSaver(this))
             {
                 form.ShowDialog(this);
+                if (form.DialogResult == DialogResult.Yes)
+                {
+                    Application.Restart();
+                    Environment.Exit(0);
+                }
             }
-            this.Text = "AgIO  Profile: " + profileName;
+            this.Text = "AgIO  Profile: " + RegistrySettings.profileName;
 
         }
 
@@ -262,7 +267,7 @@ namespace AgIO
                 }
             }
 
-            this.Text = "AgIO  Profile: " + profileName;
+            this.Text = "AgIO  Profile: " + RegistrySettings.profileName;
         }
 
         private void modSimToolStrip_Click(object sender, EventArgs e)

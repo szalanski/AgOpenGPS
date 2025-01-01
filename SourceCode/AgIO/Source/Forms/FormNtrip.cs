@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -105,6 +106,8 @@ namespace AgIO
             }
 
             Properties.Settings.Default.Save();
+            if (RegistrySettings.profileName != "Default Profile")
+                SettingsIO.ExportSettings(Path.Combine(RegistrySettings.profileDirectory, RegistrySettings.profileName + ".xml"));
 
             mf.YesMessageBox("Restart of AgIO is Required - Restarting");
 

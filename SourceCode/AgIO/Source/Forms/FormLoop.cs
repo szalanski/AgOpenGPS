@@ -3,6 +3,7 @@ using Microsoft.Win32;
 using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -71,12 +72,6 @@ namespace AgIO
 
         public int focusSkipCounter = 310;
 
-        //The base directory where Drive will be stored and fields and vehicles branch from
-        public string baseDirectory;
-
-        //current directory of Comm storage
-        public string profileDirectory, profileName;
-
         public FormLoop()
         {
             InitializeComponent();
@@ -85,15 +80,10 @@ namespace AgIO
         //First run
         private void FormLoop_Load(object sender, EventArgs e)
         {
-            //get the fields directory, if not exist, create
-            profileDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), 
-                "AgOpenGPS", "AgIO");
-
-            profileName = Settings.Default.setConfig_profileName;
-
             if (Settings.Default.setUDP_isOn)
             {
                 LoadUDPNetwork();
+                Log.EventWriter("UDP Network Loaded");
             }
             else
             {
@@ -239,8 +229,9 @@ namespace AgIO
 
                     if (broadCasterIP == null) throw new NullReferenceException();
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    Log.EventWriter(ex.ToString());
                     TimedMessageBox(1500, "URL Not Located, Network Down?", "Cannot Find: " + Properties.Settings.Default.setNTRIP_casterURL);
                     //if we had a timer already, kill it
                     tmr?.Dispose();
@@ -267,25 +258,27 @@ namespace AgIO
 
             //run gps_out or not
             cboxAutoRunGPS_Out.Checked = Properties.Settings.Default.setDisplay_isAutoRunGPS_Out;
-            if (Properties.Settings.Default.setDisplay_isAutoRunGPS_Out) StartGPS_Out();
+            if (Properties.Settings.Default.setDisplay_isAutoRunGPS_Out)
+            {
+                StartGPS_Out();
+                Log.EventWriter("Run GPS_Out");
+            }
 
-            this.Text = "AgIO  Profile: " + profileName;
+            this.Text =
+            "AgIO  v" + GitVersionInformation.MajorMinorPatch + " Profile: " + RegistrySettings.profileName;
 
-            if (profileName == "Default Profile")
+            if (RegistrySettings.profileName == "Default Profile")
             {
                 Log.EventWriter("Using Default Profile At Start Warning");
 
-                if (profileName == "Default Profile")
+                if (RegistrySettings.profileName == "Default Profile")
                     YesMessageBox("AgIO is Using Default Profile" + "\r\n\r\n" + "Load Existing Profile or Save a New One !!!"
                         + "\r\n\r\n" + "Changes will NOT be Saved");
 
-                SettingsIO.ExportSettings(Path.Combine(profileDirectory, "Default Profile.xml"));
+                SettingsIO.ExportSettings(Path.Combine(RegistrySettings.profileDirectory, "Default Profile.xml"));
 
-                RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgIO");
-                key.SetValue("ProfileName", "Default Profile");
-                key.Close();
+                RegistrySettings.Save();
             }
-
         }
 
         public void SetModulesOnOff()
@@ -346,8 +339,8 @@ namespace AgIO
 
             Settings.Default.Save();
 
-            if (profileName != "Default Profile")
-                SettingsIO.ExportSettings(Path.Combine(profileDirectory, profileName + ".xml"));
+            if (RegistrySettings.profileName != "Default Profile")
+                SettingsIO.ExportSettings(Path.Combine(RegistrySettings.profileDirectory, RegistrySettings.profileName + ".xml"));
             else
                 YesMessageBox("Using Default Profile" + "\r\n\r\n" + "Changes will NOT be Saved");
 
@@ -374,6 +367,19 @@ namespace AgIO
             if (processName.Length != 0)
             {
                 processName[0].CloseMainWindow();
+            }
+
+            Log.sbEvent.Append("Program Exit: " +
+                DateTime.Now.ToString("f", CultureInfo.CreateSpecificCulture(RegistrySettings.culture)) + "\n\r");
+
+            FileSaveSystemEvents();
+        }
+
+        public void FileSaveSystemEvents()
+        {
+            using (StreamWriter writer = new StreamWriter(Path.Combine(RegistrySettings.LogsDirectory, "AgIO_Events_Log.txt"), true))
+            {
+                writer.Write(Log.sbEvent);
             }
         }
 
