@@ -330,31 +330,6 @@ namespace AgOpenGPS
                     //    }
                     //}
 
-                    //draw contour line if button on 
-                    if (ct.isContourBtnOn)
-                    {
-                        ct.DrawContourLine();
-                    }
-                    else// draw the current and reference AB Lines or CurveAB Ref and line
-                    {
-                        //when switching lines, draw the ghost
-                        if (trk.idx > -1)
-                        {
-                            if (trk.gArr[trk.idx].mode == TrackMode.AB)
-                                ABLine.DrawABLines();
-                            else
-                                curve.DrawCurve();
-                        }
-                    }
-
-                    //draw line creations
-                    if (curve.isMakingCurve) curve.DrawCurveNew();
-
-                    if (ABLine.isMakingABLine) ABLine.DrawABLineNew();
-
-                    recPath.DrawRecordedLine();
-                    recPath.DrawDubins();
-
                     if (bnd.bndList.Count > 0 || bnd.isBndBeingMade == true)
                     {
                         //draw Boundaries
@@ -385,6 +360,31 @@ namespace AgOpenGPS
                             bnd.bndList[0].hdLine.DrawPolygon();
                         }
                     }
+
+                    //draw contour line if button on 
+                    if (ct.isContourBtnOn)
+                    {
+                        ct.DrawContourLine();
+                    }
+                    else// draw the current and reference AB Lines or CurveAB Ref and line
+                    {
+                        //when switching lines, draw the ghost
+                        if (trk.idx > -1)
+                        {
+                            if (trk.gArr[trk.idx].mode == TrackMode.AB)
+                                ABLine.DrawABLines();
+                            else
+                                curve.DrawCurve();
+                        }
+                    }
+
+                    //draw line creations
+                    if (curve.isMakingCurve) curve.DrawCurveNew();
+
+                    if (ABLine.isMakingABLine) ABLine.DrawABLineNew();
+
+                    recPath.DrawRecordedLine();
+                    recPath.DrawDubins();
 
                     if (flagPts.Count > 0) DrawFlags();
 
