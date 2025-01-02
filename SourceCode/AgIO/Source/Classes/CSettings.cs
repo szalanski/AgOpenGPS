@@ -80,12 +80,12 @@ namespace AgIO
                     if (!string.IsNullOrEmpty(LogsDirectory) && !Directory.Exists(LogsDirectory))
                     {
                         Directory.CreateDirectory(LogsDirectory);
-                        Log.sbEvent.Append("Logs Dir Created\r");
+                        Log.EventWriter("Logs Dir Created\r");
                     }
                 }
                 catch (Exception ex)
                 {
-                    Log.sbEvent.Append("Catch, Serious Problem Making Logs Directory: " + ex.ToString());
+                    Log.EventWriter("Catch, Serious Problem Making Logs Directory: " + ex.ToString());
                 }
 
                 //keep below 500 kb
@@ -103,7 +103,7 @@ namespace AgIO
                     Key.SetValue("Language", "en");
                     Key.SetValue("ProfileName", "Default Profile");
                     Key.Close();
-                    Log.sbEvent.Append("Registry -> SubKey AgIO and Keys Created\r");
+                    Log.EventWriter("Registry -> SubKey AgIO and Keys Created\r");
                 }
                 else
                 {
@@ -114,7 +114,7 @@ namespace AgIO
                         {
                             RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgIO");
                             key.SetValue("ProfileName", "Default Profile");
-                            Log.sbEvent.Append("Registry -> Key Profile Name was null and Created\r");
+                            Log.EventWriter("Registry -> Key Profile Name was null and Created");
                         }
                         else
                         {
@@ -149,7 +149,7 @@ namespace AgIO
                             if (isProfileExist && profileName != "Default Profile")
                             {
                                 SettingsIO.ImportSettings(Path.Combine(profileDirectory, profileName + ".XML"));
-                                Log.sbEvent.Append("Registry -> " + profileName + ".XML Profile Loaded");
+                                Log.EventWriter("Registry -> " + profileName + ".XML Profile Loaded");
                             }
                             else
                             {
@@ -161,7 +161,7 @@ namespace AgIO
                     }
                     catch (Exception ex)
                     {
-                        Log.sbEvent.Append("Registry -> Catch, Serious Problem Loading Profile, Doing Registry Reset: " + ex.ToString());
+                        Log.EventWriter("Registry -> Catch, Serious Problem Loading Profile, Doing Registry Reset: " + ex.ToString());
                         Reset();
 
                         //reset to default Vehicle and save
@@ -173,7 +173,7 @@ namespace AgIO
             }
             catch (Exception ex)
             {
-                Log.sbEvent.Append("Registry -> Catch, Serious Problem Creating Registry keys: " + ex.ToString());
+                Log.EventWriter("Registry -> Catch, Serious Problem Creating Registry keys: " + ex.ToString());
                 Reset();
             }
         }
@@ -188,7 +188,7 @@ namespace AgIO
             }
             catch (Exception ex)
             {
-                Log.sbEvent.Append("Registry -> Catch, Serious Problem Saving keys: " + ex.ToString());
+                Log.EventWriter("Registry -> Catch, Serious Problem Saving keys: " + ex.ToString());
             }
             key.Close();
         }
@@ -199,11 +199,11 @@ namespace AgIO
             try
             {
                 key.SetValue("ProfileName", "Default Profile");
-                Log.sbEvent.Append("Registry -> Resetting Registry keys");
+                Log.EventWriter("Registry -> Resetting Registry keys");
             }
             catch (Exception ex)
             {
-                Log.sbEvent.Append("\"Registry -> Catch, Serious Problem Resetting Registry keys: " + ex.ToString());
+                Log.EventWriter("\"Registry -> Catch, Serious Problem Resetting Registry keys: " + ex.ToString());
             }
             key.Close();
         }

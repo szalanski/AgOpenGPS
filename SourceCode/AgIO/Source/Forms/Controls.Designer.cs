@@ -198,6 +198,19 @@ namespace AgIO
         #endregion
 
         #region Menu Strip Items
+
+        private void toolStripLogViewer_Click(object sender, EventArgs e)
+        {
+            FileSaveSystemEvents();
+            Log.sbEvent.Clear();
+
+            FileInfo txtfile = new FileInfo(Path.Combine(RegistrySettings.LogsDirectory, "AgIO_Events_Log.txt"));
+            if (txtfile.Exists)
+            {
+                Process.Start("notepad.exe", txtfile.FullName);
+            }
+        }
+
         private void toolStripUDPMonitor_Click(object sender, EventArgs e)
         {
             ShowUDPMonitor();
@@ -238,7 +251,7 @@ namespace AgIO
             }
         }
 
-        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        private void toolStripMenuCommSaver_Click(object sender, EventArgs e)
         {
             //Save curent Settngs
             using (var form = new FormCommSaver(this))
@@ -246,13 +259,14 @@ namespace AgIO
                 form.ShowDialog(this);
                 if (form.DialogResult == DialogResult.Yes)
                 {
+                    Log.EventWriter("Program Reset: Saving Profile");
                     Application.Restart();
                     Environment.Exit(0);
                 }
             }
         }
 
-        private void toolStripMenuItem2_Click(object sender, EventArgs e)
+        private void toolStripMenuCommPicker_Click(object sender, EventArgs e)
         {
             //Load new settings
             using (var form = new FormCommPicker(this))
@@ -260,6 +274,7 @@ namespace AgIO
                 form.ShowDialog(this);
                 if (form.DialogResult == DialogResult.OK)
                 {
+                    Log.EventWriter("Program Reset: Profile Load");
                     Application.Restart();
                     Environment.Exit(0);
                 }

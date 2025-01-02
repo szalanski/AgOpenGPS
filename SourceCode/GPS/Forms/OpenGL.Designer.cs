@@ -275,28 +275,36 @@ namespace AgOpenGPS
                                     if (isDay) GL.Color4(tool.secColors[j].R, tool.secColors[j].G, tool.secColors[j].B, (byte)152);
                                     else GL.Color4(tool.secColors[j].R, tool.secColors[j].G, tool.secColors[j].B, (byte)(76));
                                 }
-                                patchCount = triStrip[j].patchList.Count;
+                                patchCount = triStrip[j].patchList.Count-1;
 
-                                //draw the triangle in each triangle strip
-                                GL.Begin(PrimitiveType.TriangleStrip);
+                                if (patchCount > 0)
+                                {
+                                    try
+                                    {
+                                        //draw the triangle in each triangle strip
+                                        GL.Begin(PrimitiveType.TriangleStrip);
 
-                                //left side of triangle
-                                vec2 pt = new vec2((cosSectionHeading * section[triStrip[j].currentStartSectionNum].positionLeft) + toolPos.easting,
-                                        (sinSectionHeading * section[triStrip[j].currentStartSectionNum].positionLeft) + toolPos.northing);
+                                        //left side of triangle
+                                        vec2 pt = new vec2((cosSectionHeading * section[triStrip[j].currentStartSectionNum].positionLeft) + toolPos.easting,
+                                                (sinSectionHeading * section[triStrip[j].currentStartSectionNum].positionLeft) + toolPos.northing);
 
-                                GL.Vertex3(pt.easting, pt.northing, 0);
+                                        GL.Vertex3(pt.easting, pt.northing, 0);
 
-                                //Right side of triangle
-                                pt = new vec2((cosSectionHeading * section[triStrip[j].currentEndSectionNum].positionRight) + toolPos.easting,
-                                   (sinSectionHeading * section[triStrip[j].currentEndSectionNum].positionRight) + toolPos.northing);
+                                        //Right side of triangle
+                                        pt = new vec2((cosSectionHeading * section[triStrip[j].currentEndSectionNum].positionRight) + toolPos.easting,
+                                           (sinSectionHeading * section[triStrip[j].currentEndSectionNum].positionRight) + toolPos.northing);
 
-                                GL.Vertex3(pt.easting, pt.northing, 0);
+                                        GL.Vertex3(pt.easting, pt.northing, 0);
 
-                                int last = triStrip[j].patchList[patchCount - 1].Count;
-                                //antenna
-                                GL.Vertex3(triStrip[j].patchList[patchCount - 1][last - 2].easting, triStrip[j].patchList[patchCount - 1][last - 2].northing, 0);
-                                GL.Vertex3(triStrip[j].patchList[patchCount - 1][last - 1].easting, triStrip[j].patchList[patchCount - 1][last - 1].northing, 0);
-                                GL.End();
+                                        int last = triStrip[j].patchList[patchCount].Count;
+
+                                        GL.Vertex3(triStrip[j].patchList[patchCount][last - 2].easting, triStrip[j].patchList[patchCount][last - 2].northing, 0);
+                                        GL.Vertex3(triStrip[j].patchList[patchCount][last - 1].easting, triStrip[j].patchList[patchCount][last - 1].northing, 0);
+                                        GL.End();
+                                    }
+                                    catch
+                                    { }
+                                }
                             }
                         }
                     }

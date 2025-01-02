@@ -115,6 +115,7 @@ namespace AgIO
                 SettingsIO.ExportSettings(Path.Combine(RegistrySettings.profileDirectory, RegistrySettings.profileName + ".xml"));
 
             mf.YesMessageBox("Restart of AgIO is Required - Restarting");
+            Log.EventWriter("Program Reset: Selecting NTRIP Feature");
 
             Application.Restart();
             Environment.Exit(0);
@@ -263,6 +264,8 @@ namespace AgIO
             }
             else
             {
+                Log.EventWriter("Program Reset: Button Ok on Ntrip Form");
+
                 Application.Restart();
                 Environment.Exit(0);
             }

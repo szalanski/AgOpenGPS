@@ -100,6 +100,16 @@ namespace AgIO
                     new AsyncCallback(ReceiveDataUDPAsync), null);
 
                 isUDPNetworkConnected = true;
+
+                if (isUDPNetworkConnected)
+                {
+                    Log.EventWriter("UDP Network is connected: " + epModule.ToString());
+                }
+                else
+                {
+                    Log.EventWriter("UDP Network Failed to Connect");
+                }
+
                 btnUDP.BackColor = Color.LimeGreen;
 
                 //if (!isFound)
@@ -130,10 +140,12 @@ namespace AgIO
                 loopBackSocket.Bind(new IPEndPoint(IPAddress.Loopback, 17777));
                 loopBackSocket.BeginReceiveFrom(buffer, 0, buffer.Length, SocketFlags.None, ref endPointLoopBack, 
                     new AsyncCallback(ReceiveDataLoopAsync), null);
+                Log.EventWriter("Loopback is Connected: " + IPAddress.Loopback.ToString() + ":17777");
+
             }
             catch (Exception ex)
             {
-                Log.EventWriter("Catch - > Load UDP Loopback: " + ex.ToString());
+                Log.EventWriter("Catch - > Load UDP Loopback Failed: " + ex.ToString());
                 MessageBox.Show("Load Error: " + ex.Message, "Loopback Server", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
