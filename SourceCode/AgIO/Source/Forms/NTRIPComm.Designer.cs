@@ -149,7 +149,6 @@ namespace AgIO
                 if (ntripCounter > 59) btnStartStopNtrip.Text = (ntripCounter >> 6) + " Min";
                 else if (ntripCounter < 60 && ntripCounter > 22) btnStartStopNtrip.Text = ntripCounter + " Secs";
                 else btnStartStopNtrip.Text = "In " + (Math.Abs(ntripCounter - 22)) + " secs";
-
             }
         }
 
@@ -246,6 +245,9 @@ namespace AgIO
                     // Connect to server non-Blocking method
                     clientSocket.Blocking = false;
                     clientSocket.BeginConnect(new IPEndPoint(IPAddress.Parse(broadCasterIP), broadCasterPort), new AsyncCallback(OnConnect), null);
+
+                    Log.EventWriter("NTRIP - IP: " + broadCasterIP.ToString() + ":" + broadCasterPort.ToString()
+                        + " To Port: " + toUDP_Port.ToString() + " Mount: " + mount);
                 }
                 catch (Exception ex)
                 {
