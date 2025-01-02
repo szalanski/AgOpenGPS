@@ -30,7 +30,7 @@ namespace AgIO
                     StringBuilder sbF = new StringBuilder();
                     long bytes = txtfile.Length - sizeLimit;
                     bytes = (sizeLimit * 2) / 10 + bytes;
-                    Log.sbEvent.Append("Log File Reduced by: " + bytes.ToString());
+                    Log.EventWriter("Log File Reduced by: " + bytes.ToString());
 
                     //create some extra space
                     int bytesSoFar = 0;

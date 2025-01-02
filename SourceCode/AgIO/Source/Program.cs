@@ -23,16 +23,15 @@ namespace AgIO
             Settings.Default.Reset();
             Settings.Default.Save();
 
+            Log.EventWriter("Program Started: " + DateTime.Now.ToString("f", CultureInfo.CreateSpecificCulture(RegistrySettings.culture)));
+            Log.EventWriter("AgIO Version: ");
+            Log.EventWriter(Application.ProductVersion.ToString(CultureInfo.InvariantCulture));
+
             //load the profile name and set profile directory
             RegistrySettings.Load();
 
             Properties.Settings.Default.setConfig_profileName = RegistrySettings.profileName;
             Properties.Settings.Default.Save();
-
-            Log.sbEvent.Append("Program Started: " + DateTime.Now.ToString("f", CultureInfo.CreateSpecificCulture(RegistrySettings.culture)) + "\r");
-            Log.sbEvent.Append("AgIO Version: ");
-            Log.sbEvent.Append(Application.ProductVersion.ToString(CultureInfo.InvariantCulture));
-            Log.sbEvent.Append("\r");
 
             if (Mutex.WaitOne(TimeSpan.Zero, true))
             {

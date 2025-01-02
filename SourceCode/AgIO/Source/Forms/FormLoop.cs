@@ -369,7 +369,7 @@ namespace AgIO
                 processName[0].CloseMainWindow();
             }
 
-            Log.sbEvent.Append("Program Exit: " +
+            Log.EventWriter("Program Exit: " +
                 DateTime.Now.ToString("f", CultureInfo.CreateSpecificCulture(RegistrySettings.culture)) + "\n\r");
 
             FileSaveSystemEvents();
@@ -380,6 +380,7 @@ namespace AgIO
             using (StreamWriter writer = new StreamWriter(Path.Combine(RegistrySettings.LogsDirectory, "AgIO_Events_Log.txt"), true))
             {
                 writer.Write(Log.sbEvent);
+                Log.sbEvent.Clear();
             }
         }
 

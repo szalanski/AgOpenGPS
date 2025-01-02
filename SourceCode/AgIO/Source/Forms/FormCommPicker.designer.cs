@@ -42,7 +42,7 @@
             this.cboxEnv.FormattingEnabled = true;
             this.cboxEnv.Location = new System.Drawing.Point(12, 42);
             this.cboxEnv.Name = "cboxEnv";
-            this.cboxEnv.Size = new System.Drawing.Size(538, 43);
+            this.cboxEnv.Size = new System.Drawing.Size(510, 43);
             this.cboxEnv.TabIndex = 212;
             this.cboxEnv.SelectedIndexChanged += new System.EventHandler(this.cboxVeh_SelectedIndexChanged);
             // 
@@ -67,7 +67,7 @@
             this.btnSerialCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSerialCancel.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSerialCancel.Image = global::AgIO.Properties.Resources.Cancel64;
-            this.btnSerialCancel.Location = new System.Drawing.Point(481, 140);
+            this.btnSerialCancel.Location = new System.Drawing.Point(548, 222);
             this.btnSerialCancel.Name = "btnSerialCancel";
             this.btnSerialCancel.Size = new System.Drawing.Size(88, 76);
             this.btnSerialCancel.TabIndex = 214;
@@ -78,7 +78,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Gainsboro;
-            this.ClientSize = new System.Drawing.Size(572, 219);
+            this.ClientSize = new System.Drawing.Size(639, 301);
             this.ControlBox = false;
             this.Controls.Add(this.btnSerialCancel);
             this.Controls.Add(this.lblLast);

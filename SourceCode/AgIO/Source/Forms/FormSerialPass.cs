@@ -73,6 +73,8 @@ namespace AgIO
             Properties.Settings.Default.setPort_baudRateRadio = cboxBaud.Text;
             Properties.Settings.Default.Save();
 
+            Log.EventWriter("Program Reset: Button OK on Serial Pass Form");
+
             Application.Restart();
             Environment.Exit(0);
             Close();
