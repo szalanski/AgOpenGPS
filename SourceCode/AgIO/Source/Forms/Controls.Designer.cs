@@ -250,8 +250,6 @@ namespace AgIO
                     Environment.Exit(0);
                 }
             }
-            this.Text = "AgIO  Profile: " + RegistrySettings.profileName;
-
         }
 
         private void toolStripMenuItem2_Click(object sender, EventArgs e)
@@ -266,8 +264,6 @@ namespace AgIO
                     Environment.Exit(0);
                 }
             }
-
-            this.Text = "AgIO  Profile: " + RegistrySettings.profileName;
         }
 
         private void modSimToolStrip_Click(object sender, EventArgs e)
@@ -288,6 +284,7 @@ namespace AgIO
                 catch
                 {
                     TimedMessageBox(2000, "No File Found", "Can't Find Simulator");
+                    Log.EventWriter("Catch -> Failed to load ModSim - Not Found");
                 }
             }
             else
@@ -436,6 +433,7 @@ namespace AgIO
                 catch
                 {
                     TimedMessageBox(2000, "No File Found", "Can't Find AgOpenGPS");
+                    Log.EventWriter("Can't Find AgOpenGPS - File Not Found");
                 }
             }
             else
@@ -464,6 +462,7 @@ namespace AgIO
                 catch
                 {
                     TimedMessageBox(2000, "No File Found", "Can't Find GPS_Out");
+                    Log.EventWriter("No File Found, Can't Find GPS_Out");
                 }
             }
             else

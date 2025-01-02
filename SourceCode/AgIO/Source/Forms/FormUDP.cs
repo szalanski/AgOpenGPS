@@ -185,8 +185,7 @@ namespace AgIO
                                     }
                                     catch (Exception ex)
                                     {
-                                        Console.Write("Bind Error = ");
-                                        Console.WriteLine(ex.ToString());
+                                        Log.EventWriter("Catch - > Socket Bind Error Scan UDP" + ex.ToString());
                                     }
 
                                     scanSocket.Dispose();
@@ -194,8 +193,7 @@ namespace AgIO
                             }
                             catch (Exception ex)
                             {
-                                Console.Write("nic Loop = ");
-                                Console.WriteLine(ex.ToString());
+                                Log.EventWriter("Catch - > Nic Loop exception in Scan" + ex.ToString());
                             }
                         }
                     }
@@ -251,8 +249,7 @@ namespace AgIO
                                         }
                                         catch (Exception ex)
                                         {
-                                            Console.Write("Bind Error = ");
-                                            Console.WriteLine(ex.ToString());
+                                            Log.EventWriter("Catch - > Send Subnet Bind and Send: " + ex.ToString());
                                         }
 
                                         scanSocket.Dispose();
@@ -260,8 +257,7 @@ namespace AgIO
                                 }
                                 catch (Exception ex)
                                 {
-                                    Console.Write("nic Loop = ");
-                                    Console.WriteLine(ex.ToString());
+                                    Log.EventWriter("Catch - > Nic Loop Send Subnet: " + ex.ToString());
                                 }
                             }
                         }

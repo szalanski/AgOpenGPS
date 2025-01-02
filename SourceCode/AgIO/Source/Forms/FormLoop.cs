@@ -578,6 +578,7 @@ namespace AgIO
                     {
                         sbRTCM.Clear();
                         sbRTCM.Append("Error");
+                        Log.EventWriter("RTCM List compilation error");
                     }
                 }
 

@@ -97,6 +97,7 @@ namespace AgIO
                 RegistrySettings.Save();
 
                 SettingsIO.ExportSettings(Path.Combine(RegistrySettings.profileDirectory, RegistrySettings.profileName + ".xml"));
+                
                 DialogResult = DialogResult.Yes;
                 Close();
             }

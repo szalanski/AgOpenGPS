@@ -113,7 +113,7 @@ namespace AgIO
             }
             catch (Exception e)
             {
-                //WriteErrorLog("UDP Server" + e);
+                Log.EventWriter("Catch -> Load UDP Server" + e);
                 MessageBox.Show(e.Message, "Serious Network Connection Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 btnUDP.BackColor = Color.Red;
@@ -133,7 +133,7 @@ namespace AgIO
             }
             catch (Exception ex)
             {
-                //lblStatus.Text = "Error";
+                Log.EventWriter("Catch - > Load UDP Loopback: " + ex.ToString());
                 MessageBox.Show("Load Error: " + ex.Message, "Loopback Server", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -156,9 +156,8 @@ namespace AgIO
                         new AsyncCallback(SendDataLoopAsync), null);
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                MessageBox.Show("Send Error: " + ex.Message, "UDP Client", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -168,9 +167,8 @@ namespace AgIO
             {
                 loopBackSocket.EndSend(asyncResult);
             }
-            catch (Exception ex)
+            catch
             {
-                MessageBox.Show("SendData Error: " + ex.Message, "UDP Server", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -248,10 +246,8 @@ namespace AgIO
 
                 BeginInvoke((MethodInvoker)(() => ReceiveFromLoopBack(localMsg)));
             }
-            catch (Exception)
+            catch
             {
-                //MessageBox.Show("ReceiveData Error: " + ex.Message, "UDP Server", MessageBoxButtons.OK,
-                //MessageBoxIcon.Error);
             }
         }
 
@@ -300,11 +296,8 @@ namespace AgIO
             {
                 UDPSocket.EndSend(asyncResult);
             }
-            catch (Exception)
+            catch
             {
-                //WriteErrorLog(" UDP Send Data" + e.ToString());
-                //MessageBox.Show("SendData Error: " + e.Message, "UDP Server", MessageBoxButtons.OK,
-                //MessageBoxIcon.Error);
             }
         }
 
@@ -329,11 +322,8 @@ namespace AgIO
                 BeginInvoke((MethodInvoker)(() => ReceiveFromUDP(localMsg)));
 
             }
-            catch (Exception)
+            catch 
             {
-                //WriteErrorLog("UDP Recv data " + e.ToString());
-                //MessageBox.Show("ReceiveData Error: " + e.Message, "UDP Server", MessageBoxButtons.OK,
-                //MessageBoxIcon.Error);
             }
         }
 
@@ -460,7 +450,6 @@ namespace AgIO
             }
             catch
             {
-
             }
         }
 

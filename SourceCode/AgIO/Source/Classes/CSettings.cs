@@ -41,11 +41,12 @@ namespace AgIO
                     Properties.Settings.Default.Reload();
                 }
             }
-            catch (Exception) // Should make this more specific
+            catch (Exception ex) // Should make this more specific
             {
                 // Could not import settings.
                 {
                     Properties.Settings.Default.Reload();
+                    Log.EventWriter("Catch -> Failed to Import Settings: " +  ex.ToString());
                 }
             }
         }
@@ -86,6 +87,9 @@ namespace AgIO
                 {
                     Log.sbEvent.Append("Catch, Serious Problem Making Logs Directory: " + ex.ToString());
                 }
+
+                //keep below 500 kb
+                Log.CheckLogSize(Path.Combine(LogsDirectory, "AgIO_Events_Log.txt"), 500000);
 
                 //opening the subkey
                 RegistryKey regKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\AgIO");
@@ -180,6 +184,7 @@ namespace AgIO
             try
             {
                 key.SetValue("ProfileName", profileName);
+                Log.EventWriter(profileName + " Saved to registry key");
             }
             catch (Exception ex)
             {
