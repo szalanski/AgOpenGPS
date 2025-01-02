@@ -1492,7 +1492,6 @@ namespace AgOpenGPS
                 Log.EventWriter("Turning Nozzle App Off");
             }
 
-
             nozzleAppToolStripMenuItem.Checked = isNozzleApp;
             Settings.Default.setApp_isNozzleApp = isNozzleApp;
             Settings.Default.Save();
