@@ -7,6 +7,7 @@ using System.Globalization;
 using System.Diagnostics;
 using System.Xml.Linq;
 using AgOpenGPS.Culture;
+using System.Text;
 
 namespace AgOpenGPS
 {
@@ -27,6 +28,8 @@ namespace AgOpenGPS
         public int udpWatchLimit = 70;
 
         private readonly Stopwatch udpWatch = new Stopwatch();
+
+        public StringBuilder sbMissedSentence = new StringBuilder();
 
         private void ReceiveFromAgIO(byte[] data)
         {
@@ -55,16 +58,15 @@ namespace AgOpenGPS
                 {
                     case 0xD6:
                         {
-                            //if (udpWatch.ElapsedMilliseconds < udpWatchLimit)
-                            //{
-                            //    udpWatchCounts++;
-                            //    pn.logNMEASentence.Append("*** "
-                            //        + DateTime.UtcNow.ToString("ss.ff -> ", CultureInfo.InvariantCulture)
-                            //        + udpWatch.ElapsedMilliseconds + "\r\n");
-                            //    return;
-                            //}
-                            //udpWatch.Reset();
-                            //udpWatch.Start();
+                            if (udpWatch.ElapsedMilliseconds < udpWatchLimit)
+                            {
+                                udpWatchCounts++;
+                                //sbMissedSentence.Append(DateTime.UtcNow.ToString("hh:ss:ff -> ", CultureInfo.InvariantCulture)
+                                //    + udpWatch.ElapsedMilliseconds + "\r");
+                                return;
+                            }
+                            udpWatch.Reset();
+                            udpWatch.Start();
 
                             double Lon = BitConverter.ToDouble(data, 5);
                             double Lat = BitConverter.ToDouble(data, 13);

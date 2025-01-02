@@ -88,6 +88,7 @@ namespace AgOpenGPS
 
         //For field saving in background
         private int fileSaveCounter = 1;
+        private int fileSaveAlwaysCounter = 1;
         private int fourSecondCounter = 0;
         public int twoSecondCounter = 0;
         private int oneSecondCounter = 0;
@@ -111,8 +112,6 @@ namespace AgOpenGPS
                 return;
             }
 
-
-
             ////////////////////////////////////////////// 10 second ///////////////////////////////////////////////////////
             //every 3 second update status
             if (fourSecondCounter >= 3)
@@ -132,63 +131,6 @@ namespace AgOpenGPS
 
                 //reset the counter
                 fourSecondCounter = 0;
-
-                /*
-                //if (isJobStarted)
-                //{
-                //    if (isMetric)
-                //    {
-                //        if (bnd.bndList.Count > 0)
-                //        {
-                //            fieldData =
-                //                 fd.WorkedAreaRemainPercentage + "  "
-                //                + fd.AreaBoundaryLessInnersHectares + " - "
-                //                + fd.WorkedHectares + " = "
-                //                + fd.WorkedAreaRemainHectares + " | "
-
-                //                + fd.ActualAreaWorkedHectares + " = "
-                //                + fd.ActualRemainHectares + "  "
-                //                + fd.ActualOverlapPercent + " | "
-
-                //                + fd.TimeTillFinished + "  "
-                //                + fd.WorkRateHectares;
-                //        }
-                //        else
-                //            fieldData = "Applied: "
-                //                + fd.WorkedHectares + "  Actual: "
-                //                + fd.ActualAreaWorkedHectares + "  "
-                //                + fd.ActualOverlapPercent + "   "
-                //                + fd.WorkRateHectares;
-
-                //    }
-                //    else //imperial
-                //    {
-                //        if (bnd.bndList.Count > 0)
-                //            fieldData =
-                //                 fd.WorkedAreaRemainPercentage + "  "
-                //                + fd.AreaBoundaryLessInnersAcres + " - "
-                //                + fd.WorkedAcres + " = "
-                //                + fd.WorkedAreaRemainAcres +  " | "
-
-                //                + fd.ActualAreaWorkedAcres + " = "
-                //                + fd.ActualRemainAcres + "  "
-                //                + fd.ActualOverlapPercent + " | "
-
-                //                + fd.TimeTillFinished + "  "
-                //                + fd.WorkRateAcres;
-                //        else
-                //            fieldData = "Applied: "
-                //                + fd.WorkedAcres + "  Actual: "
-                //                + fd.ActualAreaWorkedAcres + " *"
-                //                + fd.ActualOverlapPercent + "   "
-                //                + fd.WorkRateAcres;
-                //    }
-                //}
-                //else
-                //{
-                //    fieldData = string.Empty;
-                //}
-                */
 
                 if (isJobStarted)
                 {
@@ -299,6 +241,8 @@ namespace AgOpenGPS
 
                 //fix
                 if (timerSim.Enabled && pn.fixQuality++ > 5) pn.fixQuality = 2;
+
+                fileSaveAlwaysCounter += 3;
             }
 
             /////////////////////////////////////////////////////////   2 second  ////////////////////////////////////////
