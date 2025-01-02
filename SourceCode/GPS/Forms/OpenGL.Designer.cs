@@ -1377,6 +1377,13 @@ namespace AgOpenGPS
             //oglBack.MakeCurrent();
             //oglBack.SwapBuffers();
 
+            //file writer that runs all the time
+            if (fileSaveAlwaysCounter > 60)
+            {
+                fileSaveAlwaysCounter = 0;
+                //if (sbMissedSentence.Length > 0) FileSaveMissedEvents();
+            }
+
             //if a minute has elapsed save the field in case of crash and to be able to resume            
             if (fileSaveCounter > 30 && sentenceCounter < 20)
             {
@@ -1408,6 +1415,8 @@ namespace AgOpenGPS
                 oglZoom.Refresh();
 
             }
+
+
             //this is the end of the "frame". Now we wait for next NMEA sentence with a valid fix. 
         }
 
