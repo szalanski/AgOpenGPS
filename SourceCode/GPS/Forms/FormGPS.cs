@@ -274,6 +274,7 @@ namespace AgOpenGPS
 
                 if (Settings.Default.setDisplay_isShutdownWhenNoPower && powerLineStatus == PowerLineStatus.Offline)
                 {
+                    Log.EventWriter("Shutdown Computer By Power Lost Setting");
                     Close();
                 }
             }
@@ -379,11 +380,9 @@ namespace AgOpenGPS
 
             this.MouseWheel += ZoomByMouseWheel;
 
-            Log.sbEvents.Append("\r");
-            Log.sbEvents.Append("Program Started: " + DateTime.Now.ToString("f", CultureInfo.CreateSpecificCulture(Settings.Default.setF_culture)) + "\r");
-            Log.sbEvents.Append("AOG Version: ");
-            Log.sbEvents.Append(Application.ProductVersion.ToString(CultureInfo.InvariantCulture));
-            Log.sbEvents.Append("\r");
+            Log.EventWriter("Program Started: " 
+                + DateTime.Now.ToString("f", CultureInfo.CreateSpecificCulture(Settings.Default.setF_culture)));
+            Log.EventWriter("AOG Version: " + Application.ProductVersion.ToString(CultureInfo.InvariantCulture));
 
             //The way we subscribe to the System Event to check when Power Mode has changed.
             Microsoft.Win32.SystemEvents.PowerModeChanged += SystemEvents_PowerModeChanged;
@@ -415,19 +414,19 @@ namespace AgOpenGPS
             //get the fields directory, if not exist, create
             fieldsDirectory = Path.Combine(baseDirectory, "Fields");
             if (!string.IsNullOrEmpty(fieldsDirectory) && !Directory.Exists(fieldsDirectory)) { Directory.CreateDirectory(fieldsDirectory);
-                Log.sbEvents.Append("Fields Dir Created\r");
+                Log.EventWriter("Fields Dir Created");
             }
 
             //get the fields directory, if not exist, create
             vehiclesDirectory = Path.Combine(baseDirectory, "Vehicles");
             if (!string.IsNullOrEmpty(vehiclesDirectory) && !Directory.Exists(vehiclesDirectory)) { Directory.CreateDirectory(vehiclesDirectory);
-                Log.sbEvents.Append("Vehicles Dir Created\r");
+                Log.EventWriter("Vehicles Dir Created");
             }
 
             //get the fields directory, if not exist, create
             logsDirectory = Path.Combine(baseDirectory, "Logs");
             if (!string.IsNullOrEmpty(logsDirectory) && !Directory.Exists(logsDirectory)) { Directory.CreateDirectory(logsDirectory);
-                Log.sbEvents.Append("Logs Dir Created\r");
+                Log.EventWriter("Logs Dir Created");
             }
 
             //keep below 500 kb
@@ -444,12 +443,12 @@ namespace AgOpenGPS
                     currentFieldDirectory = "";
                     Settings.Default.setF_CurrentDir = "";
                     Settings.Default.Save();
-                    Log.sbEvents.Append("Field Directory is Empty or Missing\r");
+                    Log.EventWriter("Field Directory is Empty or Missing");
                 }
             }
 
-            Log.sbEvents.Append("Program Directory: " + Application.StartupPath + "\r");
-            Log.sbEvents.Append("Fields Directory: " + (fieldsDirectory) + "\r");
+            Log.EventWriter("Program Directory: " + Application.StartupPath);
+            Log.EventWriter("Fields Directory: " + (fieldsDirectory));
 
             if (isBrightnessOn)
             {
@@ -507,11 +506,12 @@ namespace AgOpenGPS
                             WorkingDirectory = Path.GetDirectoryName(strPath)
                         };
                         Process proc = Process.Start(processInfo);
+                        Log.EventWriter("AgIO Started");
                     }
                     catch
                     {
                         TimedMessageBox(2000, "No File Found", "Can't Find AgIO");
-                        Log.EventWriter("Can't Find AgIO");
+                        Log.EventWriter("Can't Find AgIO, File not Found");
                     }
                 }
             }
@@ -572,11 +572,14 @@ namespace AgOpenGPS
                     {
                         if (form.ShowDialog(this) != DialogResult.OK)
                         {
+                            Log.EventWriter("Terms Not Accepted");
                             Close();
                         }
                     }
                 }
             }
+
+            Log.EventWriter("Terms Accepted");
 
             if (vehicleFileName == "Default Vehicle")
             {
@@ -663,7 +666,9 @@ namespace AgOpenGPS
 
             SaveFormGPSWindowSettings();
 
-            Log.sbEvents.Append("Program Exit: " + DateTime.Now.ToString("f", CultureInfo.CreateSpecificCulture(Settings.Default.setF_culture)) + "\r");
+            Log.EventWriter("Missed Sentence Counter Total: " + missedSentenceCount.ToString());
+
+            Log.EventWriter("Program Exit: " + DateTime.Now.ToString("f", CultureInfo.CreateSpecificCulture(Settings.Default.setF_culture)) + "\r");
 
             //write the log file
             FileSaveSystemEvents();

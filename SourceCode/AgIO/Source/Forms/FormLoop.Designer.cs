@@ -32,9 +32,8 @@ namespace AgIO
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormLoop));
-            this.oneSecondLoopTimer = new System.Windows.Forms.Timer(this.components);
+            this.oneSecondLoopTimer = new System.Windows.Forms.Timer();
             this.label6 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.lblCurentLon = new System.Windows.Forms.Label();
@@ -66,7 +65,7 @@ namespace AgIO
             this.lblSerialPorts = new System.Windows.Forms.Label();
             this.lblMount = new System.Windows.Forms.Label();
             this.lblIP = new System.Windows.Forms.Label();
-            this.ntripMeterTimer = new System.Windows.Forms.Timer(this.components);
+            this.ntripMeterTimer = new System.Windows.Forms.Timer();
             this.lblMessages = new System.Windows.Forms.Label();
             this.lblWASCounts = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();

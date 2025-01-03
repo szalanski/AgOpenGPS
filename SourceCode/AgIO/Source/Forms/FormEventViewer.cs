@@ -2,7 +2,7 @@
 using System.IO;
 using System.Windows.Forms;
 
-namespace AgOpenGPS
+namespace AgIO
 {
     public partial class FormEventViewer : Form
     {
@@ -18,8 +18,6 @@ namespace AgOpenGPS
 
         private void FormEventViewer_Load(object sender, EventArgs e)
         {
-            //rtbLogViewer.HideSelection = false;
-
             try
             {
                 using (StreamReader sr = File.OpenText(filename))
@@ -30,9 +28,9 @@ namespace AgOpenGPS
                         rtbLogViewer.AppendText(sr.ReadLine() + "\r");
                     }
 
-                    rtbLogViewer.AppendText(" **** Current Session Below ***** \r\n");
+                    rtbLogViewer.AppendText(" **** Current Session Below ***** \r\n\r\n");
 
-                    rtbLogViewer.AppendText(Log.sbEvents.ToString());
+                    rtbLogViewer.AppendText(Log.sbEvent.ToString());
                 }
             }
             catch
@@ -60,16 +58,15 @@ namespace AgOpenGPS
                         rtbLogViewer.AppendText(sr.ReadLine() + "\r");
                     }
 
-                    rtbLogViewer.AppendText(" **** Current Session Below ***** \r\n");
+                    rtbLogViewer.AppendText(" **** Current Session Below ***** \r\n\r\n");
 
-                    rtbLogViewer.AppendText(Log.sbEvents.ToString());
+                    rtbLogViewer.AppendText(Log.sbEvent.ToString());
                 }
             }
             catch
             {
-                
+                Close();
             }
-
         }
     }
 }

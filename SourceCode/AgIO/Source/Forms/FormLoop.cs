@@ -83,7 +83,7 @@ namespace AgIO
             if (Settings.Default.setUDP_isOn)
             {
                 LoadUDPNetwork();
-                Log.EventWriter("UDP Network Loaded");
+                Log.EventWriter("UDP Network Is On");
             }
             else
             {

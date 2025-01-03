@@ -1001,9 +1001,6 @@
     <Content Include="License.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ModSim.exe">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="UDP_SimTool.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -1118,9 +1115,6 @@
     <None Include="btnImages\Images\z_RateMap1.png" />
     <None Include="btnImages\Images\z_RateMap2.png" />
     <None Include="btnImages\Images\z_RateMap3.png" />
-    <Content Include="GPS_Out.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="OGL.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

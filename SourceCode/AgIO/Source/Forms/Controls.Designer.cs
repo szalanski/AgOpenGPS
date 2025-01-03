@@ -201,14 +201,9 @@ namespace AgIO
 
         private void toolStripLogViewer_Click(object sender, EventArgs e)
         {
-            FileSaveSystemEvents();
-            Log.sbEvent.Clear();
-
-            FileInfo txtfile = new FileInfo(Path.Combine(RegistrySettings.LogsDirectory, "AgIO_Events_Log.txt"));
-            if (txtfile.Exists)
-            {
-                Process.Start("notepad.exe", txtfile.FullName);
-            }
+            Form form = new FormEventViewer(Path.Combine(RegistrySettings.LogsDirectory, "AgIO_Events_Log.txt"));
+            form.Show(this);
+            this.Activate();
         }
 
         private void toolStripUDPMonitor_Click(object sender, EventArgs e)

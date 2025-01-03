@@ -1,4 +1,4 @@
-﻿namespace AgOpenGPS
+﻿namespace AgIO
 {
     partial class FormEventViewer
     {
@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.rtbLogViewer = new System.Windows.Forms.RichTextBox();
-            this.btnExit = new System.Windows.Forms.Button();
             this.btnRefresh = new System.Windows.Forms.Button();
+            this.btnExit = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // rtbLogViewer
@@ -42,41 +42,41 @@
             this.rtbLogViewer.Location = new System.Drawing.Point(12, 12);
             this.rtbLogViewer.Name = "rtbLogViewer";
             this.rtbLogViewer.ReadOnly = true;
-            this.rtbLogViewer.Size = new System.Drawing.Size(657, 315);
+            this.rtbLogViewer.Size = new System.Drawing.Size(640, 318);
             this.rtbLogViewer.TabIndex = 520;
             this.rtbLogViewer.Text = "";
             this.rtbLogViewer.WordWrap = false;
-            // 
-            // btnExit
-            // 
-            this.btnExit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnExit.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnExit.Location = new System.Drawing.Point(490, 333);
-            this.btnExit.Name = "btnExit";
-            this.btnExit.Size = new System.Drawing.Size(179, 28);
-            this.btnExit.TabIndex = 521;
-            this.btnExit.Text = "Exit";
-            this.btnExit.UseVisualStyleBackColor = true;
-            this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
             // btnRefresh
             // 
             this.btnRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnRefresh.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnRefresh.Location = new System.Drawing.Point(261, 333);
+            this.btnRefresh.Location = new System.Drawing.Point(244, 336);
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(179, 28);
-            this.btnRefresh.TabIndex = 522;
+            this.btnRefresh.TabIndex = 524;
             this.btnRefresh.Text = "Refresh";
             this.btnRefresh.UseVisualStyleBackColor = true;
             this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
+            // 
+            // btnExit
+            // 
+            this.btnExit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnExit.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnExit.Location = new System.Drawing.Point(473, 336);
+            this.btnExit.Name = "btnExit";
+            this.btnExit.Size = new System.Drawing.Size(179, 28);
+            this.btnExit.TabIndex = 523;
+            this.btnExit.Text = "Exit";
+            this.btnExit.UseVisualStyleBackColor = true;
+            this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
             // FormEventViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Gainsboro;
-            this.ClientSize = new System.Drawing.Size(681, 365);
+            this.ClientSize = new System.Drawing.Size(664, 365);
             this.ControlBox = false;
             this.Controls.Add(this.btnRefresh);
             this.Controls.Add(this.btnExit);
@@ -94,7 +94,7 @@
         #endregion
 
         private System.Windows.Forms.RichTextBox rtbLogViewer;
-        private System.Windows.Forms.Button btnExit;
         private System.Windows.Forms.Button btnRefresh;
+        private System.Windows.Forms.Button btnExit;
     }
 }
