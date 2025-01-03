@@ -2341,7 +2341,7 @@ namespace AgOpenGPS
 
                 catch (Exception e)
                 {
-                    TimedMessageBox(2000, "Error",e.Message + "\n Cannot write to file.");
+                    TimedMessageBox(2000, "Error", e.Message + "\n Cannot write to file.");
                     Log.EventWriter("Saving Flags" + e.ToString());
                     return;
                 }
@@ -2356,14 +2356,14 @@ namespace AgOpenGPS
             }
         }
 
-        public void FileSaveMissedEvents()
-        {
-            using (StreamWriter writer = new StreamWriter(Path.Combine(logsDirectory, "Missed_Events_Log.txt"), true))
-            {
-                writer.Write(sbMissedSentence);
-                sbMissedSentence.Clear();
-            }
-        }
+        //public void FileSaveMissedEvents()
+        //{
+        //    using (StreamWriter writer = new StreamWriter(Path.Combine(logsDirectory, "Missed_Events_Log.txt"), true))
+        //    {
+        //        writer.Write(sbMissedSentence);
+        //        sbMissedSentence.Clear();
+        //    }
+        //}
 
         //save nmea sentences
         public void FileSaveElevation()

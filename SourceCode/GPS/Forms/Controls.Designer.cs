@@ -730,8 +730,8 @@ namespace AgOpenGPS
                         Log.EventWriter("High Field Start Distance Warning");
                     }
 
-                    Log.EventWriter(" *Opened* " + currentFieldDirectory);
-                    Log.EventWriter(DateTime.Now.ToString("f", CultureInfo.CreateSpecificCulture(Settings.Default.setF_culture)));
+                    Log.EventWriter("** Opened **  " + currentFieldDirectory + "   " 
+                        + (DateTime.Now.ToString("f", CultureInfo.CreateSpecificCulture(Settings.Default.setF_culture))));
                 }
             }
 
@@ -779,8 +779,8 @@ namespace AgOpenGPS
             ExportFieldAs_ISOXMLv3();
             ExportFieldAs_ISOXMLv4();
 
-            Log.EventWriter(currentFieldDirectory + " ** Closed **");
-            Log.EventWriter(DateTime.Now.ToString("f", CultureInfo.CreateSpecificCulture(Settings.Default.setF_culture)));
+            Log.EventWriter("** Closed **   " + currentFieldDirectory + "   "
+                + DateTime.Now.ToString("f", CultureInfo.CreateSpecificCulture(Settings.Default.setF_culture)));
 
             Settings.Default.setF_CurrentDir = currentFieldDirectory;
             Settings.Default.Save();
@@ -1551,7 +1551,9 @@ namespace AgOpenGPS
                     Settings.Default.Reset();
                     Settings.Default.Save();
 
+                    //save events this sessiom
                     FileSaveSystemEvents();
+                    Log.sbEvents.Clear();
 
                     //save event
                     Log.EventWriter("*****");
@@ -1854,17 +1856,6 @@ namespace AgOpenGPS
             {
                 MessageBox.Show(gStr.gsProgramWillExitPleaseRestart);
                 System.Environment.Exit(1);
-            }
-        }
-        private void systemLogViewerToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            FileSaveSystemEvents();
-            Log.sbEvents.Clear();
-
-            FileInfo txtfile = new FileInfo(Path.Combine(logsDirectory, "AgOpenGPS_Events_Log.txt"));
-            if (txtfile.Exists)
-            {
-                Process.Start("notepad.exe", txtfile.FullName);
             }
         }
 
@@ -2214,7 +2205,7 @@ namespace AgOpenGPS
         }
         private void eventViewerToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Form form = new FormEventViewer();
+            Form form = new FormEventViewer(Path.Combine(logsDirectory, "AgOpenGPS_Events_Log.txt"));
             form.Show(this);
             this.Activate();
         }

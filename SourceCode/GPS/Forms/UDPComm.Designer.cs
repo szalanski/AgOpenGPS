@@ -24,12 +24,10 @@ namespace AgOpenGPS
         private byte[] loopBuffer = new byte[1024];
 
         // Status delegate
-        public int udpWatchCounts = 0;
+        public int missedSentenceCount = 0;
         public int udpWatchLimit = 70;
 
         private readonly Stopwatch udpWatch = new Stopwatch();
-
-        public StringBuilder sbMissedSentence = new StringBuilder();
 
         private void ReceiveFromAgIO(byte[] data)
         {
@@ -60,9 +58,7 @@ namespace AgOpenGPS
                         {
                             if (udpWatch.ElapsedMilliseconds < udpWatchLimit)
                             {
-                                udpWatchCounts++;
-                                //sbMissedSentence.Append(DateTime.UtcNow.ToString("hh:ss:ff -> ", CultureInfo.InvariantCulture)
-                                //    + udpWatch.ElapsedMilliseconds + "\r");
+                                missedSentenceCount++;
                                 return;
                             }
                             udpWatch.Reset();
@@ -323,11 +319,12 @@ namespace AgOpenGPS
                 loopBackSocket.Bind(new IPEndPoint(IPAddress.Loopback, 15555));
                 loopBackSocket.BeginReceiveFrom(loopBuffer, 0, loopBuffer.Length, SocketFlags.None,
                     ref endPointLoopBack, new AsyncCallback(ReceiveAppData), null);
+                Log.EventWriter("UDP Loopback network started: " + IPAddress.Loopback.ToString() + ":" + "15555");
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Load Error: " + ex.Message, "UDP Server", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Log.EventWriter("Load UDP Server Error: " + ex.ToString());
+                Log.EventWriter("Catch -> Load UDP Loopback Error: " + ex.ToString());
             }
         }
 
