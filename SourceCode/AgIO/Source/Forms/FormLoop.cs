@@ -272,23 +272,21 @@ namespace AgIO
             {
                 Log.EventWriter("Using Default Profile At Start Warning");
 
-                if (RegistrySettings.profileName == "Default Profile")
+                TimedMessageBox(3000, "AgIO Default Profile Used", "Create or Choes a Profile");
+                using (var form = new FormProfiles(this))
                 {
-                    using (var form = new FormProfiles(this))
+                    form.ShowDialog(this);
+                    if (form.DialogResult == DialogResult.Yes)
                     {
-                        form.ShowDialog(this);
-                        if (form.DialogResult == DialogResult.Yes)
-                        {
-                            Log.EventWriter("Program Reset: Saving or Selecting Profile");
+                        Log.EventWriter("Program Reset: Saving or Selecting Profile");
 
-                            RegistrySettings.Save();
-                            Application.Restart();
-                            Environment.Exit(0);
-                        }
+                        RegistrySettings.Save();
+                        Application.Restart();
+                        Environment.Exit(0);
                     }
-                    this.Text = "AgIO  v" + GitVersionInformation.MajorMinorPatch + " Profile: "
-                        + RegistrySettings.profileName;
                 }
+                this.Text = "AgIO  v" + GitVersionInformation.MajorMinorPatch + " Profile: "
+                    + RegistrySettings.profileName;
             }
         }
 

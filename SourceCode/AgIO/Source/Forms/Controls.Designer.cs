@@ -271,7 +271,11 @@ namespace AgIO
 
         private void toolStripMenuProfiles_Click(object sender, EventArgs e)
         {
-            //Save curent Settngs
+            if (RegistrySettings.profileName == "Default Profile")
+            {
+                TimedMessageBox(3000, "AgIO Default Profile Used", "Create or Choose a Profile");
+            }
+
             using (var form = new FormProfiles(this))
             {
                 form.ShowDialog(this);
