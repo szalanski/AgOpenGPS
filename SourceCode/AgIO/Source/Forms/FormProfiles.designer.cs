@@ -223,7 +223,6 @@
             this.Controls.Add(this.cboxOverWrite);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Name = "FormProfiles";
-            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "AgIO: Manage Profiles";
             this.Load += new System.EventHandler(this.FormCommSaver_Load);

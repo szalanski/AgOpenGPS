@@ -490,7 +490,7 @@ namespace AgOpenGPS
             oglZoom.Left = 100;
             oglZoom.Top = 100;
 
-            if (Properties.Settings.Default.setDisplay_isAutoStartAgIO)
+            if (vehicleFileName != "Default Vehicle" && Properties.Settings.Default.setDisplay_isAutoStartAgIO)
             {
                 //Start AgIO process
                 Process[] processName = Process.GetProcessesByName("AgIO");
