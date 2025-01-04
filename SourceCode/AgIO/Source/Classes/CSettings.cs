@@ -91,6 +91,20 @@ namespace AgIO
                 //keep below 500 kb
                 Log.CheckLogSize(Path.Combine(LogsDirectory, "AgIO_Events_Log.txt"), 500000);
 
+                try
+                {
+                    //create Logs directory if not exist
+                    if (!string.IsNullOrEmpty(profileDirectory) && !Directory.Exists(profileDirectory))
+                    {
+                        Directory.CreateDirectory(profileDirectory);
+                        Log.EventWriter("PRofile Dir Created\r");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.EventWriter("Catch, Serious Problem Making Profile Directory: " + ex.ToString());
+                }
+
                 //opening the subkey
                 RegistryKey regKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\AgIO");
 

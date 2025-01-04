@@ -81,10 +81,10 @@
             this.linkLabelGit.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.linkLabelGit.Location = new System.Drawing.Point(13, 668);
             this.linkLabelGit.Name = "linkLabelGit";
-            this.linkLabelGit.Size = new System.Drawing.Size(408, 23);
+            this.linkLabelGit.Size = new System.Drawing.Size(447, 23);
             this.linkLabelGit.TabIndex = 11;
             this.linkLabelGit.TabStop = true;
-            this.linkLabelGit.Text = "https://github.com/farmerbriantee/AgOpenGPS";
+            this.linkLabelGit.Text = "https://github.com/AgOpenGPS-Official/AgOpenGPS";
             this.linkLabelGit.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelGit_LinkClicked);
             // 
             // linkLabelCombineForum

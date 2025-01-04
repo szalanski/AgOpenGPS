@@ -62,7 +62,6 @@
             this.label24 = new System.Windows.Forms.Label();
             this.label20 = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
-            this.lblAcquirePP = new System.Windows.Forms.Label();
             this.tabStan = new System.Windows.Forms.TabPage();
             this.label74 = new System.Windows.Forms.Label();
             this.label73 = new System.Windows.Forms.Label();
@@ -236,6 +235,8 @@
             this.button2 = new System.Windows.Forms.Button();
             this.pboxSendSteer = new System.Windows.Forms.PictureBox();
             this.btnSendSteerConfigPGN = new System.Windows.Forms.Button();
+            this.lblAcquirePP = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPP.SuspendLayout();
             this.tabStan.SuspendLayout();
@@ -509,6 +510,7 @@
             this.tabPP.BackColor = System.Drawing.Color.Gainsboro;
             this.tabPP.BackgroundImage = global::AgOpenGPS.Properties.Resources.Sf_PP;
             this.tabPP.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.tabPP.Controls.Add(this.label16);
             this.tabPP.Controls.Add(this.label71);
             this.tabPP.Controls.Add(this.label69);
             this.tabPP.Controls.Add(this.label21);
@@ -517,13 +519,13 @@
             this.tabPP.Controls.Add(this.label32);
             this.tabPP.Controls.Add(this.lblHoldLookAhead);
             this.tabPP.Controls.Add(this.hsbarHoldLookAhead);
-            this.tabPP.Controls.Add(this.lblPureIntegral);
             this.tabPP.Controls.Add(this.hsbarIntegralPurePursuit);
             this.tabPP.Controls.Add(this.label26);
             this.tabPP.Controls.Add(this.label24);
             this.tabPP.Controls.Add(this.label20);
             this.tabPP.Controls.Add(this.label18);
             this.tabPP.Controls.Add(this.lblAcquirePP);
+            this.tabPP.Controls.Add(this.lblPureIntegral);
             this.tabPP.ForeColor = System.Drawing.Color.Black;
             this.tabPP.ImageIndex = 3;
             this.tabPP.Location = new System.Drawing.Point(4, 52);
@@ -632,17 +634,17 @@
             // 
             this.lblPureIntegral.Font = new System.Drawing.Font("Tahoma", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblPureIntegral.ForeColor = System.Drawing.Color.Black;
-            this.lblPureIntegral.Location = new System.Drawing.Point(9, 236);
+            this.lblPureIntegral.Location = new System.Drawing.Point(5, 236);
             this.lblPureIntegral.Name = "lblPureIntegral";
-            this.lblPureIntegral.Size = new System.Drawing.Size(60, 35);
+            this.lblPureIntegral.Size = new System.Drawing.Size(50, 35);
             this.lblPureIntegral.TabIndex = 350;
-            this.lblPureIntegral.Text = "888";
+            this.lblPureIntegral.Text = "20";
             this.lblPureIntegral.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // hsbarIntegralPurePursuit
             // 
             this.hsbarIntegralPurePursuit.LargeChange = 1;
-            this.hsbarIntegralPurePursuit.Location = new System.Drawing.Point(68, 239);
+            this.hsbarIntegralPurePursuit.Location = new System.Drawing.Point(53, 239);
             this.hsbarIntegralPurePursuit.Name = "hsbarIntegralPurePursuit";
             this.hsbarIntegralPurePursuit.Size = new System.Drawing.Size(264, 30);
             this.hsbarIntegralPurePursuit.TabIndex = 349;
@@ -653,9 +655,9 @@
             // 
             this.label26.Font = new System.Drawing.Font("Tahoma", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label26.ForeColor = System.Drawing.Color.SteelBlue;
-            this.label26.Location = new System.Drawing.Point(112, 3);
+            this.label26.Location = new System.Drawing.Point(8, 3);
             this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(172, 26);
+            this.label26.Size = new System.Drawing.Size(351, 26);
             this.label26.TabIndex = 348;
             this.label26.Text = "Pure Pursuit";
             this.label26.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -664,9 +666,9 @@
             // 
             this.label24.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label24.ForeColor = System.Drawing.Color.Black;
-            this.label24.Location = new System.Drawing.Point(86, 217);
+            this.label24.Location = new System.Drawing.Point(53, 217);
             this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(229, 19);
+            this.label24.Size = new System.Drawing.Size(264, 19);
             this.label24.TabIndex = 342;
             this.label24.Text = "Integral";
             this.label24.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -693,18 +695,6 @@
             this.label18.TabIndex = 300;
             this.label18.Text = "Look Ahead";
             this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lblAcquirePP
-            // 
-            this.lblAcquirePP.AutoSize = true;
-            this.lblAcquirePP.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAcquirePP.ForeColor = System.Drawing.Color.Black;
-            this.lblAcquirePP.Location = new System.Drawing.Point(317, 89);
-            this.lblAcquirePP.Name = "lblAcquirePP";
-            this.lblAcquirePP.Size = new System.Drawing.Size(40, 23);
-            this.lblAcquirePP.TabIndex = 515;
-            this.lblAcquirePP.Text = "2.6";
-            this.lblAcquirePP.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // tabStan
             // 
@@ -3225,6 +3215,32 @@
             this.btnSendSteerConfigPGN.UseVisualStyleBackColor = false;
             this.btnSendSteerConfigPGN.Click += new System.EventHandler(this.btnSendSteerConfigPGN_Click);
             // 
+            // lblAcquirePP
+            // 
+            this.lblAcquirePP.AutoSize = true;
+            this.lblAcquirePP.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAcquirePP.ForeColor = System.Drawing.Color.Black;
+            this.lblAcquirePP.Location = new System.Drawing.Point(190, 159);
+            this.lblAcquirePP.Name = "lblAcquirePP";
+            this.lblAcquirePP.Size = new System.Drawing.Size(34, 19);
+            this.lblAcquirePP.TabIndex = 515;
+            this.lblAcquirePP.Text = "2.6";
+            this.lblAcquirePP.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lblAcquirePP.Visible = false;
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label16.ForeColor = System.Drawing.Color.Black;
+            this.label16.Location = new System.Drawing.Point(127, 159);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(69, 19);
+            this.label16.TabIndex = 548;
+            this.label16.Text = "Acquire:";
+            this.label16.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label16.Visible = false;
+            // 
             // FormSteer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -3492,7 +3508,6 @@
         private System.Windows.Forms.Label lblDistanceAdv;
         private System.Windows.Forms.Label label60;
         private System.Windows.Forms.TabPage tabPPAdv;
-        private System.Windows.Forms.Label lblAcquirePP;
         private System.Windows.Forms.Label label59;
         private System.Windows.Forms.Label label71;
         private System.Windows.Forms.Label label69;
@@ -3510,5 +3525,7 @@
         private System.Windows.Forms.Label label78;
         private System.Windows.Forms.Label label81;
         private System.Windows.Forms.Label label82;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label lblAcquirePP;
     }
 }
