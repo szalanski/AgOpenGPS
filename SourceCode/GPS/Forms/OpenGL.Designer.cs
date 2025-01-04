@@ -340,7 +340,16 @@ namespace AgOpenGPS
                         //draw the turnLines
                         if (yt.isYouTurnBtnOn && !ct.isContourBtnOn)
                         {
-                            GL.Color3(0.3555f, 0.6232f, 0.20f);
+                            GL.LineWidth(ABLine.lineWidth * 3);
+                            GL.Color4(0, 0, 0, 0.80f);
+
+                            for (int i = 0; i < bnd.bndList.Count; i++)
+                            {
+                                bnd.bndList[i].turnLine.DrawPolygon();
+                            }
+
+                            GL.Color3(0.76f, 0.6f, 0.95f);
+                            GL.LineWidth(ABLine.lineWidth);
                             for (int i = 0; i < bnd.bndList.Count; i++)
                             {
                                 bnd.bndList[i].turnLine.DrawPolygon();
