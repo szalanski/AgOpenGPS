@@ -18,8 +18,6 @@ namespace AgOpenGPS
 
         private void FormEventViewer_Load(object sender, EventArgs e)
         {
-            //rtbLogViewer.HideSelection = false;
-
             try
             {
                 using (StreamReader sr = File.OpenText(filename))
@@ -30,15 +28,16 @@ namespace AgOpenGPS
                         rtbLogViewer.AppendText(sr.ReadLine() + "\r");
                     }
 
-                    rtbLogViewer.AppendText(" **** Current Session Below ***** \r\n");
-
-                    rtbLogViewer.AppendText(Log.sbEvents.ToString());
                 }
             }
-            catch
+            catch (Exception ex) 
             {
-                Close();
+                rtbLogViewer.AppendText("Catch ->  error loading logfile" + ex.ToString());
             }
+
+            rtbLogViewer.AppendText(" **** Current Session Below ***** \r\n\r\n");
+
+            rtbLogViewer.AppendText(Log.sbEvents.ToString());
         }
 
         private void btnExit_Click(object sender, EventArgs e)
@@ -49,7 +48,7 @@ namespace AgOpenGPS
         private void btnRefresh_Click(object sender, EventArgs e)
         {
             rtbLogViewer.Clear();
-
+            rtbLogViewer.HideSelection = false;
             try
             {
                 using (StreamReader sr = File.OpenText(filename))
@@ -60,15 +59,16 @@ namespace AgOpenGPS
                         rtbLogViewer.AppendText(sr.ReadLine() + "\r");
                     }
 
-                    rtbLogViewer.AppendText(" **** Current Session Below ***** \r\n");
-
-                    rtbLogViewer.AppendText(Log.sbEvents.ToString());
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                
+                rtbLogViewer.AppendText("Catch ->  error loading logfile" + ex.ToString());
             }
+
+            rtbLogViewer.AppendText(" **** Current Session Below ***** \r\n\r\n");
+
+            rtbLogViewer.AppendText(Log.sbEvents.ToString());
 
         }
     }

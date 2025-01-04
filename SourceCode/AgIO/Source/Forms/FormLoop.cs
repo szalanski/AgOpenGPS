@@ -258,6 +258,7 @@ namespace AgIO
 
             //run gps_out or not
             cboxAutoRunGPS_Out.Checked = Properties.Settings.Default.setDisplay_isAutoRunGPS_Out;
+            
             if (Properties.Settings.Default.setDisplay_isAutoRunGPS_Out)
             {
                 StartGPS_Out();
@@ -271,62 +272,22 @@ namespace AgIO
             {
                 Log.EventWriter("Using Default Profile At Start Warning");
 
-                if (RegistrySettings.profileName == "Default Profile")
-                    YesMessageBox("AgIO is Using Default Profile" + "\r\n\r\n" + "Load Existing Profile or Save a New One !!!"
-                        + "\r\n\r\n" + "Changes will NOT be Saved");
+                TimedMessageBox(3000, "AgIO Default Profile Used", "Create or Choes a Profile");
+                using (var form = new FormProfiles(this))
+                {
+                    form.ShowDialog(this);
+                    if (form.DialogResult == DialogResult.Yes)
+                    {
+                        Log.EventWriter("Program Reset: Saving or Selecting Profile");
 
-                SettingsIO.ExportSettings(Path.Combine(RegistrySettings.profileDirectory, "Default Profile.xml"));
-
-                RegistrySettings.Save();
+                        RegistrySettings.Save();
+                        Application.Restart();
+                        Environment.Exit(0);
+                    }
+                }
+                this.Text = "AgIO  v" + GitVersionInformation.MajorMinorPatch + " Profile: "
+                    + RegistrySettings.profileName;
             }
-        }
-
-        public void SetModulesOnOff()
-        {
-            if (isConnectedIMU)
-            {
-                btnIMU.Visible = true;
-                lblIMUComm.Visible = true;
-                cboxIsIMUModule.BackgroundImage = Properties.Resources.Cancel64;
-            }
-            else
-            {
-                btnIMU.Visible = false;
-                lblIMUComm.Visible = false;
-                cboxIsIMUModule.BackgroundImage = Properties.Resources.AddNew;
-            }
-
-            if (isConnectedMachine)
-            {
-                btnMachine.Visible = true;
-                lblMod2Comm.Visible = true;
-                cboxIsMachineModule.BackgroundImage = Properties.Resources.Cancel64;
-            }
-            else
-            {
-                btnMachine.Visible = false;
-                lblMod2Comm.Visible = false;
-                cboxIsMachineModule.BackgroundImage = Properties.Resources.AddNew;
-            }
-
-            if (isConnectedSteer)
-            {
-                btnSteer.Visible = true;
-                lblMod1Comm.Visible = true;
-                cboxIsSteerModule.BackgroundImage = Properties.Resources.Cancel64;
-            }
-            else
-            {
-                btnSteer.Visible = false;
-                lblMod1Comm.Visible = false;
-                cboxIsSteerModule.BackgroundImage = Properties.Resources.AddNew;
-            }
-
-            Properties.Settings.Default.setMod_isIMUConnected = isConnectedIMU;
-            Properties.Settings.Default.setMod_isSteerConnected = isConnectedSteer;
-            Properties.Settings.Default.setMod_isMachineConnected = isConnectedMachine;
-
-            Properties.Settings.Default.Save();
         }
 
         private void FormLoop_FormClosing(object sender, FormClosingEventArgs e)
@@ -340,7 +301,7 @@ namespace AgIO
             Settings.Default.Save();
 
             if (RegistrySettings.profileName != "Default Profile")
-                SettingsIO.ExportSettings(Path.Combine(RegistrySettings.profileDirectory, RegistrySettings.profileName + ".xml"));
+                RegistrySettings.Save();
             else
                 YesMessageBox("Using Default Profile" + "\r\n\r\n" + "Changes will NOT be Saved");
 
@@ -731,6 +692,54 @@ namespace AgIO
             //    }
             //    SetForegroundWindow(processName[0].MainWindowHandle);
             //}
+        }
+
+        public void SetModulesOnOff()
+        {
+            if (isConnectedIMU)
+            {
+                btnIMU.Visible = true;
+                lblIMUComm.Visible = true;
+                cboxIsIMUModule.BackgroundImage = Properties.Resources.Cancel64;
+            }
+            else
+            {
+                btnIMU.Visible = false;
+                lblIMUComm.Visible = false;
+                cboxIsIMUModule.BackgroundImage = Properties.Resources.AddNew;
+            }
+
+            if (isConnectedMachine)
+            {
+                btnMachine.Visible = true;
+                lblMod2Comm.Visible = true;
+                cboxIsMachineModule.BackgroundImage = Properties.Resources.Cancel64;
+            }
+            else
+            {
+                btnMachine.Visible = false;
+                lblMod2Comm.Visible = false;
+                cboxIsMachineModule.BackgroundImage = Properties.Resources.AddNew;
+            }
+
+            if (isConnectedSteer)
+            {
+                btnSteer.Visible = true;
+                lblMod1Comm.Visible = true;
+                cboxIsSteerModule.BackgroundImage = Properties.Resources.Cancel64;
+            }
+            else
+            {
+                btnSteer.Visible = false;
+                lblMod1Comm.Visible = false;
+                cboxIsSteerModule.BackgroundImage = Properties.Resources.AddNew;
+            }
+
+            Properties.Settings.Default.setMod_isIMUConnected = isConnectedIMU;
+            Properties.Settings.Default.setMod_isSteerConnected = isConnectedSteer;
+            Properties.Settings.Default.setMod_isMachineConnected = isConnectedMachine;
+
+            Properties.Settings.Default.Save();
         }
 
         private void DoTraffic()

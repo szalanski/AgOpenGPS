@@ -1,18 +1,19 @@
 ﻿using AgIO.Properties;
 using Microsoft.Win32;
 using System;
+using System.Drawing;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace AgIO
 {
-    public partial class FormCommSaver : Form
+    public partial class FormProfiles : Form
     {
         //class variables
         private readonly FormLoop mf = null;
 
-        public FormCommSaver(Form callingForm)
+        public FormProfiles(Form callingForm)
         {
             //get copy of the calling main form
             mf = callingForm as FormLoop;
@@ -21,7 +22,10 @@ namespace AgIO
 
         private void FormCommSaver_Load(object sender, EventArgs e)
         {
-            lblLast.Text = "Current " + RegistrySettings.profileName;
+            btnSaveAs.BackColor = Color.Transparent;
+            btnSaveNewProfile.BackColor = Color.Transparent;
+
+            lblLast.Text = "Using Profile: " + RegistrySettings.profileName;
             DirectoryInfo dinfo = new DirectoryInfo(RegistrySettings.profileDirectory);
             FileInfo[] Files = dinfo.GetFiles("*.xml");
 
@@ -29,21 +33,39 @@ namespace AgIO
             {
                 string temp = Path.GetFileNameWithoutExtension(file.Name);
                 if (temp.Trim() != "Default Profile")
-                    cboxEnv.Items.Add(temp);
+                    cboxOverWrite.Items.Add(temp);
             }
 
-            if (cboxEnv.Items.Count == 0)
+            if (cboxOverWrite.Items.Count == 0)
             {
-                cboxEnv.Enabled = false;
+                cboxOverWrite.Enabled = false;
             }
 
             lblCurrentProfile.Text = RegistrySettings.profileName;
+
+            DirectoryInfo dinfo2 = new DirectoryInfo(RegistrySettings.profileDirectory);
+            FileInfo[] Files2 = dinfo2.GetFiles("*.xml");
+            if (Files2.Length == 0)
+            {
+                cboxChooseExisting.Enabled = false;
+            }
+            else
+            {
+                foreach (FileInfo file in Files2)
+                {
+                    string temp = Path.GetFileNameWithoutExtension(file.Name);
+                    if (temp.Trim() != "Default Profile")
+                    {
+                        cboxChooseExisting.Items.Add(temp);
+                    }
+                }
+            }
         }
 
-        private void cboxVeh_SelectedIndexChanged(object sender, EventArgs e)
+        private void cboxOverWrite_SelectedIndexChanged(object sender, EventArgs e)
         {
             DialogResult result3 = MessageBox.Show(
-                "Overwrite: " + cboxEnv.SelectedItem.ToString() + ".xml",
+                "Overwrite: " + cboxOverWrite.SelectedItem.ToString() + ".xml",
                 "Save And Return",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question,
@@ -51,10 +73,10 @@ namespace AgIO
 
             if (result3 == DialogResult.Yes)
             {
-                if (RegistrySettings.profileName != "Default Profile")
-                    SettingsIO.ExportSettings(Path.Combine(RegistrySettings.profileDirectory, RegistrySettings.profileName + ".xml"));
+                //save profile in registry
+                RegistrySettings.Save();
 
-                RegistrySettings.profileName = SanitizeFileName(cboxEnv.SelectedItem.ToString().Trim());
+                RegistrySettings.profileName = SanitizeFileName(cboxOverWrite.SelectedItem.ToString().Trim());
 
                 Properties.Settings.Default.setConfig_profileName = RegistrySettings.profileName;
                 Properties.Settings.Default.Save();
@@ -62,33 +84,35 @@ namespace AgIO
                 //save profile in registry
                 RegistrySettings.Save();
 
-                if (RegistrySettings.profileName != "Default Profile")
-                    SettingsIO.ExportSettings(RegistrySettings.profileDirectory + RegistrySettings.profileName + ".xml");
-                else
-                    mf.YesMessageBox("Default Profile, Changes will NOT be Saved");
                 Close();
             }
         }
 
-        private void tboxName_TextChanged(object sender, EventArgs e)
+        private void tboxNewProfile_TextChanged(object sender, EventArgs e)
         {
             TextBox textboxSender = (TextBox)sender;
             int cursorPosition = textboxSender.SelectionStart;
             textboxSender.Text = Regex.Replace(textboxSender.Text, glm.fileRegex, "");
-
             textboxSender.SelectionStart = cursorPosition;
+            if (textboxSender.Text.Length > 0)
+            {
+                btnSaveNewProfile.BackColor = Color.LightGreen;
+            }
+            else
+            {
+                btnSaveNewProfile.BackColor = Color.Transparent;
+            }
         }
 
-        private void btnSave_Click(object sender, EventArgs e)
+        private void btnSaveNewProfile_Click(object sender, EventArgs e)
         {
-            if (tboxName.Text.Trim().Length > 0 && tboxName.Text.Trim() != "Default Profile")
+            if (tboxCreateNew.Text.Trim().Length > 0 && tboxCreateNew.Text.Trim() != "Default Profile")
             {
-                RegistrySettings.profileName = SanitizeFileName(tboxName.Text.ToString().Trim());
+                RegistrySettings.profileName = SanitizeFileName(tboxCreateNew.Text.ToString().Trim());
 
-                //reset to default Vehicle and save
+                //reset to Default Profile and save
                 Settings.Default.Reset();
                 Settings.Default.Save();
-
 
                 Properties.Settings.Default.setConfig_profileName = RegistrySettings.profileName;
                 Properties.Settings.Default.Save();
@@ -108,27 +132,14 @@ namespace AgIO
             }
         }
 
-        private void tboxName_Click(object sender, EventArgs e)
+        private void tboxNewProfile_Click(object sender, EventArgs e)
         {
             if (mf.isKeyboardOn)
             {
                 mf.KeyboardToText((TextBox)sender, this);
-                btnSave.Focus();
+                btnSaveNewProfile.Focus();
             }
         }
-
-        private void btnSerialCancel_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
-
-        private static readonly Regex InvalidFileRegex = new Regex(string.Format("[{0}]", Regex.Escape(@"<>:""/\|?*")));
-
-        public static string SanitizeFileName(string fileName)
-        {
-            return InvalidFileRegex.Replace(fileName, string.Empty);
-        }
-
 
         //save As
         private void tboxSaveAs_TextChanged(object sender, EventArgs e)
@@ -138,6 +149,15 @@ namespace AgIO
             textboxSender.Text = Regex.Replace(textboxSender.Text, glm.fileRegex, "");
 
             textboxSender.SelectionStart = cursorPosition;
+            if (textboxSender.Text.Length > 0)
+            {
+                btnSaveAs.BackColor = Color.LightGreen;
+            }
+            else
+            {
+                btnSaveAs.BackColor = Color.Transparent;
+            }
+
         }
 
         private void tboxSaveAs_Click(object sender, EventArgs e)
@@ -145,7 +165,7 @@ namespace AgIO
             if (mf.isKeyboardOn)
             {
                 mf.KeyboardToText((TextBox)sender, this);
-                btnSave.Focus();
+                btnSaveNewProfile.Focus();
             }
         }
 
@@ -161,7 +181,6 @@ namespace AgIO
                 //save profile in registry
                 RegistrySettings.Save();
 
-                SettingsIO.ExportSettings(Path.Combine(RegistrySettings.profileDirectory, RegistrySettings.profileName + ".xml"));
                 DialogResult = DialogResult.OK;
                 Close();
             }
@@ -179,5 +198,45 @@ namespace AgIO
                 }
             }
         }
+
+        //Load Existing Profile
+        private void cboxChooseExisting_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cboxChooseExisting.SelectedItem.ToString().Trim() == "Default Profile")
+            {
+                mf.YesMessageBox("Choose a Different Profile, Or Create a New One");
+            }
+            else
+            {
+                //save current profile
+                RegistrySettings.Save();
+
+                SettingsIO.ImportSettings(Path.Combine(RegistrySettings.profileDirectory, cboxChooseExisting.SelectedItem.ToString().Trim() + ".xml"));
+
+                RegistrySettings.profileName = cboxChooseExisting.SelectedItem.ToString().Trim();
+
+                Properties.Settings.Default.setConfig_profileName = RegistrySettings.profileName;
+                Properties.Settings.Default.Save();
+
+                RegistrySettings.Save();
+
+                DialogResult = DialogResult.Yes;
+                Close();
+            }
+        }
+
+        //functions
+        private void btnSerialCancel_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private static readonly Regex InvalidFileRegex = new Regex(string.Format("[{0}]", Regex.Escape(@"<>:""/\|?*")));
+
+        public static string SanitizeFileName(string fileName)
+        {
+            return InvalidFileRegex.Replace(fileName, string.Empty);
+        }
+
     }
 }

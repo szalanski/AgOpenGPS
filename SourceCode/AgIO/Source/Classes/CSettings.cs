@@ -164,7 +164,7 @@ namespace AgIO
                         Log.EventWriter("Registry -> Catch, Serious Problem Loading Profile, Doing Registry Reset: " + ex.ToString());
                         Reset();
 
-                        //reset to default Vehicle and save
+                        //reset to Default Profile and save
                         Settings.Default.Reset();
                         Settings.Default.Save();
                     }
@@ -191,6 +191,9 @@ namespace AgIO
                 Log.EventWriter("Registry -> Catch, Serious Problem Saving keys: " + ex.ToString());
             }
             key.Close();
+
+            if (RegistrySettings.profileName != "Default Profile")
+                SettingsIO.ExportSettings(Path.Combine(RegistrySettings.profileDirectory, RegistrySettings.profileName + ".xml"));
         }
 
         public static void Reset()
