@@ -32,8 +32,9 @@ namespace AgIO
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormLoop));
-            this.oneSecondLoopTimer = new System.Windows.Forms.Timer();
+            this.oneSecondLoopTimer = new System.Windows.Forms.Timer(this.components);
             this.label6 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.lblCurentLon = new System.Windows.Forms.Label();
@@ -47,8 +48,7 @@ namespace AgIO
             this.lblGPS1Comm = new System.Windows.Forms.Label();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuProfiles = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripLogViewer = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripUDPMonitor = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSerialMonitor = new System.Windows.Forms.ToolStripMenuItem();
@@ -65,7 +65,7 @@ namespace AgIO
             this.lblSerialPorts = new System.Windows.Forms.Label();
             this.lblMount = new System.Windows.Forms.Label();
             this.lblIP = new System.Windows.Forms.Label();
-            this.ntripMeterTimer = new System.Windows.Forms.Timer();
+            this.ntripMeterTimer = new System.Windows.Forms.Timer(this.components);
             this.lblMessages = new System.Windows.Forms.Label();
             this.lblWASCounts = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -278,8 +278,7 @@ namespace AgIO
             this.toolStripDropDownButton1.BackColor = System.Drawing.Color.Transparent;
             this.toolStripDropDownButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem1,
-            this.toolStripMenuItem2,
+            this.toolStripMenuProfiles,
             this.toolStripLogViewer,
             this.toolStripUDPMonitor,
             this.toolStripSerialMonitor,
@@ -293,23 +292,14 @@ namespace AgIO
             this.toolStripDropDownButton1.ShowDropDownArrow = false;
             this.toolStripDropDownButton1.Size = new System.Drawing.Size(110, 68);
             // 
-            // toolStripMenuItem1
+            // toolStripMenuProfiles
             // 
-            this.toolStripMenuItem1.Font = new System.Drawing.Font("Tahoma", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.toolStripMenuItem1.Image = global::AgIO.Properties.Resources.VehFileSave;
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(348, 70);
-            this.toolStripMenuItem1.Text = "Save";
-            this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuCommSaver_Click);
-            // 
-            // toolStripMenuItem2
-            // 
-            this.toolStripMenuItem2.Font = new System.Drawing.Font("Tahoma", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.toolStripMenuItem2.Image = global::AgIO.Properties.Resources.VehFileLoad;
-            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(348, 70);
-            this.toolStripMenuItem2.Text = "Load";
-            this.toolStripMenuItem2.Click += new System.EventHandler(this.toolStripMenuCommPicker_Click);
+            this.toolStripMenuProfiles.Font = new System.Drawing.Font("Tahoma", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.toolStripMenuProfiles.Image = global::AgIO.Properties.Resources.VehFileSave;
+            this.toolStripMenuProfiles.Name = "toolStripMenuProfiles";
+            this.toolStripMenuProfiles.Size = new System.Drawing.Size(348, 70);
+            this.toolStripMenuProfiles.Text = "Profiles";
+            this.toolStripMenuProfiles.Click += new System.EventHandler(this.toolStripMenuProfiles_Click);
             // 
             // toolStripLogViewer
             // 

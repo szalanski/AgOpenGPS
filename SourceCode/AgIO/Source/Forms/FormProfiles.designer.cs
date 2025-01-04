@@ -1,6 +1,6 @@
 ﻿namespace AgIO
 {
-    partial class FormCommSaver
+    partial class FormProfiles
     {
         /// <summary>
         /// Required designer variable.
@@ -28,76 +28,62 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.cboxEnv = new System.Windows.Forms.ComboBox();
-            this.lblLast = new System.Windows.Forms.Label();
-            this.tboxName = new System.Windows.Forms.TextBox();
-            this.btnSave = new System.Windows.Forms.Button();
+            this.cboxOverWrite = new System.Windows.Forms.ComboBox();
+            this.tboxCreateNew = new System.Windows.Forms.TextBox();
+            this.btnSaveNewProfile = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.btnSerialCancel = new System.Windows.Forms.Button();
-            this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.tboxSaveAs = new System.Windows.Forms.TextBox();
             this.btnSaveAs = new System.Windows.Forms.Button();
             this.lblCurrentProfile = new System.Windows.Forms.Label();
+            this.lblLast = new System.Windows.Forms.Label();
+            this.cboxChooseExisting = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // cboxEnv
+            // cboxOverWrite
             // 
-            this.cboxEnv.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cboxEnv.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboxEnv.Font = new System.Drawing.Font("Tahoma", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cboxEnv.FormattingEnabled = true;
-            this.cboxEnv.Location = new System.Drawing.Point(12, 81);
-            this.cboxEnv.Name = "cboxEnv";
-            this.cboxEnv.Size = new System.Drawing.Size(511, 43);
-            this.cboxEnv.TabIndex = 212;
-            this.cboxEnv.SelectedIndexChanged += new System.EventHandler(this.cboxVeh_SelectedIndexChanged);
+            this.cboxOverWrite.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboxOverWrite.Font = new System.Drawing.Font("Tahoma", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cboxOverWrite.FormattingEnabled = true;
+            this.cboxOverWrite.Location = new System.Drawing.Point(624, 106);
+            this.cboxOverWrite.Name = "cboxOverWrite";
+            this.cboxOverWrite.Size = new System.Drawing.Size(439, 43);
+            this.cboxOverWrite.TabIndex = 212;
+            this.cboxOverWrite.SelectedIndexChanged += new System.EventHandler(this.cboxOverWrite_SelectedIndexChanged);
             // 
-            // lblLast
+            // tboxCreateNew
             // 
-            this.lblLast.AutoSize = true;
-            this.lblLast.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblLast.Location = new System.Drawing.Point(15, 9);
-            this.lblLast.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
-            this.lblLast.Name = "lblLast";
-            this.lblLast.Size = new System.Drawing.Size(351, 23);
-            this.lblLast.TabIndex = 213;
-            this.lblLast.Text = "Settings and Configuration Profiles ";
-            this.lblLast.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.tboxCreateNew.BackColor = System.Drawing.Color.White;
+            this.tboxCreateNew.Font = new System.Drawing.Font("Tahoma", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tboxCreateNew.Location = new System.Drawing.Point(12, 93);
+            this.tboxCreateNew.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.tboxCreateNew.Name = "tboxCreateNew";
+            this.tboxCreateNew.Size = new System.Drawing.Size(439, 36);
+            this.tboxCreateNew.TabIndex = 214;
+            this.tboxCreateNew.Click += new System.EventHandler(this.tboxNewProfile_Click);
+            this.tboxCreateNew.TextChanged += new System.EventHandler(this.tboxNewProfile_TextChanged);
             // 
-            // tboxName
+            // btnSaveNewProfile
             // 
-            this.tboxName.BackColor = System.Drawing.Color.White;
-            this.tboxName.Font = new System.Drawing.Font("Tahoma", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tboxName.Location = new System.Drawing.Point(12, 244);
-            this.tboxName.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.tboxName.Name = "tboxName";
-            this.tboxName.Size = new System.Drawing.Size(511, 36);
-            this.tboxName.TabIndex = 214;
-            this.tboxName.Click += new System.EventHandler(this.tboxName_Click);
-            this.tboxName.TextChanged += new System.EventHandler(this.tboxName_TextChanged);
-            // 
-            // btnSave
-            // 
-            this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnSave.FlatAppearance.BorderSize = 0;
-            this.btnSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSave.Font = new System.Drawing.Font("Tahoma", 15.75F);
-            this.btnSave.Image = global::AgIO.Properties.Resources.VehFileSave;
-            this.btnSave.Location = new System.Drawing.Point(540, 225);
-            this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(84, 75);
-            this.btnSave.TabIndex = 215;
-            this.btnSave.UseVisualStyleBackColor = true;
-            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            this.btnSaveNewProfile.FlatAppearance.BorderSize = 0;
+            this.btnSaveNewProfile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSaveNewProfile.Font = new System.Drawing.Font("Tahoma", 15.75F);
+            this.btnSaveNewProfile.Image = global::AgIO.Properties.Resources.VehFileSave;
+            this.btnSaveNewProfile.Location = new System.Drawing.Point(486, 65);
+            this.btnSaveNewProfile.Name = "btnSaveNewProfile";
+            this.btnSaveNewProfile.Size = new System.Drawing.Size(84, 75);
+            this.btnSaveNewProfile.TabIndex = 215;
+            this.btnSaveNewProfile.UseVisualStyleBackColor = true;
+            this.btnSaveNewProfile.Click += new System.EventHandler(this.btnSaveNewProfile_Click);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(82, 215);
+            this.label1.Location = new System.Drawing.Point(15, 66);
             this.label1.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(271, 23);
@@ -109,7 +95,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(82, 55);
+            this.label2.Location = new System.Drawing.Point(627, 80);
             this.label2.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(226, 23);
@@ -126,30 +112,18 @@
             this.btnSerialCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSerialCancel.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSerialCancel.Image = global::AgIO.Properties.Resources.Cancel64;
-            this.btnSerialCancel.Location = new System.Drawing.Point(633, 492);
+            this.btnSerialCancel.Location = new System.Drawing.Point(486, 315);
             this.btnSerialCancel.Name = "btnSerialCancel";
             this.btnSerialCancel.Size = new System.Drawing.Size(84, 75);
             this.btnSerialCancel.TabIndex = 218;
             this.btnSerialCancel.UseVisualStyleBackColor = true;
             this.btnSerialCancel.Click += new System.EventHandler(this.btnSerialCancel_Click);
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(153, 151);
-            this.label3.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(51, 23);
-            this.label3.TabIndex = 219;
-            this.label3.Text = "Or...";
-            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
             // label4
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(15, 380);
+            this.label4.Location = new System.Drawing.Point(15, 162);
             this.label4.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(91, 23);
@@ -161,22 +135,21 @@
             // 
             this.tboxSaveAs.BackColor = System.Drawing.Color.White;
             this.tboxSaveAs.Font = new System.Drawing.Font("Tahoma", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tboxSaveAs.Location = new System.Drawing.Point(12, 409);
+            this.tboxSaveAs.Location = new System.Drawing.Point(12, 190);
             this.tboxSaveAs.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.tboxSaveAs.Name = "tboxSaveAs";
-            this.tboxSaveAs.Size = new System.Drawing.Size(511, 36);
+            this.tboxSaveAs.Size = new System.Drawing.Size(439, 36);
             this.tboxSaveAs.TabIndex = 220;
             this.tboxSaveAs.Click += new System.EventHandler(this.tboxSaveAs_Click);
             this.tboxSaveAs.TextChanged += new System.EventHandler(this.tboxSaveAs_TextChanged);
             // 
             // btnSaveAs
             // 
-            this.btnSaveAs.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnSaveAs.FlatAppearance.BorderSize = 0;
             this.btnSaveAs.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSaveAs.Font = new System.Drawing.Font("Tahoma", 15.75F);
             this.btnSaveAs.Image = global::AgIO.Properties.Resources.VehFileSave;
-            this.btnSaveAs.Location = new System.Drawing.Point(540, 390);
+            this.btnSaveAs.Location = new System.Drawing.Point(486, 163);
             this.btnSaveAs.Name = "btnSaveAs";
             this.btnSaveAs.Size = new System.Drawing.Size(84, 75);
             this.btnSaveAs.TabIndex = 222;
@@ -187,7 +160,7 @@
             // 
             this.lblCurrentProfile.AutoSize = true;
             this.lblCurrentProfile.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCurrentProfile.Location = new System.Drawing.Point(106, 380);
+            this.lblCurrentProfile.Location = new System.Drawing.Point(105, 162);
             this.lblCurrentProfile.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.lblCurrentProfile.Name = "lblCurrentProfile";
             this.lblCurrentProfile.Size = new System.Drawing.Size(150, 23);
@@ -195,29 +168,64 @@
             this.lblCurrentProfile.Text = "Current Profile";
             this.lblCurrentProfile.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // FormCommSaver
+            // lblLast
+            // 
+            this.lblLast.Font = new System.Drawing.Font("Tahoma", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblLast.Location = new System.Drawing.Point(19, 3);
+            this.lblLast.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.lblLast.Name = "lblLast";
+            this.lblLast.Size = new System.Drawing.Size(551, 29);
+            this.lblLast.TabIndex = 225;
+            this.lblLast.Text = "Curent Profile";
+            this.lblLast.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // cboxChooseExisting
+            // 
+            this.cboxChooseExisting.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboxChooseExisting.Font = new System.Drawing.Font("Tahoma", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cboxChooseExisting.FormattingEnabled = true;
+            this.cboxChooseExisting.Location = new System.Drawing.Point(12, 287);
+            this.cboxChooseExisting.Name = "cboxChooseExisting";
+            this.cboxChooseExisting.Size = new System.Drawing.Size(439, 43);
+            this.cboxChooseExisting.TabIndex = 224;
+            this.cboxChooseExisting.SelectedIndexChanged += new System.EventHandler(this.cboxChooseExisting_SelectedIndexChanged);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(19, 261);
+            this.label3.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(231, 23);
+            this.label3.TabIndex = 226;
+            this.label3.Text = "Choose Existing Profile";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // FormProfiles
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Gainsboro;
-            this.ClientSize = new System.Drawing.Size(723, 573);
+            this.ClientSize = new System.Drawing.Size(576, 394);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.lblLast);
+            this.Controls.Add(this.cboxChooseExisting);
             this.Controls.Add(this.lblCurrentProfile);
             this.Controls.Add(this.btnSaveAs);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.tboxSaveAs);
-            this.Controls.Add(this.label3);
             this.Controls.Add(this.btnSerialCancel);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.btnSave);
-            this.Controls.Add(this.tboxName);
-            this.Controls.Add(this.lblLast);
-            this.Controls.Add(this.cboxEnv);
+            this.Controls.Add(this.btnSaveNewProfile);
+            this.Controls.Add(this.tboxCreateNew);
+            this.Controls.Add(this.cboxOverWrite);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
-            this.Name = "FormCommSaver";
+            this.Name = "FormProfiles";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Save Settings";
+            this.Text = "AgIO: Manage Profiles";
             this.Load += new System.EventHandler(this.FormCommSaver_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -225,17 +233,18 @@
         }
 
         #endregion
-        private System.Windows.Forms.ComboBox cboxEnv;
-        private System.Windows.Forms.Label lblLast;
-        private System.Windows.Forms.TextBox tboxName;
-        private System.Windows.Forms.Button btnSave;
+        private System.Windows.Forms.ComboBox cboxOverWrite;
+        private System.Windows.Forms.TextBox tboxCreateNew;
+        private System.Windows.Forms.Button btnSaveNewProfile;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btnSerialCancel;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox tboxSaveAs;
         private System.Windows.Forms.Button btnSaveAs;
         private System.Windows.Forms.Label lblCurrentProfile;
+        private System.Windows.Forms.Label lblLast;
+        private System.Windows.Forms.ComboBox cboxChooseExisting;
+        private System.Windows.Forms.Label label3;
     }
 }

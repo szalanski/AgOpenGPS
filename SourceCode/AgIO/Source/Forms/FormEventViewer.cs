@@ -27,16 +27,16 @@ namespace AgIO
                     {
                         rtbLogViewer.AppendText(sr.ReadLine() + "\r");
                     }
-
-                    rtbLogViewer.AppendText(" **** Current Session Below ***** \r\n\r\n");
-
-                    rtbLogViewer.AppendText(Log.sbEvent.ToString());
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                Close();
+                rtbLogViewer.AppendText("Catch ->  error loading logfile" + ex.ToString());
             }
+
+            rtbLogViewer.AppendText(" **** Current Session Below ***** \r\n\r\n");
+
+            rtbLogViewer.AppendText(Log.sbEvent.ToString());
         }
 
         private void btnExit_Click(object sender, EventArgs e)
@@ -47,6 +47,7 @@ namespace AgIO
         private void btnRefresh_Click(object sender, EventArgs e)
         {
             rtbLogViewer.Clear();
+            rtbLogViewer.HideSelection = false;
 
             try
             {
@@ -57,16 +58,16 @@ namespace AgIO
                     {
                         rtbLogViewer.AppendText(sr.ReadLine() + "\r");
                     }
-
-                    rtbLogViewer.AppendText(" **** Current Session Below ***** \r\n\r\n");
-
-                    rtbLogViewer.AppendText(Log.sbEvent.ToString());
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                Close();
+                rtbLogViewer.AppendText("Catch ->  error loading logfile" + ex.ToString());
             }
+
+            rtbLogViewer.AppendText(" **** Current Session Below ***** \r\n\r\n");
+
+            rtbLogViewer.AppendText(Log.sbEvent.ToString());
         }
     }
 }

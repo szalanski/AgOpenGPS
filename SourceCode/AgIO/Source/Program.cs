@@ -19,7 +19,7 @@ namespace AgIO
         [STAThread]
         private static void Main()
         {
-            //reset to default Vehicle and save
+            //reset to Default Profile and save
             Settings.Default.Reset();
             Settings.Default.Save();
 

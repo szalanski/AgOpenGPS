@@ -117,6 +117,11 @@ namespace AgIO
 
         private void btnUDP_Click(object sender, EventArgs e)
         {
+            if (RegistrySettings.profileName == "Default Profile")
+            {
+                TimedMessageBox(3000, "Using Default Profile", "Choose Existing or Create New Profile");
+                return;
+            }
             if (!Settings.Default.setUDP_isOn) SettingsEthernet();
             else SettingsUDP();
         }
@@ -128,6 +133,12 @@ namespace AgIO
 
         private void btnNTRIP_Click(object sender, EventArgs e)
         {
+            if (RegistrySettings.profileName == "Default Profile")
+            {
+                TimedMessageBox(3000, "Using Default Profile", "Choose Existing or Create New Profile");
+                return;
+            }
+
             SettingsNTRIP();
         }
 
@@ -138,6 +149,12 @@ namespace AgIO
 
         private void btnRadio_Click(object sender, EventArgs e)
         {
+            if (RegistrySettings.profileName == "Default Profile")
+            {
+                TimedMessageBox(3000, "Using Default Profile", "Choose Existing or Create New Profile");
+                return;
+            }
+
             SettingsRadio();
         }
 
@@ -223,6 +240,12 @@ namespace AgIO
 
         private void serialPassThroughToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (RegistrySettings.profileName == "Default Profile")
+            {
+                TimedMessageBox(3000, "Using Default Profile", "Choose Existing or Create New Profile");
+                return;
+            }
+
             if (isRadio_RequiredOn)
             {
                 TimedMessageBox(2000, "Radio NTRIP ON", "Turn it off before using Serial Pass Thru");
@@ -246,34 +269,23 @@ namespace AgIO
             }
         }
 
-        private void toolStripMenuCommSaver_Click(object sender, EventArgs e)
+        private void toolStripMenuProfiles_Click(object sender, EventArgs e)
         {
             //Save curent Settngs
-            using (var form = new FormCommSaver(this))
+            using (var form = new FormProfiles(this))
             {
                 form.ShowDialog(this);
                 if (form.DialogResult == DialogResult.Yes)
                 {
-                    Log.EventWriter("Program Reset: Saving Profile");
-                    Application.Restart();
-                    Environment.Exit(0);
-                }
-            }
-        }
+                    Log.EventWriter("Program Reset: Saving or Selecting Profile");
 
-        private void toolStripMenuCommPicker_Click(object sender, EventArgs e)
-        {
-            //Load new settings
-            using (var form = new FormCommPicker(this))
-            {
-                form.ShowDialog(this);
-                if (form.DialogResult == DialogResult.OK)
-                {
-                    Log.EventWriter("Program Reset: Profile Load");
+                    RegistrySettings.Save();
                     Application.Restart();
                     Environment.Exit(0);
                 }
             }
+            this.Text = "AgIO  v" + GitVersionInformation.MajorMinorPatch + "   Using Profile: " 
+                + RegistrySettings.profileName;
         }
 
         private void modSimToolStrip_Click(object sender, EventArgs e)
@@ -511,8 +523,7 @@ namespace AgIO
         }
 
         private ToolStripDropDownButton toolStripDropDownButton1;
-        private ToolStripMenuItem toolStripMenuItem1;
-        private ToolStripMenuItem toolStripMenuItem2;
+        private ToolStripMenuItem toolStripMenuProfiles;
         private ToolStripMenuItem deviceManagerToolStripMenuItem;
     }
 }
