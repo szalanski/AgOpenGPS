@@ -335,6 +335,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="AgIO_ico.ico" />
+    <None Include="btnImages\FileSaveAs.png" />
     <None Include="btnImages\Reset_Default.png" />
     <None Include="btnImages\LogViewer.png" />
     <None Include="btnImages\ModuleSim2.png" />

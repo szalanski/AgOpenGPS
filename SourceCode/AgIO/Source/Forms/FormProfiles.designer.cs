@@ -86,9 +86,9 @@
             this.label1.Location = new System.Drawing.Point(15, 66);
             this.label1.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(271, 23);
+            this.label1.Size = new System.Drawing.Size(60, 23);
             this.label1.TabIndex = 216;
-            this.label1.Text = "Create New Default Profile:";
+            this.label1.Text = "New:";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // label2
@@ -148,7 +148,7 @@
             this.btnSaveAs.FlatAppearance.BorderSize = 0;
             this.btnSaveAs.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSaveAs.Font = new System.Drawing.Font("Tahoma", 15.75F);
-            this.btnSaveAs.Image = global::AgIO.Properties.Resources.VehFileSave;
+            this.btnSaveAs.Image = global::AgIO.Properties.Resources.FileSaveAs;
             this.btnSaveAs.Location = new System.Drawing.Point(486, 163);
             this.btnSaveAs.Name = "btnSaveAs";
             this.btnSaveAs.Size = new System.Drawing.Size(84, 75);
@@ -197,9 +197,9 @@
             this.label3.Location = new System.Drawing.Point(19, 261);
             this.label3.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(231, 23);
+            this.label3.Size = new System.Drawing.Size(67, 23);
             this.label3.TabIndex = 226;
-            this.label3.Text = "Choose Existing Profile";
+            this.label3.Text = "Open:";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // FormProfiles
