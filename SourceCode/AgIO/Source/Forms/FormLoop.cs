@@ -259,18 +259,14 @@ namespace AgIO
             //run gps_out or not
             cboxAutoRunGPS_Out.Checked = Properties.Settings.Default.setDisplay_isAutoRunGPS_Out;
             
-            if (Properties.Settings.Default.setDisplay_isAutoRunGPS_Out)
-            {
-                StartGPS_Out();
-                Log.EventWriter("Run GPS_Out");
-            }
-
             this.Text =
             "AgIO  v" + GitVersionInformation.MajorMinorPatch + " Profile: " + RegistrySettings.profileName;
 
             if (RegistrySettings.profileName == "Default Profile")
             {
                 Log.EventWriter("Using Default Profile At Start Warning");
+
+                YesMessageBox("AgIO - No Profile Open \r\n\r\n Create or Open a Profile");
 
                 using (var form = new FormProfiles(this))
                 {
@@ -287,6 +283,13 @@ namespace AgIO
                 this.Text = "AgIO  v" + GitVersionInformation.MajorMinorPatch + " Profile: "
                     + RegistrySettings.profileName;
             }
+
+            if (Properties.Settings.Default.setDisplay_isAutoRunGPS_Out)
+            {
+                StartGPS_Out();
+                Log.EventWriter("Run GPS_Out");
+            }
+
         }
 
         private void FormLoop_FormClosing(object sender, FormClosingEventArgs e)

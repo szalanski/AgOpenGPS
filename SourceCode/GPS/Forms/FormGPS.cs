@@ -377,6 +377,21 @@ namespace AgOpenGPS
 
         private void FormGPS_Load(object sender, EventArgs e)
         {
+            if (!isTermsAccepted)
+            {
+                if (!Properties.Settings.Default.setDisplay_isTermsAccepted)
+                {
+                    using (var form = new Form_First(this))
+                    {
+                        if (form.ShowDialog(this) != DialogResult.OK)
+                        {
+                            Log.EventWriter("Terms Not Accepted");
+                            Close();
+                        }
+                    }
+                }
+            }
+
 
             this.MouseWheel += ZoomByMouseWheel;
 
@@ -563,21 +578,6 @@ namespace AgOpenGPS
             hotkeys = new char[19];
 
             hotkeys = Properties.Settings.Default.setKey_hotkeys.ToCharArray();
-
-            if (!isTermsAccepted)
-            {
-                if (!Properties.Settings.Default.setDisplay_isTermsAccepted)
-                {
-                    using (var form = new Form_First(this))
-                    {
-                        if (form.ShowDialog(this) != DialogResult.OK)
-                        {
-                            Log.EventWriter("Terms Not Accepted");
-                            Close();
-                        }
-                    }
-                }
-            }
 
             Log.EventWriter("Terms Accepted");
 
