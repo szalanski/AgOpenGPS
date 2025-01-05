@@ -137,7 +137,7 @@ namespace AgOpenGPS
             mf.LoadSettings();
 
             //save current vehicle
-            SettingsIO.ExportAll(Path.Combine(RegistrySettings.vehiclesDirectory, RegistrySettings.vehicleFileName + ".XML"));
+            RegistrySettings.Save();
         }
 
         private void FixMinMaxSpinners()

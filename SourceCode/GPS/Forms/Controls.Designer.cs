@@ -731,7 +731,7 @@ namespace AgOpenGPS
                     }
 
                     Log.EventWriter("** Opened **  " + currentFieldDirectory + "   " 
-                        + (DateTime.Now.ToString("f", CultureInfo.CreateSpecificCulture(Settings.Default.setF_culture))));
+                        + (DateTime.Now.ToString("f", CultureInfo.CreateSpecificCulture(RegistrySettings.culture))));
                 }
             }
 
@@ -780,7 +780,7 @@ namespace AgOpenGPS
             ExportFieldAs_ISOXMLv4();
 
             Log.EventWriter("** Closed **   " + currentFieldDirectory + "   "
-                + DateTime.Now.ToString("f", CultureInfo.CreateSpecificCulture(Settings.Default.setF_culture)));
+                + DateTime.Now.ToString("f", CultureInfo.CreateSpecificCulture(RegistrySettings.culture)));
 
             Settings.Default.setF_CurrentDir = currentFieldDirectory;
             Settings.Default.Save();
@@ -1432,16 +1432,19 @@ namespace AgOpenGPS
                 if (fbd.SelectedPath != Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))
                 {
                     Settings.Default.setF_workingDirectory = fbd.SelectedPath;
+                    RegistrySettings.workingDirectory = Settings.Default.setF_workingDirectory;
+                    RegistrySettings.baseDirectory = Path.Combine(RegistrySettings.workingDirectory, "AgOpenGPS");
+                    RegistrySettings.fieldsDirectory = Path.Combine(RegistrySettings.workingDirectory, "AgOpenGPS", "Fields");
+                    RegistrySettings.CreateDirectories();
                 }
                 else
                 {
                     Settings.Default.setF_workingDirectory = "Default";
+                    RegistrySettings.workingDirectory = "Default";
                 }
                 Settings.Default.Save();
 
-                RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgOpenGPS");
-                key.SetValue("WorkingDirectory", Settings.Default.setF_workingDirectory);
-                key.Close();
+                RegistrySettings.Save();
 
                 //restart program
                 MessageBox.Show(gStr.gsProgramWillExitPleaseRestart);
@@ -1538,20 +1541,6 @@ namespace AgOpenGPS
 
                 if (result2 == DialogResult.Yes)
                 {
-                    RegistryKey Key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgOpenGPS");
-
-                    //storing the values
-                    Key.SetValue("Language", "en");
-                    Key.SetValue("VehicleFileName", "Default Vehicle");
-                    Key.SetValue("WorkingDirectory", "Default");
-                    Key.Close();
-
-                    RegistrySettings.vehicleFileName = "Default Vehicle";
-
-                    Settings.Default.Reset();
-                    Settings.Default.Save();
-
-                    //save events this sessiom
                     FileSaveSystemEvents();
                     Log.sbEvents.Clear();
 
@@ -1561,8 +1550,13 @@ namespace AgOpenGPS
                     Log.EventWriter("*****");
                     FileSaveSystemEvents();
 
+                    RegistrySettings.Reset();
+
+                    Settings.Default.Reset();
+                    Settings.Default.Save();
+
                     MessageBox.Show(gStr.gsProgramWillExitPleaseRestart);
-                    System.Environment.Exit(1);
+                    Close();
                 }
             }
         }
@@ -1631,7 +1625,7 @@ namespace AgOpenGPS
             {
                 form.ShowDialog(this);
             }
-            SettingsIO.ExportAll(Path.Combine(RegistrySettings.vehiclesDirectory, RegistrySettings.vehicleFileName + ".XML"));
+            RegistrySettings.Save();
         }
         private void colorsSectionToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1641,7 +1635,7 @@ namespace AgOpenGPS
                 {
                     form.ShowDialog(this);
                 }
-                SettingsIO.ExportAll(Path.Combine(RegistrySettings.vehiclesDirectory, RegistrySettings.vehicleFileName + ".XML"));
+                RegistrySettings.Save();
             }
             else
             {
@@ -1842,16 +1836,10 @@ namespace AgOpenGPS
                     break;
             }
 
-            Settings.Default.setF_culture = lang;
-            Settings.Default.Save();
+            RegistrySettings.culture = lang;
 
-            //adding or editing "Language" subkey to the "SOFTWARE" subkey  
-            RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgOpenGPS");
-
-            //storing the values  
-            key.SetValue("Language", lang);
-            key.Close();
-
+            RegistrySettings.Save();
+            
             if (Restart)
             {
                 MessageBox.Show(gStr.gsProgramWillExitPleaseRestart);

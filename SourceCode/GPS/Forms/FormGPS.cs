@@ -393,7 +393,7 @@ namespace AgOpenGPS
             this.MouseWheel += ZoomByMouseWheel;
 
             Log.EventWriter("Program Started: " 
-                + DateTime.Now.ToString("f", CultureInfo.CreateSpecificCulture(Settings.Default.setF_culture)));
+                + DateTime.Now.ToString("f", CultureInfo.CreateSpecificCulture(RegistrySettings.culture)));
             Log.EventWriter("AOG Version: " + Application.ProductVersion.ToString(CultureInfo.InvariantCulture));
 
             //The way we subscribe to the System Event to check when Power Mode has changed.
@@ -415,7 +415,7 @@ namespace AgOpenGPS
             panelSim.Top = Height - 60;
 
             //set the language to last used
-            SetLanguage(Settings.Default.setF_culture, false);
+            SetLanguage(RegistrySettings.culture, false);
 
             //make sure current field directory exists, null if not
             currentFieldDirectory = Settings.Default.setF_CurrentDir;
@@ -558,11 +558,8 @@ namespace AgOpenGPS
                 YesMessageBox("Using Default Vehicle" + "\r\n\r\n" + "Load Existing Vehicle or Save As a New One !!!"
                     + "\r\n\r\n" + "Changes will NOT be Saved for Default Vehicle");
             
-                SettingsIO.ExportAll(Path.Combine(RegistrySettings.vehiclesDirectory, "Default Vehicle.xml"));
-
-                RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgOpenGPS");
-                key.SetValue("VehicleFileName", Properties.Settings.Default.setVehicle_vehicleName);
-                key.Close();
+                //Doesn't save Default Vehicle
+                RegistrySettings.Save();
 
                 using (FormConfig form = new FormConfig(this))
                 {
@@ -638,18 +635,13 @@ namespace AgOpenGPS
 
             Log.EventWriter("Missed Sentence Counter Total: " + missedSentenceCount.ToString());
 
-            Log.EventWriter("Program Exit: " + DateTime.Now.ToString("f", CultureInfo.CreateSpecificCulture(Settings.Default.setF_culture)) + "\r");
+            Log.EventWriter("Program Exit: " + DateTime.Now.ToString("f", CultureInfo.CreateSpecificCulture(RegistrySettings.culture)) + "\r");
 
             //write the log file
             FileSaveSystemEvents();
 
             //save current vehicle
-            SettingsIO.ExportAll(Path.Combine(RegistrySettings.vehiclesDirectory, RegistrySettings.vehicleFileName + ".XML"));
-
-            RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgOpenGPS");
-            key.SetValue("VehicleFileName", Properties.Settings.Default.setVehicle_vehicleName);
-            key.SetValue("WorkingDirectory", Properties.Settings.Default.setF_workingDirectory);
-            key.Close();
+            RegistrySettings.Save();
 
             if (displayBrightness.isWmiMonitor)
                 displayBrightness.SetBrightness(Settings.Default.setDisplay_brightnessSystem);

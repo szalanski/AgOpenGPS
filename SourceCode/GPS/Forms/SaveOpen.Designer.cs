@@ -2353,6 +2353,7 @@ namespace AgOpenGPS
             using (StreamWriter writer = new StreamWriter(Path.Combine(RegistrySettings.logsDirectory, "AgOpenGPS_Events_Log.txt"), true))
             {
                 writer.Write(Log.sbEvents);
+                Log.sbEvents.Clear();
             }
         }
 

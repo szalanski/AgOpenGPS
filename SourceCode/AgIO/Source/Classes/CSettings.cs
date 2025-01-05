@@ -212,10 +212,13 @@ namespace AgIO
 
         public static void Reset()
         {
+            Registry.CurrentUser.DeleteSubKeyTree(@"SOFTWARE\AgIO");
+
             RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgIO");
             try
             {
                 key.SetValue("ProfileName", "Default Profile");
+                key.SetValue("Language", "en");
                 Log.EventWriter("Registry -> Resetting Registry keys");
             }
             catch (Exception ex)

@@ -339,57 +339,16 @@ namespace AgOpenGPS
                 Reset();
             }
 
-            //get the vehicles directory, if not exist, create
-            try
-            {
-                vehiclesDirectory = Path.Combine(baseDirectory, "Vehicles");
-                if (!string.IsNullOrEmpty(vehiclesDirectory) && !Directory.Exists(vehiclesDirectory))
-                {
-                    Directory.CreateDirectory(vehiclesDirectory);
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.EventWriter("Catch, Serious Problem Making Vehicles Directory: " + ex.ToString());
-            }
-
-            //get the fields directory, if not exist, create
-            try
-            {
-                fieldsDirectory = Path.Combine(baseDirectory, "Fields");
-                if (!string.IsNullOrEmpty(fieldsDirectory) && !Directory.Exists(fieldsDirectory))
-                {
-                    Directory.CreateDirectory(fieldsDirectory);
-                    Log.EventWriter("Fields Dir Created");
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.EventWriter("Catch, Serious Problem Making Fields Directory: " + ex.ToString());
-            }
-
-            //get the logs directory, if not exist, create
-            try
-            {
-                logsDirectory = Path.Combine(baseDirectory, "Logs");
-                if (!string.IsNullOrEmpty(logsDirectory) && !Directory.Exists(logsDirectory))
-                {
-                    Directory.CreateDirectory(logsDirectory);
-                    Log.EventWriter("Logs Dir Created");
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.EventWriter("Catch, Serious Problem Making Logs Directory: " + ex.ToString());
-            }
+            //make sure directories exist and are in right place if not default workingDir
+            CreateDirectories();
 
             //keep below 500 kb
-            Log.CheckLogSize(Path.Combine(logsDirectory, "AgIO_Events_Log.txt"), 500000);
+            Log.CheckLogSize(Path.Combine(logsDirectory, "AgOpenGPS_Events_Log.txt"), 500000);
 
             //what's in the vehicle directory
             try
             {
-                DirectoryInfo dinfo = new DirectoryInfo(RegistrySettings.vehiclesDirectory);
+                DirectoryInfo dinfo = new DirectoryInfo(vehiclesDirectory);
                 FileInfo[] vehicleFiles = dinfo.GetFiles("*.xml");
 
                 bool isVehicleExist = false;
@@ -417,10 +376,10 @@ namespace AgOpenGPS
             }
             catch (Exception ex)
             {
-                Log.EventWriter("Registry -> Catch, Serious Problem Loading Profile, Doing Registry Reset: " + ex.ToString());
+                Log.EventWriter("Registry -> Catch, Serious Problem Loading Vehicle, Doing Registry Reset: " + ex.ToString());
                 Reset();
 
-                //reset to Default Profile and save
+                //reset to Default Vehicle and save
                 Settings.Default.Reset();
                 Settings.Default.Save();
             }
@@ -428,10 +387,13 @@ namespace AgOpenGPS
 
         public static void Save()
         {
-            RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgIO");
+            RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgOpenGPS");
             try
             {
-                key.SetValue("ProfileName", vehicleFileName);
+                key.SetValue("VehicleFileName", vehicleFileName);
+                key.SetValue("Language", culture);
+                key.SetValue("WorkingDirectory", workingDirectory);
+
                 Log.EventWriter(vehicleFileName + " Saved to registry key");
             }
             catch (Exception ex)
@@ -440,8 +402,22 @@ namespace AgOpenGPS
             }
             key.Close();
 
-            //if (RegistrySettings.vehicleFileName != "Default Profile")
-            //    SettingsIO.ExportSettings(Path.Combine(RegistrySettings.vehiclesDirectory, RegistrySettings.vehicleFileName + ".xml"));
+            try
+            {
+                if (vehicleFileName != "Default Vehicle")
+                {
+                    SettingsIO.ExportAll(Path.Combine(vehiclesDirectory, vehicleFileName + ".xml"));
+                    //Log.EventWriter(vehicleFileName + ".XML Saved to Vehicles");
+                }
+                else
+                {
+                    //Log.EventWriter("Default Vehicle Not saved to Vehicles");
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EventWriter("Registry -> Catch, Unable to save Vehicle FileName: " + ex.ToString());
+            }
         }
 
         public static void Reset()
@@ -457,11 +433,73 @@ namespace AgOpenGPS
                 key.SetValue("WorkingDirectory", "Default");
                 key.Close();
 
-                Log.EventWriter("Registry -> Resetting Registry SubKey Tree");
+                Log.EventWriter("Registry -> Resetting Registry SubKey Tree and Full Default Reset");
+
+                culture = "en";
+                vehiclesDirectory =
+                   Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "AgOpenGPS", "Vehicles");
+                logsDirectory =
+                   Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "AgOpenGPS", "Logs");
+                vehicleFileName = "Default Vehicle";
+                workingDirectory = "Default";
+                baseDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "AgOpenGPS");
+                fieldsDirectory = Path.Combine(baseDirectory, "Fields");
+
+                CreateDirectories();
+
+                
+
             }
             catch (Exception ex)
             {
                 Log.EventWriter("\"Registry -> Catch, Serious Problem Resetting Registry keys: " + ex.ToString());
+            }
+        }
+
+        public static void CreateDirectories()
+        {
+            //get the vehicles directory, if not exist, create
+            try
+            {
+                vehiclesDirectory = Path.Combine(baseDirectory, "Vehicles");
+                if (!string.IsNullOrEmpty(vehiclesDirectory) && !Directory.Exists(vehiclesDirectory))
+                {
+                    Directory.CreateDirectory(vehiclesDirectory);
+                    Log.EventWriter("Vehicles Dir Created");
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EventWriter("Catch, Serious Problem Making Vehicles Directory: " + ex.ToString());
+            }
+
+            //get the fields directory, if not exist, create
+            try
+            {
+                fieldsDirectory = Path.Combine(baseDirectory, "Fields");
+                if (!string.IsNullOrEmpty(fieldsDirectory) && !Directory.Exists(fieldsDirectory))
+                {
+                    Directory.CreateDirectory(fieldsDirectory);
+                    Log.EventWriter("Fields Dir Created");
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EventWriter("Catch, Serious Problem Making Fields Directory: " + ex.ToString());
+            }
+
+            //get the logs directory, if not exist, create
+            try
+            {
+                if (!string.IsNullOrEmpty(logsDirectory) && !Directory.Exists(logsDirectory))
+                {
+                    Directory.CreateDirectory(logsDirectory);
+                    Log.EventWriter("Logs Dir Created");
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EventWriter("Catch, Serious Problem Making Logs Directory: " + ex.ToString());
             }
         }
     }
