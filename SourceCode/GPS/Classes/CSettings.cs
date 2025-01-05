@@ -1,4 +1,7 @@
-﻿using System;
+﻿using AgOpenGPS.Properties;
+using Microsoft.Win32;
+using OpenTK.Input;
+using System;
 using System.Configuration;
 using System.IO;
 using System.Linq;
@@ -252,6 +255,213 @@ namespace AgOpenGPS
                 Properties.Settings.Default.Reload();
                 MessageBox.Show("Fatal Error with Settings File");
                 return (false);
+            }
+        }
+    }
+
+    public static class RegistrySettings
+    {
+        public static string culture = "en";
+        public static string vehiclesDirectory =
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "AgOpenGPS", "Vehicles");
+        public static string logsDirectory =
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "AgOpenGPS", "Logs");
+        public static string vehicleFileName = "Default Vehicle";
+        public static string workingDirectory = "Default";
+        public static string baseDirectory = workingDirectory;
+        public static string fieldsDirectory = workingDirectory;
+
+        public static void Load()
+        {
+            try
+            {
+                //opening the subkey
+                RegistryKey regKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\AgOpenGPS");
+
+                ////create default keys if not existing
+                if (regKey == null)
+                {
+                    RegistryKey Key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgOpenGPS");
+
+                    //storing the values
+                    Key.SetValue("Language", "en");
+                    Key.SetValue("VehicleFileName", "Default Vehicle");
+                    Key.SetValue("WorkingDirectory", "Default");
+                    Key.Close();
+                }
+
+                //Base Directory Registry Key
+                regKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\AgOpenGPS");
+
+                if (regKey.GetValue("WorkingDirectory") == null || regKey.GetValue("WorkingDirectory").ToString() == "")
+                {
+                    RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgOpenGPS");
+                    key.SetValue("WorkingDirectory", "Default");
+                    key.Close();
+                }
+                workingDirectory = regKey.GetValue("WorkingDirectory").ToString();
+
+                if (workingDirectory == "Default")
+                {
+                    baseDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "AgOpenGPS");
+                }
+                else //user set to other
+                {
+                    baseDirectory = Path.Combine(workingDirectory, "AgOpenGPS");
+                }
+
+                //Vehicle File Name Registry Key
+                if (regKey.GetValue("VehicleFileName") == null || regKey.GetValue("VehicleFileName").ToString() == "")
+                {
+                    RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgOpenGPS");
+                    key.SetValue("VehicleFileName", "Default Vehicle");
+                    key.Close();
+                }
+
+                vehicleFileName = regKey.GetValue("VehicleFileName").ToString();
+
+                //Language Registry Key
+                if (regKey.GetValue("Language") == null || regKey.GetValue("Language").ToString() == "")
+                {
+                    RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgOpenGPS");
+                    key.SetValue("Language", "en");
+                    key.Close();
+                }
+
+                culture = regKey.GetValue("Language").ToString();
+
+                //close registry
+                regKey.Close();
+            }
+            catch (Exception ex)
+            {
+                Log.EventWriter("Registry -> Catch, Serious Problem Creating Registry keys: " + ex.ToString());
+                Reset();
+            }
+
+            //get the vehicles directory, if not exist, create
+            try
+            {
+                vehiclesDirectory = Path.Combine(baseDirectory, "Vehicles");
+                if (!string.IsNullOrEmpty(vehiclesDirectory) && !Directory.Exists(vehiclesDirectory))
+                {
+                    Directory.CreateDirectory(vehiclesDirectory);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EventWriter("Catch, Serious Problem Making Vehicles Directory: " + ex.ToString());
+            }
+
+            //get the fields directory, if not exist, create
+            try
+            {
+                fieldsDirectory = Path.Combine(baseDirectory, "Fields");
+                if (!string.IsNullOrEmpty(fieldsDirectory) && !Directory.Exists(fieldsDirectory))
+                {
+                    Directory.CreateDirectory(fieldsDirectory);
+                    Log.EventWriter("Fields Dir Created");
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EventWriter("Catch, Serious Problem Making Fields Directory: " + ex.ToString());
+            }
+
+            //get the logs directory, if not exist, create
+            try
+            {
+                logsDirectory = Path.Combine(baseDirectory, "Logs");
+                if (!string.IsNullOrEmpty(logsDirectory) && !Directory.Exists(logsDirectory))
+                {
+                    Directory.CreateDirectory(logsDirectory);
+                    Log.EventWriter("Logs Dir Created");
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EventWriter("Catch, Serious Problem Making Logs Directory: " + ex.ToString());
+            }
+
+            //keep below 500 kb
+            Log.CheckLogSize(Path.Combine(logsDirectory, "AgIO_Events_Log.txt"), 500000);
+
+            //what's in the vehicle directory
+            try
+            {
+                DirectoryInfo dinfo = new DirectoryInfo(RegistrySettings.vehiclesDirectory);
+                FileInfo[] vehicleFiles = dinfo.GetFiles("*.xml");
+
+                bool isVehicleExist = false;
+
+                foreach (FileInfo file in vehicleFiles)
+                {
+                    string temp = Path.GetFileNameWithoutExtension(file.Name).Trim();
+
+                    if (temp == vehicleFileName)
+                    {
+                        isVehicleExist = true;
+                    }
+                }
+
+                //does current vehicle exist?
+                if (isVehicleExist && vehicleFileName != "Default Vehicle")
+                {
+                    SettingsIO.ImportAll(Path.Combine(RegistrySettings.vehiclesDirectory, vehicleFileName + ".XML"));
+                }
+                else
+                {
+                    vehicleFileName = "Default Vehicle";
+                    Log.EventWriter("Vehicle file does not exist or is Default, Default Vehicle selected");
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EventWriter("Registry -> Catch, Serious Problem Loading Profile, Doing Registry Reset: " + ex.ToString());
+                Reset();
+
+                //reset to Default Profile and save
+                Settings.Default.Reset();
+                Settings.Default.Save();
+            }
+        }        
+
+        public static void Save()
+        {
+            RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgIO");
+            try
+            {
+                key.SetValue("ProfileName", vehicleFileName);
+                Log.EventWriter(vehicleFileName + " Saved to registry key");
+            }
+            catch (Exception ex)
+            {
+                Log.EventWriter("Registry -> Catch, Serious Problem Saving keys: " + ex.ToString());
+            }
+            key.Close();
+
+            //if (RegistrySettings.vehicleFileName != "Default Profile")
+            //    SettingsIO.ExportSettings(Path.Combine(RegistrySettings.vehiclesDirectory, RegistrySettings.vehicleFileName + ".xml"));
+        }
+
+        public static void Reset()
+        {
+            try
+            {
+                Registry.CurrentUser.DeleteSubKeyTree(@"SOFTWARE\AgOpenGPS");
+
+                //create all new key
+                RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgOpenGPS");
+                key.SetValue("Language", "en");
+                key.SetValue("VehicleFileName", "Default Vehicle");
+                key.SetValue("WorkingDirectory", "Default");
+                key.Close();
+
+                Log.EventWriter("Registry -> Resetting Registry SubKey Tree");
+            }
+            catch (Exception ex)
+            {
+                Log.EventWriter("\"Registry -> Catch, Serious Problem Resetting Registry keys: " + ex.ToString());
             }
         }
     }

@@ -167,8 +167,8 @@ namespace AgOpenGPS
         {
             Bitmap bm = new Bitmap(this.Width, this.Height);
             this.DrawToBitmap(bm, new Rectangle(0, 0, this.Width, this.Height));
-            bm.Save(Path.Combine(mf.baseDirectory, "AllSet.PNG"), ImageFormat.Png);
-            System.Diagnostics.Process.Start("explorer.exe", mf.baseDirectory);
+            bm.Save(Path.Combine(RegistrySettings.baseDirectory, "AllSet.PNG"), ImageFormat.Png);
+            System.Diagnostics.Process.Start("explorer.exe", RegistrySettings.baseDirectory);
             Log.EventWriter("View All Settings to PNG");
             Close();
         }

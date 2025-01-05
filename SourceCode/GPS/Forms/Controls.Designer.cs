@@ -1546,7 +1546,7 @@ namespace AgOpenGPS
                     Key.SetValue("WorkingDirectory", "Default");
                     Key.Close();
 
-                    vehicleFileName = "Default Vehicle";
+                    RegistrySettings.vehicleFileName = "Default Vehicle";
 
                     Settings.Default.Reset();
                     Settings.Default.Save();
@@ -1631,7 +1631,7 @@ namespace AgOpenGPS
             {
                 form.ShowDialog(this);
             }
-            SettingsIO.ExportAll(Path.Combine(vehiclesDirectory, vehicleFileName + ".XML"));
+            SettingsIO.ExportAll(Path.Combine(RegistrySettings.vehiclesDirectory, RegistrySettings.vehicleFileName + ".XML"));
         }
         private void colorsSectionToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1641,7 +1641,7 @@ namespace AgOpenGPS
                 {
                     form.ShowDialog(this);
                 }
-                SettingsIO.ExportAll(Path.Combine(vehiclesDirectory, vehicleFileName + ".XML"));
+                SettingsIO.ExportAll(Path.Combine(RegistrySettings.vehiclesDirectory, RegistrySettings.vehicleFileName + ".XML"));
             }
             else
             {
@@ -2205,7 +2205,7 @@ namespace AgOpenGPS
         }
         private void eventViewerToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Form form = new FormEventViewer(Path.Combine(logsDirectory, "AgOpenGPS_Events_Log.txt"));
+            Form form = new FormEventViewer(Path.Combine(RegistrySettings.logsDirectory, "AgOpenGPS_Events_Log.txt"));
             form.Show(this);
             this.Activate();
         }
@@ -2372,7 +2372,7 @@ namespace AgOpenGPS
                 FileSaveSingleFlagKML(flagNumberPicked);
 
                 //Process.Start(@"C:\Program Files (x86)\Google\Google Earth\client\googleearth", workingDirectory + currentFieldDirectory + "\\Flags.KML");
-                Process.Start(Path.Combine(fieldsDirectory, currentFieldDirectory, "Flag.KML"));
+                Process.Start(Path.Combine(RegistrySettings.fieldsDirectory, currentFieldDirectory, "Flag.KML"));
             }
         }
 

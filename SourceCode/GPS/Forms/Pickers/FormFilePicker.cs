@@ -31,7 +31,7 @@ namespace AgOpenGPS
             timer1.Enabled = true;
             ListViewItem itm;
 
-            string[] dirs = Directory.GetDirectories(mf.fieldsDirectory);
+            string[] dirs = Directory.GetDirectories(RegistrySettings.fieldsDirectory);
 
             //fileList?.Clear();
 
@@ -310,9 +310,9 @@ namespace AgOpenGPS
                 else
                 {
                     if (order == 0) mf.filePickerFileAndDirectory =
-                            Path.Combine(mf.fieldsDirectory, lvLines.SelectedItems[0].SubItems[0].Text, "Field.txt");
+                            Path.Combine(RegistrySettings.fieldsDirectory, lvLines.SelectedItems[0].SubItems[0].Text, "Field.txt");
                     else mf.filePickerFileAndDirectory =
-                            Path.Combine(mf.fieldsDirectory, lvLines.SelectedItems[0].SubItems[1].Text, "Field.txt");
+                            Path.Combine(RegistrySettings.fieldsDirectory, lvLines.SelectedItems[0].SubItems[1].Text, "Field.txt");
                     Close();
                 }
             }
@@ -330,9 +330,9 @@ namespace AgOpenGPS
             if (count > 0)
             {
                 if (order == 0)
-                    dir2Delete = Path.Combine(mf.fieldsDirectory, lvLines.SelectedItems[0].SubItems[0].Text);
+                    dir2Delete = Path.Combine(RegistrySettings.fieldsDirectory, lvLines.SelectedItems[0].SubItems[0].Text);
                 else
-                    dir2Delete = Path.Combine(mf.fieldsDirectory, lvLines.SelectedItems[0].SubItems[1].Text);
+                    dir2Delete = Path.Combine(RegistrySettings.fieldsDirectory, lvLines.SelectedItems[0].SubItems[1].Text);
 
                 DialogResult result3 = MessageBox.Show(
                     dir2Delete,
@@ -350,7 +350,7 @@ namespace AgOpenGPS
 
             ListViewItem itm;
 
-            string[] dirs = Directory.GetDirectories(mf.fieldsDirectory);
+            string[] dirs = Directory.GetDirectories(RegistrySettings.fieldsDirectory);
 
             fileList?.Clear();
 

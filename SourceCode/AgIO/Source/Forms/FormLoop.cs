@@ -340,7 +340,7 @@ namespace AgIO
 
         public void FileSaveSystemEvents()
         {
-            using (StreamWriter writer = new StreamWriter(Path.Combine(RegistrySettings.LogsDirectory, "AgIO_Events_Log.txt"), true))
+            using (StreamWriter writer = new StreamWriter(Path.Combine(RegistrySettings.logsDirectory, "AgIO_Events_Log.txt"), true))
             {
                 writer.Write(Log.sbEvent);
                 Log.sbEvent.Clear();

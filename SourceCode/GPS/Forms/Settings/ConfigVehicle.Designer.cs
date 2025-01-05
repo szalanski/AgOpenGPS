@@ -24,7 +24,7 @@ namespace AgOpenGPS
             if (!mf.isJobStarted)
             {
                 //save current vehicle
-                SettingsIO.ExportAll(Path.Combine(mf.vehiclesDirectory, mf.vehicleFileName + ".XML"));
+                SettingsIO.ExportAll(Path.Combine(RegistrySettings.vehiclesDirectory, RegistrySettings.vehicleFileName + ".XML"));
 
                 if (lvVehicles.SelectedItems.Count > 0)
                 {
@@ -37,11 +37,11 @@ namespace AgOpenGPS
 
                     if (result3 == DialogResult.Yes)
                     {
-                        bool success = SettingsIO.ImportAll(Path.Combine(mf.vehiclesDirectory, lvVehicles.SelectedItems[0].SubItems[0].Text + ".XML"));
+                        bool success = SettingsIO.ImportAll(Path.Combine(RegistrySettings.vehiclesDirectory, lvVehicles.SelectedItems[0].SubItems[0].Text + ".XML"));
                         if (!success) return;
 
-                        mf.vehicleFileName = lvVehicles.SelectedItems[0].SubItems[0].Text;
-                        Properties.Settings.Default.setVehicle_vehicleName = mf.vehicleFileName;
+                        RegistrySettings.vehicleFileName = lvVehicles.SelectedItems[0].SubItems[0].Text;
+                        Properties.Settings.Default.setVehicle_vehicleName = RegistrySettings.vehicleFileName;
                         Properties.Settings.Default.Save();
 
                         RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgOpenGPS");
@@ -109,7 +109,7 @@ namespace AgOpenGPS
                         ///Remind the user
                         mf.TimedMessageBox(2500, "Steer and Machine Settings Sent", "Were Modules Connected?");
 
-                        Log.EventWriter("Vehicle Loaded: " + mf.vehicleFileName + ".XML");
+                        Log.EventWriter("Vehicle Loaded: " + RegistrySettings.vehicleFileName + ".XML");
                     }
 
                     UpdateVehicleListView();
@@ -132,7 +132,7 @@ namespace AgOpenGPS
                     if (lvVehicles.SelectedItems[0].SubItems[0].Text.Trim() != "Default Vehicle")
                     {
 
-                        if (lvVehicles.SelectedItems[0].SubItems[0].Text != mf.vehicleFileName)
+                        if (lvVehicles.SelectedItems[0].SubItems[0].Text != RegistrySettings.vehicleFileName)
                         {
                             DialogResult result3 = MessageBox.Show(
                             "Delete: " + lvVehicles.SelectedItems[0].SubItems[0].Text + ".XML",
@@ -142,7 +142,7 @@ namespace AgOpenGPS
                             MessageBoxDefaultButton.Button2);
                             if (result3 == DialogResult.Yes)
                             {
-                                File.Delete(Path.Combine(mf.vehiclesDirectory, lvVehicles.SelectedItems[0].SubItems[0].Text + ".XML"));
+                                File.Delete(Path.Combine(RegistrySettings.vehiclesDirectory, lvVehicles.SelectedItems[0].SubItems[0].Text + ".XML"));
                             }
                         }
                         else
@@ -172,10 +172,10 @@ namespace AgOpenGPS
 
             if (tboxVehicleNameSave.Text.Trim().Length > 0)
             {
-                SettingsIO.ExportAll(Path.Combine(mf.vehiclesDirectory, tboxVehicleNameSave.Text.Trim() + ".XML"));
+                SettingsIO.ExportAll(Path.Combine(RegistrySettings.vehiclesDirectory, tboxVehicleNameSave.Text.Trim() + ".XML"));
 
-                mf.vehicleFileName = tboxVehicleNameSave.Text.Trim();
-                Properties.Settings.Default.setVehicle_vehicleName = mf.vehicleFileName;
+                RegistrySettings.vehicleFileName = tboxVehicleNameSave.Text.Trim();
+                Properties.Settings.Default.setVehicle_vehicleName = RegistrySettings.vehicleFileName;
                 Properties.Settings.Default.Save();
 
                 RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgOpenGPS");
@@ -299,7 +299,7 @@ namespace AgOpenGPS
 
             if (tboxCreateNewVehicle.Text.Trim().Length > 0)
             {
-                SettingsIO.ExportAll(Path.Combine(mf.vehiclesDirectory, mf.vehicleFileName + ".XML"));
+                SettingsIO.ExportAll(Path.Combine(RegistrySettings.vehiclesDirectory, RegistrySettings.vehicleFileName + ".XML"));
 
                 Settings.Default.Reset();
                 Settings.Default.Save();
@@ -308,7 +308,7 @@ namespace AgOpenGPS
 
                 Properties.Settings.Default.Save();
 
-                lblCurrentVehicle.Text = mf.vehicleFileName = Properties.Settings.Default.setVehicle_vehicleName;
+                lblCurrentVehicle.Text = RegistrySettings.vehicleFileName = Properties.Settings.Default.setVehicle_vehicleName;
                 tboxCreateNewVehicle.Text = "";
 
                 LoadBrandImage();
@@ -372,9 +372,9 @@ namespace AgOpenGPS
                 ///Remind the user
                 mf.TimedMessageBox(2500, "Steer and Machine Settings Sent", "Were Modules Connected?");
 
-                Log.EventWriter("New Vehicle Loaded: " + mf.vehicleFileName + ".XML");
+                Log.EventWriter("New Vehicle Loaded: " + RegistrySettings.vehicleFileName + ".XML");
 
-                SettingsIO.ExportAll(Path.Combine(mf.vehiclesDirectory, mf.vehicleFileName + ".XML"));
+                SettingsIO.ExportAll(Path.Combine(RegistrySettings.vehiclesDirectory, RegistrySettings.vehicleFileName + ".XML"));
 
                 RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgOpenGPS");
                 key.SetValue("VehicleFileName", Properties.Settings.Default.setVehicle_vehicleName);
@@ -393,7 +393,7 @@ namespace AgOpenGPS
 
         private void UpdateVehicleListView()
         {
-            DirectoryInfo dinfo = new DirectoryInfo(mf.vehiclesDirectory);
+            DirectoryInfo dinfo = new DirectoryInfo(RegistrySettings.vehiclesDirectory);
             FileInfo[] Files = dinfo.GetFiles("*.XML");
 
             //load the listbox
