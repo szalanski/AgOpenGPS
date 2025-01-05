@@ -155,7 +155,6 @@ namespace AgIO
             {
                 mf.TimedMessageBox(3000, "Error opening port", ex.Message);
                 Log.EventWriter("Catch - > Error opening Radio port" + ex.ToString());
-
             }
 
             SetButtonState();

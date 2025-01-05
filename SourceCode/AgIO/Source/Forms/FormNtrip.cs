@@ -166,7 +166,6 @@ namespace AgIO
             {
                 mf.YesMessageBox("Can't Find: " + actualIP);
                 Log.EventWriter("Catch -> Can't Find Caster IP" + ex.ToString());
-
             }
         }
 

@@ -97,7 +97,7 @@ namespace AgIO
                     if (!string.IsNullOrEmpty(profileDirectory) && !Directory.Exists(profileDirectory))
                     {
                         Directory.CreateDirectory(profileDirectory);
-                        Log.EventWriter("PRofile Dir Created\r");
+                        Log.EventWriter("Profile Dir Created\r");
                     }
                 }
                 catch (Exception ex)
