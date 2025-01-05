@@ -97,7 +97,7 @@ namespace AgOpenGPS
             label134.Text = Properties.Settings.Default.setVehicle_isStanleyUsed.ToString();
             label136.Text = Properties.Settings.Default.setVehicle_isSteerAxleAhead.ToString();
             label138.Text = Properties.Settings.Default.setVehicle_maxAngularVelocity.ToString();
-            label140.Text = Properties.Settings.Default.setVehicle_minTurningRadius.ToString();
+            label140.Text = Properties.Settings.Default.set_youTurnRadius.ToString();
             label142.Text = Properties.Settings.Default.setVehicle_numSections.ToString();
             label144.Text = Properties.Settings.Default.setVehicle_slowSpeedCutoff.ToString();
             label146.Text = Properties.Settings.Default.setVehicle_tankTrailingHitchLength.ToString();
