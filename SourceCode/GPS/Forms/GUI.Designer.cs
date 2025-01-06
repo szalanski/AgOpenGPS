@@ -517,9 +517,6 @@ namespace AgOpenGPS
 
             string directoryName = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
 
-            //grab the current vehicle filename - make sure it exists
-            RegistrySettings.vehicleFileName = Settings.Default.setVehicle_vehicleName;
-
             simulatorOnToolStripMenuItem.Checked = Settings.Default.setMenu_isSimulatorOn;
             if (simulatorOnToolStripMenuItem.Checked)
             {

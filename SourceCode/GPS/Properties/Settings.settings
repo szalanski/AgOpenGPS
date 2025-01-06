@@ -74,12 +74,6 @@
     <Setting Name="setMenu_isSkyOn" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="setF_culture" Type="System.String" Scope="User">
-      <Value Profile="(Default)">en</Value>
-    </Setting>
-    <Setting Name="setF_workingDirectory" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Default</Value>
-    </Setting>
     <Setting Name="setDisplay_lightbarCmPerPixel" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">5</Value>
     </Setting>
@@ -448,9 +442,6 @@
     </Setting>
     <Setting Name="setVehicle_isSteerAxleAhead" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
-    </Setting>
-    <Setting Name="setVehicle_vehicleName" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Default Vehicle</Value>
     </Setting>
     <Setting Name="setVehicle_slowSpeedCutoff" Type="System.Double" Scope="User">
       <Value Profile="(Default)">0.5</Value>

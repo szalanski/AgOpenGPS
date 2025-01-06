@@ -394,7 +394,7 @@ namespace AgOpenGPS
                 key.SetValue("Language", culture);
                 key.SetValue("WorkingDirectory", workingDirectory);
 
-                Log.EventWriter(vehicleFileName + " Saved to registry key");
+                //Log.EventWriter(vehicleFileName + " Saved to registry key");
             }
             catch (Exception ex)
             {
