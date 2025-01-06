@@ -16,7 +16,6 @@ namespace AgOpenGPS
         //class variables
         private readonly FormGPS mf = null;
 
-        //Nozzz constructor
         public FormAllSettings(Form callingForm)
         {
             //get copy of the calling main form

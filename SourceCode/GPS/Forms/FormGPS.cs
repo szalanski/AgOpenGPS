@@ -231,12 +231,6 @@ namespace AgOpenGPS
         /// </summary>
         public CWindowsSettingsBrightnessController displayBrightness;
 
-        /// <summary>
-        /// Nozzle class
-        /// </summary>
-        public CNozzle nozz;
-
-
         #endregion // Class Props and instances
 
         //The method assigned to the PowerModeChanged event call
@@ -280,8 +274,6 @@ namespace AgOpenGPS
             InitializeComponent();
 
             CheckSettingsNotNull();
-
-            CheckNozzleSettingsNotNull();
 
             //time keeper
             secondsSinceStart = (DateTime.Now - Process.GetCurrentProcess().StartTime).TotalSeconds;
@@ -364,9 +356,6 @@ namespace AgOpenGPS
 
             //brightness object class
             displayBrightness = new CWindowsSettingsBrightnessController(Properties.Settings.Default.setDisplay_isBrightnessOn);
-
-            //Application rate controller
-            nozz = new CNozzle(this);
         }
 
         private void FormGPS_Load(object sender, EventArgs e)
@@ -769,14 +758,6 @@ namespace AgOpenGPS
             if (Settings.Default.setFeatures == null)
             {
                 Settings.Default.setFeatures = new CFeatureSettings();
-            }
-        }
-
-        public void CheckNozzleSettingsNotNull()
-        {
-            if (Settings.Default.setNozzleSettings == null)
-            {
-                Settings.Default.setNozzleSettings = new CNozzleSettings();
             }
         }
 
