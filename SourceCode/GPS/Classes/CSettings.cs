@@ -406,6 +406,7 @@ namespace AgOpenGPS
             {
                 if (vehicleFileName != "Default Vehicle")
                 {
+                    for (int i = 0; i < 500000000; i++) ;
                     SettingsIO.ExportAll(Path.Combine(vehiclesDirectory, vehicleFileName + ".xml"));
                     //Log.EventWriter(vehicleFileName + ".XML Saved to Vehicles");
                 }
@@ -445,9 +446,7 @@ namespace AgOpenGPS
                 baseDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "AgOpenGPS");
                 fieldsDirectory = Path.Combine(baseDirectory, "Fields");
 
-                CreateDirectories();
-
-                
+                CreateDirectories();             
 
             }
             catch (Exception ex)
