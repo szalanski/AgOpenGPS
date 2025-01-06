@@ -16,7 +16,6 @@ namespace AgOpenGPS
         //class variables
         private readonly FormGPS mf = null;
 
-        //Nozzz constructor
         public FormAllSettings(Form callingForm)
         {
             //get copy of the calling main form
@@ -58,7 +57,7 @@ namespace AgOpenGPS
             label56.Text = Properties.Settings.Default.setDisplay_isAutoStartAgIO.ToString();
             label58.Text = Properties.Settings.Default.setDisplay_isAutoOffAgIO.ToString();
 
-            label60.Text = Properties.Settings.Default.setF_culture;
+            label60.Text = RegistrySettings.culture;
             label62.Text = Properties.Settings.Default.setF_CurrentDir;
             label64.Text = Properties.Settings.Default.setF_isRemoteWorkSystemOn.ToString();
             label66.Text = Properties.Settings.Default.setF_isSteerWorkSwitchEnabled.ToString(); 
@@ -97,7 +96,7 @@ namespace AgOpenGPS
             label134.Text = Properties.Settings.Default.setVehicle_isStanleyUsed.ToString();
             label136.Text = Properties.Settings.Default.setVehicle_isSteerAxleAhead.ToString();
             label138.Text = Properties.Settings.Default.setVehicle_maxAngularVelocity.ToString();
-            label140.Text = Properties.Settings.Default.setVehicle_minTurningRadius.ToString();
+            label140.Text = Properties.Settings.Default.set_youTurnRadius.ToString();
             label142.Text = Properties.Settings.Default.setVehicle_numSections.ToString();
             label144.Text = Properties.Settings.Default.setVehicle_slowSpeedCutoff.ToString();
             label146.Text = Properties.Settings.Default.setVehicle_tankTrailingHitchLength.ToString();
@@ -167,8 +166,8 @@ namespace AgOpenGPS
         {
             Bitmap bm = new Bitmap(this.Width, this.Height);
             this.DrawToBitmap(bm, new Rectangle(0, 0, this.Width, this.Height));
-            bm.Save(Path.Combine(mf.baseDirectory, "AllSet.PNG"), ImageFormat.Png);
-            System.Diagnostics.Process.Start("explorer.exe", mf.baseDirectory);
+            bm.Save(Path.Combine(RegistrySettings.baseDirectory, "AllSet.PNG"), ImageFormat.Png);
+            System.Diagnostics.Process.Start("explorer.exe", RegistrySettings.baseDirectory);
             Log.EventWriter("View All Settings to PNG");
             Close();
         }

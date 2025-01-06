@@ -52,7 +52,7 @@ namespace AgOpenGPS
                 Filter = "XML files (*.XML)|*.XML",
 
                 //the initial directory, fields, for the open dialog
-                InitialDirectory = mf.fieldsDirectory
+                InitialDirectory = RegistrySettings.fieldsDirectory
             };
 
             //was a file selected
@@ -206,7 +206,7 @@ namespace AgOpenGPS
         private void btnBuildFields_Click(object sender, EventArgs e)
         {
             mf.currentFieldDirectory = tboxFieldName.Text.Trim();
-            string directoryName = Path.Combine(mf.fieldsDirectory, mf.currentFieldDirectory);
+            string directoryName = Path.Combine(RegistrySettings.fieldsDirectory, mf.currentFieldDirectory);
 
             //create new field files.
             if ((!string.IsNullOrEmpty(directoryName)) && (Directory.Exists(directoryName)))
@@ -321,7 +321,7 @@ namespace AgOpenGPS
                     string myFileName;
 
                     //get the directory and make sure it exists, create if not
-                    directoryName = Path.Combine(mf.fieldsDirectory, mf.currentFieldDirectory);
+                    directoryName = Path.Combine(RegistrySettings.fieldsDirectory, mf.currentFieldDirectory);
 
                     if ((directoryName.Length > 0) && (!Directory.Exists(directoryName)))
                     { Directory.CreateDirectory(directoryName); }

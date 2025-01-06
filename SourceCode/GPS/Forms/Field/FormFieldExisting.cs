@@ -39,7 +39,7 @@ namespace AgOpenGPS
             timer1.Enabled = true;
             ListViewItem itm;
 
-            string[] dirs = Directory.GetDirectories(mf.fieldsDirectory);
+            string[] dirs = Directory.GetDirectories(RegistrySettings.fieldsDirectory);
 
             if (dirs == null || dirs.Length < 1)
             {
@@ -279,7 +279,7 @@ namespace AgOpenGPS
                 return;
             }
 
-            string fileStr = Path.Combine(mf.fieldsDirectory, lblTemplateChosen.Text, "Field.txt");
+            string fileStr = Path.Combine(RegistrySettings.fieldsDirectory, lblTemplateChosen.Text, "Field.txt");
 
             if (!File.Exists(fileStr))
             {
@@ -290,7 +290,7 @@ namespace AgOpenGPS
             if (mf.isJobStarted) mf.FileSaveEverythingBeforeClosingField();
 
             //get the directory and make sure it exists, create if not
-            string directoryName = Path.Combine(mf.fieldsDirectory, tboxFieldName.Text.Trim());
+            string directoryName = Path.Combine(RegistrySettings.fieldsDirectory, tboxFieldName.Text.Trim());
 
             // create from template
             if (Directory.Exists(directoryName))
@@ -357,7 +357,7 @@ namespace AgOpenGPS
                 }
 
                 //create txt file copies
-                string templateDirectoryName = Path.Combine(mf.fieldsDirectory, lblTemplateChosen.Text);
+                string templateDirectoryName = Path.Combine(RegistrySettings.fieldsDirectory, lblTemplateChosen.Text);
                 string fileToCopy = "";
                 string destinationDirectory = "";
 
@@ -516,7 +516,7 @@ namespace AgOpenGPS
 
         private void btnAddVehicleName_Click(object sender, EventArgs e)
         {
-            tboxFieldName.Text += " " + mf.vehicleFileName;
+            tboxFieldName.Text += " " + RegistrySettings.vehicleFileName;
         }
 
         private void btnSort_Click(object sender, EventArgs e)

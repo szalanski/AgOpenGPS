@@ -218,7 +218,7 @@ namespace AgIO
 
         private void toolStripLogViewer_Click(object sender, EventArgs e)
         {
-            Form form = new FormEventViewer(Path.Combine(RegistrySettings.LogsDirectory, "AgIO_Events_Log.txt"));
+            Form form = new FormEventViewer(Path.Combine(RegistrySettings.logsDirectory, "AgIO_Events_Log.txt"));
             form.Show(this);
             this.Activate();
         }

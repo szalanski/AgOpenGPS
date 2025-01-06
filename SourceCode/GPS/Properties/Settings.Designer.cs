@@ -3110,29 +3110,6 @@ namespace AgOpenGPS.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::AgOpenGPS.CNozzleSettings setNozzleSettings {
-            get {
-                return ((global::AgOpenGPS.CNozzleSettings)(this["setNozzleSettings"]));
-            }
-            set {
-                this["setNozzleSettings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool setApp_isNozzleApp {
-            get {
-                return ((bool)(this["setApp_isNozzleApp"]));
-            }
-            set {
-                this["setApp_isNozzleApp"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0.8")]
         public double setTram_alpha {
             get {

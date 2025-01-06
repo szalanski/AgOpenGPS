@@ -1376,12 +1376,6 @@ namespace AgOpenGPS
             //send the byte out to section machines
             BuildMachineByte();
 
-            //Nozzz
-            if (isNozzleApp)
-            {
-                nozz.BuildRatePGN();
-            }
-
             ////Paint to context for troubleshooting
             //oglBack.MakeCurrent();
             //oglBack.SwapBuffers();

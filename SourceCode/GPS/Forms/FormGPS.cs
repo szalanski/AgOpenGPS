@@ -45,14 +45,8 @@ namespace AgOpenGPS
         //How many headlands allowed
         public const int MAXHEADS = 6;
 
-        //The base directory where AgOpenGPS will be stored and fields and vehicles branch from
-        public string baseDirectory;
-
-        //current directory of vehicle
-        public string vehiclesDirectory, vehicleFileName = "", logsDirectory;
-
-        //current fields and field directory
-        public string fieldsDirectory, currentFieldDirectory, displayFieldName;
+        //current fields
+        public string currentFieldDirectory, displayFieldName;
 
         private bool leftMouseDownOnOpenGL; //mousedown event in opengl window
         public int flagNumberPicked = 0;
@@ -237,12 +231,6 @@ namespace AgOpenGPS
         /// </summary>
         public CWindowsSettingsBrightnessController displayBrightness;
 
-        /// <summary>
-        /// Nozzle class
-        /// </summary>
-        public CNozzle nozz;
-
-
         #endregion // Class Props and instances
 
         //The method assigned to the PowerModeChanged event call
@@ -286,8 +274,6 @@ namespace AgOpenGPS
             InitializeComponent();
 
             CheckSettingsNotNull();
-
-            CheckNozzleSettingsNotNull();
 
             //time keeper
             secondsSinceStart = (DateTime.Now - Process.GetCurrentProcess().StartTime).TotalSeconds;
@@ -370,9 +356,6 @@ namespace AgOpenGPS
 
             //brightness object class
             displayBrightness = new CWindowsSettingsBrightnessController(Properties.Settings.Default.setDisplay_isBrightnessOn);
-
-            //Application rate controller
-            nozz = new CNozzle(this);
         }
 
         private void FormGPS_Load(object sender, EventArgs e)
@@ -388,15 +371,18 @@ namespace AgOpenGPS
                             Log.EventWriter("Terms Not Accepted");
                             Close();
                         }
+                        else
+                        {
+                            Log.EventWriter("Terms Accepted");
+                        }
                     }
                 }
             }
 
-
             this.MouseWheel += ZoomByMouseWheel;
 
             Log.EventWriter("Program Started: " 
-                + DateTime.Now.ToString("f", CultureInfo.CreateSpecificCulture(Settings.Default.setF_culture)));
+                + DateTime.Now.ToString("f", CultureInfo.CreateSpecificCulture(RegistrySettings.culture)));
             Log.EventWriter("AOG Version: " + Application.ProductVersion.ToString(CultureInfo.InvariantCulture));
 
             //The way we subscribe to the System Event to check when Power Mode has changed.
@@ -418,41 +404,14 @@ namespace AgOpenGPS
             panelSim.Top = Height - 60;
 
             //set the language to last used
-            SetLanguage(Settings.Default.setF_culture, false);
-
-            string workingDirectory = Settings.Default.setF_workingDirectory == "Default"
-                ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
-                : Settings.Default.setF_workingDirectory;
-
-            baseDirectory = Path.Combine(workingDirectory, "AgOpenGPS");
-
-            //get the fields directory, if not exist, create
-            fieldsDirectory = Path.Combine(baseDirectory, "Fields");
-            if (!string.IsNullOrEmpty(fieldsDirectory) && !Directory.Exists(fieldsDirectory)) { Directory.CreateDirectory(fieldsDirectory);
-                Log.EventWriter("Fields Dir Created");
-            }
-
-            //get the fields directory, if not exist, create
-            vehiclesDirectory = Path.Combine(baseDirectory, "Vehicles");
-            if (!string.IsNullOrEmpty(vehiclesDirectory) && !Directory.Exists(vehiclesDirectory)) { Directory.CreateDirectory(vehiclesDirectory);
-                Log.EventWriter("Vehicles Dir Created");
-            }
-
-            //get the fields directory, if not exist, create
-            logsDirectory = Path.Combine(baseDirectory, "Logs");
-            if (!string.IsNullOrEmpty(logsDirectory) && !Directory.Exists(logsDirectory)) { Directory.CreateDirectory(logsDirectory);
-                Log.EventWriter("Logs Dir Created");
-            }
-
-            //keep below 500 kb
-            Log.CheckLogSize(Path.Combine(logsDirectory, "AgOpenGPS_Events_Log.txt"), 500000);
+            SetLanguage(RegistrySettings.culture, false);
 
             //make sure current field directory exists, null if not
             currentFieldDirectory = Settings.Default.setF_CurrentDir;
 
             if (currentFieldDirectory != "")
             {
-                string dir = Path.Combine(fieldsDirectory, currentFieldDirectory);
+                string dir = Path.Combine(RegistrySettings.fieldsDirectory, currentFieldDirectory);
                 if (!string.IsNullOrEmpty(dir) && !Directory.Exists(dir))
                 {
                     currentFieldDirectory = "";
@@ -463,7 +422,7 @@ namespace AgOpenGPS
             }
 
             Log.EventWriter("Program Directory: " + Application.StartupPath);
-            Log.EventWriter("Fields Directory: " + (fieldsDirectory));
+            Log.EventWriter("Fields Directory: " + (RegistrySettings.fieldsDirectory));
 
             if (isBrightnessOn)
             {
@@ -505,7 +464,7 @@ namespace AgOpenGPS
             oglZoom.Left = 100;
             oglZoom.Top = 100;
 
-            if (vehicleFileName != "Default Vehicle" && Properties.Settings.Default.setDisplay_isAutoStartAgIO)
+            if (RegistrySettings.vehicleFileName != "Default Vehicle" && Properties.Settings.Default.setDisplay_isAutoStartAgIO)
             {
                 //Start AgIO process
                 Process[] processName = Process.GetProcessesByName("AgIO");
@@ -581,18 +540,15 @@ namespace AgOpenGPS
 
             Log.EventWriter("Terms Accepted");
 
-            if (vehicleFileName == "Default Vehicle")
+            if (RegistrySettings.vehicleFileName == "Default Vehicle")
             {
                 Log.EventWriter("Using Default Vehicle At Start Warning");
 
                 YesMessageBox("Using Default Vehicle" + "\r\n\r\n" + "Load Existing Vehicle or Save As a New One !!!"
                     + "\r\n\r\n" + "Changes will NOT be Saved for Default Vehicle");
             
-                SettingsIO.ExportAll(Path.Combine(vehiclesDirectory, "Default Vehicle.xml"));
-
-                RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgOpenGPS");
-                key.SetValue("VehicleFileName", Properties.Settings.Default.setVehicle_vehicleName);
-                key.Close();
+                //Doesn't save Default Vehicle
+                RegistrySettings.Save();
 
                 using (FormConfig form = new FormConfig(this))
                 {
@@ -668,18 +624,13 @@ namespace AgOpenGPS
 
             Log.EventWriter("Missed Sentence Counter Total: " + missedSentenceCount.ToString());
 
-            Log.EventWriter("Program Exit: " + DateTime.Now.ToString("f", CultureInfo.CreateSpecificCulture(Settings.Default.setF_culture)) + "\r");
+            Log.EventWriter("Program Exit: " + DateTime.Now.ToString("f", CultureInfo.CreateSpecificCulture(RegistrySettings.culture)) + "\r");
 
             //write the log file
             FileSaveSystemEvents();
 
             //save current vehicle
-            SettingsIO.ExportAll(Path.Combine(vehiclesDirectory, vehicleFileName + ".XML"));
-
-            RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgOpenGPS");
-            key.SetValue("VehicleFileName", Properties.Settings.Default.setVehicle_vehicleName);
-            key.SetValue("WorkingDirectory", Properties.Settings.Default.setF_workingDirectory);
-            key.Close();
+            RegistrySettings.Save();
 
             if (displayBrightness.isWmiMonitor)
                 displayBrightness.SetBrightness(Settings.Default.setDisplay_brightnessSystem);
@@ -788,14 +739,6 @@ namespace AgOpenGPS
             if (Settings.Default.setFeatures == null)
             {
                 Settings.Default.setFeatures = new CFeatureSettings();
-            }
-        }
-
-        public void CheckNozzleSettingsNotNull()
-        {
-            if (Settings.Default.setNozzleSettings == null)
-            {
-                Settings.Default.setNozzleSettings = new CNozzleSettings();
             }
         }
 

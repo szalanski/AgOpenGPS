@@ -35,7 +35,7 @@ namespace AgOpenGPS
         {
             //check if directory and file exists, maybe was deleted etc
             if (String.IsNullOrEmpty(mf.currentFieldDirectory)) btnJobResume.Enabled = false;
-            string directoryName = Path.Combine(mf.fieldsDirectory, mf.currentFieldDirectory);
+            string directoryName = Path.Combine(RegistrySettings.fieldsDirectory, mf.currentFieldDirectory);
 
             string fileAndDirectory = Path.Combine(directoryName, "Field.txt");
 
@@ -124,7 +124,7 @@ namespace AgOpenGPS
             string infieldList = "";
             int numFields = 0;
 
-            string[] dirs = Directory.GetDirectories(mf.fieldsDirectory);
+            string[] dirs = Directory.GetDirectories(RegistrySettings.fieldsDirectory);
 
             foreach (string dir in dirs)
             {
@@ -200,7 +200,7 @@ namespace AgOpenGPS
                 }
                 else // 1 field found
                 {
-                    mf.filePickerFileAndDirectory = Path.Combine(mf.fieldsDirectory, infieldList, "Field.txt");
+                    mf.filePickerFileAndDirectory = Path.Combine(RegistrySettings.fieldsDirectory, infieldList, "Field.txt");
                     mf.FileOpenField(mf.filePickerFileAndDirectory);
                     Close();
                 }

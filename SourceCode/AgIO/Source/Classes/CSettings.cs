@@ -66,7 +66,7 @@ namespace AgIO
         public static string culture = "en";
         public static string profileDirectory =
             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "AgOpenGPS", "AgIO");
-        public static string LogsDirectory =
+        public static string logsDirectory =
             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "AgOpenGPS", "Logs");
         public static string profileName = "Default Profile";
 
@@ -77,9 +77,9 @@ namespace AgIO
                 try
                 {
                     //create Logs directory if not exist
-                    if (!string.IsNullOrEmpty(LogsDirectory) && !Directory.Exists(LogsDirectory))
+                    if (!string.IsNullOrEmpty(logsDirectory) && !Directory.Exists(logsDirectory))
                     {
-                        Directory.CreateDirectory(LogsDirectory);
+                        Directory.CreateDirectory(logsDirectory);
                         Log.EventWriter("Logs Dir Created\r");
                     }
                 }
@@ -89,7 +89,7 @@ namespace AgIO
                 }
 
                 //keep below 500 kb
-                Log.CheckLogSize(Path.Combine(LogsDirectory, "AgIO_Events_Log.txt"), 500000);
+                Log.CheckLogSize(Path.Combine(logsDirectory, "AgIO_Events_Log.txt"), 500000);
 
                 try
                 {
@@ -212,10 +212,13 @@ namespace AgIO
 
         public static void Reset()
         {
+            Registry.CurrentUser.DeleteSubKeyTree(@"SOFTWARE\AgIO");
+
             RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgIO");
             try
             {
                 key.SetValue("ProfileName", "Default Profile");
+                key.SetValue("Language", "en");
                 Log.EventWriter("Registry -> Resetting Registry keys");
             }
             catch (Exception ex)

@@ -372,7 +372,7 @@ namespace AgOpenGPS
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, 9729);
             }
 
-            string fileAndDirectory = Path.Combine(mf.fieldsDirectory, mf.currentFieldDirectory, "BackPic.png");
+            string fileAndDirectory = Path.Combine(RegistrySettings.fieldsDirectory, mf.currentFieldDirectory, "BackPic.png");
             try
             {
                 if (File.Exists(fileAndDirectory))
@@ -458,7 +458,7 @@ namespace AgOpenGPS
                 bitmap = glm.MakeGrayscale3(bitmap);
             }
 
-            string fileAndDirectory = Path.Combine(mf.fieldsDirectory, mf.currentFieldDirectory, "BackPic.png");
+            string fileAndDirectory = Path.Combine(RegistrySettings.fieldsDirectory, mf.currentFieldDirectory, "BackPic.png");
             try
             {
                 if (File.Exists(fileAndDirectory))
