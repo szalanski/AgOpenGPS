@@ -1883,9 +1883,9 @@
             this.label139.ForeColor = System.Drawing.Color.DimGray;
             this.label139.Location = new System.Drawing.Point(466, 114);
             this.label139.Name = "label139";
-            this.label139.Size = new System.Drawing.Size(191, 22);
+            this.label139.Size = new System.Drawing.Size(169, 22);
             this.label139.TabIndex = 735;
-            this.label139.Text = "Min Turning Radius";
+            this.label139.Text = "Min Uturn Radius";
             this.label139.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label140

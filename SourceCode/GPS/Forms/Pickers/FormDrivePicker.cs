@@ -34,7 +34,7 @@ namespace AgOpenGPS
             int count = lvLines.SelectedItems.Count;
             if (count > 0)
             {
-                mf.filePickerFileAndDirectory = Path.Combine(mf.fieldsDirectory, lvLines.SelectedItems[0].SubItems[0].Text, "Field.txt");
+                mf.filePickerFileAndDirectory = Path.Combine(RegistrySettings.fieldsDirectory, lvLines.SelectedItems[0].SubItems[0].Text, "Field.txt");
                 Close();
             }
         }

@@ -249,7 +249,7 @@ namespace AgOpenGPS
             //save new copy of kml with selected flag and view in GoogleEarth
 
             mf.FileMakeKMLFromCurrentPosition(mf.pn.latitude, mf.pn.longitude);
-            System.Diagnostics.Process.Start(Path.Combine(mf.fieldsDirectory, mf.currentFieldDirectory, "CurrentPosition.KML"));
+            System.Diagnostics.Process.Start(Path.Combine(RegistrySettings.fieldsDirectory, mf.currentFieldDirectory, "CurrentPosition.KML"));
             isClosing = true;
             Close();
         }
@@ -319,7 +319,7 @@ namespace AgOpenGPS
                         Filter = "KML files (*.KML)|*.KML",
 
                         //the initial directory, fields, for the open dialog
-                        InitialDirectory = Path.Combine(mf.fieldsDirectory, mf.currentFieldDirectory)
+                        InitialDirectory = Path.Combine(RegistrySettings.fieldsDirectory, mf.currentFieldDirectory)
                     };
 
                     //was a file selected
