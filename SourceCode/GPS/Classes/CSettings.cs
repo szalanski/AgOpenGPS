@@ -446,9 +446,7 @@ namespace AgOpenGPS
                 baseDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "AgOpenGPS");
                 fieldsDirectory = Path.Combine(baseDirectory, "Fields");
 
-                CreateDirectories();
-
-                
+                CreateDirectories();             
 
             }
             catch (Exception ex)
