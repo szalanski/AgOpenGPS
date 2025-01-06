@@ -1289,26 +1289,30 @@ namespace AgOpenGPS
 
             FolderBrowserDialog fbd = new FolderBrowserDialog();
             fbd.ShowNewFolderButton = true;
-            fbd.Description = "Currently: " + Settings.Default.setF_workingDirectory;
+            fbd.Description = "Currently: " + RegistrySettings.workingDirectory;
 
-            if (Settings.Default.setF_workingDirectory == "Default") fbd.SelectedPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            else fbd.SelectedPath = Settings.Default.setF_workingDirectory;
+            if (RegistrySettings.workingDirectory == "Default") fbd.SelectedPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            else fbd.SelectedPath = RegistrySettings.workingDirectory;
 
             if (fbd.ShowDialog(this) == DialogResult.OK)
             {
                 if (fbd.SelectedPath != Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))
                 {
-                    Settings.Default.setF_workingDirectory = fbd.SelectedPath;
-                    RegistrySettings.workingDirectory = Settings.Default.setF_workingDirectory;
+                    RegistrySettings.workingDirectory = fbd.SelectedPath;
                     RegistrySettings.baseDirectory = Path.Combine(RegistrySettings.workingDirectory, "AgOpenGPS");
                     RegistrySettings.fieldsDirectory = Path.Combine(RegistrySettings.workingDirectory, "AgOpenGPS", "Fields");
                     RegistrySettings.CreateDirectories();
+                    RegistrySettings.vehicleFileName = "Default Vehicle";
                 }
                 else
                 {
-                    Settings.Default.setF_workingDirectory = "Default";
                     RegistrySettings.workingDirectory = "Default";
+                    RegistrySettings.vehicleFileName = "Default Vehicle";
+                    RegistrySettings.CreateDirectories();
                 }
+
+                //reset to default Vehicle and save
+                Settings.Default.Reset();
                 Settings.Default.Save();
 
                 RegistrySettings.Save();

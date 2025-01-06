@@ -227,7 +227,7 @@ namespace AgOpenGPS
         private void tabSummary_Enter(object sender, EventArgs e)
         {
             SectionFeetInchesTotalWidthLabelUpdate();
-            lblSummaryVehicleName.Text = Properties.Settings.Default.setVehicle_vehicleName;
+            lblSummaryVehicleName.Text = RegistrySettings.vehicleFileName;
             UpdateSummary();
         }
 
