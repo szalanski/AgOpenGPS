@@ -45,6 +45,10 @@ namespace AgOpenGPS
                 Top = 0;
                 Left = 0;
             }
+
+            label1.Text = "Vehicle xml: " + RegistrySettings.vehicleFileName;
+            label7.Text = "Directory: " + RegistrySettings.workingDirectory;
+            label8.Text = "Culture: " + RegistrySettings.culture;
         }
 
         private void button1_Click(object sender, EventArgs e)
