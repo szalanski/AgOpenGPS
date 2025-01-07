@@ -1229,7 +1229,7 @@
             this.tab1.Name = "tab1";
             this.tab1.Padding = new System.Drawing.Point(0, 0);
             this.tab1.SelectedIndex = 0;
-            this.tab1.Size = new System.Drawing.Size(859, 632);
+            this.tab1.Size = new System.Drawing.Size(865, 632);
             this.tab1.TabIndex = 0;
             // 
             // tabSummary
@@ -3495,7 +3495,7 @@
             this.tabTSections.ForeColor = System.Drawing.Color.Black;
             this.tabTSections.Location = new System.Drawing.Point(4, 44);
             this.tabTSections.Name = "tabTSections";
-            this.tabTSections.Size = new System.Drawing.Size(851, 584);
+            this.tabTSections.Size = new System.Drawing.Size(857, 584);
             this.tabTSections.TabIndex = 7;
             this.tabTSections.Text = "tSect";
             this.tabTSections.Enter += new System.EventHandler(this.tabTSections_Enter);
@@ -4082,7 +4082,7 @@
             this.label106.Font = new System.Drawing.Font("Tahoma", 15.75F);
             this.label106.ForeColor = System.Drawing.Color.Black;
             this.label106.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label106.Location = new System.Drawing.Point(441, 473);
+            this.label106.Location = new System.Drawing.Point(355, 472);
             this.label106.Name = "label106";
             this.label106.Size = new System.Drawing.Size(168, 32);
             this.label106.TabIndex = 502;
@@ -4196,7 +4196,7 @@
             this.label50.Font = new System.Drawing.Font("Tahoma", 15.75F);
             this.label50.ForeColor = System.Drawing.Color.Black;
             this.label50.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label50.Location = new System.Drawing.Point(228, 473);
+            this.label50.Location = new System.Drawing.Point(902, 223);
             this.label50.Name = "label50";
             this.label50.Size = new System.Drawing.Size(174, 32);
             this.label50.TabIndex = 293;
@@ -4474,7 +4474,7 @@
             this.cboxSectionBoundaryControl.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cboxSectionBoundaryControl.Font = new System.Drawing.Font("Tahoma", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cboxSectionBoundaryControl.ForeColor = System.Drawing.Color.Black;
-            this.cboxSectionBoundaryControl.Location = new System.Drawing.Point(473, 508);
+            this.cboxSectionBoundaryControl.Location = new System.Drawing.Point(387, 507);
             this.cboxSectionBoundaryControl.Name = "cboxSectionBoundaryControl";
             this.cboxSectionBoundaryControl.Size = new System.Drawing.Size(104, 52);
             this.cboxSectionBoundaryControl.TabIndex = 501;
@@ -4580,7 +4580,7 @@
             this.nudMinCoverage.BackColor = System.Drawing.Color.AliceBlue;
             this.nudMinCoverage.Font = new System.Drawing.Font("Tahoma", 27.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.nudMinCoverage.InterceptArrowKeys = false;
-            this.nudMinCoverage.Location = new System.Drawing.Point(258, 508);
+            this.nudMinCoverage.Location = new System.Drawing.Point(932, 258);
             this.nudMinCoverage.Name = "nudMinCoverage";
             this.nudMinCoverage.ReadOnly = true;
             this.nudMinCoverage.Size = new System.Drawing.Size(132, 52);
@@ -9551,7 +9551,7 @@
             this.lblCurrentVehicle.Font = new System.Drawing.Font("Tahoma", 14.25F);
             this.lblCurrentVehicle.ForeColor = System.Drawing.Color.Black;
             this.lblCurrentVehicle.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.lblCurrentVehicle.Location = new System.Drawing.Point(15, 4);
+            this.lblCurrentVehicle.Location = new System.Drawing.Point(21, 4);
             this.lblCurrentVehicle.Name = "lblCurrentVehicle";
             this.lblCurrentVehicle.Size = new System.Drawing.Size(138, 23);
             this.lblCurrentVehicle.TabIndex = 450;
@@ -9634,7 +9634,7 @@
             this.panelBottom.ForeColor = System.Drawing.Color.Lime;
             this.panelBottom.Location = new System.Drawing.Point(124, 645);
             this.panelBottom.Name = "panelBottom";
-            this.panelBottom.Size = new System.Drawing.Size(859, 66);
+            this.panelBottom.Size = new System.Drawing.Size(865, 66);
             this.panelBottom.TabIndex = 112;
             // 
             // lblFeetMeters
@@ -9658,7 +9658,7 @@
             this.btnOK.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnOK.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.btnOK.Image = global::AgOpenGPS.Properties.Resources.OK64;
-            this.btnOK.Location = new System.Drawing.Point(774, 1);
+            this.btnOK.Location = new System.Drawing.Point(780, 1);
             this.btnOK.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(80, 62);
@@ -9691,7 +9691,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.ClientSize = new System.Drawing.Size(987, 715);
+            this.ClientSize = new System.Drawing.Size(993, 715);
             this.ControlBox = false;
             this.Controls.Add(this.tab1);
             this.Controls.Add(this.panelBottom);
