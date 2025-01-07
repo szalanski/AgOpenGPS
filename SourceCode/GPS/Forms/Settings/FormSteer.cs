@@ -679,6 +679,7 @@ namespace AgOpenGPS
             nudcmPerPixel.Value = Properties.Settings.Default.setDisplay_lightbarCmPerPixel;
 
             label20.Text = mf.unitsInCm;
+            label43.Text = mf.unitsInCm;
         }
 
         private void tabOnTheLine_Leave(object sender, EventArgs e)

@@ -5,6 +5,7 @@ using System;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using System.Xml.XPath;
@@ -406,13 +407,13 @@ namespace AgOpenGPS
             {
                 if (vehicleFileName != "Default Vehicle")
                 {
-                    for (int i = 0; i < 500000000; i++) ;
+                    //let settings finish writing to user.config
+                    Thread.Sleep(500) ;
                     SettingsIO.ExportAll(Path.Combine(vehiclesDirectory, vehicleFileName + ".xml"));
-                    //Log.EventWriter(vehicleFileName + ".XML Saved to Vehicles");
                 }
                 else
                 {
-                    //Log.EventWriter("Default Vehicle Not saved to Vehicles");
+                    Log.EventWriter("Default Vehicle Not saved to Vehicles");
                 }
             }
             catch (Exception ex)
