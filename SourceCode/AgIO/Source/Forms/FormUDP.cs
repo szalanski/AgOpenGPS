@@ -330,7 +330,6 @@ namespace AgIO
 
         private void btnUDPOff_Click(object sender, EventArgs e)
         {
-
             Properties.Settings.Default.setUDP_isOn = false;
             Properties.Settings.Default.setUDP_isSendNMEAToUDP = false;
 

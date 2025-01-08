@@ -29,9 +29,6 @@ namespace AgIO
             //load the profile name and set profile directory
             RegistrySettings.Load();
 
-            Properties.Settings.Default.setConfig_profileName = RegistrySettings.profileName;
-            Properties.Settings.Default.Save();
-
             if (Mutex.WaitOne(TimeSpan.Zero, true))
             {
                 Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo(RegistrySettings.culture);

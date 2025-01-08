@@ -388,14 +388,14 @@ namespace AgOpenGPS
 
         public static void Save()
         {
+            Properties.Settings.Default.Save();
+
             RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgOpenGPS");
             try
             {
                 key.SetValue("VehicleFileName", vehicleFileName);
                 key.SetValue("Language", culture);
                 key.SetValue("WorkingDirectory", workingDirectory);
-
-                //Log.EventWriter(vehicleFileName + " Saved to registry key");
             }
             catch (Exception ex)
             {

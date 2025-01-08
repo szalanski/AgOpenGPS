@@ -4,6 +4,7 @@ using System;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Xml.Linq;
 using System.Xml.XPath;
 
@@ -97,7 +98,7 @@ namespace AgIO
                     if (!string.IsNullOrEmpty(profileDirectory) && !Directory.Exists(profileDirectory))
                     {
                         Directory.CreateDirectory(profileDirectory);
-                        Log.EventWriter("PRofile Dir Created\r");
+                        Log.EventWriter("Profile Dir Created\r");
                     }
                 }
                 catch (Exception ex)
@@ -108,7 +109,7 @@ namespace AgIO
                 //opening the subkey
                 RegistryKey regKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\AgIO");
 
-                ////create default keys if not existing
+                //create default keys if not existing
                 if (regKey == null)
                 {
                     RegistryKey Key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgIO");
@@ -124,7 +125,7 @@ namespace AgIO
                     try
                     {
                         //Profile File Name from Registry Key
-                        if (regKey.GetValue("ProfileName") == null)
+                        if (regKey.GetValue("ProfileName") == null || regKey.GetValue("ProfileName").ToString() == null)
                         {
                             RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgIO");
                             key.SetValue("ProfileName", "Default Profile");
@@ -132,6 +133,18 @@ namespace AgIO
                         }
                         else
                         {
+                            //Culture from Registry Key
+                            if (regKey.GetValue("AgOne_Culture") == null || regKey.GetValue("Language").ToString() == "")
+                            {
+                                RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgIO");
+                                key.SetValue("Language", "en");
+                                Log.EventWriter("Registry -> Culture was null and Created");
+                            }
+                            else
+                            {
+                                culture = regKey.GetValue("Language").ToString();
+                            }
+
                             profileName = regKey.GetValue("ProfileName").ToString();
 
                             //get the Documents directory, if not exist, create
@@ -194,6 +207,8 @@ namespace AgIO
 
         public static void Save()
         {
+            Properties.Settings.Default.Save();
+
             RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgIO");
             try
             {
@@ -207,8 +222,12 @@ namespace AgIO
             key.Close();
 
             if (RegistrySettings.profileName != "Default Profile")
+            {
+                Thread.Sleep(500);
                 SettingsIO.ExportSettings(Path.Combine(RegistrySettings.profileDirectory, RegistrySettings.profileName + ".xml"));
+            }
         }
+        
 
         public static void Reset()
         {

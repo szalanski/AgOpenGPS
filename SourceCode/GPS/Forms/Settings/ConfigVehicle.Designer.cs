@@ -166,8 +166,6 @@ namespace AgOpenGPS
             btnVehicleSave.BackColor = Color.Transparent;
             btnVehicleSave.Enabled = false;
 
-            Settings.Default.Save();
-
             //save current vehicle
             RegistrySettings.Save();
 
