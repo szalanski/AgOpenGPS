@@ -78,9 +78,6 @@ namespace AgIO
 
                 RegistrySettings.profileName = SanitizeFileName(cboxOverWrite.SelectedItem.ToString().Trim());
 
-                Properties.Settings.Default.setConfig_profileName = RegistrySettings.profileName;
-                Properties.Settings.Default.Save();
-
                 //save profile in registry
                 RegistrySettings.Save();
 
@@ -112,15 +109,9 @@ namespace AgIO
 
                 //reset to Default Profile and save
                 Settings.Default.Reset();
-                Settings.Default.Save();
-
-                Properties.Settings.Default.setConfig_profileName = RegistrySettings.profileName;
-                Properties.Settings.Default.Save();
 
                 //save profile in registry
                 RegistrySettings.Save();
-
-                SettingsIO.ExportSettings(Path.Combine(RegistrySettings.profileDirectory, RegistrySettings.profileName + ".xml"));
                 
                 DialogResult = DialogResult.Yes;
                 Close();
@@ -175,9 +166,6 @@ namespace AgIO
             {
                 RegistrySettings.profileName = SanitizeFileName(tboxSaveAs.Text.ToString().Trim());
 
-                Properties.Settings.Default.setConfig_profileName = RegistrySettings.profileName;
-                Properties.Settings.Default.Save();
-
                 //save profile in registry
                 RegistrySettings.Save();
 
@@ -214,9 +202,6 @@ namespace AgIO
                 SettingsIO.ImportSettings(Path.Combine(RegistrySettings.profileDirectory, cboxChooseExisting.SelectedItem.ToString().Trim() + ".xml"));
 
                 RegistrySettings.profileName = cboxChooseExisting.SelectedItem.ToString().Trim();
-
-                Properties.Settings.Default.setConfig_profileName = RegistrySettings.profileName;
-                Properties.Settings.Default.Save();
 
                 RegistrySettings.Save();
 
