@@ -522,7 +522,7 @@ namespace AgOpenGPS
                 double svennDist = mf.camera.camSetDistance * -0.07;
                 double svennWidth = svennDist * 0.22;
                 GL.LineWidth(mf.ABLine.lineWidth);
-                GL.Color3(1.2, 1.25, 0.10);
+                GL.Color3(0.95, 0.95, 0.10);
                 GL.Begin(PrimitiveType.LineStrip);
                 {
                     GL.Vertex3(svennWidth, wheelbase + svennDist, 0.0);
