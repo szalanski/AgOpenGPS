@@ -982,9 +982,11 @@
     <None Include="btnImages\Config\ConD_LineSmooth.png" />
     <None Include="btnImages\QR\QRAOG.png" />
     <None Include="btnImages\QR\QRYouTube.png" />
+    <None Include="btnImages\BoundarySectionControlOnOff.png" />
     <Content Include="License.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\BoundarySectionControlOnOff.png" />
     <Content Include="UDP_SimTool.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
