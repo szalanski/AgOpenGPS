@@ -270,6 +270,19 @@ namespace AgOpenGPS
                             }
                             break;
                         }
+                    case 222: // DE
+                        {
+                            //{ 0x80, 0x81, 0x7f, 222, number bytes, mask, command CRC };
+                            if (data.Length < 6) break;
+                            if (((data[5] & 1) == 1)) //mask bit #0 set and command bit #0 nudge line to the 0 = left 1 = right
+                            {
+                                double dist = Properties.Settings.Default.setAS_snapDistance * 0.01;
+                                if ((data[6] & 1) != 1) { trk.NudgeTrack(-dist); }
+                                if ((data[6] & 1) == 1) { trk.NudgeTrack(dist); }
+                            }
+                            break;
+                        }
+
 
                     #region Remote Switches
                     case 234://MTZ8302 Feb 2020
