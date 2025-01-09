@@ -84,7 +84,7 @@
             this.lblMetersInches.BackColor = System.Drawing.Color.Transparent;
             this.lblMetersInches.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblMetersInches.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.lblMetersInches.Location = new System.Drawing.Point(137, 23);
+            this.lblMetersInches.Location = new System.Drawing.Point(137, 14);
             this.lblMetersInches.Name = "lblMetersInches";
             this.lblMetersInches.Size = new System.Drawing.Size(102, 23);
             this.lblMetersInches.TabIndex = 151;
@@ -141,7 +141,7 @@
             this.cboxIsRecBoundaryWhenSectionOn.Font = new System.Drawing.Font("Tahoma", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cboxIsRecBoundaryWhenSectionOn.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.cboxIsRecBoundaryWhenSectionOn.Image = global::AgOpenGPS.Properties.Resources.BoundarySectionControlOnOff;
-            this.cboxIsRecBoundaryWhenSectionOn.Location = new System.Drawing.Point(6, 278);
+            this.cboxIsRecBoundaryWhenSectionOn.Location = new System.Drawing.Point(155, 54);
             this.cboxIsRecBoundaryWhenSectionOn.Name = "cboxIsRecBoundaryWhenSectionOn";
             this.cboxIsRecBoundaryWhenSectionOn.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.cboxIsRecBoundaryWhenSectionOn.Size = new System.Drawing.Size(80, 84);
@@ -156,7 +156,7 @@
             this.btnAntennaTool.FlatAppearance.BorderSize = 0;
             this.btnAntennaTool.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAntennaTool.Image = global::AgOpenGPS.Properties.Resources.BoundaryRecordTool;
-            this.btnAntennaTool.Location = new System.Drawing.Point(155, 65);
+            this.btnAntennaTool.Location = new System.Drawing.Point(13, 172);
             this.btnAntennaTool.Name = "btnAntennaTool";
             this.btnAntennaTool.Size = new System.Drawing.Size(80, 64);
             this.btnAntennaTool.TabIndex = 155;
@@ -185,7 +185,7 @@
             this.btnLeftRight.FlatAppearance.BorderSize = 0;
             this.btnLeftRight.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnLeftRight.Image = global::AgOpenGPS.Properties.Resources.BoundaryLeft;
-            this.btnLeftRight.Location = new System.Drawing.Point(5, 65);
+            this.btnLeftRight.Location = new System.Drawing.Point(5, 64);
             this.btnLeftRight.Name = "btnLeftRight";
             this.btnLeftRight.Size = new System.Drawing.Size(80, 64);
             this.btnLeftRight.TabIndex = 68;
@@ -201,7 +201,7 @@
             this.btnStop.Image = global::AgOpenGPS.Properties.Resources.OK64;
             this.btnStop.Location = new System.Drawing.Point(5, 395);
             this.btnStop.Name = "btnStop";
-            this.btnStop.Size = new System.Drawing.Size(80, 64);
+            this.btnStop.Size = new System.Drawing.Size(80, 78);
             this.btnStop.TabIndex = 140;
             this.btnStop.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnStop.UseVisualStyleBackColor = false;
@@ -231,7 +231,7 @@
             this.btnRestart.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnRestart.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold);
             this.btnRestart.Image = global::AgOpenGPS.Properties.Resources.Trash;
-            this.btnRestart.Location = new System.Drawing.Point(23, 173);
+            this.btnRestart.Location = new System.Drawing.Point(18, 292);
             this.btnRestart.Name = "btnRestart";
             this.btnRestart.Size = new System.Drawing.Size(52, 52);
             this.btnRestart.TabIndex = 147;
@@ -259,7 +259,7 @@
             // 
             this.nudOffset.BackColor = System.Drawing.Color.AliceBlue;
             this.nudOffset.Font = new System.Drawing.Font("Tahoma", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nudOffset.Location = new System.Drawing.Point(11, 10);
+            this.nudOffset.Location = new System.Drawing.Point(11, 5);
             this.nudOffset.Maximum = new decimal(new int[] {
             4999,
             0,
@@ -291,7 +291,6 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.btnAddPoint);
             this.Controls.Add(this.btnLeftRight);
-            this.Controls.Add(this.btnStop);
             this.Controls.Add(this.btnPausePlay);
             this.Controls.Add(this.lblArea);
             this.Controls.Add(this.btnRestart);
@@ -299,6 +298,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.nudOffset);
             this.Controls.Add(this.lblMetersInches);
+            this.Controls.Add(this.btnStop);
             this.Font = new System.Drawing.Font("Tahoma", 14F);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.HelpButton = true;
