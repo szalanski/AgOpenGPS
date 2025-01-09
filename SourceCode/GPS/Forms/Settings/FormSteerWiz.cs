@@ -245,8 +245,6 @@ namespace AgOpenGPS
 
             Properties.Settings.Default.setIMU_invertRoll = mf.ahrs.isRollInvert;
 
-            Properties.Settings.Default.Save();
-
             //save current vehicle
             RegistrySettings.Save();
         }
@@ -590,8 +588,6 @@ namespace AgOpenGPS
             Properties.Settings.Default.setIMU_invertRoll = false;
 
             Properties.Settings.Default.setIMU_rollZero = mf.ahrs.rollZero;
-
-            Properties.Settings.Default.Save();
 
             toSend252 = true;
             counter252 = 3;

@@ -308,8 +308,6 @@ namespace AgOpenGPS
 
             Properties.Settings.Default.setAS_uTurnCompensation = mf.vehicle.uturnCompensation;
 
-            Properties.Settings.Default.Save();
-
             //save current vehicle
             RegistrySettings.Save();
         }
@@ -1187,8 +1185,6 @@ namespace AgOpenGPS
 
                 Properties.Settings.Default.setAS_isSteerInReverse = false;
                 mf.isSteerInReverse = false;
-
-                Properties.Settings.Default.Save();
 
                 //save current vehicle
                 RegistrySettings.Save();
