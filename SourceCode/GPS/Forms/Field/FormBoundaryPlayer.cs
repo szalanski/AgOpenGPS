@@ -105,7 +105,6 @@ namespace AgOpenGPS
             {
                 lblArea.Text = Math.Round(area * 0.000247105, 2).ToString();
             }
-            lblPoints.Text = mf.bnd.bndBeingMadePts.Count.ToString();
         }
 
         private void btnStop_Click(object sender, EventArgs e)
@@ -135,7 +134,6 @@ namespace AgOpenGPS
                     mf.CalculateMinMax();
                     mf.FileSaveBoundary();
                     mf.bnd.BuildTurnLines();
-                    //mf.hd.BuildSingleSpaceHeadLines();
                     mf.btnABDraw.Visible = true;
 
                     Log.EventWriter("Driven Boundary Created, Area: " + lblArea.Text);
@@ -159,7 +157,6 @@ namespace AgOpenGPS
             {
                 mf.bnd.isOkToAddPoints = false;
                 btnPausePlay.Image = Properties.Resources.BoundaryRecord;
-                //btnPausePlay.Text = gStr.gsRecord;
                 btnAddPoint.Enabled = true;
                 btnDeleteLast.Enabled = true;
             }
@@ -167,7 +164,6 @@ namespace AgOpenGPS
             {
                 mf.bnd.isOkToAddPoints = true;
                 btnPausePlay.Image = Properties.Resources.boundaryPause;
-                //btnPausePlay.Text = gStr.gsPause;
                 btnAddPoint.Enabled = false;
                 btnDeleteLast.Enabled = false;
             }
@@ -178,7 +174,6 @@ namespace AgOpenGPS
             mf.bnd.isOkToAddPoints = true;
             mf.AddBoundaryPoint();
             mf.bnd.isOkToAddPoints = false;
-            lblPoints.Text = mf.bnd.bndBeingMadePts.Count.ToString();
         }
 
         private void btnDeleteLast_Click(object sender, EventArgs e)
@@ -186,7 +181,6 @@ namespace AgOpenGPS
             int ptCount = mf.bnd.bndBeingMadePts.Count;
             if (ptCount > 0)
                 mf.bnd.bndBeingMadePts.RemoveAt(ptCount - 1);
-            lblPoints.Text = mf.bnd.bndBeingMadePts.Count.ToString();
         }
 
         private void btnRestart_Click(object sender, EventArgs e)
@@ -199,7 +193,6 @@ namespace AgOpenGPS
             if (result3 == DialogResult.Yes)
             {
                 mf.bnd.bndBeingMadePts?.Clear();
-                lblPoints.Text = mf.bnd.bndBeingMadePts.Count.ToString();
             }
         }
 
@@ -213,8 +206,7 @@ namespace AgOpenGPS
         {
             mf.bnd.isDrawAtPivot = !mf.bnd.isDrawAtPivot;
             btnAntennaTool.Image = mf.bnd.isDrawAtPivot ? Properties.Resources.BoundaryRecordPivot : Properties.Resources.BoundaryRecordTool;
-            Properties.Settings.Default.setBnd_isDrawPivot = mf.bnd.isDrawAtPivot;
-            Properties.Settings.Default.Save();
+            Properties.Settings.Default.setBnd_isDrawPivot = mf.bnd.isDrawAtPivot;            
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -224,7 +216,6 @@ namespace AgOpenGPS
                 mf.bnd.isOkToAddPoints = true;
                 mf.AddBoundaryPoint();
                 mf.bnd.isOkToAddPoints = false;
-                lblPoints.Text = mf.bnd.bndBeingMadePts.Count.ToString();
             }
 
             if (keyData == Keys.D) //autosteer button on off
@@ -232,7 +223,6 @@ namespace AgOpenGPS
                 int ptCount = mf.bnd.bndBeingMadePts.Count;
                 if (ptCount > 0)
                     mf.bnd.bndBeingMadePts.RemoveAt(ptCount - 1);
-                lblPoints.Text = mf.bnd.bndBeingMadePts.Count.ToString();
             }
 
             if (keyData == Keys.R) //autosteer button on off
@@ -257,20 +247,9 @@ namespace AgOpenGPS
             // Call the base class
             return base.ProcessCmdKey(ref msg, keyData);
         }
-
+        private void cboxIsRecBoundaryWhenSectionOn_Click(object sender, EventArgs e)
+        {
+            mf.bnd.isRecBoundaryWhenSectionOn = cboxIsRecBoundaryWhenSectionOn.Checked;
+        }
     }
 }
-
-/*
-
-            MessageBox.Show(gStr, gStr.gsHelp);
-
-            DialogResult result2 = MessageBox.Show(gStr, gStr.gsHelp,
-                MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-
-            if (result2 == DialogResult.Yes)
-            {
-                System.Diagnostics.Process.Start("https://www.youtube.com/watch?v=rsJMRZrcuX4");
-            }
-
-*/

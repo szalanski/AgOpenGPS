@@ -499,8 +499,6 @@ namespace AgOpenGPS
 
             hotkeys = Properties.Settings.Default.setKey_hotkeys.ToCharArray();
 
-            Log.EventWriter("Terms Accepted");
-
             if (RegistrySettings.vehicleFileName == "Default Vehicle")
             {
                 Log.EventWriter("Using Default Vehicle At Start Warning");
@@ -682,11 +680,11 @@ namespace AgOpenGPS
         public bool IsOnScreen(System.Drawing.Point RecLocation, System.Drawing.Size RecSize, double MinPercentOnScreen = 0.8)
         {
             double PixelsVisible = 0;
-            System.Drawing.Rectangle Rec = new System.Drawing.Rectangle(RecLocation, RecSize);
+            Rectangle Rec = new System.Drawing.Rectangle(RecLocation, RecSize);
 
             foreach (Screen Scrn in Screen.AllScreens)
             {
-                System.Drawing.Rectangle r = System.Drawing.Rectangle.Intersect(Rec, Scrn.WorkingArea);
+                var r = System.Drawing.Rectangle.Intersect(Rec, Scrn.WorkingArea);
                 // intersect rectangle with screen
                 if (r.Width != 0 & r.Height != 0)
                 {
@@ -1156,6 +1154,7 @@ namespace AgOpenGPS
             headlandBuildToolStripMenuItem.Enabled = isOn;
             flagByLatLonToolStripMenuItem.Enabled = isOn;
             tramLinesMenuField.Enabled = isOn;
+            tramsMultiMenuField.Enabled = isOn;
             recordedPathStripMenu.Enabled = isOn;
         }
 
