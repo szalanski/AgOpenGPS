@@ -499,8 +499,6 @@ namespace AgOpenGPS
 
             hotkeys = Properties.Settings.Default.setKey_hotkeys.ToCharArray();
 
-            Log.EventWriter("Terms Accepted");
-
             if (RegistrySettings.vehicleFileName == "Default Vehicle")
             {
                 Log.EventWriter("Using Default Vehicle At Start Warning");
@@ -1156,6 +1154,7 @@ namespace AgOpenGPS
             headlandBuildToolStripMenuItem.Enabled = isOn;
             flagByLatLonToolStripMenuItem.Enabled = isOn;
             tramLinesMenuField.Enabled = isOn;
+            tramsMultiMenuField.Enabled = isOn;
             recordedPathStripMenu.Enabled = isOn;
         }
 

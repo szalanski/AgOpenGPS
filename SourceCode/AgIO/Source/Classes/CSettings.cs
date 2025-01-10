@@ -90,7 +90,7 @@ namespace AgIO
                 }
 
                 //keep below 500 kb
-                Log.CheckLogSize(Path.Combine(logsDirectory, "AgIO_Events_Log.txt"), 500000);
+                Log.CheckLogSize(Path.Combine(logsDirectory, "AgIO_Events_Log.txt"), 1000000);
 
                 try
                 {
