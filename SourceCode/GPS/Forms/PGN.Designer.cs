@@ -444,9 +444,6 @@ namespace AgOpenGPS
             //public int  = 12;
         }
 
-
-
-
         //pgn instances
 
         /// <summary>

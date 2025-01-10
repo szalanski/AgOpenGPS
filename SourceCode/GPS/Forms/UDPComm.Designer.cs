@@ -7,6 +7,7 @@ using System.Globalization;
 using System.Diagnostics;
 using System.Xml.Linq;
 using AgOpenGPS.Culture;
+using System.Text;
 
 namespace AgOpenGPS
 {
@@ -23,7 +24,7 @@ namespace AgOpenGPS
         private byte[] loopBuffer = new byte[1024];
 
         // Status delegate
-        public int udpWatchCounts = 0;
+        public int missedSentenceCount = 0;
         public int udpWatchLimit = 70;
 
         private readonly Stopwatch udpWatch = new Stopwatch();
@@ -57,10 +58,7 @@ namespace AgOpenGPS
                         {
                             if (udpWatch.ElapsedMilliseconds < udpWatchLimit)
                             {
-                                udpWatchCounts++;
-                                if (isLogNMEA) pn.logNMEASentence.Append("*** "
-                                    + DateTime.UtcNow.ToString("ss.ff -> ", CultureInfo.InvariantCulture)
-                                    + udpWatch.ElapsedMilliseconds + "\r\n");
+                                missedSentenceCount++;
                                 return;
                             }
                             udpWatch.Reset();
@@ -160,11 +158,6 @@ namespace AgOpenGPS
 
                                 sentenceCounter = 0;
 
-                                if (isLogNMEA)
-                                    pn.logNMEASentence.Append(
-                                        DateTime.UtcNow.ToString("mm:ss.ff",CultureInfo.InvariantCulture)+ " " +
-                                        Lat.ToString("N7") + " " + Lon.ToString("N7") );
-
                                 UpdateFixPosition();
                             }
                         }
@@ -241,12 +234,6 @@ namespace AgOpenGPS
                             //Actual PWM
                             mc.pwmDisplay = data[12];
 
-                            if (isLogNMEA)
-                                pn.logNMEASentence.Append(
-                                    DateTime.UtcNow.ToString("mm:ss.ff", CultureInfo.InvariantCulture) + " AS " +
-                                    mc.actualSteerAngleDegrees.ToString("N1") + "\r\n"
-                                    );
-
                             break;
                         }
 
@@ -269,7 +256,7 @@ namespace AgOpenGPS
                                 lblHardwareMessage.Visible = true;
                                 hardwareLineCounter = data[5] * 10;
 
-                                SystemEventWriter(lblHardwareMessage.Text);
+                                Log.EventWriter(lblHardwareMessage.Text);
 
                                 //color based on byte 6
                                 if (data[6] == 0) lblHardwareMessage.BackColor = Color.Salmon;
@@ -312,10 +299,12 @@ namespace AgOpenGPS
                 loopBackSocket.Bind(new IPEndPoint(IPAddress.Loopback, 15555));
                 loopBackSocket.BeginReceiveFrom(loopBuffer, 0, loopBuffer.Length, SocketFlags.None,
                     ref endPointLoopBack, new AsyncCallback(ReceiveAppData), null);
+                Log.EventWriter("UDP Loopback network started: " + IPAddress.Loopback.ToString() + ":" + "15555");
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Load Error: " + ex.Message, "UDP Server", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Log.EventWriter("Catch -> Load UDP Loopback Error: " + ex.ToString());
             }
         }
 
@@ -371,10 +360,10 @@ namespace AgOpenGPS
                     loopBackSocket.BeginSendTo(byteData, 0, byteData.Length, SocketFlags.None,
                         epAgIO, new AsyncCallback(SendAsyncLoopData), null);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    //WriteErrorLog("Sending UDP Message" + e.ToString());
-                    MessageBox.Show("Send Error: " + e.Message, "UDP Client", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    //Log.EventWriter("Sending UDP Message" + e.ToString());
+                    //MessageBox.Show("Send Error: " + e.Message, "UDP Client", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -671,7 +660,7 @@ namespace AgOpenGPS
             //turn right
             if (keyData == Keys.Right)
             {
-                sim.steerAngle += 0.5;
+                sim.steerAngle += 1.0;
                 if (sim.steerAngle > 40) sim.steerAngle = 40;
                 if (sim.steerAngle < -40) sim.steerAngle = -40;
                 sim.steerAngleScrollBar = sim.steerAngle;
@@ -683,7 +672,7 @@ namespace AgOpenGPS
             //turn left
             if (keyData == Keys.Left)
             {
-                sim.steerAngle -= 0.5;
+                sim.steerAngle -= 1.0;
                 if (sim.steerAngle > 40) sim.steerAngle = 40;
                 if (sim.steerAngle < -40) sim.steerAngle = -40;
                 sim.steerAngleScrollBar = sim.steerAngle;
