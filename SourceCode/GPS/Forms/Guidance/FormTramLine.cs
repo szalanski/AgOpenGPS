@@ -485,38 +485,51 @@ namespace AgOpenGPS
 
                 bool isLeft = (ptB.easting - ptA.easting) * (ptCut.northing - ptA.northing) 
                     > (ptB.northing - ptA.northing) * (ptCut.easting - ptA.easting);
+                
+                bool isIntersect = false;
 
                 if (tramList.Count > 0)
                 {
-                    if (isLeft)
+                    for (int i = 0; i < tramList.Count; i++)
                     {
-                        for (int i = 0; i < tramList.Count; i++)
+                        ////check for line intersection
+                        for (int j = 0; j < tramList[i].Count - 1; j++)
+                        {
+                            if (GetLineIntersection(
+                                tramList[i][j].easting, tramList[i][j].northing,
+                                tramList[i][j + 1].easting, tramList[i][j + 1].northing,
+                                ptA.easting, ptA.northing, ptB.easting, ptB.northing))
+                            {
+                                isIntersect = true;
+                                break;
+                            }
+                        }
+
+                        if (isIntersect)
                         {
                             for (int h = 0; h < tramList[i].Count; h++)
                             {
-                                if ((ptB.easting - ptA.easting) * (tramList[i][h].northing - ptA.northing)
-                                    > (ptB.northing - ptA.northing) * (tramList[i][h].easting - ptA.easting))
+                                if (isLeft)
                                 {
-                                    tramList[i].RemoveAt(h);
-                                    h = -1;
+                                    if ((ptB.easting - ptA.easting) * (tramList[i][h].northing - ptA.northing)
+                                        > (ptB.northing - ptA.northing) * (tramList[i][h].easting - ptA.easting))
+                                    {
+                                        tramList[i].RemoveAt(h);
+                                        h = -1;
+                                    }
+                                }
+                                else
+                                {
+                                    if ((ptB.easting - ptA.easting) * (tramList[i][h].northing - ptA.northing)
+                                        < (ptB.northing - ptA.northing) * (tramList[i][h].easting - ptA.easting))
+                                    {
+                                        tramList[i].RemoveAt(h);
+                                        h = -1;
+                                    }
                                 }
                             }
                         }
-                    }
-                    else
-                    {
-                        for (int i = 0; i < tramList.Count; i++)
-                        {
-                            for (int h = 0; h < tramList[i].Count; h++)
-                            {
-                                if ((ptB.easting - ptA.easting) * (tramList[i][h].northing - ptA.northing)
-                                    < (ptB.northing - ptA.northing) * (tramList[i][h].easting - ptA.easting))
-                                {
-                                    tramList[i].RemoveAt(h);
-                                    h = -1;
-                                }
-                            }
-                        }
+                        isIntersect = false;
                     }
                 }
 
@@ -527,6 +540,34 @@ namespace AgOpenGPS
                 step = 0;
             }
         }
+
+        public bool GetLineIntersection(double p0x, double p0y, double p1x, double p1y,
+        double p2x, double p2y, double p3x, double p3y)
+        {
+            double s1x, s1y, s2x, s2y;
+            s1x = p1x - p0x;
+            s1y = p1y - p0y;
+
+            s2x = p3x - p2x;
+            s2y = p3y - p2y;
+
+            double s, t;
+            s = (-s1y * (p0x - p2x) + s1x * (p0y - p2y)) / (-s2x * s1y + s1x * s2y);
+
+            if (s >= 0 && s <= 1)
+            {
+                //check oher side
+                t = (s2x * (p0y - p2y) - s2y * (p0x - p2x)) / (-s2x * s1y + s1x * s2y);
+                if (t >= 0 && t <= 1)
+                {
+                    // Collision detected
+                    return true;
+                }
+            }
+
+            return false; // No collision
+        }
+
 
         private void oglSelf_Paint(object sender, PaintEventArgs e)
         {
