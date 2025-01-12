@@ -638,9 +638,9 @@ namespace AgOpenGPS
 
         private void DrawTrams()
         {
-            GL.LineWidth(8);
+            GL.LineWidth(6);
 
-            GL.Color4(0.930f, 0.72f, 0.73530f, mf.tram.tramAlpha);
+            GL.Color4(0.730f, 0.52f, 0.63530f, mf.tram.tramAlpha);
 
             if (displayMode == 0 || displayMode == 1)
             {
@@ -676,7 +676,7 @@ namespace AgOpenGPS
         {
             GL.LineWidth(2);
 
-            GL.Color4(0.7530f, 0.972f, 0.973530f, 0.9);
+            GL.Color4(0.97530f, 0.972f, 0.973530f, 1.0);
 
             if (displayMode == 0 || displayMode == 1)
             {
@@ -1119,14 +1119,7 @@ namespace AgOpenGPS
         private void btnDnStartTram_Click(object sender, EventArgs e)
         {
             startPass--;
-            if (cboxIsOuter.Checked)
-            {
-                if (startPass < 1) startPass = 1;
-            }
-            else
-            {
-                if (startPass < 0) startPass = 0;
-            }
+            if (startPass < 0) startPass = 0;
             lblStartPass.Text = "Start\r\n" + startPass.ToString();
             lblNumPasses.Text = "Trams\r\n" + passes.ToString();
             BuildTram();
