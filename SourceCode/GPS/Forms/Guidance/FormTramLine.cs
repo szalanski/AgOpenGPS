@@ -17,7 +17,7 @@ namespace AgOpenGPS
         //access to the main GPS form and all its variables
         private readonly FormGPS mf = null;
 
-        private bool isCancel = false;
+        private bool isCancel = false, isFirstRun = true;
 
         private int indx = -1;
 
@@ -59,10 +59,6 @@ namespace AgOpenGPS
             tbarTramAlpha.Value = (int)(mf.tram.tramAlpha * 100);
             lblAplha.Text = tbarTramAlpha.Value.ToString() + "%";
 
-            startPass = 1;
-            passes = 2;
-            lblStartPass.Text = "Start\r\n" + startPass.ToString();
-            lblNumPasses.Text = "Trams\r\n" + passes.ToString();
 
             mf.tool.halfWidth = (mf.tool.width - mf.tool.overlap) / 2.0;
 
@@ -87,6 +83,7 @@ namespace AgOpenGPS
                 Left = 0;
             }
 
+            ResetStartNumLabels();
             LoadAndFixLines();
         }
 
@@ -169,16 +166,40 @@ namespace AgOpenGPS
                 indx = 0;
             }
 
+            for (indx = 0; indx < gTemp.Count; indx++)
+            {
+                BuildTram();
+                if (tramList[0].Count == 0)
+                {
+                    gTemp[indx].isVisible = !gTemp[indx].isVisible;
+                    tramList.Clear();
+                    tramArr.Clear();
+                }
+            }
+
+            indx = 0;
             FixLabelsCurve();
+            BuildTram();
+        }
+
+        private void ResetStartNumLabels()
+        {
+            if (cboxIsOuter.Checked)
+            {
+                startPass = 1;
+            }
+            else
+            {
+                startPass = 0;
+            }
+            passes = 2;
+            lblStartPass.Text = "Start\r\n" + startPass.ToString();
+            lblNumPasses.Text = "Trams\r\n" + passes.ToString();
         }
 
         #endregion
 
         #region Building Lines
-        private void chkIsBuildLeft_Click(object sender, EventArgs e)
-        {
-            gTemp[indx].isVisible = !gTemp[indx].isVisible;
-        }
 
         private void btnAddLines_Click(object sender, EventArgs e)
         {
@@ -568,7 +589,6 @@ namespace AgOpenGPS
             return false; // No collision
         }
 
-
         private void oglSelf_Paint(object sender, PaintEventArgs e)
         {
             oglSelf.MakeCurrent();
@@ -857,9 +877,7 @@ namespace AgOpenGPS
                 indx = -1;
             }
 
-            FixLabelsCurve();
-            lblStartPass.Text = "Start\r\n" + startPass.ToString();
-            lblNumPasses.Text = "Trams\r\n" + passes.ToString();
+            ResetStartNumLabels();
             BuildTram();
         }
 
@@ -912,8 +930,7 @@ namespace AgOpenGPS
         private void btnSwapAB_Click(object sender, EventArgs e)
         {
             gTemp[indx].isVisible = !gTemp[indx].isVisible;
-            lblStartPass.Text = "Start\r\n" + startPass.ToString();
-            lblNumPasses.Text = "Trams\r\n" + passes.ToString();
+            ResetStartNumLabels();
             BuildTram();
         }
 
@@ -927,12 +944,10 @@ namespace AgOpenGPS
             mf.tram.tramBndOuterArr?.Clear();
             mf.tram.tramBndInnerArr?.Clear();
 
-            startPass = 1;
-            passes = 2;
-            lblStartPass.Text = "Start\r\n" + startPass.ToString();
-            lblNumPasses.Text = "Trams\r\n" + passes.ToString();
+            ResetStartNumLabels();
 
             cboxIsOuter.Checked = false;
+            BuildTram();
         }
 
         private void btnCancelTouch_Click(object sender, EventArgs e)
@@ -972,7 +987,6 @@ namespace AgOpenGPS
             {
                 mf.tram.tramBndOuterArr?.Clear();
                 mf.tram.tramBndInnerArr?.Clear();
-                if (startPass == 0) startPass = 1;
                 BuildTramBnd();
             }
             else
@@ -980,6 +994,8 @@ namespace AgOpenGPS
                 mf.tram.tramBndOuterArr?.Clear();
                 mf.tram.tramBndInnerArr?.Clear();
             }
+            ResetStartNumLabels();
+            BuildTram();
         }
 
         public void BuildTramBnd()
