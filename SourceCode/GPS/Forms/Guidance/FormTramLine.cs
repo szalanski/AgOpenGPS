@@ -17,7 +17,7 @@ namespace AgOpenGPS
         //access to the main GPS form and all its variables
         private readonly FormGPS mf = null;
 
-        private bool isCancel = false, isFirstRun = true;
+        private bool isCancel = false;
 
         private int indx = -1;
 
@@ -28,14 +28,14 @@ namespace AgOpenGPS
 
         private int step = 0;
 
-        public vec2 pint = new vec2();
+        private vec2 pint = new vec2();
 
         //tramTrams
-        public List<vec2> tramArr = new List<vec2>();
+        private List<vec2> tramArr = new List<vec2>();
 
-        public List<List<vec2>> tramList = new List<List<vec2>>();
+        private List<List<vec2>> tramList = new List<List<vec2>>();
 
-        public List<CTrk> gTemp = new List<CTrk>();
+        private List<CTrk> gTemp = new List<CTrk>();
 
         private bool isDrawSections = false;
 
@@ -142,6 +142,7 @@ namespace AgOpenGPS
         {
             //load the lines from Trks
             gTemp?.Clear();
+
             foreach (var item in mf.trk.gArr)
             {
                 if ((item.mode == TrackMode.AB || item.mode == TrackMode.Curve) && item.isVisible)
@@ -192,6 +193,12 @@ namespace AgOpenGPS
             {
                 startPass = 0;
             }
+
+            if (mf.tram.tramBndOuterArr.Count > 0)
+            {
+                startPass = 1;
+            }
+
             passes = 2;
             lblStartPass.Text = "Start\r\n" + startPass.ToString();
             lblNumPasses.Text = "Trams\r\n" + passes.ToString();
@@ -226,7 +233,7 @@ namespace AgOpenGPS
             tramArr?.Clear();
         }
 
-        public void BuildTram()
+        private void BuildTram()
         {
             if (gTemp[indx].mode == TrackMode.Curve)
             {
@@ -562,7 +569,7 @@ namespace AgOpenGPS
             }
         }
 
-        public bool GetLineIntersection(double p0x, double p0y, double p1x, double p1y,
+        private bool GetLineIntersection(double p0x, double p0y, double p1x, double p1y,
         double p2x, double p2y, double p3x, double p3y)
         {
             double s1x, s1y, s2x, s2y;
@@ -662,33 +669,27 @@ namespace AgOpenGPS
 
             GL.Color4(0.730f, 0.52f, 0.63530f, mf.tram.tramAlpha);
 
-            if (displayMode == 0 || displayMode == 1)
+            if (mf.tram.tramList.Count > 0)
             {
-                if (mf.tram.tramList.Count > 0)
+                for (int i = 0; i < mf.tram.tramList.Count; i++)
                 {
-                    for (int i = 0; i < mf.tram.tramList.Count; i++)
-                    {
-                        GL.Begin(PrimitiveType.LineStrip);
-                        for (int h = 0; h < mf.tram.tramList[i].Count; h++)
-                            GL.Vertex3(mf.tram.tramList[i][h].easting, mf.tram.tramList[i][h].northing, 0);
-                        GL.End();
-                    }
+                    GL.Begin(PrimitiveType.LineStrip);
+                    for (int h = 0; h < mf.tram.tramList[i].Count; h++)
+                        GL.Vertex3(mf.tram.tramList[i][h].easting, mf.tram.tramList[i][h].northing, 0);
+                    GL.End();
                 }
             }
 
-            if (displayMode == 0 || displayMode == 2)
+            if (mf.tram.tramBndOuterArr.Count > 0)
             {
-                if (mf.tram.tramBndOuterArr.Count > 0)
-                {
-                    GL.Color4(0.830f, 0.72f, 0.3530f, mf.tram.tramAlpha);
+                GL.Color4(0.830f, 0.72f, 0.3530f, mf.tram.tramAlpha);
 
-                    GL.Begin(PrimitiveType.LineStrip);
-                    for (int h = 0; h < mf.tram.tramBndOuterArr.Count; h++) GL.Vertex3(mf.tram.tramBndOuterArr[h].easting, mf.tram.tramBndOuterArr[h].northing, 0);
-                    GL.End();
-                    GL.Begin(PrimitiveType.LineStrip);
-                    for (int h = 0; h < mf.tram.tramBndInnerArr.Count; h++) GL.Vertex3(mf.tram.tramBndInnerArr[h].easting, mf.tram.tramBndInnerArr[h].northing, 0);
-                    GL.End();
-                }
+                GL.Begin(PrimitiveType.LineLoop);
+                for (int h = 0; h < mf.tram.tramBndOuterArr.Count; h++) GL.Vertex3(mf.tram.tramBndOuterArr[h].easting, mf.tram.tramBndOuterArr[h].northing, 0);
+                GL.End();
+                GL.Begin(PrimitiveType.LineLoop);
+                for (int h = 0; h < mf.tram.tramBndInnerArr.Count; h++) GL.Vertex3(mf.tram.tramBndInnerArr[h].easting, mf.tram.tramBndInnerArr[h].northing, 0);
+                GL.End();
             }
         }
 
@@ -978,6 +979,15 @@ namespace AgOpenGPS
             }
         }
 
+        private void btnResize_Click(object sender, EventArgs e)
+        {
+            Screen myScreen = Screen.PrimaryScreen;
+            Rectangle area = myScreen.WorkingArea;
+            this.Height = area.Height;
+
+            FormTramLine_ResizeEnd(this, e);
+        }
+
         #endregion
 
         #region Outer Tram
@@ -998,7 +1008,7 @@ namespace AgOpenGPS
             BuildTram();
         }
 
-        public void BuildTramBnd()
+        private void BuildTramBnd()
         {
             mf.tram.displayMode = 1;
             mf.tram.tramBndOuterArr?.Clear();
@@ -1055,7 +1065,7 @@ namespace AgOpenGPS
             }
         }
 
-        public void CreateBndOuterTramTrack()
+        private void CreateBndOuterTramTrack()
         {
             //countExit the points from the boundary
             int ptCount = mf.bnd.bndList[0].fenceLine.Count;
