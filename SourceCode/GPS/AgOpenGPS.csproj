@@ -993,6 +993,9 @@
     <None Include="btnImages\QR\QRYouTube.png" />
     <None Include="btnImages\BoundarySectionControlOnOff.png" />
     <None Include="btnImages\TramMulti.png" />
+    <None Include="btnImages\IncrementMinus.png" />
+    <None Include="btnImages\IncrementPlus.png" />
+    <None Include="btnImages\ZoomOut.png" />
     <Content Include="License.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

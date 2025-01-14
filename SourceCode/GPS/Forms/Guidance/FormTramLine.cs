@@ -28,18 +28,12 @@ namespace AgOpenGPS
 
         private int step = 0;
 
-        private vec2 pint = new vec2();
-
         //tramTrams
         private List<vec2> tramArr = new List<vec2>();
 
         private List<List<vec2>> tramList = new List<List<vec2>>();
 
         private List<CTrk> gTemp = new List<CTrk>();
-
-        private bool isDrawSections = false;
-
-        private int displayMode = 0;
 
         private int passes, startPass;
 
@@ -56,14 +50,9 @@ namespace AgOpenGPS
         private void FormTramLine_Load(object sender, EventArgs e)
         {
             //trams
-            tbarTramAlpha.Value = (int)(mf.tram.tramAlpha * 100);
-            lblAplha.Text = tbarTramAlpha.Value.ToString() + "%";
-
+            lblAplha.Text = ((int)(mf.tram.alpha * 100)).ToString();
 
             mf.tool.halfWidth = (mf.tool.width - mf.tool.overlap) / 2.0;
-
-            if (isDrawSections) btnDrawSections.Image = Properties.Resources.MappingOn;
-            else btnDrawSections.Image = Properties.Resources.MappingOff;
 
             FixLabelsCurve();
 
@@ -135,7 +124,8 @@ namespace AgOpenGPS
             
 
             Properties.Settings.Default.setWindow_tramLineSize = Size;
-            Properties.Settings.Default.setTram_alpha = mf.tram.tramAlpha;
+            Properties.Settings.Default.setTram_alpha = mf.tram.alpha;
+            Properties.Settings.Default.Save();
         }
 
         private void LoadAndFixLines()
@@ -201,7 +191,7 @@ namespace AgOpenGPS
 
             passes = 2;
             lblStartPass.Text = "Start\r\n" + startPass.ToString();
-            lblNumPasses.Text = "Trams\r\n" + passes.ToString();
+            lblNumPasses.Text = passes.ToString();
         }
 
         #endregion
@@ -609,8 +599,6 @@ namespace AgOpenGPS
             //translate to that spot in the world
             GL.Translate(-mf.fieldCenterX, -mf.fieldCenterY, 0);
 
-            if (isDrawSections) DrawSections();
-
             GL.LineWidth(3);
 
             for (int j = 0; j < mf.bnd.bndList.Count; j++)
@@ -667,7 +655,7 @@ namespace AgOpenGPS
         {
             GL.LineWidth(6);
 
-            GL.Color4(0.730f, 0.52f, 0.63530f, mf.tram.tramAlpha);
+            GL.Color4(0.730f, 0.52f, 0.63530f, mf.tram.alpha);
 
             if (mf.tram.tramList.Count > 0)
             {
@@ -682,7 +670,7 @@ namespace AgOpenGPS
 
             if (mf.tram.tramBndOuterArr.Count > 0)
             {
-                GL.Color4(0.830f, 0.72f, 0.3530f, mf.tram.tramAlpha);
+                GL.Color4(0.830f, 0.72f, 0.3530f, mf.tram.alpha);
 
                 GL.Begin(PrimitiveType.LineLoop);
                 for (int h = 0; h < mf.tram.tramBndOuterArr.Count; h++) GL.Vertex3(mf.tram.tramBndOuterArr[h].easting, mf.tram.tramBndOuterArr[h].northing, 0);
@@ -699,62 +687,16 @@ namespace AgOpenGPS
 
             GL.Color4(0.97530f, 0.972f, 0.973530f, 1.0);
 
-            if (displayMode == 0 || displayMode == 1)
+            if (tramList.Count > 0)
             {
-                if (tramList.Count > 0)
+                for (int i = 0; i < tramList.Count; i++)
                 {
-                    for (int i = 0; i < tramList.Count; i++)
-                    {
-                        GL.Begin(PrimitiveType.LineStrip);
-                        for (int h = 0; h < tramList[i].Count; h++)
-                            GL.Vertex3(tramList[i][h].easting, tramList[i][h].northing, 0);
-                        GL.End();
-                    }
+                    GL.Begin(PrimitiveType.LineStrip);
+                    for (int h = 0; h < tramList[i].Count; h++)
+                        GL.Vertex3(tramList[i][h].easting, tramList[i][h].northing, 0);
+                    GL.End();
                 }
             }
-        }
-
-        private void DrawSections()
-        {
-            int cnt, step, patchCount;
-            int mipmap = 8;
-
-            GL.Color3(0.12f, 0.12f, 0.12f);
-
-            //draw patches j= # of sections
-            for (int j = 0; j < mf.triStrip.Count; j++)
-            {
-                //every time the section turns off and on is a new patch
-                patchCount = mf.triStrip[j].patchList.Count;
-
-                if (patchCount > 0)
-                {
-                    //for every new chunk of patch
-                    foreach (System.Collections.Generic.List<vec3> triList in mf.triStrip[j].patchList)
-                    {
-                        //draw the triangle in each triangle strip
-                        GL.Begin(PrimitiveType.TriangleStrip);
-                        cnt = triList.Count;
-
-                        //if large enough patch and camera zoomed out, fake mipmap the patches, skip triangles
-                        if (cnt >= (mipmap))
-                        {
-                            step = mipmap;
-                            for (int i = 1; i < cnt; i += step)
-                            {
-                                GL.Vertex3(triList[i].easting, triList[i].northing, 0); i++;
-                                GL.Vertex3(triList[i].easting, triList[i].northing, 0); i++;
-
-                                //too small to mipmap it
-                                if (cnt - i <= (mipmap + 2))
-                                    step = 0;
-                            }
-                        }
-                        else { for (int i = 1; i < cnt; i++) GL.Vertex3(triList[i].easting, triList[i].northing, 0); }
-                        GL.End();
-                    }
-                }
-            } //end of section patches
         }
 
         private void DrawBuiltLines()
@@ -899,7 +841,7 @@ namespace AgOpenGPS
 
             FixLabelsCurve();
             lblStartPass.Text = "Start\r\n"+startPass.ToString();
-            lblNumPasses.Text = "Trams\r\n"+passes.ToString();
+            lblNumPasses.Text = passes.ToString();
             BuildTram();
         }
 
@@ -913,19 +855,6 @@ namespace AgOpenGPS
         {
             isCancel = true;
             Close();
-        }
-
-        private void btnDrawSections_Click(object sender, EventArgs e)
-        {
-            isDrawSections = !isDrawSections;
-            if (isDrawSections) btnDrawSections.Image = Properties.Resources.MappingOn;
-            else btnDrawSections.Image = Properties.Resources.MappingOff;
-        }
-
-        private void tbarTramAlpha_Scroll(object sender, EventArgs e)
-        {
-            mf.tram.tramAlpha = (double)tbarTramAlpha.Value * 0.01;
-            lblAplha.Text = tbarTramAlpha.Value.ToString() + "%";
         }
 
         private void btnSwapAB_Click(object sender, EventArgs e)
@@ -986,6 +915,19 @@ namespace AgOpenGPS
             this.Height = area.Height;
 
             FormTramLine_ResizeEnd(this, e);
+        }
+        private void btnDnAlpha_Click(object sender, EventArgs e)
+        {
+            mf.tram.alpha -= 0.1;
+            if (mf.tram.alpha < 0.2) mf.tram.alpha = 0.2;
+            lblAplha.Text = ((int)(mf.tram.alpha * 100)).ToString();
+        }
+
+        private void btnUpAlpha_Click(object sender, EventArgs e)
+        {
+            mf.tram.alpha += 0.1;
+            if (mf.tram.alpha > 1.0) mf.tram.alpha = 1.0;
+            lblAplha.Text = ((int)(mf.tram.alpha * 100)).ToString();
         }
 
         #endregion
@@ -1121,7 +1063,7 @@ namespace AgOpenGPS
         {
             passes++;
             lblStartPass.Text = "Start\r\n" + startPass.ToString();
-            lblNumPasses.Text = "Trams\r\n" + passes.ToString();
+            lblNumPasses.Text = passes.ToString();
             BuildTram();
         }
 
@@ -1130,7 +1072,7 @@ namespace AgOpenGPS
             passes--;
             if (passes < 1) passes = 1;
             lblStartPass.Text = "Start\r\n" + startPass.ToString();
-            lblNumPasses.Text = "Trams\r\n" + passes.ToString();
+            lblNumPasses.Text = passes.ToString();
             BuildTram();
         }
 
@@ -1138,7 +1080,7 @@ namespace AgOpenGPS
         {
             startPass++;
             lblStartPass.Text = "Start\r\n" + startPass.ToString();
-            lblNumPasses.Text = "Trams\r\n" + passes.ToString();
+            lblNumPasses.Text = passes.ToString();
             BuildTram();
         }
 
@@ -1147,7 +1089,7 @@ namespace AgOpenGPS
             startPass--;
             if (startPass < 0) startPass = 0;
             lblStartPass.Text = "Start\r\n" + startPass.ToString();
-            lblNumPasses.Text = "Trams\r\n" + passes.ToString();
+            lblNumPasses.Text = passes.ToString();
             BuildTram();
         }
 
