@@ -246,7 +246,7 @@ namespace AgOpenGPS
             Properties.Settings.Default.setIMU_invertRoll = mf.ahrs.isRollInvert;
 
             //save current vehicle
-            RegistrySettings.Save();
+            Properties.Settings.Default.Save();
         }
 
         private void Timer1_Tick(object sender, EventArgs e)
@@ -595,7 +595,7 @@ namespace AgOpenGPS
             counter251 = 2;
 
             //save current vehicle
-            RegistrySettings.Save();
+            Properties.Settings.Default.Save();
 
             FormSteer_Load(this, e);
         }

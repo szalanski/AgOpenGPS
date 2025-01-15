@@ -135,11 +135,11 @@ namespace AgOpenGPS
                 return;
             }
 
-            //reload all the settings from default and user.config
+            //reload all the settings
             mf.LoadSettings();
 
             //save current vehicle
-            RegistrySettings.Save();
+            Properties.Settings.Default.Save();
         }
 
         private void FixMinMaxSpinners()

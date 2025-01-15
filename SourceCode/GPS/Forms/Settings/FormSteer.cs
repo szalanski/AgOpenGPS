@@ -309,7 +309,7 @@ namespace AgOpenGPS
             Properties.Settings.Default.setAS_uTurnCompensation = mf.vehicle.uturnCompensation;
 
             //save current vehicle
-            RegistrySettings.Save();
+            Properties.Settings.Default.Save();
         }
 
         private void Timer1_Tick(object sender, EventArgs e)
@@ -1187,7 +1187,7 @@ namespace AgOpenGPS
                 mf.isSteerInReverse = false;
 
                 //save current vehicle
-                RegistrySettings.Save();
+                Properties.Settings.Default.Save();
 
                 mf.vehicle = new CVehicle(mf);
 

@@ -7,6 +7,7 @@ namespace AgLibrary.Logging
     public static class Log
     {
         public static StringBuilder sbEvents = new StringBuilder();
+        private static string logsDirectory = "";
 
         public static void EventWriter(string message)
         {
@@ -16,8 +17,22 @@ namespace AgLibrary.Logging
             sbEvents.Append("\r");
         }
 
+        public static void FileSaveSystemEvents()
+        {
+            if (logsDirectory != "")
+            {
+                using (StreamWriter writer = new StreamWriter(logsDirectory, true))
+                {
+                    writer.Write(sbEvents);
+                    sbEvents.Clear();
+                }
+            }
+        }
+
         public static void CheckLogSize(string logFile, int sizeLimit)
         {
+            logsDirectory = logFile;
+
             //system event log file
             FileInfo txtfile = new FileInfo(logFile);
             if (txtfile.Exists)
@@ -27,7 +42,7 @@ namespace AgLibrary.Logging
                     StringBuilder sbF = new StringBuilder();
                     long bytes = txtfile.Length - sizeLimit;
                     bytes = (sizeLimit * 2) / 10 + bytes;
-                    Log.sbEvents.Append("Log File Reduced by: " + bytes.ToString());
+                    sbEvents.Append("Log File Reduced by: " + bytes.ToString());
 
                     //create some extra space
                     int bytesSoFar = 0;

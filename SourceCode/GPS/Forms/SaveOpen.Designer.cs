@@ -1090,6 +1090,8 @@ namespace AgOpenGPS
         //function to open a previously saved field, resume, open exisiting, open named field
         public void FileOpenField(string _openType)
         {
+            if (isJobStarted) FileSaveEverythingBeforeClosingField();
+
             string fileAndDirectory = "";
             if (_openType.Contains("Field.txt"))
             {
@@ -1133,12 +1135,6 @@ namespace AgOpenGPS
             }
 
             if (fileAndDirectory == "Cancel") return;
-
-            //close the existing job and reset everything
-            this.JobClose();
-
-            //and open a new job
-            this.JobNew();
 
             //Saturday, February 11, 2017  -->  7:26:52 AM
             //$FieldDir
@@ -1209,16 +1205,15 @@ namespace AgOpenGPS
                     Log.EventWriter("While Opening Field" + e.ToString());
 
                     TimedMessageBox(2000, gStr.gsFieldFileIsCorrupt, gStr.gsChooseADifferentField);
-
-                    
-                    JobClose();
                     return;
                 }
             }
 
-            // Tracks -------------------------------------------------------------------------------------------------
+            //and open a new job
+            this.JobNew();
 
-            trk.gArr?.Clear();
+
+            // Tracks -------------------------------------------------------------------------------------------------
 
             FileLoadTracks();
 
@@ -2313,15 +2308,6 @@ namespace AgOpenGPS
                     Log.EventWriter("Saving Flags" + e.ToString());
                     return;
                 }
-            }
-        }
-
-        public void FileSaveSystemEvents()
-        {
-            using (StreamWriter writer = new StreamWriter(Path.Combine(RegistrySettings.logsDirectory, "AgOpenGPS_Events_Log.txt"), true))
-            {
-                writer.Write(Log.sbEvents);
-                Log.sbEvents.Clear();
             }
         }
 
