@@ -28,15 +28,6 @@ namespace AgOpenGPS
                 }
                 workingDirectory = regKey.GetValue("WorkingDirectory").ToString();
 
-                if (workingDirectory == "Default")
-                {
-                    baseDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "AgOpenGPS");
-                }
-                else //user set to other
-                {
-                    baseDirectory = Path.Combine(workingDirectory, "AgOpenGPS");
-                }
-
                 //Vehicle File Name Registry Key
                 if (regKey.GetValue("VehicleFileName") == null)
                 {
@@ -49,7 +40,6 @@ namespace AgOpenGPS
                 {
                     regKey.SetValue("Language", "en");
                 }
-
                 culture = regKey.GetValue("Language").ToString();
 
                 //close registry
@@ -114,6 +104,29 @@ namespace AgOpenGPS
 
         public static void CreateDirectories()
         {
+            try
+            {
+                if (workingDirectory == "Default")
+                {
+                    baseDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "AgOpenGPS");
+                }
+                else //user set to other
+                {
+                    baseDirectory = Path.Combine(workingDirectory, "AgOpenGPS");
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EventWriter("Catch, Serious Problem Making Working Directory: " + ex.ToString());
+
+                if (workingDirectory != "Default")
+                {
+                    workingDirectory = "Default";
+                    Save("WorkingDirectory", "Default");
+                    CreateDirectories();
+                }
+            }
+
             //get the vehicles directory, if not exist, create
             try
             {
