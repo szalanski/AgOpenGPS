@@ -158,7 +158,7 @@
             this.btnAntennaTool.FlatAppearance.BorderSize = 0;
             this.btnAntennaTool.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAntennaTool.Image = global::AgOpenGPS.Properties.Resources.BoundaryRecordTool;
-            this.btnAntennaTool.Location = new System.Drawing.Point(13, 172);
+            this.btnAntennaTool.Location = new System.Drawing.Point(16, 291);
             this.btnAntennaTool.Name = "btnAntennaTool";
             this.btnAntennaTool.Size = new System.Drawing.Size(80, 64);
             this.btnAntennaTool.TabIndex = 155;
@@ -187,7 +187,7 @@
             this.btnLeftRight.FlatAppearance.BorderSize = 0;
             this.btnLeftRight.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnLeftRight.Image = global::AgOpenGPS.Properties.Resources.BoundaryLeft;
-            this.btnLeftRight.Location = new System.Drawing.Point(5, 64);
+            this.btnLeftRight.Location = new System.Drawing.Point(5, 175);
             this.btnLeftRight.Name = "btnLeftRight";
             this.btnLeftRight.Size = new System.Drawing.Size(80, 64);
             this.btnLeftRight.TabIndex = 68;
@@ -233,7 +233,7 @@
             this.btnRestart.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnRestart.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold);
             this.btnRestart.Image = global::AgOpenGPS.Properties.Resources.Trash;
-            this.btnRestart.Location = new System.Drawing.Point(18, 292);
+            this.btnRestart.Location = new System.Drawing.Point(21, 77);
             this.btnRestart.Name = "btnRestart";
             this.btnRestart.Size = new System.Drawing.Size(52, 52);
             this.btnRestart.TabIndex = 147;
