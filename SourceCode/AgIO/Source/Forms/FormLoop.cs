@@ -336,16 +336,7 @@ namespace AgIO
             Log.EventWriter("Program Exit: " +
                 DateTime.Now.ToString("f", CultureInfo.InvariantCulture) + "\n\r");
 
-            FileSaveSystemEvents();
-        }
-
-        public void FileSaveSystemEvents()
-        {
-            using (StreamWriter writer = new StreamWriter(Path.Combine(RegistrySettings.logsDirectory, "AgIO_Events_Log.txt"), true))
-            {
-                writer.Write(Log.sbEvents);
-                Log.sbEvents.Clear();
-            }
+            Log.FileSaveSystemEvents();
         }
 
         private void oneSecondLoopTimer_Tick(object sender, EventArgs e)
