@@ -263,7 +263,7 @@ namespace AgIO
             this.Text =
             "AgIO  v" + GitVersionInformation.MajorMinorPatch + " Profile: " + RegistrySettings.profileName;
 
-            if (RegistrySettings.profileName == "Default Profile")
+            if (RegistrySettings.profileName == "")
             {
                 Log.EventWriter("Using Default Profile At Start Warning");
 
@@ -303,7 +303,7 @@ namespace AgIO
 
             Settings.Default.Save();
 
-            if (RegistrySettings.profileName != "Default Profile")
+            if (RegistrySettings.profileName != "")
                 RegistrySettings.Save();
             else
                 YesMessageBox("Using Default Profile" + "\r\n\r\n" + "Changes will NOT be Saved");

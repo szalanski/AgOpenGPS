@@ -118,7 +118,7 @@ namespace AgIO
 
         private void btnUDP_Click(object sender, EventArgs e)
         {
-            if (RegistrySettings.profileName == "Default Profile")
+            if (RegistrySettings.profileName == "")
             {
                 TimedMessageBox(3000, "Using Default Profile", "Choose Existing or Create New Profile");
                 return;
@@ -134,7 +134,7 @@ namespace AgIO
 
         private void btnNTRIP_Click(object sender, EventArgs e)
         {
-            if (RegistrySettings.profileName == "Default Profile")
+            if (RegistrySettings.profileName == "")
             {
                 TimedMessageBox(3000, "Using Default Profile", "Choose Existing or Create New Profile");
                 return;
@@ -150,7 +150,7 @@ namespace AgIO
 
         private void btnRadio_Click(object sender, EventArgs e)
         {
-            if (RegistrySettings.profileName == "Default Profile")
+            if (RegistrySettings.profileName == "")
             {
                 TimedMessageBox(3000, "Using Default Profile", "Choose Existing or Create New Profile");
                 return;
@@ -241,7 +241,7 @@ namespace AgIO
 
         private void serialPassThroughToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (RegistrySettings.profileName == "Default Profile")
+            if (RegistrySettings.profileName == "")
             {
                 TimedMessageBox(3000, "Using Default Profile", "Choose Existing or Create New Profile");
                 return;
@@ -272,7 +272,7 @@ namespace AgIO
 
         private void toolStripMenuProfiles_Click(object sender, EventArgs e)
         {
-            if (RegistrySettings.profileName == "Default Profile")
+            if (RegistrySettings.profileName == "")
             {
                 TimedMessageBox(3000, "AgIO Default Profile Used", "Create or Choose a Profile");
             }
