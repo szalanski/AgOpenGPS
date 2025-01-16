@@ -42,6 +42,9 @@
             // 
             // keyboard1
             // 
+            this.keyboard1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.keyboard1.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.keyboard1.Location = new System.Drawing.Point(2, 56);
             this.keyboard1.Name = "keyboard1";
