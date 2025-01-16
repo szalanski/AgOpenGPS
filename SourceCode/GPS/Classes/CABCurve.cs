@@ -1055,6 +1055,44 @@ namespace AgOpenGPS
                     //GL.PointSize(1.0f);
                 }
             }
+
+            if (guideArr.Count > 0)
+            {
+                GL.LineWidth(mf.ABLine.lineWidth * 3);
+                GL.Color3(0, 0, 0);
+
+                if (mf.trk.gArr[mf.trk.idx].mode != TrackMode.bndCurve)
+                    GL.Begin(PrimitiveType.LineStrip);
+                else
+                    GL.Begin(PrimitiveType.LineLoop);
+
+                for (int i = 0; i < guideArr.Count; i++)
+                {
+                    GL.Begin(PrimitiveType.LineStrip);
+                    for (int h = 0; h < guideArr[i].Count; h++)
+                        GL.Vertex3(guideArr[i][h].easting, guideArr[i][h].northing, 0);
+                    GL.End();
+                }
+                GL.End();
+
+                GL.LineWidth(mf.ABLine.lineWidth);
+                GL.Color4(0.2, 0.5, 0.2, 0.6);
+
+                if (mf.trk.gArr[mf.trk.idx].mode != TrackMode.bndCurve)
+                    GL.Begin(PrimitiveType.LineStrip);
+                else
+                    GL.Begin(PrimitiveType.LineLoop);
+
+                for (int i = 0; i < guideArr.Count; i++)
+                {
+                    GL.Begin(PrimitiveType.LineStrip);
+                    for (int h = 0; h < guideArr[i].Count; h++)
+                        GL.Vertex3(guideArr[i][h].easting, guideArr[i][h].northing, 0);
+                    GL.End();
+                }
+                GL.End();
+            }
+
             GL.PointSize(1.0f);
         }
 
