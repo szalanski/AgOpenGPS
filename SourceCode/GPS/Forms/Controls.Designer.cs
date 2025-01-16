@@ -1313,12 +1313,12 @@ namespace AgOpenGPS
             fbd.ShowNewFolderButton = true;
             fbd.Description = "Currently: " + RegistrySettings.workingDirectory;
 
-            if (RegistrySettings.workingDirectory == "Default") fbd.SelectedPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            if (RegistrySettings.workingDirectory == RegistrySettings.defaultString) fbd.SelectedPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             else fbd.SelectedPath = RegistrySettings.workingDirectory;
 
             if (fbd.ShowDialog(this) == DialogResult.OK)
             {
-                RegistrySettings.Save("WorkingDirectory", fbd.SelectedPath);
+                RegistrySettings.Save(RegKeys.workingDirectory, fbd.SelectedPath);
 
                 //restart program
                 MessageBox.Show(gStr.gsProgramWillExitPleaseRestart);
@@ -1656,7 +1656,7 @@ namespace AgOpenGPS
                     lang = "en";
                     break;
             }
-            RegistrySettings.Save("Language", lang);
+            RegistrySettings.Save(RegKeys.language, lang);
 
             Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo(lang);
             Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo(lang);

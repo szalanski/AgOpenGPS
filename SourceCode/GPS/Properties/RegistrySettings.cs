@@ -5,15 +5,23 @@ using System.IO;
 
 namespace AgOpenGPS
 {
+    public static class RegKeys
+    {
+        public const string vehicleFileName = "VehicleFileName";
+        public const string workingDirectory = "WorkingDirectory";
+        public const string language = "Language";
+    }
+
     public static class RegistrySettings
     {
+        public const string defaultString = "Default";
         public static string culture = "en";
-        public static string vehiclesDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "AgOpenGPS", "Vehicles");
-        public static string logsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "AgOpenGPS", "Logs");
         public static string vehicleFileName = "";
         public static string workingDirectory = "Default";
-        public static string baseDirectory = workingDirectory;
-        public static string fieldsDirectory = workingDirectory;
+        public static string vehiclesDirectory;
+        public static string logsDirectory;
+        public static string baseDirectory;
+        public static string fieldsDirectory;
 
         public static void Load()
         {
@@ -22,25 +30,28 @@ namespace AgOpenGPS
                 //opening the subkey
                 RegistryKey regKey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgOpenGPS");
 
-                if (regKey.GetValue("WorkingDirectory") == null || regKey.GetValue("WorkingDirectory").ToString() == "")
+                if (regKey.GetValue(RegKeys.workingDirectory) == null || regKey.GetValue(RegKeys.workingDirectory).ToString() == "")
                 {
-                    regKey.SetValue("WorkingDirectory", "Default");
+                    regKey.SetValue(RegKeys.workingDirectory, defaultString);
+                    Log.EventWriter("Registry -> Key workingDirectory was null");
                 }
-                workingDirectory = regKey.GetValue("WorkingDirectory").ToString();
+                workingDirectory = regKey.GetValue(RegKeys.workingDirectory).ToString();
 
                 //Vehicle File Name Registry Key
-                if (regKey.GetValue("VehicleFileName") == null)
+                if (regKey.GetValue(RegKeys.vehicleFileName) == null)
                 {
-                    regKey.SetValue("VehicleFileName", "");
+                    regKey.SetValue(RegKeys.vehicleFileName, "");
+                    Log.EventWriter("Registry -> Key vehicleFileName was null");
                 }
-                vehicleFileName = regKey.GetValue("VehicleFileName").ToString();
+                vehicleFileName = regKey.GetValue(RegKeys.vehicleFileName).ToString();
 
                 //Language Registry Key
-                if (regKey.GetValue("Language") == null || regKey.GetValue("Language").ToString() == "")
+                if (regKey.GetValue(RegKeys.language) == null || regKey.GetValue(RegKeys.language).ToString() == "")
                 {
-                    regKey.SetValue("Language", "en");
+                    regKey.SetValue(RegKeys.language, "en");
+                    Log.EventWriter("Registry -> Key language was null");
                 }
-                culture = regKey.GetValue("Language").ToString();
+                culture = regKey.GetValue(RegKeys.language).ToString();
 
                 //close registry
                 regKey.Close();
@@ -67,13 +78,13 @@ namespace AgOpenGPS
                 //adding or editing "Language" subkey to the "SOFTWARE" subkey  
                 RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgOpenGPS");
 
-                if (name == "VehicleFileName")
+                if (name == RegKeys.vehicleFileName)
                     vehicleFileName = value;
-                else if (name == "Language")
+                else if (name == RegKeys.language)
                     culture = value;
 
-                if (name == "WorkingDirectory" && value == Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))
-                    key.SetValue(name, "Default");
+                if (name == RegKeys.workingDirectory && value == Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))
+                    key.SetValue(name, defaultString);
                 else//storing the value
                     key.SetValue(name, value);
 
@@ -81,7 +92,7 @@ namespace AgOpenGPS
             }
             catch (Exception ex)
             {
-                Log.EventWriter("Registry -> Catch, Unable to save Vehicle FileName: " + ex.ToString());
+                Log.EventWriter("Registry -> Catch, Unable to save " + name + ": " + ex.ToString());
             }
         }
 
@@ -93,7 +104,7 @@ namespace AgOpenGPS
 
                 Log.EventWriter("Registry -> Resetting Registry SubKey Tree and Full Default Reset");
             }
-            catch (Exception ex)
+            catch (Exception ex)//program will crash anyways!
             {
                 Log.EventWriter("Registry -> Catch, Serious Problem Resetting Registry keys: " + ex.ToString());
 
@@ -106,7 +117,7 @@ namespace AgOpenGPS
         {
             try
             {
-                if (workingDirectory == "Default")
+                if (workingDirectory == defaultString)
                 {
                     baseDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "AgOpenGPS");
                 }
@@ -119,11 +130,17 @@ namespace AgOpenGPS
             {
                 Log.EventWriter("Catch, Serious Problem Making Working Directory: " + ex.ToString());
 
-                if (workingDirectory != "Default")
+                if (workingDirectory != defaultString)
                 {
-                    workingDirectory = "Default";
-                    Save("WorkingDirectory", "Default");
+                    workingDirectory = defaultString;
+                    Save(RegKeys.workingDirectory, defaultString);
                     CreateDirectories();
+                    return;
+                }
+                else//program will crash anyways!
+                {
+                    Log.FileSaveSystemEvents();
+                    Environment.Exit(0);
                 }
             }
 
@@ -160,6 +177,7 @@ namespace AgOpenGPS
             //get the logs directory, if not exist, create
             try
             {
+                logsDirectory = Path.Combine(baseDirectory, "Logs");
                 if (!string.IsNullOrEmpty(logsDirectory) && !Directory.Exists(logsDirectory))
                 {
                     Directory.CreateDirectory(logsDirectory);

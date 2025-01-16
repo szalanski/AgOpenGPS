@@ -31,7 +31,7 @@ namespace AgOpenGPS
 
                     if (result3 == DialogResult.Yes)
                     {
-                        RegistrySettings.Save("VehicleFileName", newVehicleName);
+                        RegistrySettings.Save(RegKeys.vehicleFileName, newVehicleName);
 
                         var result = Settings.Default.Load();
                         if (result != LoadResult.Ok)
@@ -155,7 +155,7 @@ namespace AgOpenGPS
 
             if (newVehicleName.Length > 0)
             {
-                RegistrySettings.Save("VehicleFileName", newVehicleName);
+                RegistrySettings.Save(RegKeys.vehicleFileName, newVehicleName);
                 Settings.Default.Save();
 
                 //same anyways so why reload???
@@ -265,7 +265,7 @@ namespace AgOpenGPS
 
             if (newVehicleName.Length > 0)
             {
-                RegistrySettings.Save("VehicleFileName", newVehicleName);
+                RegistrySettings.Save(RegKeys.vehicleFileName, newVehicleName);
                 
                 Settings.Default.Reset();
                 Settings.Default.Save();

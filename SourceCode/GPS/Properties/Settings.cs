@@ -291,7 +291,7 @@ namespace AgOpenGPS.Properties
             if (result == LoadResult.MissingFile)
             {
                 Log.EventWriter("Vehicle file does not exist or is Default, Default Vehicle used");
-                RegistrySettings.Save("VehicleFileName", "");
+                RegistrySettings.Save(RegKeys.vehicleFileName, "");
             }
 
             return result;
