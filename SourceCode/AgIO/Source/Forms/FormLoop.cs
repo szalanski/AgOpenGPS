@@ -193,6 +193,7 @@ namespace AgIO
             isConnectedSteer = cboxIsSteerModule.Checked = Properties.Settings.Default.setMod_isSteerConnected;
             isConnectedMachine = cboxIsMachineModule.Checked = Properties.Settings.Default.setMod_isMachineConnected;
 
+            //On or off the module rows
             SetModulesOnOff();
 
             oneSecondLoopTimer.Enabled = true;
@@ -203,9 +204,6 @@ namespace AgIO
             pictureBox1.Left = 0;
             pictureBox1.Top = 0;
             //pictureBox1.Dock = DockStyle.Fill;:
-
-            //On or off the module rows
-            SetModulesOnOff();
 
             //update Caster IP from URL, just use the old one if can't find
             if (isNTRIP_RequiredOn)
@@ -276,7 +274,6 @@ namespace AgIO
                     {
                         Log.EventWriter("Program Reset: Saving or Selecting Profile");
 
-                        RegistrySettings.Save();
                         Application.Restart();
                         Environment.Exit(0);
                     }
@@ -302,12 +299,6 @@ namespace AgIO
             Settings.Default.setPort_wasRtcmConnected = wasRtcmConnectedLastRun;
 
             Settings.Default.Save();
-
-            if (RegistrySettings.profileName != "")
-                RegistrySettings.Save();
-            else
-                YesMessageBox("Using Default Profile" + "\r\n\r\n" + "Changes will NOT be Saved");
-
 
             if (loopBackSocket != null)
             {
@@ -729,11 +720,17 @@ namespace AgIO
                 cboxIsSteerModule.BackgroundImage = Properties.Resources.AddNew;
             }
 
-            Properties.Settings.Default.setMod_isIMUConnected = isConnectedIMU;
-            Properties.Settings.Default.setMod_isSteerConnected = isConnectedSteer;
-            Properties.Settings.Default.setMod_isMachineConnected = isConnectedMachine;
+            if (cboxIsIMUModule.Checked != Properties.Settings.Default.setMod_isIMUConnected ||
+                cboxIsSteerModule.Checked != Properties.Settings.Default.setMod_isSteerConnected ||
+                cboxIsMachineModule.Checked != Properties.Settings.Default.setMod_isMachineConnected)
+            {
 
-            Properties.Settings.Default.Save();
+                Properties.Settings.Default.setMod_isIMUConnected = isConnectedIMU;
+                Properties.Settings.Default.setMod_isSteerConnected = isConnectedSteer;
+                Properties.Settings.Default.setMod_isMachineConnected = isConnectedMachine;
+
+                Properties.Settings.Default.Save();
+            }
         }
 
         private void DoTraffic()

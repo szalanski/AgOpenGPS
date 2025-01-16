@@ -44,24 +44,21 @@ namespace AgIO
 
             DirectoryInfo dinfo2 = new DirectoryInfo(RegistrySettings.profileDirectory);
             FileInfo[] Files2 = dinfo2.GetFiles("*.xml");
-            if (Files2.Length == 0)
+            foreach (FileInfo file in Files2)
             {
-                cboxChooseExisting.Enabled = false;
-            }
-            else
-            {
-                foreach (FileInfo file in Files2)
-                {
-                    string temp = Path.GetFileNameWithoutExtension(file.Name);
+                string temp = Path.GetFileNameWithoutExtension(file.Name);
+                if (temp != RegistrySettings.profileName)
                     cboxChooseExisting.Items.Add(temp);
-                }
             }
+
+            cboxChooseExisting.Enabled = cboxChooseExisting.Items.Count > 0;
         }
 
         private void cboxOverWrite_SelectedIndexChanged(object sender, EventArgs e)
         {
+            string newProfile = SanitizeFileName(cboxOverWrite.SelectedItem.ToString()).Trim();
             DialogResult result3 = MessageBox.Show(
-                "Overwrite: " + cboxOverWrite.SelectedItem.ToString() + ".xml",
+                "Overwrite: " + newProfile + ".xml",
                 "Save And Return",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question,
@@ -70,12 +67,7 @@ namespace AgIO
             if (result3 == DialogResult.Yes)
             {
                 //save profile in registry
-                RegistrySettings.Save();
-
-                RegistrySettings.profileName = SanitizeFileName(cboxOverWrite.SelectedItem.ToString().Trim());
-
-                //save profile in registry
-                RegistrySettings.Save();
+                RegistrySettings.Save(RegKeys.profileName, newProfile);
 
                 Close();
             }
@@ -99,16 +91,16 @@ namespace AgIO
 
         private void btnSaveNewProfile_Click(object sender, EventArgs e)
         {
-            if (tboxCreateNew.Text.Trim().Length > 0)
-            {
-                RegistrySettings.profileName = SanitizeFileName(tboxCreateNew.Text.Trim());
+            string newProfile = SanitizeFileName(tboxCreateNew.Text).Trim();
 
+            if (newProfile.Length > 0)
+            {
+                //save profile in registry
+                RegistrySettings.Save(RegKeys.profileName, newProfile);
+                
                 //reset to Default Profile and save
                 Settings.Default.Reset();
 
-                //save profile in registry
-                RegistrySettings.Save();
-                
                 DialogResult = DialogResult.Yes;
                 Close();
             }
@@ -158,12 +150,13 @@ namespace AgIO
 
         private void btnSaveAs_Click(object sender, EventArgs e)
         {
-            if (tboxSaveAs.Text.Trim().Length > 0)
+            string newProfile = SanitizeFileName(tboxSaveAs.Text.ToString()).Trim();
+            if (newProfile.Length > 0)
             {
-                RegistrySettings.profileName = SanitizeFileName(tboxSaveAs.Text.ToString().Trim());
-
                 //save profile in registry
-                RegistrySettings.Save();
+                RegistrySettings.Save(RegKeys.profileName, newProfile);
+
+                Settings.Default.Save();
 
                 DialogResult = DialogResult.OK;
                 Close();
@@ -178,14 +171,11 @@ namespace AgIO
         //Load Existing Profile
         private void cboxChooseExisting_SelectedIndexChanged(object sender, EventArgs e)
         {
+            string newProfile = SanitizeFileName(cboxChooseExisting.SelectedItem.ToString()).Trim();
             //save current profile
-            RegistrySettings.Save();
+            RegistrySettings.Save(RegKeys.profileName, newProfile);
 
-            SettingsIO.ImportSettings(Path.Combine(RegistrySettings.profileDirectory, cboxChooseExisting.SelectedItem.ToString().Trim() + ".xml"));
-
-            RegistrySettings.profileName = cboxChooseExisting.SelectedItem.ToString().Trim();
-
-            RegistrySettings.Save();
+            Settings.Default.Load();
 
             DialogResult = DialogResult.Yes;
             Close();

@@ -283,8 +283,7 @@ namespace AgIO
                 if (form.DialogResult == DialogResult.Yes)
                 {
                     Log.EventWriter("Program Reset: Saving or Selecting Profile");
-
-                    RegistrySettings.Save();
+                    
                     Application.Restart();
                     Environment.Exit(0);
                 }
