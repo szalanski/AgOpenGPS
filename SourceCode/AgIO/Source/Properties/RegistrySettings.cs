@@ -15,21 +15,34 @@ namespace AgIO
     public static class RegKeys
     {
         public const string profileName = "ProfileName";
+        public const string workingDirectory = "WorkingDirectory";
+        public const string language = "Language";
     }
 
     public static class RegistrySettings
     {
+        public const string defaultString = "Default";
+
         public static string culture = "en";
+        public static string workingDirectory = "Default";
+        public static string baseDirectory;
         public static string profileDirectory;
         public static string logsDirectory;
         public static string profileName = "";
-        
+
         public static void Load()
         {
             try
             {
                 //opening the subkey
-                RegistryKey regKey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgIO");
+                RegistryKey regKey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgOpenGPS");
+
+                if (regKey.GetValue(RegKeys.workingDirectory) == null || regKey.GetValue(RegKeys.workingDirectory).ToString() == "")
+                {
+                    regKey.SetValue(RegKeys.workingDirectory, defaultString);
+                    Log.EventWriter("Registry -> Key workingDirectory was null");
+                }
+                workingDirectory = regKey.GetValue(RegKeys.workingDirectory).ToString();
 
                 //Profile File Name from Registry Key
                 if (regKey.GetValue(RegKeys.profileName) == null)
@@ -39,7 +52,6 @@ namespace AgIO
                 }
                 profileName = regKey.GetValue(RegKeys.profileName).ToString();
 
-                /*
                 //Culture from Registry Key
                 if (regKey.GetValue("Language").ToString() == "")
                 {
@@ -47,7 +59,7 @@ namespace AgIO
                     Log.EventWriter("Registry -> Culture was null and Created");
                 }
                 culture = regKey.GetValue("Language").ToString();
-                */
+                
                 regKey.Close();
             }
             catch (Exception ex)
@@ -69,7 +81,7 @@ namespace AgIO
         {
             try
             {
-                RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgIO");
+                RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgOpenGPS");
                 key.SetValue(name, value);
                 Log.EventWriter("Registry -> Key " + name + " Saved to registry key with value: " + value);
 
@@ -87,7 +99,7 @@ namespace AgIO
         {
             try
             {
-                Registry.CurrentUser.DeleteSubKeyTree(@"SOFTWARE\AgIO");
+                Registry.CurrentUser.DeleteSubKeyTree(@"SOFTWARE\AgOpenGPS");
 
                 Log.EventWriter("Registry -> Resetting Registry SubKey Tree and Full Default Reset");
             }
@@ -109,7 +121,36 @@ namespace AgIO
         {
             try
             {
-                logsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "AgOpenGPS", "Logs");
+                if (workingDirectory == defaultString)
+                {
+                    baseDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "AgOpenGPS");
+                }
+                else //user set to other
+                {
+                    baseDirectory = Path.Combine(workingDirectory, "AgOpenGPS");
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EventWriter("Catch, Serious Problem Making Working Directory: " + ex.ToString());
+
+                if (workingDirectory != defaultString)
+                {
+                    workingDirectory = defaultString;
+                    Save(RegKeys.workingDirectory, defaultString);
+                    CreateDirectories();
+                    return;
+                }
+                else//program will crash anyways!
+                {
+                    Log.FileSaveSystemEvents();
+                    Environment.Exit(0);
+                }
+            }
+
+            try
+            {
+                logsDirectory = Path.Combine(baseDirectory, "Logs");
                 //create Logs directory if not exist
                 if (!string.IsNullOrEmpty(logsDirectory) && !Directory.Exists(logsDirectory))
                 {
@@ -122,11 +163,10 @@ namespace AgIO
                 Log.EventWriter("Catch, Serious Problem Making Logs Directory: " + ex.ToString());
             }
 
-
             try
             {
                 //get the Documents directory, if not exist, create
-                profileDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "AgOpenGPS", "AgIO");
+                profileDirectory = Path.Combine(baseDirectory, "AgIO");
 
                 //create Logs directory if not exist
                 if (!string.IsNullOrEmpty(profileDirectory) && !Directory.Exists(profileDirectory))
