@@ -34,7 +34,7 @@ namespace AgOpenGPS
                         RegistrySettings.Save(RegKeys.vehicleFileName, newVehicleName);
 
                         var result = Settings.Default.Load();
-                        if (result != LoadResult.Ok)
+                        if (result != AgLibrary.LoadResult.Ok)
                         {
                             Log.EventWriter("Vehicle Loaded: " + newVehicleName + ".XML With Error:" + result.ToString());
 
