@@ -298,7 +298,7 @@ namespace AgOpenGPS
                 Settings.Default.Reset();
                 Settings.Default.Save();
 
-                lblCurrentVehicle.Text = RegistrySettings.vehicleFileName = tboxCreateNewVehicle.Text.Trim();
+                labelCurrentVehicle.Text = RegistrySettings.vehicleFileName = tboxCreateNewVehicle.Text.Trim();
                 tboxCreateNewVehicle.Text = "";
 
                 LoadBrandImage();
@@ -579,13 +579,13 @@ namespace AgOpenGPS
             {
                 nudTractorHitchLength.Visible = true;
                 label94.Visible = true;
-                label27.Visible = true;
+                labelHitchLength.Visible = true;
             }
             else
             {
                 nudTractorHitchLength.Visible = false;
                 label94.Visible = false;
-                label27.Visible = false;
+                labelHitchLength.Visible = false;
             }
 
             label94.Text = mf.unitsInCm;
