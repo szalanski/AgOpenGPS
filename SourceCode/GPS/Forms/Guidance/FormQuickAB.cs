@@ -165,11 +165,8 @@ namespace AgOpenGPS
                 //array number is 1 less since it starts at zero
                 idx = mf.trk.gArr.Count - 1;
 
-                mf.trk.gArr[idx].ptA =
-                    new vec2(mf.curve.desList[0].easting, mf.curve.desList[0].northing);
-                mf.trk.gArr[idx].ptB =
-                    new vec2(mf.curve.desList[mf.curve.desList.Count - 1].easting,
-                    mf.curve.desList[mf.curve.desList.Count - 1].northing);
+                mf.trk.gArr[idx].ptA = new vec2(ptAa);
+                mf.trk.gArr[idx].ptB = new vec2(ptBb);
 
                 mf.trk.gArr[idx].mode = TrackMode.Curve;
 
