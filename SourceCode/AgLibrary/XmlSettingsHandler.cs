@@ -182,7 +182,7 @@ namespace AgLibrary
                     // Start the root element
                     xml.WriteStartElement("configuration");
                     xml.WriteStartElement("userSettings");
-                    xml.WriteStartElement("AgOpenGPS.Properties.Settings");
+                    xml.WriteStartElement(obj.ToString());
 
                     foreach (var fld in obj.GetType().GetFields())
                     {

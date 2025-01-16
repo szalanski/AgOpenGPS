@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Text;
 
@@ -11,7 +12,7 @@ namespace AgLibrary.Logging
 
         public static void EventWriter(string message)
         {
-            sbEvents.Append(DateTime.Now.ToString("T"));
+            sbEvents.Append(DateTime.Now.ToString("T", CultureInfo.InvariantCulture));
             sbEvents.Append("-> ");
             sbEvents.Append(message);
             sbEvents.Append("\r");
