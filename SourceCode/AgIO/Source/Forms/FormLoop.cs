@@ -334,7 +334,7 @@ namespace AgIO
             }
 
             Log.EventWriter("Program Exit: " +
-                DateTime.Now.ToString("f", CultureInfo.CreateSpecificCulture(RegistrySettings.culture)) + "\n\r");
+                DateTime.Now.ToString("f", CultureInfo.InvariantCulture) + "\n\r");
 
             FileSaveSystemEvents();
         }

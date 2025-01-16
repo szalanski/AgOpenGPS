@@ -24,7 +24,7 @@ namespace AgIO
             Settings.Default.Reset();
             Settings.Default.Save();
 
-            Log.EventWriter("Program Started: " + DateTime.Now.ToString("f", CultureInfo.CreateSpecificCulture(RegistrySettings.culture)));
+            Log.EventWriter("Program Started: " + DateTime.Now.ToString("f", CultureInfo.InvariantCulture));
             Log.EventWriter("AgIO Version: " + Application.ProductVersion.ToString(CultureInfo.InvariantCulture));
 
             //load the profile name and set profile directory
