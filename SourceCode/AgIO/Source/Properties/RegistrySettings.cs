@@ -6,6 +6,7 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Windows.Forms;
 using System.Xml.Linq;
 using System.Xml.XPath;
 
@@ -70,7 +71,7 @@ namespace AgIO
             {
                 RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgIO");
                 key.SetValue(name, value);
-                Log.EventWriter("Registry -> Key " + name + " Saved to registry key");
+                Log.EventWriter("Registry -> Key " + name + " Saved to registry key with value: " + value);
 
                 if (name == RegKeys.profileName)
                     profileName = value;
@@ -81,7 +82,6 @@ namespace AgIO
                 Log.EventWriter("Registry -> Catch, Serious Problem Saving keys: " + ex.ToString());
             }
         }
-
 
         public static void Reset()
         {
@@ -96,11 +96,16 @@ namespace AgIO
                 Log.EventWriter("Registry -> Catch, Serious Problem Resetting Registry keys: " + ex.ToString());
 
                 Log.FileSaveSystemEvents();
+
+                MessageBox.Show("Can't delete the Registery SubKeyTree",
+                "Critical Registry Error",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
                 Environment.Exit(0);
             }
         }
 
-        public static void CreateDirectories()
+        private static void CreateDirectories()
         {
             try
             {

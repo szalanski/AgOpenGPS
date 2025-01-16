@@ -2,6 +2,7 @@
 using Microsoft.Win32;
 using System;
 using System.IO;
+using System.Windows.Forms;
 
 namespace AgOpenGPS
 {
@@ -84,9 +85,15 @@ namespace AgOpenGPS
                     culture = value;
 
                 if (name == RegKeys.workingDirectory && value == Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))
+                {
                     key.SetValue(name, defaultString);
+                    Log.EventWriter("Registry -> Key " + name + " Saved to registry key with value: " + defaultString);
+                }
                 else//storing the value
+                {
                     key.SetValue(name, value);
+                    Log.EventWriter("Registry -> Key " + name + " Saved to registry key with value: " + value);
+                }
 
                 key.Close();
             }
@@ -109,11 +116,17 @@ namespace AgOpenGPS
                 Log.EventWriter("Registry -> Catch, Serious Problem Resetting Registry keys: " + ex.ToString());
 
                 Log.FileSaveSystemEvents();
+
+                MessageBox.Show("Can't delete the Registery SubKeyTree",
+                "Critical Registry Error",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
+
                 Environment.Exit(0);
             }
         }
 
-        public static void CreateDirectories()
+        private static void CreateDirectories()
         {
             try
             {

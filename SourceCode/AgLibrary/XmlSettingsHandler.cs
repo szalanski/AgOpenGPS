@@ -1,6 +1,8 @@
-﻿using System;
+﻿using AgLibrary.Logging;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -36,7 +38,6 @@ namespace AgLibrary
                                 if (reader.Name == "setting")
                                 {
                                     name = reader.GetAttribute("name");
-                                    string serializeAs = reader.GetAttribute("serializeAs");
                                 }
                                 else if (reader.Name == "value")
                                 {
@@ -127,12 +128,15 @@ namespace AgLibrary
                                                 else
                                                 {
                                                     Errors = true;
+                                                    if (Debugger.IsAttached)
+                                                        throw new ArgumentException("type not found");
                                                     continue;
-                                                    throw new ArgumentException("type not found");
                                                 }
                                             }
                                             catch (Exception)
                                             {
+                                                if (Debugger.IsAttached)
+                                                    throw;// Re-throws the original exception
                                                 Errors = true;
                                                 continue;
                                             }
@@ -147,13 +151,14 @@ namespace AgLibrary
                     }
                     reader.Close();
                 }
-
-                return Errors ? LoadResult.Failed : LoadResult.Ok;
             }
             catch (Exception)
             {
+                if (Debugger.IsAttached)
+                    throw;// Re-throws the original exception
+                Errors = true;
             }
-            return LoadResult.Failed;
+            return Errors ? LoadResult.Failed : LoadResult.Ok;
         }
 
         private static bool parseInvariantCulture(string value, out int outValue)
@@ -251,8 +256,9 @@ namespace AgLibrary
                 if (File.Exists(filePath + ".tmp"))
                     File.Move(filePath + ".tmp", filePath);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Log.EventWriter("Exception saving XML file" + ex.ToString());
             }
         }
     }

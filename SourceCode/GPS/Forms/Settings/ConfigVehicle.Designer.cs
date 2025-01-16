@@ -157,8 +157,6 @@ namespace AgOpenGPS
             {
                 RegistrySettings.Save(RegKeys.vehicleFileName, newVehicleName);
                 Settings.Default.Save();
-
-                //same anyways so why reload???
             }
 
             UpdateVehicleListView();
