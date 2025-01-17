@@ -115,6 +115,15 @@ namespace AgOpenGPS.Culture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to I Agree to the Terms &amp; Conditions.
+        /// </summary>
+        public static string gsAgree {
+            get {
+                return ResourceManager.GetString("gsAgree", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Agressiveness.
         /// </summary>
         public static string gsAgressiveness {
@@ -309,6 +318,15 @@ namespace AgOpenGPS.Culture {
         public static string gsCharts {
             get {
                 return ResourceManager.GetString("gsCharts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Check for Updates.
+        /// </summary>
+        public static string gsCheckForUpdates {
+            get {
+                return ResourceManager.GetString("gsCheckForUpdates", resourceCulture);
             }
         }
         
@@ -570,6 +588,24 @@ namespace AgOpenGPS.Culture {
         public static string gsDirectoryExists {
             get {
                 return ResourceManager.GetString("gsDirectoryExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DIsagree.
+        /// </summary>
+        public static string gsDisagree {
+            get {
+                return ResourceManager.GetString("gsDisagree", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Discussions at:.
+        /// </summary>
+        public static string gsDiscussions {
+            get {
+                return ResourceManager.GetString("gsDiscussions", resourceCulture);
             }
         }
         
@@ -1974,6 +2010,48 @@ namespace AgOpenGPS.Culture {
         public static string gsSvennArrow {
             get {
                 return ResourceManager.GetString("gsSvennArrow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Terms and Conditions for Version: .
+        /// </summary>
+        public static string gsTermsConditions {
+            get {
+                return ResourceManager.GetString("gsTermsConditions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If you distribute copies of this FREE program, whether gratis or for a fee, improved, changed, you must pass on to the recipients the same freedoms that you received as Outlined in the GPLv3 License..
+        /// </summary>
+        public static string gsTermsOne {
+            get {
+                return ResourceManager.GetString("gsTermsOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to AgOpenGPS is strictly educational software to learn about guidance systems, GPS sentences, and theoretical application of machine control.
+        ///
+        ///It is in no way to be used on real equipment in any circumstance. A simulator is provided to allow the student to safely experience machine guidance.
+        ///
+        ///There are no safety systems in the software and none are implied. 
+        ///
+        ///USE AT OWN RISK..
+        /// </summary>
+        public static string gsTermsThree {
+            get {
+                return ResourceManager.GetString("gsTermsThree", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must make sure that they, receive or can get the source code.  And you must show them these terms so they know their rights. Don&apos;t steal others work and call it your own..
+        /// </summary>
+        public static string gsTermsTwo {
+            get {
+                return ResourceManager.GetString("gsTermsTwo", resourceCulture);
             }
         }
         
