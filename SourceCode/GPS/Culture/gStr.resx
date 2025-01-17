@@ -249,6 +249,9 @@
   <data name="gsCoverage" xml:space="preserve">
     <value>% Coverage</value>
   </data>
+  <data name="gsCreate" xml:space="preserve">
+    <value>Create</value>
+  </data>
   <data name="gsCreateABoundaryFirst" xml:space="preserve">
     <value>Create A Boundary First</value>
   </data>
@@ -627,6 +630,15 @@
   <data name="gsPleaseEnterABLine" xml:space="preserve">
     <value>Please Enter ABLine</value>
   </data>
+  <data name="gsPleaseWait" xml:space="preserve">
+    <value>Please Wait...</value>
+  </data>
+  <data name="gsPoints" xml:space="preserve">
+    <value>Points</value>
+  </data>
+  <data name="gsPointsToProcess" xml:space="preserve">
+    <value>Points to Process</value>
+  </data>
   <data name="gsPolygons" xml:space="preserve">
     <value>Polygons</value>
   </data>
@@ -656,6 +668,9 @@
   </data>
   <data name="gsRecordedPathMenu" xml:space="preserve">
     <value>Recorded Path</value>
+  </data>
+  <data name="gsReducedPoints" xml:space="preserve">
+    <value>Reduced Points</value>
   </data>
   <data name="gsRemoveOffset" xml:space="preserve">
     <value>Remove Offset</value>
@@ -725,6 +740,9 @@
   </data>
   <data name="gsSlowDownBelow" xml:space="preserve">
     <value>Slow Down Below</value>
+  </data>
+  <data name="gsSmooth" xml:space="preserve">
+    <value>Smooth</value>
   </data>
   <data name="gsSmoothABCurve" xml:space="preserve">
     <value>Smooth AB Curve</value>

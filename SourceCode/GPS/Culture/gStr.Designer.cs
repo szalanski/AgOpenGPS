@@ -457,6 +457,15 @@ namespace AgOpenGPS.Culture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create.
+        /// </summary>
+        public static string gsCreate {
+            get {
+                return ResourceManager.GetString("gsCreate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create A Boundary First.
         /// </summary>
         public static string gsCreateABoundaryFirst {
@@ -1591,6 +1600,33 @@ namespace AgOpenGPS.Culture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please Wait....
+        /// </summary>
+        public static string gsPleaseWait {
+            get {
+                return ResourceManager.GetString("gsPleaseWait", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Points.
+        /// </summary>
+        public static string gsPoints {
+            get {
+                return ResourceManager.GetString("gsPoints", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Points to Process.
+        /// </summary>
+        public static string gsPointsToProcess {
+            get {
+                return ResourceManager.GetString("gsPointsToProcess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Polygons.
         /// </summary>
         public static string gsPolygons {
@@ -1677,6 +1713,15 @@ namespace AgOpenGPS.Culture {
         public static string gsRecordedPathMenu {
             get {
                 return ResourceManager.GetString("gsRecordedPathMenu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reduced Points.
+        /// </summary>
+        public static string gsReducedPoints {
+            get {
+                return ResourceManager.GetString("gsReducedPoints", resourceCulture);
             }
         }
         
@@ -1884,6 +1929,15 @@ namespace AgOpenGPS.Culture {
         public static string gsSlowDownBelow {
             get {
                 return ResourceManager.GetString("gsSlowDownBelow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Smooth.
+        /// </summary>
+        public static string gsSmooth {
+            get {
+                return ResourceManager.GetString("gsSmooth", resourceCulture);
             }
         }
         

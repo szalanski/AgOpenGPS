@@ -246,6 +246,9 @@
   <data name="gsCoverage" xml:space="preserve">
     <value>% Dekking</value>
   </data>
+  <data name="gsCreate" xml:space="preserve">
+    <value>Creër</value>
+  </data>
   <data name="gsCreateABoundaryFirst" xml:space="preserve">
     <value>Maak eerst een perceelgrens</value>
   </data>
@@ -612,6 +615,15 @@
   <data name="gsPleaseEnterABLine" xml:space="preserve">
     <value>Volg AB lijn aub</value>
   </data>
+  <data name="gsPleaseWait" xml:space="preserve">
+    <value>Even wachten...</value>
+  </data>
+  <data name="gsPoints" xml:space="preserve">
+    <value>Punten</value>
+  </data>
+  <data name="gsPointsToProcess" xml:space="preserve">
+    <value>Punten te berekenen</value>
+  </data>
   <data name="gsPowerLoss" xml:space="preserve">
     <value>Schakel uit op batterij</value>
   </data>
@@ -638,6 +650,9 @@
   </data>
   <data name="gsRecordedPathMenu" xml:space="preserve">
     <value>Opgenomen pad Menu</value>
+  </data>
+  <data name="gsReducedPoints" xml:space="preserve">
+    <value>Verminder Punten</value>
   </data>
   <data name="gsRemoveOffset" xml:space="preserve">
     <value>Verwijder Offset</value>
@@ -707,6 +722,9 @@
   </data>
   <data name="gsSlowDownBelow" xml:space="preserve">
     <value>Vertraag hieronder</value>
+  </data>
+  <data name="gsSmooth" xml:space="preserve">
+    <value>Afvlakken</value>
   </data>
   <data name="gsSmoothABCurve" xml:space="preserve">
     <value>AB-curve Glad strijken</value>
