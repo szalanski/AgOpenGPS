@@ -458,7 +458,7 @@ namespace AgOpenGPS
             rbtnPivotBehindPos.Checked = Properties.Settings.Default.setTool_trailingToolToPivotLength > 0;
             rbtnPivotAheadNeg.Checked = Properties.Settings.Default.setTool_trailingToolToPivotLength < 0;
 
-            label177.Text = mf.unitsInCm;
+            LabelCm.Text = mf.unitsInCm;
         }
 
         private void tabToolPivot_Leave(object sender, EventArgs e)
@@ -571,12 +571,12 @@ namespace AgOpenGPS
             if (cboxIsUnique.Checked)
             {
                 cboxIsUnique.BackgroundImage = Properties.Resources.ConT_Symmetric;
-                cboxNumberOfZones.Visible = lblZonesBox.Visible = true;
+                cboxNumberOfZones.Visible = labelZonesBox.Visible = true;
             }
             else
             {
                 cboxIsUnique.BackgroundImage = Properties.Resources.ConT_Asymmetric;
-                cboxNumberOfZones.Visible = lblZonesBox.Visible = false;
+                cboxNumberOfZones.Visible = labelZonesBox.Visible = false;
             }
 
             nudNumberOfSections.Maximum = FormGPS.MAXSECTIONS;
