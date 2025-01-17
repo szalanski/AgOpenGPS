@@ -107,6 +107,8 @@ namespace AgOpenGPS
             {
                 lblArea.Text = Math.Round(area * 0.000247105, 2).ToString();
             }
+
+            lblPoints.Text = mf.bnd.bndBeingMadePts.Count.ToString();
         }
 
         private void btnStop_Click(object sender, EventArgs e)
@@ -176,6 +178,7 @@ namespace AgOpenGPS
             mf.bnd.isOkToAddPoints = true;
             mf.AddBoundaryPoint();
             mf.bnd.isOkToAddPoints = false;
+            lblPoints.Text = mf.bnd.bndBeingMadePts.Count.ToString();
         }
 
         private void btnDeleteLast_Click(object sender, EventArgs e)
@@ -183,6 +186,7 @@ namespace AgOpenGPS
             int ptCount = mf.bnd.bndBeingMadePts.Count;
             if (ptCount > 0)
                 mf.bnd.bndBeingMadePts.RemoveAt(ptCount - 1);
+            lblPoints.Text = mf.bnd.bndBeingMadePts.Count.ToString();
         }
 
         private void btnRestart_Click(object sender, EventArgs e)
@@ -196,6 +200,7 @@ namespace AgOpenGPS
             {
                 mf.bnd.bndBeingMadePts?.Clear();
             }
+            lblPoints.Text = mf.bnd.bndBeingMadePts.Count.ToString();
         }
 
         private void btnLeftRight_Click(object sender, EventArgs e)
@@ -218,6 +223,7 @@ namespace AgOpenGPS
                 mf.bnd.isOkToAddPoints = true;
                 mf.AddBoundaryPoint();
                 mf.bnd.isOkToAddPoints = false;
+                lblPoints.Text = mf.bnd.bndBeingMadePts.Count.ToString();
             }
 
             if (keyData == Keys.D) //autosteer button on off
@@ -225,6 +231,7 @@ namespace AgOpenGPS
                 int ptCount = mf.bnd.bndBeingMadePts.Count;
                 if (ptCount > 0)
                     mf.bnd.bndBeingMadePts.RemoveAt(ptCount - 1);
+                lblPoints.Text = mf.bnd.bndBeingMadePts.Count.ToString();
             }
 
             if (keyData == Keys.R) //autosteer button on off

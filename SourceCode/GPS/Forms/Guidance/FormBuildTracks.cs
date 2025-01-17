@@ -24,6 +24,9 @@ namespace AgOpenGPS
 
         private bool isRefRightSide = true; //left side 0 middle 1 right 2
 
+        private vec2 ptAa = new vec2();
+        private vec2 ptBb = new vec2();
+
         private bool isOn = true;
 
         //used throughout to acces the master Track list
@@ -626,6 +629,8 @@ namespace AgOpenGPS
             else
             {
                 lblCurveExists.Text = gStr.gsDriving;
+                ptAa.easting = mf.pivotAxlePos.easting;
+                ptAa.northing = mf.pivotAxlePos.northing;
 
                 btnBCurve.Enabled = true;
                 btnACurve.Enabled = false;
@@ -648,6 +653,9 @@ namespace AgOpenGPS
             panelCurve.Visible = false;
             panelName.Visible = true;
 
+            ptBb.easting = mf.pivotAxlePos.easting;
+            ptBb.northing = mf.pivotAxlePos.northing;
+
             int cnt = mf.curve.desList.Count;
             if (cnt > 3)
             {
@@ -659,11 +667,8 @@ namespace AgOpenGPS
                 //array number is 1 less since it starts at zero
                 idx = mf.trk.gArr.Count - 1;
 
-                mf.trk.gArr[idx].ptA =
-                    new vec2(mf.curve.desList[0].easting, mf.curve.desList[0].northing);
-                mf.trk.gArr[idx].ptB =
-                    new vec2(mf.curve.desList[mf.curve.desList.Count - 1].easting,
-                    mf.curve.desList[mf.curve.desList.Count - 1].northing);
+                mf.trk.gArr[idx].ptA = new vec2(ptAa);
+                mf.trk.gArr[idx].ptB = new vec2(ptBb);
 
                 mf.trk.gArr[idx].mode = TrackMode.Curve;
 
