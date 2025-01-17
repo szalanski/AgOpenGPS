@@ -105,13 +105,13 @@
             // 
             // labelVersion
             // 
-            this.labelVersion.Font = new System.Drawing.Font("Tahoma", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelVersion.Location = new System.Drawing.Point(280, 23);
+            this.labelVersion.Font = new System.Drawing.Font("Tahoma", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelVersion.Location = new System.Drawing.Point(279, 15);
             this.labelVersion.Name = "labelVersion";
-            this.labelVersion.Size = new System.Drawing.Size(714, 35);
+            this.labelVersion.Size = new System.Drawing.Size(732, 35);
             this.labelVersion.TabIndex = 34;
             this.labelVersion.Text = "Version 5.1";
-            this.labelVersion.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.labelVersion.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // labelTermsOne
             // 
