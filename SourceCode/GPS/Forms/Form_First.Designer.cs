@@ -34,7 +34,7 @@
             this.labelDiscussionsAt = new System.Windows.Forms.Label();
             this.linkLabelGit = new System.Windows.Forms.LinkLabel();
             this.linkLabelCombineForum = new System.Windows.Forms.LinkLabel();
-            this.labelVersion = new System.Windows.Forms.Label();
+            this.labelTermsAndVersion = new System.Windows.Forms.Label();
             this.labelTermsOne = new System.Windows.Forms.Label();
             this.labelTerms2 = new System.Windows.Forms.Label();
             this.labelTerms3 = new System.Windows.Forms.Label();
@@ -103,15 +103,15 @@
             this.linkLabelCombineForum.Text = "https://discourse.agopengps.com/";
             this.linkLabelCombineForum.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelCombineForum_LinkClicked);
             // 
-            // labelVersion
+            // labelTermsAndVersion
             // 
-            this.labelVersion.Font = new System.Drawing.Font("Tahoma", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelVersion.Location = new System.Drawing.Point(279, 15);
-            this.labelVersion.Name = "labelVersion";
-            this.labelVersion.Size = new System.Drawing.Size(732, 35);
-            this.labelVersion.TabIndex = 34;
-            this.labelVersion.Text = "Version 5.1";
-            this.labelVersion.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.labelTermsAndVersion.Font = new System.Drawing.Font("Tahoma", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelTermsAndVersion.Location = new System.Drawing.Point(279, 15);
+            this.labelTermsAndVersion.Name = "labelTermsAndVersion";
+            this.labelTermsAndVersion.Size = new System.Drawing.Size(732, 35);
+            this.labelTermsAndVersion.TabIndex = 34;
+            this.labelTermsAndVersion.Text = "Version 5.1";
+            this.labelTermsAndVersion.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // labelTermsOne
             // 
@@ -263,7 +263,7 @@
             this.Controls.Add(this.labelTermsOne);
             this.Controls.Add(this.labelDiscussionsAt);
             this.Controls.Add(this.labelDisagree);
-            this.Controls.Add(this.labelVersion);
+            this.Controls.Add(this.labelTermsAndVersion);
             this.Controls.Add(this.labelCheckForUpdates);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.linkLabelGit);
@@ -290,7 +290,7 @@
         private System.Windows.Forms.LinkLabel linkLabelGit;
         private System.Windows.Forms.LinkLabel linkLabelCombineForum;
         private System.Windows.Forms.Button labelAgree;
-        private System.Windows.Forms.Label labelVersion;
+        private System.Windows.Forms.Label labelTermsAndVersion;
         private System.Windows.Forms.Button labelDisagree;
         private System.Windows.Forms.Label labelTermsOne;
         private System.Windows.Forms.Label labelTerms2;

@@ -769,7 +769,7 @@
     <value>Svenn Arrow</value>
   </data>
   <data name="gsTermsConditions" xml:space="preserve">
-    <value>Terms and Conditions</value>
+    <value>Terms and Conditions for version: </value>
   </data>
   <data name="gsTermsOne" xml:space="preserve">
     <value>If you distribute copies of this FREE program, whether gratis or for a fee, improved, changed, you must pass on to the recipients the same freedoms that you received as Outlined in the GPLv3 License.</value>

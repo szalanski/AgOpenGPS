@@ -2014,7 +2014,7 @@ namespace AgOpenGPS.Culture {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Terms and Conditions.
+        ///   Looks up a localized string similar to Terms and Conditions for version: .
         /// </summary>
         public static string gsTermsConditions {
             get {
