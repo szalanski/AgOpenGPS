@@ -288,7 +288,7 @@ namespace AgIO
                     Environment.Exit(0);
                 }
             }
-            this.Text = "AgIO  v" + GitVersionInformation.MajorMinorPatch + "   Using Profile: " 
+            this.Text = "AgIO  v" + Program.Version + "   Using Profile: " 
                 + RegistrySettings.profileName;
         }
 

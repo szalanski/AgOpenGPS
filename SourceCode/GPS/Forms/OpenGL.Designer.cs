@@ -529,8 +529,7 @@ namespace AgOpenGPS
                         }
                     }
 
-                    bool isPreRelease = !string.IsNullOrEmpty(GitVersionInformation.PreReleaseTag);
-                    if (isPreRelease) DrawBeta();
+                    if (Program.IsPreRelease) DrawBeta();
 
                     if (pn.age > pn.ageAlarm) DrawAge();
 
@@ -2760,7 +2759,7 @@ namespace AgOpenGPS
         private void DrawBeta()
         {
             GL.Color3(1f, 1f, 1f);
-            font.DrawText(-oglMain.Width / 2.1, oglMain.Height / 1.2, "Beta Testing v" + GitVersionInformation.SemVer, 0.8);
+            font.DrawText(-oglMain.Width / 2.1, oglMain.Height / 1.2, "Beta Testing v" + Program.SemVer, 0.8);
         }
 
         private void DrawAge()

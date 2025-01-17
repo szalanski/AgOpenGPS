@@ -5,6 +5,7 @@ using System;
 using System.Configuration;
 using System.Globalization;
 using System.IO;
+using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -13,6 +14,8 @@ namespace AgIO
     internal static class Program
     {
         private static readonly Mutex Mutex = new Mutex(true, "{8F6F0AC4-B9A1-55fd-A8CF-72F04E6BDE8F}");
+
+        public static readonly string Version = Assembly.GetEntryAssembly().GetName().Version.ToString(3); // Major.Minor.Patch
 
         /// <summary>
         /// The main entry point for the application.
