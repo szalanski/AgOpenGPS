@@ -592,7 +592,7 @@ namespace AgOpenGPS.Culture {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to DIsagree.
+        ///   Looks up a localized string similar to Disagree.
         /// </summary>
         public static string gsDisagree {
             get {
