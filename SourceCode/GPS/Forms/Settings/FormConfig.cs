@@ -445,7 +445,6 @@ namespace AgOpenGPS
 
             mf.isMetric = false;
             Properties.Settings.Default.setMenu_isMetric = mf.isMetric;
-            Properties.Settings.Default.Save();
             isClosing = true;
             Close();
         }
@@ -457,7 +456,6 @@ namespace AgOpenGPS
 
             mf.isMetric = true;
             Properties.Settings.Default.setMenu_isMetric = mf.isMetric;
-            Properties.Settings.Default.Save();
             isClosing = true;
             Close();
             //FormConfig_Load(this, e);

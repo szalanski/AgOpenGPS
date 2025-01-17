@@ -53,50 +53,7 @@ namespace AgOpenGPS
 
                         SectionFeetInchesTotalWidthLabelUpdate();
 
-                        //Form Steer Settings
-                        mf.p_252.pgn[mf.p_252.countsPerDegree] = unchecked((byte)Properties.Settings.Default.setAS_countsPerDegree);
-                        mf.p_252.pgn[mf.p_252.ackerman] = unchecked((byte)Properties.Settings.Default.setAS_ackerman);
-
-                        mf.p_252.pgn[mf.p_252.wasOffsetHi] = unchecked((byte)(Properties.Settings.Default.setAS_wasOffset >> 8));
-                        mf.p_252.pgn[mf.p_252.wasOffsetLo] = unchecked((byte)(Properties.Settings.Default.setAS_wasOffset));
-
-                        mf.p_252.pgn[mf.p_252.highPWM] = unchecked((byte)Properties.Settings.Default.setAS_highSteerPWM);
-                        mf.p_252.pgn[mf.p_252.lowPWM] = unchecked((byte)Properties.Settings.Default.setAS_lowSteerPWM);
-                        mf.p_252.pgn[mf.p_252.gainProportional] = unchecked((byte)Properties.Settings.Default.setAS_Kp);
-                        mf.p_252.pgn[mf.p_252.minPWM] = unchecked((byte)Properties.Settings.Default.setAS_minSteerPWM);
-
-                        mf.SendPgnToLoop(mf.p_252.pgn);
-
-                        //machine module settings
-                        mf.p_238.pgn[mf.p_238.set0] = Properties.Settings.Default.setArdMac_setting0;
-                        mf.p_238.pgn[mf.p_238.raiseTime] = Properties.Settings.Default.setArdMac_hydRaiseTime;
-                        mf.p_238.pgn[mf.p_238.lowerTime] = Properties.Settings.Default.setArdMac_hydLowerTime;
-
-                        mf.SendPgnToLoop(mf.p_238.pgn);
-
-                        //steer config
-                        mf.p_251.pgn[mf.p_251.set0] = Properties.Settings.Default.setArdSteer_setting0;
-                        mf.p_251.pgn[mf.p_251.set1] = Properties.Settings.Default.setArdSteer_setting1;
-                        mf.p_251.pgn[mf.p_251.maxPulse] = Properties.Settings.Default.setArdSteer_maxPulseCounts;
-                        mf.p_251.pgn[mf.p_251.minSpeed] = unchecked((byte)(Properties.Settings.Default.setAS_minSteerSpeed * 10));
-
-                        if (Properties.Settings.Default.setAS_isConstantContourOn)
-                            mf.p_251.pgn[mf.p_251.angVel] = 1;
-                        else mf.p_251.pgn[mf.p_251.angVel] = 0;
-
-                        mf.SendPgnToLoop(mf.p_251.pgn);
-
-                        //machine settings    
-                        mf.p_238.pgn[mf.p_238.set0] = Properties.Settings.Default.setArdMac_setting0;
-                        mf.p_238.pgn[mf.p_238.raiseTime] = Properties.Settings.Default.setArdMac_hydRaiseTime;
-                        mf.p_238.pgn[mf.p_238.lowerTime] = Properties.Settings.Default.setArdMac_hydLowerTime;
-
-                        mf.p_238.pgn[mf.p_238.user1] = Properties.Settings.Default.setArdMac_user1;
-                        mf.p_238.pgn[mf.p_238.user2] = Properties.Settings.Default.setArdMac_user2;
-                        mf.p_238.pgn[mf.p_238.user3] = Properties.Settings.Default.setArdMac_user3;
-                        mf.p_238.pgn[mf.p_238.user4] = Properties.Settings.Default.setArdMac_user4;
-
-                        mf.SendPgnToLoop(mf.p_238.pgn);
+                        SendSettings();
 
                         //Send Pin configuration
                         SendRelaySettingsToMachineModule();
@@ -104,9 +61,8 @@ namespace AgOpenGPS
                         ///Remind the user
                         mf.TimedMessageBox(2500, "Steer and Machine Settings Sent", "Were Modules Connected?");
                     }
+                    UpdateSummary();
                 }
-                UpdateVehicleListView();
-                UpdateSummary();
             }
             else
             {
@@ -115,6 +71,7 @@ namespace AgOpenGPS
 
             btnOK.PerformClick();
         }
+
         private void btnVehicleDelete_Click(object sender, EventArgs e)
         {
             if (!mf.isJobStarted)
@@ -158,10 +115,10 @@ namespace AgOpenGPS
                 RegistrySettings.Save(RegKeys.vehicleFileName, newVehicleName);
                 Settings.Default.Save();
             }
-
             UpdateVehicleListView();
             UpdateSummary();
         }
+
         private void tboxVehicleNameSave_TextChanged(object sender, EventArgs e)
         {
             var textboxSender = (TextBox)sender;
@@ -189,7 +146,6 @@ namespace AgOpenGPS
         {
             if (!mf.isJobStarted)
             {
-
                 if (mf.isKeyboardOn)
                 {
                     mf.KeyboardToText((TextBox)sender, this);
@@ -201,6 +157,7 @@ namespace AgOpenGPS
                 tboxVehicleNameSave.Enabled = false;
             }
         }
+
         private void tboxVehicleNameSave_Enter(object sender, EventArgs e)
         {
             //btnVehicleSaveAs.Enabled = false;
@@ -209,7 +166,6 @@ namespace AgOpenGPS
 
             lvVehicles.SelectedItems.Clear();
         }
-
 
         //New Vehicle
         private void tboxCreateNewVehicle_TextChanged(object sender, EventArgs e)
@@ -236,11 +192,11 @@ namespace AgOpenGPS
                 btnVehicleNewSave.BackColor = Color.LimeGreen;
             }
         }
+
         private void tboxCreateNewVehicle_Click(object sender, EventArgs e)
         {
             if (!mf.isJobStarted)
             {
-
                 if (mf.isKeyboardOn)
                 {
                     mf.KeyboardToText((TextBox)sender, this);
@@ -253,6 +209,7 @@ namespace AgOpenGPS
                 tboxCreateNewVehicle.Enabled = false;
             }
         }
+
         private void btnVehicleNewSave_Click(object sender, EventArgs e)
         {
             btnVehicleNewSave.BackColor = Color.Transparent;
@@ -280,50 +237,7 @@ namespace AgOpenGPS
 
                 SectionFeetInchesTotalWidthLabelUpdate();
 
-                //Form Steer Settings
-                mf.p_252.pgn[mf.p_252.countsPerDegree] = unchecked((byte)Properties.Settings.Default.setAS_countsPerDegree);
-                mf.p_252.pgn[mf.p_252.ackerman] = unchecked((byte)Properties.Settings.Default.setAS_ackerman);
-
-                mf.p_252.pgn[mf.p_252.wasOffsetHi] = unchecked((byte)(Properties.Settings.Default.setAS_wasOffset >> 8));
-                mf.p_252.pgn[mf.p_252.wasOffsetLo] = unchecked((byte)(Properties.Settings.Default.setAS_wasOffset));
-
-                mf.p_252.pgn[mf.p_252.highPWM] = unchecked((byte)Properties.Settings.Default.setAS_highSteerPWM);
-                mf.p_252.pgn[mf.p_252.lowPWM] = unchecked((byte)Properties.Settings.Default.setAS_lowSteerPWM);
-                mf.p_252.pgn[mf.p_252.gainProportional] = unchecked((byte)Properties.Settings.Default.setAS_Kp);
-                mf.p_252.pgn[mf.p_252.minPWM] = unchecked((byte)Properties.Settings.Default.setAS_minSteerPWM);
-
-                mf.SendPgnToLoop(mf.p_252.pgn);
-
-                //machine module settings
-                mf.p_238.pgn[mf.p_238.set0] = Properties.Settings.Default.setArdMac_setting0;
-                mf.p_238.pgn[mf.p_238.raiseTime] = Properties.Settings.Default.setArdMac_hydRaiseTime;
-                mf.p_238.pgn[mf.p_238.lowerTime] = Properties.Settings.Default.setArdMac_hydLowerTime;
-
-                mf.SendPgnToLoop(mf.p_238.pgn);
-
-                //steer config
-                mf.p_251.pgn[mf.p_251.set0] = Properties.Settings.Default.setArdSteer_setting0;
-                mf.p_251.pgn[mf.p_251.set1] = Properties.Settings.Default.setArdSteer_setting1;
-                mf.p_251.pgn[mf.p_251.maxPulse] = Properties.Settings.Default.setArdSteer_maxPulseCounts;
-                mf.p_251.pgn[mf.p_251.minSpeed] = unchecked((byte)(Properties.Settings.Default.setAS_minSteerSpeed * 10));
-
-                if (Properties.Settings.Default.setAS_isConstantContourOn)
-                    mf.p_251.pgn[mf.p_251.angVel] = 1;
-                else mf.p_251.pgn[mf.p_251.angVel] = 0;
-
-                mf.SendPgnToLoop(mf.p_251.pgn);
-
-                //machine settings    
-                mf.p_238.pgn[mf.p_238.set0] = Properties.Settings.Default.setArdMac_setting0;
-                mf.p_238.pgn[mf.p_238.raiseTime] = Properties.Settings.Default.setArdMac_hydRaiseTime;
-                mf.p_238.pgn[mf.p_238.lowerTime] = Properties.Settings.Default.setArdMac_hydLowerTime;
-
-                mf.p_238.pgn[mf.p_238.user1] = Properties.Settings.Default.setArdMac_user1;
-                mf.p_238.pgn[mf.p_238.user2] = Properties.Settings.Default.setArdMac_user2;
-                mf.p_238.pgn[mf.p_238.user3] = Properties.Settings.Default.setArdMac_user3;
-                mf.p_238.pgn[mf.p_238.user4] = Properties.Settings.Default.setArdMac_user4;
-
-                mf.SendPgnToLoop(mf.p_238.pgn);
+                SendSettings();
 
                 //Send Pin configuration
                 SendRelaySettingsToMachineModule();
@@ -331,7 +245,6 @@ namespace AgOpenGPS
                 ///Remind the user
                 mf.TimedMessageBox(2500, "Steer and Machine Settings Sent", "Were Modules Connected?");
             }
-
             UpdateVehicleListView();
             UpdateSummary();
         }        
@@ -398,8 +311,8 @@ namespace AgOpenGPS
             Properties.Settings.Default.setDisplay_isKeyboardOn = mf.isKeyboardOn;
             Properties.Settings.Default.setDisplay_isLogElevation = mf.isLogElevation;
 
-            if (rbtnDisplayMetric.Checked) { Properties.Settings.Default.setMenu_isMetric = true; mf.isMetric = true; }
-            else { Properties.Settings.Default.setMenu_isMetric = false; mf.isMetric = false; }
+            Properties.Settings.Default.setMenu_isMetric = rbtnDisplayMetric.Checked;
+            mf.isMetric = rbtnDisplayMetric.Checked;
 
             Properties.Settings.Default.setTool_isDirectionMarkers = mf.isDirectionMarkers;
 
@@ -503,7 +416,6 @@ namespace AgOpenGPS
             }
         }
 
-
         private void nudAntennaHeight_Click(object sender, EventArgs e)
         {
             if (mf.KeypadToNUD((NudlessNumericUpDown)sender, this))
@@ -528,31 +440,19 @@ namespace AgOpenGPS
             if (mf.vehicle.vehicleType == 0)
             {
                 pictureBox1.Image = Properties.Resources.RadiusWheelBase;
-                nudTractorHitchLength.Visible = true;
             }
             else if (mf.vehicle.vehicleType == 1)
             {
                 pictureBox1.Image = Properties.Resources.RadiusWheelBaseHarvester;
-                nudTractorHitchLength.Visible = false;
             }
             else if (mf.vehicle.vehicleType == 2)
             {
                 pictureBox1.Image = Properties.Resources.RadiusWheelBase4WD;
-                nudTractorHitchLength.Visible = true;
             }
 
-            if (Properties.Settings.Default.setTool_isToolTrailing || Properties.Settings.Default.setTool_isToolTBT)
-            {
-                nudTractorHitchLength.Visible = true;
-                label94.Visible = true;
-                labelHitchLength.Visible = true;
-            }
-            else
-            {
-                nudTractorHitchLength.Visible = false;
-                label94.Visible = false;
-                labelHitchLength.Visible = false;
-            }
+            nudTractorHitchLength.Visible = Properties.Settings.Default.setTool_isToolTrailing || Properties.Settings.Default.setTool_isToolTBT;
+            label94.Visible = nudTractorHitchLength.Visible;
+            labelHitchLength.Visible = nudTractorHitchLength.Visible;
 
             label94.Text = mf.unitsInCm;
             label95.Text = mf.unitsInCm;
@@ -571,8 +471,6 @@ namespace AgOpenGPS
                 Properties.Settings.Default.setVehicle_hitchLength = mf.tool.hitchLength;
             }
         }
-
-
 
         private void nudWheelbase_Click(object sender, EventArgs e)
         {
@@ -653,7 +551,7 @@ namespace AgOpenGPS
 
             Properties.Settings.Default.setDisplay_colorVehicle = mf.vehicleColor;
 
-            if (rbtnTractor.Checked == true)
+            if (rbtnTractor.Checked)
             {
                 Settings.Default.setBrand_TBrand = brand;
 
@@ -663,11 +561,9 @@ namespace AgOpenGPS
                 BitmapData bitmapData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                 GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bitmapData.Width, bitmapData.Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, bitmapData.Scan0);
                 bitmap.UnlockBits(bitmapData);
-
             }
 
-            if (rbtnHarvester.Checked == true)
-
+            if (rbtnHarvester.Checked)
             {
                 Settings.Default.setBrand_HBrand = brandH;
                 Bitmap bitmap = mf.GetHarvesterBrand(brandH);
@@ -676,10 +572,9 @@ namespace AgOpenGPS
                 BitmapData bitmapData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                 GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bitmapData.Width, bitmapData.Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, bitmapData.Scan0);
                 bitmap.UnlockBits(bitmapData);
-
             }
 
-            if (rbtn4WD.Checked == true)
+            if (rbtn4WD.Checked)
             {
                 Settings.Default.setBrand_WDBrand = brand4WD;
                 Bitmap bitmap = mf.Get4WDBrandFront(brand4WD);
@@ -697,7 +592,6 @@ namespace AgOpenGPS
                 GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bitmapData.Width, bitmapData.Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, bitmapData.Scan0);
                 bitmap.UnlockBits(bitmapData);
             }
-
             Properties.Settings.Default.Save();
         }
 
@@ -742,16 +636,17 @@ namespace AgOpenGPS
         private void btnOpacityUp_Click(object sender, EventArgs e)
         {
             mf.vehicleOpacity = Math.Min(mf.vehicleOpacity + 0.2, 1);
-            lblOpacityPercent.Text = ((int)(mf.vehicleOpacity * 100)).ToString() + "%";
-            mf.vehicleOpacityByte = (byte)(255 * (mf.vehicleOpacity));
-            Properties.Settings.Default.setDisplay_vehicleOpacity = (int)(mf.vehicleOpacity * 100);
-            Properties.Settings.Default.Save();
-            SetOpacity();
+            OpacityChanged();
         }
 
         private void btnOpacityDn_Click(object sender, EventArgs e)
         {
             mf.vehicleOpacity = Math.Max(mf.vehicleOpacity - 0.2, 0.2);
+            OpacityChanged();
+        }
+
+        private void OpacityChanged()
+        {
             lblOpacityPercent.Text = ((int)(mf.vehicleOpacity * 100)).ToString() + "%";
             mf.vehicleOpacityByte = (byte)(255 * (mf.vehicleOpacity));
             Properties.Settings.Default.setDisplay_vehicleOpacity = (int)(mf.vehicleOpacity * 100);
@@ -952,273 +847,77 @@ namespace AgOpenGPS
             }
         }
 
-        //Check Brand is changed
-
-        private void rbtnBrandTAgOpenGPS_CheckedChanged(object sender, EventArgs e)
+        private void SendSettings()
         {
-            if ((sender as RadioButton).Checked)
-            {
-                {
-                    brand = TBrand.AGOpenGPS;
-                    pboxAlpha.BackgroundImage = mf.GetTractorBrand(brand);
-                    original = null;
-                    SetOpacity();
-                }
-            }
+            //Form Steer Settings
+            mf.p_252.pgn[mf.p_252.countsPerDegree] = unchecked((byte)Properties.Settings.Default.setAS_countsPerDegree);
+            mf.p_252.pgn[mf.p_252.ackerman] = unchecked((byte)Properties.Settings.Default.setAS_ackerman);
+
+            mf.p_252.pgn[mf.p_252.wasOffsetHi] = unchecked((byte)(Properties.Settings.Default.setAS_wasOffset >> 8));
+            mf.p_252.pgn[mf.p_252.wasOffsetLo] = unchecked((byte)(Properties.Settings.Default.setAS_wasOffset));
+
+            mf.p_252.pgn[mf.p_252.highPWM] = unchecked((byte)Properties.Settings.Default.setAS_highSteerPWM);
+            mf.p_252.pgn[mf.p_252.lowPWM] = unchecked((byte)Properties.Settings.Default.setAS_lowSteerPWM);
+            mf.p_252.pgn[mf.p_252.gainProportional] = unchecked((byte)Properties.Settings.Default.setAS_Kp);
+            mf.p_252.pgn[mf.p_252.minPWM] = unchecked((byte)Properties.Settings.Default.setAS_minSteerPWM);
+
+            mf.SendPgnToLoop(mf.p_252.pgn);
+
+            //steer config
+            mf.p_251.pgn[mf.p_251.set0] = Properties.Settings.Default.setArdSteer_setting0;
+            mf.p_251.pgn[mf.p_251.set1] = Properties.Settings.Default.setArdSteer_setting1;
+            mf.p_251.pgn[mf.p_251.maxPulse] = Properties.Settings.Default.setArdSteer_maxPulseCounts;
+            mf.p_251.pgn[mf.p_251.minSpeed] = unchecked((byte)(Properties.Settings.Default.setAS_minSteerSpeed * 10));
+
+            if (Properties.Settings.Default.setAS_isConstantContourOn)
+                mf.p_251.pgn[mf.p_251.angVel] = 1;
+            else mf.p_251.pgn[mf.p_251.angVel] = 0;
+
+            mf.SendPgnToLoop(mf.p_251.pgn);
+
+            //machine settings    
+            mf.p_238.pgn[mf.p_238.set0] = Properties.Settings.Default.setArdMac_setting0;
+            mf.p_238.pgn[mf.p_238.raiseTime] = Properties.Settings.Default.setArdMac_hydRaiseTime;
+            mf.p_238.pgn[mf.p_238.lowerTime] = Properties.Settings.Default.setArdMac_hydLowerTime;
+
+            mf.p_238.pgn[mf.p_238.user1] = Properties.Settings.Default.setArdMac_user1;
+            mf.p_238.pgn[mf.p_238.user2] = Properties.Settings.Default.setArdMac_user2;
+            mf.p_238.pgn[mf.p_238.user3] = Properties.Settings.Default.setArdMac_user3;
+            mf.p_238.pgn[mf.p_238.user4] = Properties.Settings.Default.setArdMac_user4;
+
+            mf.SendPgnToLoop(mf.p_238.pgn);
         }
 
-        private void rbtnBrandTCase_CheckedChanged(object sender, EventArgs e)
+        private void HarvesterBrandCheckedChanged(object sender, EventArgs e)
         {
-            if ((sender as RadioButton).Checked)
+            RadioButton radioButton = sender as RadioButton;
+            if (radioButton.Checked)
             {
-                {
-                    brand = TBrand.Case;
-                    pboxAlpha.BackgroundImage = mf.GetTractorBrand(brand);
-                    original = null;
-                    SetOpacity();
-                }
-            }
-        }
-
-        private void rbtnBrandTClaas_CheckedChanged(object sender, EventArgs e)
-        {
-            if ((sender as RadioButton).Checked)
-            {
-                {
-                    brand = TBrand.Claas;
-                    pboxAlpha.BackgroundImage = mf.GetTractorBrand(brand);
-                    original = null;
-                    SetOpacity();
-                }
-            }
-        }
-
-        private void rbtnBrandTDeutz_CheckedChanged(object sender, EventArgs e)
-        {
-            if ((sender as RadioButton).Checked)
-            {
-                brand = TBrand.Deutz;
-                pboxAlpha.BackgroundImage = mf.GetTractorBrand(brand);
-                original = null;
-                SetOpacity();
-            }
-        }
-
-        private void rbtnBrandTFendt_CheckedChanged(object sender, EventArgs e)
-        {
-            if ((sender as RadioButton).Checked)
-            {
-                brand = TBrand.Fendt;
-                pboxAlpha.BackgroundImage = mf.GetTractorBrand(brand);
-                original = null;
-                SetOpacity();
-            }
-        }
-
-        private void rbtnBrandTJDeere_CheckedChanged(object sender, EventArgs e)
-        {
-            if ((sender as RadioButton).Checked)
-            {
-                brand = TBrand.JDeere;
-                pboxAlpha.BackgroundImage = mf.GetTractorBrand(brand);
-                original = null;
-                SetOpacity();
-            }
-        }
-
-        private void rbtnBrandTKubota_CheckedChanged(object sender, EventArgs e)
-        {
-            if ((sender as RadioButton).Checked)
-            {
-                brand = TBrand.Kubota;
-                pboxAlpha.BackgroundImage = mf.GetTractorBrand(brand);
-                original = null;
-                SetOpacity();
-            }
-        }
-
-        private void rbtnBrandTMassey_CheckedChanged(object sender, EventArgs e)
-        {
-            if ((sender as RadioButton).Checked)
-            {
-                brand = TBrand.Massey;
-                pboxAlpha.BackgroundImage = mf.GetTractorBrand(brand);
-                original = null;
-                SetOpacity();
-            }
-        }
-
-        private void rbtnBrandTNH_CheckedChanged(object sender, EventArgs e)
-        {
-            if ((sender as RadioButton).Checked)
-            {
-                brand = TBrand.NewHolland;
-                pboxAlpha.BackgroundImage = mf.GetTractorBrand(brand);
-                original = null;
-                SetOpacity();
-            }
-        }
-
-        private void rbtnBrandTSame_CheckedChanged(object sender, EventArgs e)
-        {
-            if ((sender as RadioButton).Checked)
-            {
-                brand = TBrand.Same;
-                pboxAlpha.BackgroundImage = mf.GetTractorBrand(brand);
-                original = null;
-                SetOpacity();
-            }
-        }
-
-        private void rbtnBrandTSteyr_CheckedChanged(object sender, EventArgs e)
-        {
-            if ((sender as RadioButton).Checked)
-            {
-                brand = TBrand.Steyr;
-                pboxAlpha.BackgroundImage = mf.GetTractorBrand(brand);
-                original = null;
-                SetOpacity();
-            }
-        }
-
-        private void rbtnBrandTUrsus_CheckedChanged(object sender, EventArgs e)
-        {
-            if ((sender as RadioButton).Checked)
-            {
-                brand = TBrand.Ursus;
-                pboxAlpha.BackgroundImage = mf.GetTractorBrand(brand);
-                original = null;
-                SetOpacity();
-            }
-        }
-
-        private void rbtnBrandTValtra_CheckedChanged(object sender, EventArgs e)
-        {
-            if ((sender as RadioButton).Checked)
-            {
-                brand = TBrand.Valtra;
-                pboxAlpha.BackgroundImage = mf.GetTractorBrand(brand);
-                original = null;
-                SetOpacity();
-            }
-        }
-
-        private void rbtnBrandHAgOpenGPS_CheckedChanged(object sender, EventArgs e)
-        {
-            if ((sender as RadioButton).Checked)
-            {
-                brandH = HBrand.AgOpenGPS;
+                brandH = (HBrand)radioButton.Tag;
                 pboxAlpha.BackgroundImage = mf.GetHarvesterBrand(brandH);
                 original = null;
                 SetOpacity();
             }
         }
 
-        private void rbtnBrandHCase_CheckedChanged(object sender, EventArgs e)
+        private void TractorBrandCheckedChanged(object sender, EventArgs e)
         {
-            if ((sender as RadioButton).Checked)
+            RadioButton radioButton = sender as RadioButton;
+            if (radioButton.Checked)
             {
-                brandH = HBrand.Case;
-                pboxAlpha.BackgroundImage = mf.GetHarvesterBrand(brandH);
+                brand = (TBrand)radioButton.Tag;
+                pboxAlpha.BackgroundImage = mf.GetTractorBrand(brand);
                 original = null;
                 SetOpacity();
             }
         }
 
-        private void rbtnBrandHClaas_CheckedChanged(object sender, EventArgs e)
+        private void Brand4WDCheckedChanged(object sender, EventArgs e)
         {
-            if ((sender as RadioButton).Checked)
+            RadioButton radioButton = sender as RadioButton;
+            if (radioButton.Checked)
             {
-                brandH = HBrand.Claas;
-                pboxAlpha.BackgroundImage = mf.GetHarvesterBrand(brandH);
-                original = null;
-                SetOpacity();
-            }
-        }
-
-        private void rbtnBrandHJDeere_CheckedChanged(object sender, EventArgs e)
-        {
-            if ((sender as RadioButton).Checked)
-            {
-                {
-                    brandH = HBrand.JDeere;
-                    pboxAlpha.BackgroundImage = mf.GetHarvesterBrand(brandH);
-                    original = null;
-                    SetOpacity();
-                }
-            }
-        }
-
-        private void rbtnBrandHNH_CheckedChanged(object sender, EventArgs e)
-        {
-            if ((sender as RadioButton).Checked)
-            {
-                brandH = HBrand.NewHolland;
-                pboxAlpha.BackgroundImage = mf.GetHarvesterBrand(brandH);
-                original = null;
-                SetOpacity();
-            }
-        }
-
-        private void rbtnBrand4WDAgOpenGPS_CheckedChanged(object sender, EventArgs e)
-        {
-            if ((sender as RadioButton).Checked)
-            {
-                brand4WD = WDBrand.AgOpenGPS;
-                pboxAlpha.BackgroundImage = mf.Get4WDBrandFront(brand4WD);
-                original = null;
-                SetOpacity();
-            }
-        }
-
-        private void rbtnBrand4WDCase_CheckedChanged(object sender, EventArgs e)
-        {
-            if ((sender as RadioButton).Checked)
-            {
-                brand4WD = WDBrand.Case;
-                pboxAlpha.BackgroundImage = mf.Get4WDBrandFront(brand4WD);
-                original = null;
-                SetOpacity();
-            }
-        }
-
-        private void rbtnBrand4WDChallenger_CheckedChanged(object sender, EventArgs e)
-        {
-            if ((sender as RadioButton).Checked)
-            {
-                brand4WD = WDBrand.Challenger;
-                pboxAlpha.BackgroundImage = mf.Get4WDBrandFront(brand4WD);
-                original = null;
-                SetOpacity();
-            }
-        }
-
-        private void rbtnBrand4WDJDeere_CheckedChanged(object sender, EventArgs e)
-        {
-            if ((sender as RadioButton).Checked)
-            {
-                brand4WD = WDBrand.JDeere;
-                pboxAlpha.BackgroundImage = mf.Get4WDBrandFront(brand4WD);
-                original = null;
-                SetOpacity();
-            }
-        }
-
-        private void rbtnBrand4WDNH_CheckedChanged(object sender, EventArgs e)
-        {
-            if ((sender as RadioButton).Checked)
-            {
-                brand4WD = WDBrand.NewHolland;
-                pboxAlpha.BackgroundImage = mf.Get4WDBrandFront(brand4WD);
-                original = null;
-                SetOpacity();
-            }
-        }
-        private void rbtnBrand4WDHolder_CheckedChanged(object sender, EventArgs e)
-        {
-            if ((sender as RadioButton).Checked)
-            {
-                brand4WD = WDBrand.Holder;
+                brand4WD = (WDBrand)radioButton.Tag;
                 pboxAlpha.BackgroundImage = mf.Get4WDBrandFront(brand4WD);
                 original = null;
                 SetOpacity();
