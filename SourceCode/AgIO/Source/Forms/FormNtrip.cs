@@ -7,6 +7,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using AgIO.Controls;
 using AgLibrary.Logging;
 
 namespace AgIO
@@ -374,31 +375,31 @@ namespace AgIO
 
         private void NudCasterPort_Enter(object sender, EventArgs e)
         {
-            mf.KeypadToNUD((NumericUpDown)sender, this);
+            ((NumericUpDown)sender).ShowKeypad(this);
             btnSerialCancel.Focus();
         }
 
         private void NudGGAInterval_Enter(object sender, EventArgs e)
         {
-            mf.KeypadToNUD((NumericUpDown)sender, this);
+            ((NumericUpDown)sender).ShowKeypad(this);
             btnSerialCancel.Focus();
         }
 
         private void NudLatitude_Enter(object sender, EventArgs e)
         {
-            mf.KeypadToNUD((NumericUpDown)sender, this);
+            ((NumericUpDown)sender).ShowKeypad(this);
             btnSerialCancel.Focus();
         }
 
         private void NudLongitude_Enter(object sender, EventArgs e)
         {
-            mf.KeypadToNUD((NumericUpDown)sender, this);
+            ((NumericUpDown)sender).ShowKeypad(this);
             btnSerialCancel.Focus();
         }
 
         private void NudSendToUDPPort_Enter(object sender, EventArgs e)
         {
-            mf.KeypadToNUD((NumericUpDown)sender, this);
+            ((NumericUpDown)sender).ShowKeypad(this);
             btnSerialCancel.Focus();
         }
 
