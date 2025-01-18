@@ -396,6 +396,9 @@
   <data name="gsForNow" xml:space="preserve">
     <value>Tijdelijk</value>
   </data>
+  <data name="gsFormFlag" xml:space="preserve">
+    <value>Vlaggen</value>
+  </data>
   <data name="gsFromExisting" xml:space="preserve">
     <value>Vanuit bestaand</value>
   </data>

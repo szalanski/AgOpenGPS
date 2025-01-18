@@ -907,6 +907,15 @@ namespace AgOpenGPS.Culture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Flags.
+        /// </summary>
+        public static string gsFormFlag {
+            get {
+                return ResourceManager.GetString("gsFormFlag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to For Now.
         /// </summary>
         public static string gsForNow {

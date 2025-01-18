@@ -402,6 +402,9 @@
   <data name="gsForNow" xml:space="preserve">
     <value>For Now</value>
   </data>
+  <data name="gsFormFlag" xml:space="preserve">
+    <value>Flags</value>
+  </data>
   <data name="gsFromExisting" xml:space="preserve">
     <value>From Existing</value>
   </data>
