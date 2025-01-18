@@ -1,4 +1,5 @@
-﻿using AgOpenGPS.Culture;
+﻿using AgOpenGPS.Controls;
+using AgOpenGPS.Culture;
 using AgOpenGPS.Helpers;
 using System;
 using System.Globalization;
@@ -37,12 +38,12 @@ namespace AgOpenGPS
 
         private void nudLatitude_Click(object sender, EventArgs e)
         {
-            mf.KeypadToNUD((NudlessNumericUpDown)sender, this);
+            ((NudlessNumericUpDown)sender).ShowKeypad(this);
         }
 
         private void nudLongitude_Click(object sender, EventArgs e)
         {
-            mf.KeypadToNUD((NudlessNumericUpDown)sender, this);
+            ((NudlessNumericUpDown)sender).ShowKeypad(this);
         }
 
         public void CalcHeading()

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows.Forms;
 using AgLibrary.Logging;
+using AgOpenGPS.Controls;
 
 namespace AgOpenGPS
 {
@@ -119,7 +120,7 @@ namespace AgOpenGPS
 
         private void nudFixJumpDistance_Click(object sender, EventArgs e)
         {
-            if (mf.KeypadToNUD((NudlessNumericUpDown)sender, this))
+            if (((NudlessNumericUpDown)sender).ShowKeypad(this))
             {
                 Properties.Settings.Default.setGPS_jumpFixAlarmDistance = ((int)nudFixJumpDistance.Value);
                 //mf.jumpDistanceAlarm = Properties.Settings.Default.setGPS_dualHeadingOffset;
@@ -128,7 +129,7 @@ namespace AgOpenGPS
 
         private void nudDualHeadingOffset_Click(object sender, EventArgs e)
         {
-            if (mf.KeypadToNUD((NudlessNumericUpDown)sender, this))
+            if (((NudlessNumericUpDown)sender).ShowKeypad(this))
             {
                 Properties.Settings.Default.setGPS_dualHeadingOffset = ((double)nudDualHeadingOffset.Value);
                 mf.pn.headingTrueDualOffset = Properties.Settings.Default.setGPS_dualHeadingOffset;
@@ -137,7 +138,7 @@ namespace AgOpenGPS
 
          private void nudDualReverseDistance_Click(object sender, EventArgs e)
         {
-            if (mf.KeypadToNUD((NudlessNumericUpDown)sender, this))
+            if (((NudlessNumericUpDown)sender).ShowKeypad(this))
             {
                 Properties.Settings.Default.setGPS_dualReverseDetectionDistance = ((double)nudDualReverseDistance.Value);
                 mf.dualReverseDetectionDistance = Properties.Settings.Default.setGPS_dualReverseDetectionDistance;
@@ -145,7 +146,7 @@ namespace AgOpenGPS
         }
         //private void nudMinimumFrameTime_Click(object sender, EventArgs e)
         //{
-        //    if (mf.KeypadToNUD((NudlessNumericUpDown)sender, this))
+        //    if (((NudlessNumericUpDown)sender).ShowKeypad(this))
         //    {
         //        Properties.Settings.Default.SetGPS_udpWatchMsec = ((int)nudMinimumFrameTime.Value);
         //        mf.udpWatchLimit = Properties.Settings.Default.SetGPS_udpWatchMsec;
@@ -182,7 +183,7 @@ namespace AgOpenGPS
 
         //private void nudForwardComp_Click(object sender, EventArgs e)
         //{
-        //    if (mf.KeypadToNUD((NudlessNumericUpDown)sender, this))
+        //    if (((NudlessNumericUpDown)sender).ShowKeypad(this))
         //    {
         //        Properties.Settings.Default.setGPS_forwardComp = (double)nudForwardComp.Value;
         //    }
@@ -190,7 +191,7 @@ namespace AgOpenGPS
 
         //private void nudReverseComp_Click(object sender, EventArgs e)
         //{
-        //    if (mf.KeypadToNUD((NudlessNumericUpDown)sender, this))
+        //    if (((NudlessNumericUpDown)sender).ShowKeypad(this))
         //    {
         //        Properties.Settings.Default.setGPS_reverseComp = (double)nudReverseComp.Value;
         //    }
@@ -198,7 +199,7 @@ namespace AgOpenGPS
 
         //private void nudAgeAlarm_Click(object sender, EventArgs e)
         //{
-        //    if (mf.KeypadToNUD((NudlessNumericUpDown)sender, this))
+        //    if (((NudlessNumericUpDown)sender).ShowKeypad(this))
         //    {
         //        Properties.Settings.Default.setGPS_ageAlarm = (int)nudAgeAlarm.Value;
         //    }

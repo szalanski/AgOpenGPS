@@ -1,6 +1,7 @@
 ﻿//Please, if you use this, share the improvements
 
 using AgLibrary.Logging;
+using AgOpenGPS.Controls;
 using AgOpenGPS.Culture;
 using AgOpenGPS.Helpers;
 using Microsoft.Win32;
@@ -465,7 +466,7 @@ namespace AgOpenGPS
 
         private void nudNumGuideLines_Click(object sender, EventArgs e)
         {
-            if (mf.KeypadToNUD((NudlessNumericUpDown)sender, this))
+            if (((NudlessNumericUpDown)sender).ShowKeypad(this))
             {
                 mf.ABLine.numGuideLines = (int)nudNumGuideLines.Value;
             }

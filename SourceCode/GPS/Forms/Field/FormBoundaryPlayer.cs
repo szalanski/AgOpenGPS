@@ -1,4 +1,5 @@
 ﻿using AgLibrary.Logging;
+using AgOpenGPS.Controls;
 using AgOpenGPS.Culture;
 using AgOpenGPS.Helpers;
 using System;
@@ -70,7 +71,7 @@ namespace AgOpenGPS
 
         private void nudOffset_Click(object sender, EventArgs e)
         {
-            mf.KeypadToNUD((NudlessNumericUpDown)sender, this);
+            ((NudlessNumericUpDown)sender).ShowKeypad(this);
             btnPausePlay.Focus();
             if (mf.isMetric)
             {
