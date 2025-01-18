@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Forms;
+using AgOpenGPS.Culture;
 using AgOpenGPS.Helpers;
 
 namespace AgOpenGPS
@@ -14,6 +15,9 @@ namespace AgOpenGPS
             mf = callingForm as FormGPS;
 
             InitializeComponent();
+            
+
+
         }
 
         private void linkLabelGit_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -28,7 +32,17 @@ namespace AgOpenGPS
 
         private void Form_About_Load(object sender, EventArgs e)
         {
-            lblVersion.Text = "Terms and Conditions of Version " + GitVersionInformation.SemVer;
+            
+            //translate labels
+            labelAgree.Text = gStr.gsAgree;
+            labelDisagree.Text = gStr.gsDisagree;
+            labelTermsOne.Text = gStr.gsTermsOne;
+            labelTerms2.Text = gStr.gsTermsTwo;
+            labelTerms3.Text = gStr.gsTermsThree;
+            labelTermsAndVersion.Text = gStr.gsTermsConditions + GitVersionInformation.SemVer;
+            labelDiscussionsAt.Text = gStr.gsDiscussions;
+            labelCheckForUpdates.Text = gStr.gsCheckForUpdates;
+
 
             // Add a link to the LinkLabel.
             LinkLabel.Link link = new LinkLabel.Link { LinkData = "https://github.com/AgOpenGPS-Official/AgOpenGPS" };
@@ -72,5 +86,5 @@ namespace AgOpenGPS
             Properties.Settings.Default.Save();
             mf.isTermsAccepted = true;
         }
-    }
+    }   
 }
