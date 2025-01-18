@@ -172,7 +172,7 @@ namespace AgOpenGPS
             {
                 if (mf.isKeyboardOn)
                 {
-                    mf.KeyboardToText((TextBox)sender, this);
+                    ((TextBox)sender).ShowKeyboard(this);
                 }
             }
             else
@@ -223,7 +223,7 @@ namespace AgOpenGPS
             {
                 if (mf.isKeyboardOn)
                 {
-                    mf.KeyboardToText((TextBox)sender, this);
+                    ((TextBox)sender).ShowKeyboard(this);
                 }
             }
             else

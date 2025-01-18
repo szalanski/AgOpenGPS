@@ -364,7 +364,7 @@ namespace AgOpenGPS
 
             if (mf.isKeyboardOn)
             {
-                mf.KeyboardToText((System.Windows.Forms.TextBox)sender, this);
+                ((System.Windows.Forms.TextBox)sender).ShowKeyboard(this);
                 
                 if (indx > -1)
                     gTemp[indx].name = tboxNameCurve.Text.Trim();

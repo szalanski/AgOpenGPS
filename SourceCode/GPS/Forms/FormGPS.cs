@@ -763,20 +763,6 @@ namespace AgOpenGPS
             }
         }
 
-        public void KeyboardToText(TextBox sender, Form owner)
-        {
-            var colour = sender.BackColor;
-            sender.BackColor = Color.Red;
-            using (FormKeyboard form = new FormKeyboard(sender.Text))
-            {
-                if (form.ShowDialog(owner) == DialogResult.OK)
-                {
-                    sender.Text = form.ReturnString;
-                }
-            }
-            sender.BackColor = colour;
-        }
-
         //request a new job
         public void JobNew()
         {

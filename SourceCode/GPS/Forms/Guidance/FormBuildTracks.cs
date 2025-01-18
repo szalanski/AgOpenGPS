@@ -1371,7 +1371,7 @@ namespace AgOpenGPS
         private void textBox_Click(object sender, EventArgs e)
         {
             if (mf.isKeyboardOn)
-                mf.KeyboardToText((TextBox)sender, this);
+                ((TextBox)sender).ShowKeyboard(this);
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
