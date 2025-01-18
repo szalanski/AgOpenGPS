@@ -1,4 +1,5 @@
-﻿using AgIO.Properties;
+﻿using AgIO.Controls;
+using AgIO.Properties;
 using Microsoft.Win32;
 using System;
 using System.Drawing;
@@ -127,7 +128,7 @@ namespace AgIO
         {
             if (mf.isKeyboardOn)
             {
-                mf.KeyboardToText((TextBox)sender, this);
+                ((TextBox)sender).ShowKeyboard(this);
                 btnSaveNewProfile.Focus();
             }
         }
@@ -155,7 +156,7 @@ namespace AgIO
         {
             if (mf.isKeyboardOn)
             {
-                mf.KeyboardToText((TextBox)sender, this);
+                ((TextBox)sender).ShowKeyboard(this);
                 btnSaveNewProfile.Focus();
             }
         }

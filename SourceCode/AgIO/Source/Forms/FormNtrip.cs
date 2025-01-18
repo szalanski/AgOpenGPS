@@ -407,7 +407,7 @@ namespace AgIO
         {
             if (mf.isKeyboardOn)
             {
-                mf.KeyboardToText((TextBox)sender, this);
+                ((TextBox)sender).ShowKeyboard(this);
                 btnSerialCancel.Focus();
             }
             btnGetIP.PerformClick();
@@ -417,7 +417,7 @@ namespace AgIO
         {
             if (mf.isKeyboardOn)
             {
-                mf.KeyboardToText((TextBox)sender, this);
+                ((TextBox)sender).ShowKeyboard(this);
                 btnSerialCancel.Focus();
             }
         }
@@ -426,7 +426,7 @@ namespace AgIO
         {
             if (mf.isKeyboardOn)
             {
-                mf.KeyboardToText((TextBox)sender, this);
+                ((TextBox)sender).ShowKeyboard(this);
                 btnSerialCancel.Focus();
             }
         }
@@ -435,7 +435,7 @@ namespace AgIO
         {
             if (mf.isKeyboardOn)
             {
-                mf.KeyboardToText((TextBox)sender, this);
+                ((TextBox)sender).ShowKeyboard(this);
                 btnSerialCancel.Focus();
             }
         }
