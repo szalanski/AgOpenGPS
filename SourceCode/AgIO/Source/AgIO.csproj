@@ -21,6 +21,7 @@
       <HintPath>..\..\References\RepeatButtonControl.dll</HintPath>
     </Reference>
     <Reference Include="System.Configuration" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\AgLibrary\AgLibrary.csproj" />
