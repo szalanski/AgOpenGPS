@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.Windows.Forms;
 using AgOpenGPS.Culture;
 using AgOpenGPS.Helpers;
@@ -8,12 +7,8 @@ namespace AgOpenGPS
 {
     public partial class Form_First : Form
     {
-        private readonly FormGPS mf = null;
-
         public Form_First(Form callingForm)
         {
-            mf = callingForm as FormGPS;
-
             InitializeComponent();
             
 
@@ -68,23 +63,20 @@ namespace AgOpenGPS
 
         private void button1_Click(object sender, EventArgs e)
         {
-            mf.isTermsAccepted = true;
+            DialogResult = DialogResult.OK;
             Close();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            Properties.Settings.Default.setDisplay_isTermsAccepted = false;
-            Properties.Settings.Default.Save();
-            //Close();
-            Environment.Exit(0);
+            DialogResult = DialogResult.Cancel;
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
             Properties.Settings.Default.setDisplay_isTermsAccepted = true;
             Properties.Settings.Default.Save();
-            mf.isTermsAccepted = true;
+            DialogResult = DialogResult.OK;
         }
     }   
 }

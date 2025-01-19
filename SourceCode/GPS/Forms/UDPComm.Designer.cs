@@ -260,16 +260,8 @@ namespace AgOpenGPS
                                 Log.EventWriter(lblHardwareMessage.Text);
 
                                 //color based on byte 6
-                                if (data[6] == 0)
-                                {
-                                    lblHardwareMessage.BackColor = Color.Salmon;
-                                    lblHardwareMessage.ForeColor = Color.Black;
-                                }
-                                else
-                                {
-                                    lblHardwareMessage.BackColor = Color.Bisque;
-                                    lblHardwareMessage.ForeColor = Color.Black;
-                                }
+                                lblHardwareMessage.BackColor = data[6] == 0 ? Color.Salmon : Color.Bisque;
+                                lblHardwareMessage.ForeColor = Color.Black;
                             }
                             else
                             {

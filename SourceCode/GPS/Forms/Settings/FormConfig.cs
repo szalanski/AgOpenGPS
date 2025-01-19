@@ -283,11 +283,11 @@ namespace AgOpenGPS
                 return;
             }
 
-            //reload all the settings from default and user.config
+            //reload all the settings
             mf.LoadSettings();
 
             //save current vehicle
-            RegistrySettings.Save();
+            Properties.Settings.Default.Save();
         }
 
         private void FixMinMaxSpinners()
@@ -435,7 +435,6 @@ namespace AgOpenGPS
 
             mf.isMetric = false;
             Properties.Settings.Default.setMenu_isMetric = mf.isMetric;
-            Properties.Settings.Default.Save();
             isClosing = true;
             Close();
         }
@@ -447,7 +446,6 @@ namespace AgOpenGPS
 
             mf.isMetric = true;
             Properties.Settings.Default.setMenu_isMetric = mf.isMetric;
-            Properties.Settings.Default.Save();
             isClosing = true;
             Close();
             //FormConfig_Load(this, e);

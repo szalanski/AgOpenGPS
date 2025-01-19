@@ -20,18 +20,14 @@ namespace AgIO
         [STAThread]
         private static void Main()
         {
-            //reset to Default Profile and save
-            Settings.Default.Reset();
-            Settings.Default.Save();
-
-            Log.EventWriter("Program Started: " + DateTime.Now.ToString("f", CultureInfo.CreateSpecificCulture(RegistrySettings.culture)));
-            Log.EventWriter("AgIO Version: " + Application.ProductVersion.ToString(CultureInfo.InvariantCulture));
-
-            //load the profile name and set profile directory
-            RegistrySettings.Load();
-
             if (Mutex.WaitOne(TimeSpan.Zero, true))
             {
+                //load the profile name and set profile directory
+                RegistrySettings.Load();
+
+                Log.EventWriter("Program Started: " + DateTime.Now.ToString("f", CultureInfo.InvariantCulture));
+                Log.EventWriter("AgIO Version: " + Application.ProductVersion.ToString(CultureInfo.InvariantCulture));
+
                 Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo(RegistrySettings.culture);
                 Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo(RegistrySettings.culture);
                 Application.EnableVisualStyles();
@@ -40,7 +36,7 @@ namespace AgIO
             }
         }
     }
-}               
+}
 
 //catch (System.Configuration.ConfigurationErrorsException ex)
 //{

@@ -4,6 +4,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using AgLibrary.Settings;
 using AgLibrary.Logging;
 using AgOpenGPS.Culture;
 using AgOpenGPS.Properties;
@@ -19,13 +20,11 @@ namespace AgOpenGPS
         {
             if (!mf.isJobStarted)
             {
-                //save current vehicle
-                RegistrySettings.Save();
-
                 if (lvVehicles.SelectedItems.Count > 0)
                 {
+                    string newVehicleName = lvVehicles.SelectedItems[0].SubItems[0].Text;
                     DialogResult result3 = MessageBox.Show(
-                        "Open: " + lvVehicles.SelectedItems[0].SubItems[0].Text + ".XML ?",
+                        "Open: " + newVehicleName + ".XML ?",
                         gStr.gsSaveAndReturn,
                         MessageBoxButtons.YesNo,
                         MessageBoxIcon.Question,
@@ -33,12 +32,17 @@ namespace AgOpenGPS
 
                     if (result3 == DialogResult.Yes)
                     {
-                        bool success = SettingsIO.ImportAll(Path.Combine(RegistrySettings.vehiclesDirectory, lvVehicles.SelectedItems[0].SubItems[0].Text + ".XML"));
-                        if (!success) return;
+                        RegistrySettings.Save(RegKeys.vehicleFileName, newVehicleName);
 
-                        RegistrySettings.vehicleFileName = lvVehicles.SelectedItems[0].SubItems[0].Text;
+                        var result = Settings.Default.Load();
+                        if (result != LoadResult.Ok)
+                        {
+                            Log.EventWriter("Vehicle Loaded: " + newVehicleName + ".XML With Error:" + result.ToString());
 
-                        RegistrySettings.Save();
+                            MessageBox.Show("There was an error while opening the xml \r\n\r\n Please check your settings");
+                        }
+
+                        Log.EventWriter("Vehicle Loaded: " + RegistrySettings.vehicleFileName + ".XML");
 
                         LoadBrandImage();
 
@@ -57,18 +61,14 @@ namespace AgOpenGPS
 
                         ///Remind the user
                         mf.TimedMessageBox(2500, "Steer and Machine Settings Sent", "Were Modules Connected?");
-
-                        Log.EventWriter("Vehicle Loaded: " + RegistrySettings.vehicleFileName + ".XML");
                     }
-                    UpdateVehicleListView();
+                    UpdateSummary();
                 }
             }
             else
             {
                 mf.TimedMessageBox(2000, gStr.gsFieldIsOpen, gStr.gsCloseFieldFirst);
-                UpdateVehicleListView();
             }
-            UpdateSummary();
 
             btnOK.PerformClick();
         }
@@ -79,34 +79,26 @@ namespace AgOpenGPS
             {
                 if (lvVehicles.SelectedItems.Count > 0)
                 {
-                    if (lvVehicles.SelectedItems[0].SubItems[0].Text.Trim() != "Default Vehicle")
+                    if (lvVehicles.SelectedItems[0].SubItems[0].Text != RegistrySettings.vehicleFileName)
                     {
-
-                        if (lvVehicles.SelectedItems[0].SubItems[0].Text != RegistrySettings.vehicleFileName)
+                        DialogResult result3 = MessageBox.Show(
+                        "Delete: " + lvVehicles.SelectedItems[0].SubItems[0].Text + ".XML",
+                        gStr.gsSaveAndReturn,
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Error,
+                        MessageBoxDefaultButton.Button2);
+                        if (result3 == DialogResult.Yes)
                         {
-                            DialogResult result3 = MessageBox.Show(
-                            "Delete: " + lvVehicles.SelectedItems[0].SubItems[0].Text + ".XML",
-                            gStr.gsSaveAndReturn,
-                            MessageBoxButtons.YesNo,
-                            MessageBoxIcon.Error,
-                            MessageBoxDefaultButton.Button2);
-                            if (result3 == DialogResult.Yes)
-                            {
-                                File.Delete(Path.Combine(RegistrySettings.vehiclesDirectory, lvVehicles.SelectedItems[0].SubItems[0].Text + ".XML"));
-                            }
-                        }
-                        else
-                        {
-                            mf.TimedMessageBox(2000, "Vehicle In Use", "Select Different Vehicle");
+                            File.Delete(Path.Combine(RegistrySettings.vehiclesDirectory, lvVehicles.SelectedItems[0].SubItems[0].Text + ".XML"));
                         }
                     }
                     else
                     {
-                        Log.EventWriter("Attempted to Delete Default Vehicle, Denied");
-                        mf.TimedMessageBox(2500, "Default Vehicle Delete Denied", "Choose Another Vehicle");
+                        mf.TimedMessageBox(2000, "Vehicle In Use", "Select Different Vehicle");
                     }
                 }
             }
+
             UpdateVehicleListView();
         }
 
@@ -116,27 +108,13 @@ namespace AgOpenGPS
             btnVehicleSave.BackColor = Color.Transparent;
             btnVehicleSave.Enabled = false;
 
-            //save current vehicle
-            RegistrySettings.Save();
+            string newVehicleName = SanitizeFileName(tboxVehicleNameSave.Text.Trim()).Trim();
+            tboxVehicleNameSave.Text = "";
 
-            tboxVehicleNameSave.Text = SanitizeFileName(tboxVehicleNameSave.Text.Trim());
-
-            if (tboxVehicleNameSave.Text.Trim().Length > 0)
+            if (newVehicleName.Length > 0)
             {
-                RegistrySettings.vehicleFileName = tboxVehicleNameSave.Text.Trim();
-                RegistrySettings.Save();
-
-                tboxVehicleNameSave.Text = "";
-
-                LoadBrandImage();
-
-                mf.vehicle = new CVehicle(mf);
-                mf.tool = new CTool(mf);
-
-                //reset AOG
-                mf.LoadSettings();
-
-                SectionFeetInchesTotalWidthLabelUpdate();
+                RegistrySettings.Save(RegKeys.vehicleFileName, newVehicleName);
+                Settings.Default.Save();
             }
             UpdateVehicleListView();
             UpdateSummary();
@@ -238,17 +216,17 @@ namespace AgOpenGPS
             btnVehicleNewSave.BackColor = Color.Transparent;
             btnVehicleNewSave.Enabled = false;
 
-            tboxCreateNewVehicle.Text = SanitizeFileName(tboxCreateNewVehicle.Text.Trim());
+            string newVehicleName = SanitizeFileName(tboxCreateNewVehicle.Text.Trim()).Trim();
+            tboxCreateNewVehicle.Text = "";
 
-            if (tboxCreateNewVehicle.Text.Trim().Length > 0)
+            if (newVehicleName.Length > 0)
             {
-                RegistrySettings.Save();
-
+                RegistrySettings.Save(RegKeys.vehicleFileName, newVehicleName);
+                
                 Settings.Default.Reset();
                 Settings.Default.Save();
 
-                labelCurrentVehicle.Text = RegistrySettings.vehicleFileName = tboxCreateNewVehicle.Text.Trim();
-                tboxCreateNewVehicle.Text = "";
+                Log.EventWriter("New Vehicle Loaded: " + RegistrySettings.vehicleFileName + ".XML");
 
                 LoadBrandImage();
 
@@ -267,13 +245,10 @@ namespace AgOpenGPS
 
                 ///Remind the user
                 mf.TimedMessageBox(2500, "Steer and Machine Settings Sent", "Were Modules Connected?");
-
-                Log.EventWriter("New Vehicle Loaded: " + RegistrySettings.vehicleFileName + ".XML");
-
-                RegistrySettings.Save();
             }
             UpdateVehicleListView();
-        }
+            UpdateSummary();
+        }        
 
         //Functions
         private static readonly Regex InvalidFileRegex = new Regex(string.Format("[{0}]", Regex.Escape(@"<>:""/\|?*")));
@@ -568,25 +543,6 @@ namespace AgOpenGPS
                 mf.vehicle.vehicleType = 2;
                 Properties.Settings.Default.setVehicle_vehicleType = 2;
             }
-
-            if (mf.vehicle.vehicleType == 0) //2WD tractor
-            {
-                Properties.Settings.Default.setVehicle_isPivotBehindAntenna = true;
-                Properties.Settings.Default.setVehicle_isSteerAxleAhead = true;
-            }
-            if (mf.vehicle.vehicleType == 1) //harvestor
-            {
-                Properties.Settings.Default.setVehicle_isPivotBehindAntenna = true;
-                Properties.Settings.Default.setVehicle_isSteerAxleAhead = false;
-            }
-            if (mf.vehicle.vehicleType == 2) //4WD
-            {
-                Properties.Settings.Default.setVehicle_isPivotBehindAntenna = false;
-                Properties.Settings.Default.setVehicle_isSteerAxleAhead = true;
-            }
-
-            mf.vehicle.isPivotBehindAntenna = Properties.Settings.Default.setVehicle_isPivotBehindAntenna;
-            mf.vehicle.isSteerAxleAhead = Properties.Settings.Default.setVehicle_isSteerAxleAhead;
 
             //the old brand code
             Properties.Settings.Default.setDisplay_isVehicleImage = !cboxIsImage.Checked;
