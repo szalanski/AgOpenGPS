@@ -16,7 +16,7 @@
         public double rollFilter;
 
         //is the auto steer in auto turn on mode or not
-        public bool isAutoSteerAuto, isRollInvert, isReverseOn;
+        public bool isAutoSteerAuto, isRollInvert, autoswitchDualFix2FixOn, isDualAsIMU, isReverseOn;
 
         //the factor for fusion of GPS and IMU
         public double forwardComp, reverseComp, fusionWeight;
@@ -40,6 +40,8 @@
             isRollInvert = Properties.Settings.Default.setIMU_invertRoll;
 
             isReverseOn = Properties.Settings.Default.setIMU_isReverseOn;
+
+            autoswitchDualFix2FixOn = Properties.Settings.Default.setAutoswitchDualFix2FixOn;
         }
     }
 }

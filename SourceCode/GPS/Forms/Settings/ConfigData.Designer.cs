@@ -40,6 +40,7 @@ namespace AgOpenGPS
             nudFixJumpDistance.Value = Properties.Settings.Default.setGPS_jumpFixAlarmDistance;
 
             cboxIsReverseOn.Checked = Properties.Settings.Default.setIMU_isReverseOn;
+            cboxIsAutoSwitchDualFix2FixOn.Checked = Properties.Settings.Default.setAutoswitchDualFix2FixOn;
 
             if (Properties.Settings.Default.setF_minHeadingStepDistance == 1.0)
                 cboxMinGPSStep.Checked = true;
@@ -70,6 +71,10 @@ namespace AgOpenGPS
                 hsbarFusion.Enabled = false;
             }
 
+            // FOR AUTOSWITCH DUALFIX2FIX START
+            hsbarFusion.Enabled = true;
+            // FOR AUTOSWITCH DUALFIX2FIX STOP
+
             //nudMinimumFrameTime.Value = Properties.Settings.Default.SetGPS_udpWatchMsec;
 
             //nudForwardComp.Value = (decimal)(Properties.Settings.Default.setGPS_forwardComp);
@@ -85,6 +90,8 @@ namespace AgOpenGPS
             Properties.Settings.Default.setGPS_isRTK = mf.isRTK_AlarmOn = cboxIsRTK.Checked;
 
             Properties.Settings.Default.setIMU_isReverseOn = mf.ahrs.isReverseOn = cboxIsReverseOn.Checked;
+            Properties.Settings.Default.setAutoswitchDualFix2FixOn = mf.ahrs.autoswitchDualFix2FixOn = cboxIsAutoSwitchDualFix2FixOn.Checked;
+
             Properties.Settings.Default.setGPS_isRTK_KillAutoSteer = mf.isRTK_KillAutosteer = cboxIsRTK_KillAutoSteer.Checked;
 
             if (cboxMinGPSStep.Checked)

@@ -150,6 +150,23 @@ namespace AgOpenGPS
             pn.speed = pn.vtgSpeed;
             pn.AverageTheSpeed();
 
+            // FOR AUTOSWITCH DUALFIX2FIX START
+            if (Properties.Settings.Default.setGPS_headingFromWhichSource == "Dual" && ahrs.autoswitchDualFix2FixOn == true)
+            {
+                if (pn.speed > 2 || pn.speed < -2)
+                {
+                    headingFromSource = "Fix";
+                    ahrs.isDualAsIMU = true;
+                }
+                else
+                {
+                    headingFromSource = "Dual";
+                    ahrs.isDualAsIMU = false;
+                    ahrs.imuHeading = 99999;
+                }
+            }
+            // FOR AUTOSWITCH DUALFIX2FIX END
+
             #region Heading
             switch (headingFromSource)
             {
@@ -157,6 +174,13 @@ namespace AgOpenGPS
                 case "Fix":
                     {
                         #region Start
+
+                        // FOR AUTOSWITCH DUALFIX2FIX START
+                        if (Properties.Settings.Default.setGPS_headingFromWhichSource == "Dual" && ahrs.autoswitchDualFix2FixOn == true)
+                        {
+                            lblSpeed.ForeColor = System.Drawing.Color.Red;
+                        }
+                        // FOR AUTOSWITCH DUALFIX2FIX END
 
                         distanceCurrentStepFixDisplay = glm.Distance(prevDistFix, pn.fix);
                         distanceCurrentStepFixDisplay *= 100;
@@ -346,6 +370,7 @@ namespace AgOpenGPS
                         //imu on board
                         if (ahrs.imuHeading != 99999)
                         {
+                            isChangingDirection = false;
 
                             if (ahrs.isReverseOn)
                             {
@@ -480,6 +505,7 @@ namespace AgOpenGPS
                             else
                             {
                                 isReverse = false;
+                                isChangingDirection = false;
                             }
 
                             //set the headings
@@ -660,6 +686,14 @@ namespace AgOpenGPS
 
                 case "Dual":
                     {
+                        // FOR AUTOSWITCH DUALFIX2FIX START
+                        if (Properties.Settings.Default.setGPS_headingFromWhichSource == "Dual" && ahrs.autoswitchDualFix2FixOn == true)
+                        {
+                            lblSpeed.ForeColor = System.Drawing.Color.Green;
+                            isChangingDirection = false;
+                        }
+                        // FOR AUTOSWITCH DUALFIX2FIX END
+
                         isFirstHeadingSet = true;
                         //use Dual Antenna heading for camera and tractor graphic
                         fixHeading = glm.toRadians(pn.headingTrueDual);
@@ -740,6 +774,14 @@ namespace AgOpenGPS
                         else if (smoothCamHeading < -glm.twoPI) smoothCamHeading += glm.twoPI;
 
                         camHeading = glm.toDegrees(smoothCamHeading);
+
+                        // FOR AUTOSWITCH DUALFIX2FIX START
+                        // save current fix and set as valid to make switch dual to fix2fix fluid
+                        for (int i = totalFixSteps - 1; i > 0; i--) stepFixPts[i] = stepFixPts[i - 1];
+                        stepFixPts[0].easting = pn.fix.easting;
+                        stepFixPts[0].northing = pn.fix.northing;
+                        stepFixPts[0].isSet = 1;
+                        // FOR AUTOSWITCH DUALFIX2FIX END
 
                         TheRest();
 
