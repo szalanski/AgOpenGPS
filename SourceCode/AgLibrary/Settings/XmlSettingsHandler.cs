@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
@@ -46,99 +47,15 @@ namespace AgLibrary
                                         var pinfo = obj.GetType().GetField(name);
                                         if (pinfo != null)
                                         {
-                                            Type fieldType = pinfo.FieldType;
                                             try
                                             {
-                                                // Read string values
-                                                string value = reader.ReadString();
-
-                                                if (fieldType == typeof(string))
-                                                {
-                                                    pinfo.SetValue(obj, value);
-                                                }
-                                                else if (fieldType.IsEnum) // Handle Enums
-                                                {
-                                                    var enumValue = Enum.Parse(fieldType, value, ignoreCase: true);
-                                                    pinfo.SetValue(obj, enumValue);
-                                                }
-                                                else if (fieldType.IsPrimitive || fieldType == typeof(decimal))
-                                                {
-                                                    object parsedValue = Convert.ChangeType(value, fieldType, CultureInfo.InvariantCulture);
-                                                    pinfo.SetValue(obj, parsedValue);
-                                                }
-                                                else if (fieldType == typeof(Color))
-                                                {
-                                                    var parts = value.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-                                                    if (parts.Length == 3 && parseInvariantCulture(parts[0], out int r) && parseInvariantCulture(parts[1], out int g) && parseInvariantCulture(parts[2], out int b))
-                                                    {
-                                                        pinfo.SetValue(obj, Color.FromArgb(r, g, b));
-                                                    }
-                                                }
-                                                else if (fieldType == typeof(Point))
-                                                {
-                                                    var parts = value.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-                                                    if (parts.Length == 2 && parseInvariantCulture(parts[0], out int x) && parseInvariantCulture(parts[1], out int y))
-                                                    {
-                                                        pinfo.SetValue(obj, new Point(x, y));
-                                                    }
-                                                }
-                                                else if (fieldType == typeof(Size))
-                                                {
-                                                    var parts = value.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-                                                    if (parts.Length == 2 && parseInvariantCulture(parts[0], out int width) && parseInvariantCulture(parts[1], out int height))
-                                                    {
-                                                        pinfo.SetValue(obj, new Size(width, height));
-                                                    }
-                                                }
-                                                else if (typeof(IEnumerable).IsAssignableFrom(fieldType) && (fieldType.IsGenericType || fieldType.IsArray))
-                                                {
-                                                    Type itemType;
-
-                                                    if (fieldType.IsGenericType) // For generic collections like List<T>
-                                                        itemType = fieldType.GetGenericArguments()[0];
-                                                    else if (fieldType.IsArray) // For arrays like T[]
-                                                        itemType = fieldType.GetElementType();
-                                                    else
-                                                    {
-                                                        throw new NotSupportedException($"Unsupported collection type: {fieldType}");
-                                                    }
-
-                                                    // Deserialize XML into the custom object
-                                                    var serializer = new XmlSerializer(typeof(List<>).MakeGenericType(itemType));
-                                                    var list = serializer.Deserialize(reader);
-
-                                                    if (fieldType.IsArray) // Convert List<T> to T[] for arrays
-                                                    {
-                                                        var array = ((IEnumerable)list).Cast<object>().ToArray();
-                                                        pinfo.SetValue(obj, Array.CreateInstance(itemType, array.Length));
-                                                        Array.Copy(array, (Array)pinfo.GetValue(obj), array.Length);
-                                                    }
-                                                    else // Directly assign the List<T>
-                                                    {
-                                                        pinfo.SetValue(obj, list);
-                                                    }
-                                                }
-                                                else if (fieldType.IsClass)
-                                                {
-                                                    // Deserialize XML into the custom object
-                                                    var serializer = new XmlSerializer(fieldType);
-                                                    var nestedObj = serializer.Deserialize(reader);
-                                                    pinfo.SetValue(obj, nestedObj);
-                                                }
-                                                else
-                                                {
-                                                    Errors = true;
-                                                    if (Debugger.IsAttached)
-                                                        throw new ArgumentException("type not found");
-                                                    continue;
-                                                }
+                                                SetFieldValue(pinfo, reader, obj);
                                             }
                                             catch (Exception)
                                             {
                                                 if (Debugger.IsAttached)
                                                     throw;// Re-throws the original exception
                                                 Errors = true;
-                                                continue;
                                             }
                                         }
                                     }
@@ -159,6 +76,94 @@ namespace AgLibrary
                 Errors = true;
             }
             return Errors ? LoadResult.Failed : LoadResult.Ok;
+        }
+
+        private static bool SetFieldValue(FieldInfo pinfo, XmlTextReader reader, object obj)
+        {
+            Type fieldType = pinfo.FieldType;
+            // Read string values
+            string value = reader.ReadString();
+
+            if (fieldType == typeof(string))
+            {
+                pinfo.SetValue(obj, value);
+            }
+            else if (fieldType.IsEnum) // Handle Enums
+            {
+                var enumValue = Enum.Parse(fieldType, value, ignoreCase: true);
+                pinfo.SetValue(obj, enumValue);
+            }
+            else if (fieldType.IsPrimitive || fieldType == typeof(decimal))
+            {
+                object parsedValue = Convert.ChangeType(value, fieldType, CultureInfo.InvariantCulture);
+                pinfo.SetValue(obj, parsedValue);
+            }
+            else if (fieldType == typeof(Color))
+            {
+                var parts = value.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                if (parts.Length == 3 && parseInvariantCulture(parts[0], out int r) && parseInvariantCulture(parts[1], out int g) && parseInvariantCulture(parts[2], out int b))
+                {
+                    pinfo.SetValue(obj, Color.FromArgb(r, g, b));
+                }
+            }
+            else if (fieldType == typeof(Point))
+            {
+                var parts = value.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                if (parts.Length == 2 && parseInvariantCulture(parts[0], out int x) && parseInvariantCulture(parts[1], out int y))
+                {
+                    pinfo.SetValue(obj, new Point(x, y));
+                }
+            }
+            else if (fieldType == typeof(Size))
+            {
+                var parts = value.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                if (parts.Length == 2 && parseInvariantCulture(parts[0], out int width) && parseInvariantCulture(parts[1], out int height))
+                {
+                    pinfo.SetValue(obj, new Size(width, height));
+                }
+            }
+            else if (typeof(IEnumerable).IsAssignableFrom(fieldType) && (fieldType.IsGenericType || fieldType.IsArray))
+            {
+                Type itemType;
+
+                if (fieldType.IsGenericType) // For generic collections like List<T>
+                    itemType = fieldType.GetGenericArguments()[0];
+                else if (fieldType.IsArray) // For arrays like T[]
+                    itemType = fieldType.GetElementType();
+                else
+                {
+                    throw new NotSupportedException($"Unsupported collection type: {fieldType}");
+                }
+
+                // Deserialize XML into the custom object
+                var serializer = new XmlSerializer(typeof(List<>).MakeGenericType(itemType));
+                var list = serializer.Deserialize(reader);
+
+                if (fieldType.IsArray) // Convert List<T> to T[] for arrays
+                {
+                    var array = ((IEnumerable)list).Cast<object>().ToArray();
+                    pinfo.SetValue(obj, Array.CreateInstance(itemType, array.Length));
+                    Array.Copy(array, (Array)pinfo.GetValue(obj), array.Length);
+                }
+                else // Directly assign the List<T>
+                {
+                    pinfo.SetValue(obj, list);
+                }
+            }
+            else if (fieldType.IsClass)
+            {
+                // Deserialize XML into the custom object
+                var serializer = new XmlSerializer(fieldType);
+                var nestedObj = serializer.Deserialize(reader);
+                pinfo.SetValue(obj, nestedObj);
+            }
+            else
+            {
+                if (Debugger.IsAttached)
+                    throw new ArgumentException("type not found");
+                return false;
+            }
+            return true;
         }
 
         private static bool parseInvariantCulture(string value, out int outValue)

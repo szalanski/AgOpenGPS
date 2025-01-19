@@ -266,16 +266,6 @@ namespace AgOpenGPS
             labelElevationOnOff.Text = gStr.gsElevationlog;
             unitsGroupBox.Text = gStr.gsUnits;
 
-
-
-
-
-
-
-
-
-
-
             UpdateSummary();
 
             if (!ScreenHelper.IsOnScreen(Bounds))

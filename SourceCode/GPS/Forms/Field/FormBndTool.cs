@@ -848,7 +848,7 @@ namespace AgOpenGPS
             int limit = end;
             if (end == 99999 || start == 99999) return;
 
-            if (mf.bnd.bndList[bndSelect].fenceLine.Count > 0)
+            if (bndSelect >= 0 && bndSelect < mf.bnd.bndList.Count && mf.bnd.bndList[bndSelect].fenceLine.Count > 0)
             {
                 if ((Math.Abs(start - end)) > (mf.bnd.bndList[bndSelect].fenceLine.Count * 0.5))
                 {
