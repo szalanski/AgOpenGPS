@@ -12,7 +12,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace AgLibrary
+namespace AgLibrary.Settings
 {
     public enum LoadResult { Ok, MissingFile, Failed };
 

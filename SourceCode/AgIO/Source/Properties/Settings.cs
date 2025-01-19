@@ -1,5 +1,5 @@
-﻿using AgLibrary;
-using AgLibrary.Logging;
+﻿using AgLibrary.Logging;
+using AgLibrary.Settings;
 using System.Collections.Generic;
 using System.IO;
 
