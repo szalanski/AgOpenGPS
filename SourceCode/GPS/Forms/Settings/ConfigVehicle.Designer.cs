@@ -4,6 +4,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using AgLibrary.Settings;
 using AgLibrary.Logging;
 using AgOpenGPS.Culture;
 using AgOpenGPS.Properties;
@@ -34,7 +35,7 @@ namespace AgOpenGPS
                         RegistrySettings.Save(RegKeys.vehicleFileName, newVehicleName);
 
                         var result = Settings.Default.Load();
-                        if (result != AgLibrary.LoadResult.Ok)
+                        if (result != LoadResult.Ok)
                         {
                             Log.EventWriter("Vehicle Loaded: " + newVehicleName + ".XML With Error:" + result.ToString());
 
