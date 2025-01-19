@@ -1,4 +1,5 @@
-﻿using AgOpenGPS.Culture;
+﻿using AgOpenGPS.Controls;
+using AgOpenGPS.Culture;
 using AgOpenGPS.Helpers;
 using System;
 using System.Collections.Generic;
@@ -399,7 +400,7 @@ namespace AgOpenGPS
         {
             timer1.Enabled = false;
 
-            if (mf.KeypadToNUD((NudlessNumericUpDown)sender, this))
+            if (((NudlessNumericUpDown)sender).ShowKeypad(this))
             {
                 //original A pt. 
                 mf.ABLine.desHeading = glm.toRadians((double)nudHeading.Value);
@@ -481,7 +482,7 @@ namespace AgOpenGPS
         private void textBox_Click(object sender, EventArgs e)
         {
             if (mf.isKeyboardOn)
-                mf.KeyboardToText((TextBox)sender, this);
+                ((TextBox)sender).ShowKeyboard(this);
         }
 
         private void btnAdd_Click(object sender, EventArgs e)

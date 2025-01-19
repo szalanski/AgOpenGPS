@@ -1,4 +1,5 @@
 ﻿using AgLibrary.Logging;
+using AgOpenGPS.Controls;
 using AgOpenGPS.Culture;
 using AgOpenGPS.Helpers;
 using System;
@@ -892,7 +893,7 @@ namespace AgOpenGPS
         {
             timer1.Enabled = false;
 
-            if (mf.KeypadToNUD((NudlessNumericUpDown)sender, this))
+            if (((NudlessNumericUpDown)sender).ShowKeypad(this))
             {
                 //original A pt. 
                 mf.ABLine.desHeading = glm.toRadians((double)nudHeading.Value);
@@ -1163,22 +1164,22 @@ namespace AgOpenGPS
 
         private void nudLatitudeA_Click(object sender, EventArgs e)
         {
-            mf.KeypadToNUD((NudlessNumericUpDown)sender, this);
+            ((NudlessNumericUpDown)sender).ShowKeypad(this);
         }
 
         private void nudLongitudeA_Click(object sender, EventArgs e)
         {
-            mf.KeypadToNUD((NudlessNumericUpDown)sender, this);
+            ((NudlessNumericUpDown)sender).ShowKeypad(this);
         }
 
         private void nudLatitudeB_Click(object sender, EventArgs e)
         {
-            mf.KeypadToNUD((NudlessNumericUpDown)sender, this);
+            ((NudlessNumericUpDown)sender).ShowKeypad(this);
         }
 
         private void nudLongitudeB_Click(object sender, EventArgs e)
         {
-            mf.KeypadToNUD((NudlessNumericUpDown)sender, this);
+            ((NudlessNumericUpDown)sender).ShowKeypad(this);
         }
 
         private void btnEnter_LatLonLatLon_Click(object sender, EventArgs e)
@@ -1242,17 +1243,17 @@ namespace AgOpenGPS
 
         private void nudLatitudePlus_Click(object sender, EventArgs e)
         {
-            mf.KeypadToNUD((NudlessNumericUpDown)sender, this);
+            ((NudlessNumericUpDown)sender).ShowKeypad(this);
         }
 
         private void nudLongitudePlus_Click(object sender, EventArgs e)
         {
-            mf.KeypadToNUD((NudlessNumericUpDown)sender, this);
+            ((NudlessNumericUpDown)sender).ShowKeypad(this);
         }
 
         private void nudHeadingLatLonPlus_Click(object sender, EventArgs e)
         {
-            mf.KeypadToNUD((NudlessNumericUpDown)sender, this);
+            ((NudlessNumericUpDown)sender).ShowKeypad(this);
         }
 
         private void btnEnter_LatLonPlus_Click(object sender, EventArgs e)
@@ -1306,12 +1307,12 @@ namespace AgOpenGPS
 
         private void nudLatitudePivot_Click(object sender, EventArgs e)
         {
-            mf.KeypadToNUD((NudlessNumericUpDown)sender, this);
+            ((NudlessNumericUpDown)sender).ShowKeypad(this);
         }
 
         private void nudLongitudePivot_Click(object sender, EventArgs e)
         {
-            mf.KeypadToNUD((NudlessNumericUpDown)sender, this);
+            ((NudlessNumericUpDown)sender).ShowKeypad(this);
         }
 
         private void btnEnter_Pivot_Click(object sender, EventArgs e)
@@ -1370,7 +1371,7 @@ namespace AgOpenGPS
         private void textBox_Click(object sender, EventArgs e)
         {
             if (mf.isKeyboardOn)
-                mf.KeyboardToText((TextBox)sender, this);
+                ((TextBox)sender).ShowKeyboard(this);
         }
 
         private void btnAdd_Click(object sender, EventArgs e)

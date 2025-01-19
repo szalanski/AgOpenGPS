@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using AgOpenGPS.Controls;
 using AgOpenGPS.Helpers;
 
 namespace AgOpenGPS
@@ -113,7 +114,7 @@ namespace AgOpenGPS
         {
             if (mf.isKeyboardOn)
             {
-                mf.KeyboardToText((TextBox)sender, this);
+                ((TextBox)sender).ShowKeyboard(this);
                 btnExit.Focus();
             }
         }

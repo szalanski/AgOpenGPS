@@ -1,4 +1,5 @@
 ﻿using AgLibrary.Logging;
+using AgOpenGPS.Controls;
 using AgOpenGPS.Culture;
 using AgOpenGPS.Helpers;
 using AgOpenGPS.Properties;
@@ -488,7 +489,7 @@ namespace AgOpenGPS
 
         private void nudMaxCounts_Click(object sender, EventArgs e)
         {
-            if (mf.KeypadToNUD((NudlessNumericUpDown)sender, this))
+            if (((NudlessNumericUpDown)sender).ShowKeypad(this))
             {
                 pboxSendSteer.Visible = true;
             }
@@ -622,7 +623,7 @@ namespace AgOpenGPS
 
         private void nudMinSteerSpeed_Click(object sender, EventArgs e)
         {
-            if (mf.KeypadToNUD((NudlessNumericUpDown)sender, this))
+            if (((NudlessNumericUpDown)sender).ShowKeypad(this))
             {
                 Properties.Settings.Default.setAS_minSteerSpeed = ((double)nudMinSteerSpeed.Value);
                 if (!mf.isMetric) Properties.Settings.Default.setAS_minSteerSpeed *= 1.609344;
@@ -632,7 +633,7 @@ namespace AgOpenGPS
 
         private void nudMaxSteerSpeed_Click(object sender, EventArgs e)
         {
-            if (mf.KeypadToNUD((NudlessNumericUpDown)sender, this))
+            if (((NudlessNumericUpDown)sender).ShowKeypad(this))
             {
                 Properties.Settings.Default.setAS_maxSteerSpeed = ((double)nudMaxSteerSpeed.Value);
                 if (!mf.isMetric) Properties.Settings.Default.setAS_maxSteerSpeed *= 1.609344;
@@ -642,7 +643,7 @@ namespace AgOpenGPS
 
         private void nudGuidanceSpeedLimit_Click(object sender, EventArgs e)
         {
-            if (mf.KeypadToNUD((NudlessNumericUpDown)sender, this))
+            if (((NudlessNumericUpDown)sender).ShowKeypad(this))
             {
                 Properties.Settings.Default.setAS_functionSpeedLimit = ((double)nudGuidanceSpeedLimit.Value);
                 if (!mf.isMetric) Properties.Settings.Default.setAS_functionSpeedLimit *= 1.609344;
@@ -689,7 +690,7 @@ namespace AgOpenGPS
 
         private void nudcmPerPixel_Click(object sender, EventArgs e)
         {
-            if (mf.KeypadToNUD((NudlessNumericUpDown)sender, this))
+            if (((NudlessNumericUpDown)sender).ShowKeypad(this))
             {
                 Properties.Settings.Default.setDisplay_lightbarCmPerPixel = ((int)nudcmPerPixel.Value);
                 mf.lightbarCmPerPixel = Properties.Settings.Default.setDisplay_lightbarCmPerPixel;
@@ -698,7 +699,7 @@ namespace AgOpenGPS
 
         private void nudLineWidth_Click(object sender, EventArgs e)
         {
-            if (mf.KeypadToNUD((NudlessNumericUpDown)sender, this))
+            if (((NudlessNumericUpDown)sender).ShowKeypad(this))
             {
                 Properties.Settings.Default.setDisplay_lineWidth = (int)nudLineWidth.Value;
                 mf.ABLine.lineWidth = Properties.Settings.Default.setDisplay_lineWidth;
@@ -707,7 +708,7 @@ namespace AgOpenGPS
 
         private void nudSnapDistance_Click(object sender, EventArgs e)
         {
-            if (mf.KeypadToNUD((NudlessNumericUpDown)sender, this))
+            if (((NudlessNumericUpDown)sender).ShowKeypad(this))
             {
                 Properties.Settings.Default.setAS_snapDistance = ((double)nudSnapDistance.Value * mf.inOrCm2Cm);
                 mf.ABLine.snapDistance = Properties.Settings.Default.setAS_snapDistance;
@@ -716,7 +717,7 @@ namespace AgOpenGPS
 
         private void nudGuidanceLookAhead_Click(object sender, EventArgs e)
         {
-            if (mf.KeypadToNUD((NudlessNumericUpDown)sender, this))
+            if (((NudlessNumericUpDown)sender).ShowKeypad(this))
             {
                 Properties.Settings.Default.setAS_guidanceLookAheadTime = ((double)nudGuidanceLookAhead.Value);
                 mf.guidanceLookAheadTime = Properties.Settings.Default.setAS_guidanceLookAheadTime;
@@ -911,13 +912,13 @@ namespace AgOpenGPS
 
         private void nudDeadZoneHeading_Click(object sender, EventArgs e)
         {
-            mf.KeypadToNUD((NudlessNumericUpDown)sender, this);
+            ((NudlessNumericUpDown)sender).ShowKeypad(this);
             mf.vehicle.deadZoneHeading = (int)(nudDeadZoneHeading.Value * 100);
         }
 
         private void nudDeadZoneDelay_Click(object sender, EventArgs e)
         {
-            mf.KeypadToNUD((NudlessNumericUpDown)sender, this);
+            ((NudlessNumericUpDown)sender).ShowKeypad(this);
             mf.vehicle.deadZoneDelay = (int)(nudDeadZoneDelay.Value);
         }
 

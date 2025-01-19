@@ -499,33 +499,6 @@ namespace AgIO
             }
         }
 
-        public void KeypadToNUD(NumericUpDown sender, Form owner)
-        {
-            sender.BackColor = System.Drawing.Color.Red;
-            using (var form = new FormNumeric((double)sender.Minimum, (double)sender.Maximum, (double)sender.Value))
-            {
-                if (form.ShowDialog(owner) == DialogResult.OK)
-                {
-                    sender.Value = (decimal)form.ReturnValue;
-                }
-            }
-            sender.BackColor = System.Drawing.Color.AliceBlue;
-        }
-
-        public void KeyboardToText(TextBox sender, Form owner)
-        {
-            TextBox tbox = (TextBox)sender;
-            tbox.BackColor = System.Drawing.Color.Red;
-            using (var form = new FormKeyboard((string)tbox.Text))
-            {
-                if (form.ShowDialog(owner) == DialogResult.OK)
-                {
-                    tbox.Text = (string)form.ReturnString;
-                }
-            }
-            tbox.BackColor = System.Drawing.Color.AliceBlue;
-        }
-
         private ToolStripDropDownButton toolStripDropDownButton1;
         private ToolStripMenuItem toolStripMenuProfiles;
         private ToolStripMenuItem deviceManagerToolStripMenuItem;
