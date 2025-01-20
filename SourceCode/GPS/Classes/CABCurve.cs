@@ -41,7 +41,7 @@ namespace AgOpenGPS
         public List<vec3> curList = new List<vec3>();
 
         //guidelines
-        public List<List<vec3>> guideArr = new List<List<vec3>>();
+        private List<List<vec3>> guideArr = new List<List<vec3>>();
 
         bool isBusyWorking = false;
 
@@ -498,18 +498,14 @@ namespace AgOpenGPS
             // the listlist of all the guidelines
             List<List<vec3>> newGuideLL = new List<List<vec3>>();
 
-            //the list of points of curve new list from async
-            List<vec3> newGuideList = new List<vec3>();
-
             try
             {
                 for (int numGuides = -_passes; numGuides <= _passes; numGuides++)
                 {
                     if (numGuides == 0) continue;
-                    newGuideList = new List<vec3>
-                    {
-                        Capacity = 128
-                    };
+
+                    //the list of points of curve new list from async
+                    List<vec3> newGuideList = new List<vec3>();
 
                     newGuideLL.Add(newGuideList);
 
@@ -520,8 +516,6 @@ namespace AgOpenGPS
 
                     nextGuideDist += distAway;
 
-                    vec3 point;
-
                     double step = (mf.tool.width - mf.tool.overlap) * 0.48;
                     if (step > 4) step = 4;
                     if (step < 1) step = 1;
@@ -531,11 +525,11 @@ namespace AgOpenGPS
                     int refCount = track.curvePts.Count;
                     for (int i = 0; i < refCount; i++)
                     {
-                        point = new vec3(
+                        vec3 point = new vec3(
                         track.curvePts[i].easting + (Math.Sin(glm.PIBy2 + track.curvePts[i].heading) * nextGuideDist),
                         track.curvePts[i].northing + (Math.Cos(glm.PIBy2 + track.curvePts[i].heading) * nextGuideDist),
                         track.curvePts[i].heading);
-                        bool Add = true;
+                        bool add = true;
 
                         for (int t = 0; t < refCount; t++)
                         {
@@ -543,12 +537,12 @@ namespace AgOpenGPS
                                 + ((point.northing - track.curvePts[t].northing) * (point.northing - track.curvePts[t].northing));
                             if (dist < distSqAway)
                             {
-                                Add = false;
+                                add = false;
                                 break;
                             }
                         }
 
-                        if (Add)
+                        if (add)
                         {
                             if (newGuideList.Count > 0)
                             {
@@ -558,7 +552,6 @@ namespace AgOpenGPS
                                 {
                                     if (mf.bnd.bndList.Count > 0)
                                     {
-
                                         if (mf.bnd.bndList[0].fenceLineEar.IsPointInPolygon(point))
                                         {
                                             newGuideList.Add(point);
@@ -574,7 +567,6 @@ namespace AgOpenGPS
                             {
                                 if (mf.bnd.bndList.Count > 0)
                                 {
-
                                     if (mf.bnd.bndList[0].fenceLineEar.IsPointInPolygon(point))
                                     {
                                         newGuideList.Add(point);
