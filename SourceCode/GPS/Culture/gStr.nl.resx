@@ -147,6 +147,9 @@
   <data name="gsAntennaOffset" xml:space="preserve">
     <value>Antenne-verschuiving</value>
   </data>
+  <data name="gsApplied" xml:space="preserve">
+    <value>Bewerkt</value>
+  </data>
   <data name="gsAreYouSure" xml:space="preserve">
     <value>Weet u het zeker?</value>
   </data>
@@ -245,6 +248,9 @@
   </data>
   <data name="gsCoverage" xml:space="preserve">
     <value>% Dekking</value>
+  </data>
+  <data name="gsCreate" xml:space="preserve">
+    <value>Creër</value>
   </data>
   <data name="gsCreateABoundaryFirst" xml:space="preserve">
     <value>Maak eerst een perceelgrens</value>
@@ -392,6 +398,9 @@
   </data>
   <data name="gsForNow" xml:space="preserve">
     <value>Tijdelijk</value>
+  </data>
+  <data name="gsFormFlag" xml:space="preserve">
+    <value>Vlaggen</value>
   </data>
   <data name="gsFromExisting" xml:space="preserve">
     <value>Vanuit bestaand</value>
@@ -612,6 +621,18 @@
   <data name="gsPleaseEnterABLine" xml:space="preserve">
     <value>Volg AB lijn aub</value>
   </data>
+  <data name="gsPleaseWait" xml:space="preserve">
+    <value>Even wachten...</value>
+  </data>
+  <data name="gsPoint" xml:space="preserve">
+    <value>Punt</value>
+  </data>
+  <data name="gsPoints" xml:space="preserve">
+    <value>Punten</value>
+  </data>
+  <data name="gsPointsToProcess" xml:space="preserve">
+    <value>Punten te berekenen</value>
+  </data>
   <data name="gsPowerLoss" xml:space="preserve">
     <value>Schakel uit op batterij</value>
   </data>
@@ -627,6 +648,9 @@
   <data name="gsRaiseTime" xml:space="preserve">
     <value>Hef-tijd</value>
   </data>
+  <data name="gsRate" xml:space="preserve">
+    <value>Ratio</value>
+  </data>
   <data name="gsReallyResetEverything" xml:space="preserve">
     <value>Alles terugzetten naar defaults</value>
   </data>
@@ -638,6 +662,12 @@
   </data>
   <data name="gsRecordedPathMenu" xml:space="preserve">
     <value>Opgenomen pad Menu</value>
+  </data>
+  <data name="gsReducedPoints" xml:space="preserve">
+    <value>Verminder Punten</value>
+  </data>
+  <data name="gsRemain" xml:space="preserve">
+    <value>Te doen</value>
   </data>
   <data name="gsRemoveOffset" xml:space="preserve">
     <value>Verwijder Offset</value>
@@ -707,6 +737,9 @@
   </data>
   <data name="gsSlowDownBelow" xml:space="preserve">
     <value>Vertraag hieronder</value>
+  </data>
+  <data name="gsSmooth" xml:space="preserve">
+    <value>Afvlakken</value>
   </data>
   <data name="gsSmoothABCurve" xml:space="preserve">
     <value>AB-curve Glad strijken</value>
@@ -786,6 +819,9 @@ GEBRUIK OP EIGEN RISICO.</value>
   <data name="gsTopFieldView" xml:space="preserve">
     <value>Bovenaanzicht Perceel</value>
   </data>
+  <data name="gsTotal" xml:space="preserve">
+    <value>Totaal</value>
+  </data>
   <data name="gsTrack" xml:space="preserve">
     <value>Spoorbreedte</value>
   </data>
@@ -836,6 +872,9 @@ GEBRUIK OP EIGEN RISICO.</value>
   </data>
   <data name="gsWorkSwitch" xml:space="preserve">
     <value>Werk Schakelaar</value>
+  </data>
+  <data name="gsWorked" xml:space="preserve">
+    <value>Gedaan</value>
   </data>
   <data name="gsXTEChart" xml:space="preserve">
     <value>XTE Grafiek</value>

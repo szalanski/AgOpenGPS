@@ -151,6 +151,15 @@ namespace AgOpenGPS.Culture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Applied.
+        /// </summary>
+        public static string gsApplied {
+            get {
+                return ResourceManager.GetString("gsApplied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Area.
         /// </summary>
         public static string gsArea {
@@ -453,6 +462,15 @@ namespace AgOpenGPS.Culture {
         public static string gsCoverage {
             get {
                 return ResourceManager.GetString("gsCoverage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create.
+        /// </summary>
+        public static string gsCreate {
+            get {
+                return ResourceManager.GetString("gsCreate", resourceCulture);
             }
         }
         
@@ -894,6 +912,15 @@ namespace AgOpenGPS.Culture {
         public static string gsFlagFileIsCorrupt {
             get {
                 return ResourceManager.GetString("gsFlagFileIsCorrupt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Flags.
+        /// </summary>
+        public static string gsFormFlag {
+            get {
+                return ResourceManager.GetString("gsFormFlag", resourceCulture);
             }
         }
         
@@ -1591,6 +1618,42 @@ namespace AgOpenGPS.Culture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please Wait....
+        /// </summary>
+        public static string gsPleaseWait {
+            get {
+                return ResourceManager.GetString("gsPleaseWait", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Point.
+        /// </summary>
+        public static string gsPoint {
+            get {
+                return ResourceManager.GetString("gsPoint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Points.
+        /// </summary>
+        public static string gsPoints {
+            get {
+                return ResourceManager.GetString("gsPoints", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Points to Process.
+        /// </summary>
+        public static string gsPointsToProcess {
+            get {
+                return ResourceManager.GetString("gsPointsToProcess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Polygons.
         /// </summary>
         public static string gsPolygons {
@@ -1645,6 +1708,15 @@ namespace AgOpenGPS.Culture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Rate.
+        /// </summary>
+        public static string gsRate {
+            get {
+                return ResourceManager.GetString("gsRate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Really Reset Everything.
         /// </summary>
         public static string gsReallyResetEverything {
@@ -1677,6 +1749,24 @@ namespace AgOpenGPS.Culture {
         public static string gsRecordedPathMenu {
             get {
                 return ResourceManager.GetString("gsRecordedPathMenu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reduced Points.
+        /// </summary>
+        public static string gsReducedPoints {
+            get {
+                return ResourceManager.GetString("gsReducedPoints", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remain.
+        /// </summary>
+        public static string gsRemain {
+            get {
+                return ResourceManager.GetString("gsRemain", resourceCulture);
             }
         }
         
@@ -1884,6 +1974,15 @@ namespace AgOpenGPS.Culture {
         public static string gsSlowDownBelow {
             get {
                 return ResourceManager.GetString("gsSlowDownBelow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Smooth.
+        /// </summary>
+        public static string gsSmooth {
+            get {
+                return ResourceManager.GetString("gsSmooth", resourceCulture);
             }
         }
         
@@ -2119,6 +2218,15 @@ namespace AgOpenGPS.Culture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Total.
+        /// </summary>
+        public static string gsTotal {
+            get {
+                return ResourceManager.GetString("gsTotal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Track.
         /// </summary>
         public static string gsTrack {
@@ -2322,6 +2430,15 @@ namespace AgOpenGPS.Culture {
         public static string gsWizards {
             get {
                 return ResourceManager.GetString("gsWizards", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Worked.
+        /// </summary>
+        public static string gsWorked {
+            get {
+                return ResourceManager.GetString("gsWorked", resourceCulture);
             }
         }
         

@@ -147,6 +147,9 @@
   <data name="gsAntennaOffset" xml:space="preserve">
     <value>Antenna Offset</value>
   </data>
+  <data name="gsApplied" xml:space="preserve">
+    <value>Applied</value>
+  </data>
   <data name="gsAreYouSure" xml:space="preserve">
     <value>Are you sure ?</value>
   </data>
@@ -248,6 +251,9 @@
   </data>
   <data name="gsCoverage" xml:space="preserve">
     <value>% Coverage</value>
+  </data>
+  <data name="gsCreate" xml:space="preserve">
+    <value>Create</value>
   </data>
   <data name="gsCreateABoundaryFirst" xml:space="preserve">
     <value>Create A Boundary First</value>
@@ -398,6 +404,9 @@
   </data>
   <data name="gsForNow" xml:space="preserve">
     <value>For Now</value>
+  </data>
+  <data name="gsFormFlag" xml:space="preserve">
+    <value>Flags</value>
   </data>
   <data name="gsFromExisting" xml:space="preserve">
     <value>From Existing</value>
@@ -627,6 +636,18 @@
   <data name="gsPleaseEnterABLine" xml:space="preserve">
     <value>Please Enter ABLine</value>
   </data>
+  <data name="gsPleaseWait" xml:space="preserve">
+    <value>Please Wait...</value>
+  </data>
+  <data name="gsPoint" xml:space="preserve">
+    <value>Point</value>
+  </data>
+  <data name="gsPoints" xml:space="preserve">
+    <value>Points</value>
+  </data>
+  <data name="gsPointsToProcess" xml:space="preserve">
+    <value>Points to Process</value>
+  </data>
   <data name="gsPolygons" xml:space="preserve">
     <value>Polygons</value>
   </data>
@@ -645,6 +666,9 @@
   <data name="gsRaiseTime" xml:space="preserve">
     <value>Raise Time</value>
   </data>
+  <data name="gsRate" xml:space="preserve">
+    <value>Rate</value>
+  </data>
   <data name="gsReallyResetEverything" xml:space="preserve">
     <value>Really Reset Everything</value>
   </data>
@@ -656,6 +680,12 @@
   </data>
   <data name="gsRecordedPathMenu" xml:space="preserve">
     <value>Recorded Path</value>
+  </data>
+  <data name="gsReducedPoints" xml:space="preserve">
+    <value>Reduced Points</value>
+  </data>
+  <data name="gsRemain" xml:space="preserve">
+    <value>Remain</value>
   </data>
   <data name="gsRemoveOffset" xml:space="preserve">
     <value>Remove Offset</value>
@@ -725,6 +755,9 @@
   </data>
   <data name="gsSlowDownBelow" xml:space="preserve">
     <value>Slow Down Below</value>
+  </data>
+  <data name="gsSmooth" xml:space="preserve">
+    <value>Smooth</value>
   </data>
   <data name="gsSmoothABCurve" xml:space="preserve">
     <value>Smooth AB Curve</value>
@@ -807,6 +840,9 @@ USE AT OWN RISK.</value>
   <data name="gsTopFieldView" xml:space="preserve">
     <value>Top Field View</value>
   </data>
+  <data name="gsTotal" xml:space="preserve">
+    <value>Total</value>
+  </data>
   <data name="gsTrack" xml:space="preserve">
     <value>Track</value>
   </data>
@@ -878,6 +914,9 @@ USE AT OWN RISK.</value>
   </data>
   <data name="gsWorkSwitch" xml:space="preserve">
     <value>Work Switch</value>
+  </data>
+  <data name="gsWorked" xml:space="preserve">
+    <value>Worked</value>
   </data>
   <data name="gsXTEChart" xml:space="preserve">
     <value>XTE Chart</value>
