@@ -147,6 +147,9 @@
   <data name="gsAntennaOffset" xml:space="preserve">
     <value>Antenne-verschuiving</value>
   </data>
+  <data name="gsApplied" xml:space="preserve">
+    <value>Bewerkt</value>
+  </data>
   <data name="gsAreYouSure" xml:space="preserve">
     <value>Weet u het zeker?</value>
   </data>
@@ -621,6 +624,9 @@
   <data name="gsPleaseWait" xml:space="preserve">
     <value>Even wachten...</value>
   </data>
+  <data name="gsPoint" xml:space="preserve">
+    <value>Punt</value>
+  </data>
   <data name="gsPoints" xml:space="preserve">
     <value>Punten</value>
   </data>
@@ -642,6 +648,9 @@
   <data name="gsRaiseTime" xml:space="preserve">
     <value>Hef-tijd</value>
   </data>
+  <data name="gsRate" xml:space="preserve">
+    <value>Ratio</value>
+  </data>
   <data name="gsReallyResetEverything" xml:space="preserve">
     <value>Alles terugzetten naar defaults</value>
   </data>
@@ -656,6 +665,9 @@
   </data>
   <data name="gsReducedPoints" xml:space="preserve">
     <value>Verminder Punten</value>
+  </data>
+  <data name="gsRemain" xml:space="preserve">
+    <value>Te doen</value>
   </data>
   <data name="gsRemoveOffset" xml:space="preserve">
     <value>Verwijder Offset</value>
@@ -807,6 +819,9 @@ GEBRUIK OP EIGEN RISICO.</value>
   <data name="gsTopFieldView" xml:space="preserve">
     <value>Bovenaanzicht Perceel</value>
   </data>
+  <data name="gsTotal" xml:space="preserve">
+    <value>Totaal</value>
+  </data>
   <data name="gsTrack" xml:space="preserve">
     <value>Spoorbreedte</value>
   </data>
@@ -857,6 +872,9 @@ GEBRUIK OP EIGEN RISICO.</value>
   </data>
   <data name="gsWorkSwitch" xml:space="preserve">
     <value>Werk Schakelaar</value>
+  </data>
+  <data name="gsWorked" xml:space="preserve">
+    <value>Gedaan</value>
   </data>
   <data name="gsXTEChart" xml:space="preserve">
     <value>XTE Grafiek</value>

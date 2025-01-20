@@ -147,6 +147,9 @@
   <data name="gsAntennaOffset" xml:space="preserve">
     <value>Antenna Offset</value>
   </data>
+  <data name="gsApplied" xml:space="preserve">
+    <value>Applied</value>
+  </data>
   <data name="gsAreYouSure" xml:space="preserve">
     <value>Are you sure ?</value>
   </data>
@@ -636,6 +639,9 @@
   <data name="gsPleaseWait" xml:space="preserve">
     <value>Please Wait...</value>
   </data>
+  <data name="gsPoint" xml:space="preserve">
+    <value>Point</value>
+  </data>
   <data name="gsPoints" xml:space="preserve">
     <value>Points</value>
   </data>
@@ -660,6 +666,9 @@
   <data name="gsRaiseTime" xml:space="preserve">
     <value>Raise Time</value>
   </data>
+  <data name="gsRate" xml:space="preserve">
+    <value>Rate</value>
+  </data>
   <data name="gsReallyResetEverything" xml:space="preserve">
     <value>Really Reset Everything</value>
   </data>
@@ -674,6 +683,9 @@
   </data>
   <data name="gsReducedPoints" xml:space="preserve">
     <value>Reduced Points</value>
+  </data>
+  <data name="gsRemain" xml:space="preserve">
+    <value>Remain</value>
   </data>
   <data name="gsRemoveOffset" xml:space="preserve">
     <value>Remove Offset</value>
@@ -828,6 +840,9 @@ USE AT OWN RISK.</value>
   <data name="gsTopFieldView" xml:space="preserve">
     <value>Top Field View</value>
   </data>
+  <data name="gsTotal" xml:space="preserve">
+    <value>Total</value>
+  </data>
   <data name="gsTrack" xml:space="preserve">
     <value>Track</value>
   </data>
@@ -899,6 +914,9 @@ USE AT OWN RISK.</value>
   </data>
   <data name="gsWorkSwitch" xml:space="preserve">
     <value>Work Switch</value>
+  </data>
+  <data name="gsWorked" xml:space="preserve">
+    <value>Worked</value>
   </data>
   <data name="gsXTEChart" xml:space="preserve">
     <value>XTE Chart</value>
