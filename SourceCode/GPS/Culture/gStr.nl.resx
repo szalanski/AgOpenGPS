@@ -174,6 +174,9 @@
   <data name="gsAutoSteerPort" xml:space="preserve">
     <value>Autosteer Configuratie</value>
   </data>
+  <data name="gsBackground" xml:space="preserve">
+    <value>Achtergrond</value>
+  </data>
   <data name="gsBasedOnField" xml:space="preserve">
     <value>Gebaseerd op veld:</value>
   </data>
@@ -194,6 +197,9 @@
   </data>
   <data name="gsButFieldIsLoaded" xml:space="preserve">
     <value>maar veld is geladen</value>
+  </data>
+  <data name="gsCancel" xml:space="preserve">
+    <value>Afbreken</value>
   </data>
   <data name="gsCenter" xml:space="preserve">
     <value>Midden</value>
@@ -258,6 +264,9 @@
   <data name="gsCreateNewField" xml:space="preserve">
     <value>Maak nieuw perceel</value>
   </data>
+  <data name="gsCreateNewFromIsoXML" xml:space="preserve">
+    <value>Maaak een nieuw perceel vanuit een ISO-XML Bestand</value>
+  </data>
   <data name="gsCurrent" xml:space="preserve">
     <value>Huidig</value>
   </data>
@@ -308,6 +317,9 @@
   </data>
   <data name="gsDistance" xml:space="preserve">
     <value>Afstand</value>
+  </data>
+  <data name="gsDistanceToFlag" xml:space="preserve">
+    <value>Afstand tot Vlag</value>
   </data>
   <data name="gsDriveIn" xml:space="preserve">
     <value>Rij in perceel</value>
@@ -360,6 +372,12 @@
   <data name="gsErrorreadingKML" xml:space="preserve">
     <value>Fout bij lezen KML</value>
   </data>
+  <data name="gsExit" xml:space="preserve">
+    <value>Afsluiten</value>
+  </data>
+  <data name="gsExitToWindows" xml:space="preserve">
+    <value>Afsluiten over:</value>
+  </data>
   <data name="gsExtraGuideLines" xml:space="preserve">
     <value>Extra geleidingslijnen</value>
   </data>
@@ -395,6 +413,9 @@
   </data>
   <data name="gsFlagFileIsCorrupt" xml:space="preserve">
     <value>POI bestand corrupt</value>
+  </data>
+  <data name="gsFlags" xml:space="preserve">
+    <value>Creer Vlaggen</value>
   </data>
   <data name="gsForNow" xml:space="preserve">
     <value>Tijdelijk</value>
@@ -506,6 +527,9 @@
   </data>
   <data name="gsManual" xml:space="preserve">
     <value>Manueel</value>
+  </data>
+  <data name="gsMapForBackground" xml:space="preserve">
+    <value>Gebruik een Bing Map als Achtergrond</value>
   </data>
   <data name="gsMeters" xml:space="preserve">
     <value>Meter</value>
@@ -728,6 +752,12 @@
   </data>
   <data name="gsShiftGPSPosition" xml:space="preserve">
     <value>Verschuif GPS Positie (cm)</value>
+  </data>
+  <data name="gsShutdown" xml:space="preserve">
+    <value>Uit zetten</value>
+  </data>
+  <data name="gsShutdownIn" xml:space="preserve">
+    <value>Uitzetten over:</value>
   </data>
   <data name="gsSimulatorOn" xml:space="preserve">
     <value>Simulator Aan</value>
