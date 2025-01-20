@@ -1,28 +1,25 @@
 ﻿using System;
 
-namespace AgOpenGPS.Core
+namespace AgOpenGPS.Core.ApplicationModels
 {
-    public class GeoDelta
+    public struct GeoDelta
     {
-        private double _northingDelta;
-        private double _eastingDelta;
-
         public GeoDelta(GeoCoord fromCoord, GeoCoord toCoord)
         {
-            _northingDelta = toCoord.Northing - fromCoord.Northing;
-            _eastingDelta = toCoord.Easting - fromCoord.Easting;
+            NorthingDelta = toCoord.Northing - fromCoord.Northing;
+            EastingDelta = toCoord.Easting - fromCoord.Easting;
         }
 
         public GeoDelta(double northingDelta, double eastingDelta)
         {
-            _northingDelta = northingDelta;
-            _eastingDelta = eastingDelta;
+            NorthingDelta = northingDelta;
+            EastingDelta = eastingDelta;
         }
 
-        public double NorthingDelta => _northingDelta;
-        public double EastingDelta => _eastingDelta;
+        public double NorthingDelta { get; }
+        public double EastingDelta { get; }
 
-        public double LengthSquared => _northingDelta * _northingDelta + _eastingDelta * _eastingDelta;
+        public double LengthSquared => NorthingDelta * NorthingDelta + EastingDelta * EastingDelta;
         public double Length => Math.Sqrt(LengthSquared);
     }
 }

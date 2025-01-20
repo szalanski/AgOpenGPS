@@ -1,17 +1,14 @@
-﻿namespace AgOpenGPS.Core
+﻿namespace AgOpenGPS.Core.ApplicationModels
 {
     public struct GeoCoordDir
     {
-        private GeoCoord _coord;
-        private GeoDir _direction;
-
         public GeoCoordDir(GeoCoord coord, GeoDir direction)
         {
-            _direction = direction;
-            _coord = coord;
+            Coord = coord;
+            Direction = direction;
         }
 
-        public GeoCoord Coord => _coord;
-        public GeoDir Direction => _direction;
+        public GeoCoord Coord { get; }
+        public GeoDir Direction { get; }
     }
 }

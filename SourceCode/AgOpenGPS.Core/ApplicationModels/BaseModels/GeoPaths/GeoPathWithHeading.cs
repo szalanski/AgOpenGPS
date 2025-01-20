@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace AgOpenGPS.Core
+namespace AgOpenGPS.Core.ApplicationModels
 {
     public class GeoPathWithHeading : GeoPath
     {
@@ -15,7 +15,7 @@ namespace AgOpenGPS.Core
 
         public override void Add(GeoCoord coord)
         {
-            throw new NotImplementedException();
+            throw new InvalidOperationException();
         }
 
         public void Add(GeoCoord coordDir, GeoDir geoDir)

@@ -1,4 +1,4 @@
-﻿namespace AgOpenGPS.Core
+﻿namespace AgOpenGPS.Core.ApplicationModels
 {
     public abstract class GeoPathBase
     {

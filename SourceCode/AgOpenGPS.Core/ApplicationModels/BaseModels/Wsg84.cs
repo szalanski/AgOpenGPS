@@ -1,17 +1,15 @@
-﻿namespace AgOpenGPS.Core
+﻿namespace AgOpenGPS.Core.ApplicationModels
 {
-    public class Wgs84
+    // Represents a coordinate in the World Geodetic System 1984
+    public struct Wgs84
     {
-        private double _latitude;
-        private double _longitude;
-
-        public Wgs84(double latitude, double longitude)
+        Wgs84(double latitude, double longitude)
         {
-            _latitude = latitude;
-            _longitude = longitude;
+            Latitude = latitude;
+            Longitude = longitude;
         }
 
-        public double Latitude => _latitude;
-        public double Longitude => _longitude;
+        public double Latitude { get; }
+        public double Longitude { get; }
     }
 }

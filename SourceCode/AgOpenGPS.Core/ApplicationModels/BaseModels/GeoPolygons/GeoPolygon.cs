@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace AgOpenGPS.Core
+namespace AgOpenGPS.Core.ApplicationModels
 {
-    public class GeoPolygon : GeoPolygonBase
+    public class GeoPolygon : GeoPathBase
     {
         protected readonly List<GeoCoord> _coords;
         protected bool _areaValid;

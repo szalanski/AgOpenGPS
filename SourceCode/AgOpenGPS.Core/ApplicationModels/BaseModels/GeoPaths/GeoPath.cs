@@ -1,7 +1,7 @@
 ﻿﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace AgOpenGPS.Core
+namespace AgOpenGPS.Core.ApplicationModels
 {
     public class GeoPath : GeoPathBase
     {

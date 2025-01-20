@@ -1,20 +1,17 @@
 ﻿using System;
 
-namespace AgOpenGPS.Core
+namespace AgOpenGPS.Core.ApplicationModels
 {
-    public class GeoCoord
+    public struct GeoCoord
     {
-        private double _northing;
-        private double _easting;
-
         public GeoCoord(double northing, double easting)
         {
-            _northing = northing;
-            _easting = easting;
+            Northing = northing;
+            Easting = easting;
         }
 
-        public double Northing => _northing;
-        public double Easting => _easting;
+        public double Northing { get; }
+        public double Easting { get; }
 
         public double DistanceSquared(GeoCoord coord2)
         {
@@ -36,7 +33,6 @@ namespace AgOpenGPS.Core
             return new GeoCoord(Math.Max(this.Northing, bCoord.Northing), Math.Max(this.Easting, bCoord.Easting));
         }
 
-
         public static GeoDelta operator -(GeoCoord aCoord, GeoCoord bCoord)
         {
             return new GeoDelta(aCoord.Northing - bCoord.Northing, aCoord.Easting - bCoord.Easting);
@@ -46,7 +42,6 @@ namespace AgOpenGPS.Core
         {
             return new GeoCoord(coord.Northing + delta.NorthingDelta, coord.Easting + delta.EastingDelta);
         }
-
 
     }
 }

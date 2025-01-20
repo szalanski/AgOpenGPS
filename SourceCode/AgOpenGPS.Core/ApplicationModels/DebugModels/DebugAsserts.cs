@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace AgOpenGPS.Core
+namespace AgOpenGPS.Core.ApplicationModels
 {
     public class DebugAsserts
     {

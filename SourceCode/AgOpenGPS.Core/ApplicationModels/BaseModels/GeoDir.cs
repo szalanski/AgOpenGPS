@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AgOpenGPS.Core
+namespace AgOpenGPS.Core.ApplicationModels
 {
     public struct GeoDir
     {
