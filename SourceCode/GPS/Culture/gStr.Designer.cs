@@ -241,6 +241,15 @@ namespace AgOpenGPS.Culture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Background.
+        /// </summary>
+        public static string gsBackground {
+            get {
+                return ResourceManager.GetString("gsBackground", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Based on Field:.
         /// </summary>
         public static string gsBasedOnField {
@@ -300,6 +309,15 @@ namespace AgOpenGPS.Culture {
         public static string gsButFieldIsLoaded {
             get {
                 return ResourceManager.GetString("gsButFieldIsLoaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string gsCancel {
+            get {
+                return ResourceManager.GetString("gsCancel", resourceCulture);
             }
         }
         
@@ -493,6 +511,15 @@ namespace AgOpenGPS.Culture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create New Field From ISO-XML.
+        /// </summary>
+        public static string gsCreateNewFromIsoXML {
+            get {
+                return ResourceManager.GetString("gsCreateNewFromIsoXML", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Current.
         /// </summary>
         public static string gsCurrent {
@@ -642,6 +669,15 @@ namespace AgOpenGPS.Culture {
         public static string gsDistance {
             get {
                 return ResourceManager.GetString("gsDistance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Distance to Flag.
+        /// </summary>
+        public static string gsDistanceToFlag {
+            get {
+                return ResourceManager.GetString("gsDistanceToFlag", resourceCulture);
             }
         }
         
@@ -799,6 +835,24 @@ namespace AgOpenGPS.Culture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Exit.
+        /// </summary>
+        public static string gsExit {
+            get {
+                return ResourceManager.GetString("gsExit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exit to Windows in:.
+        /// </summary>
+        public static string gsExitToWindows {
+            get {
+                return ResourceManager.GetString("gsExitToWindows", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Extra Guidelines.
         /// </summary>
         public static string gsExtraGuideLines {
@@ -912,6 +966,15 @@ namespace AgOpenGPS.Culture {
         public static string gsFlagFileIsCorrupt {
             get {
                 return ResourceManager.GetString("gsFlagFileIsCorrupt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create Flags.
+        /// </summary>
+        public static string gsFlags {
+            get {
+                return ResourceManager.GetString("gsFlags", resourceCulture);
             }
         }
         
@@ -1263,6 +1326,15 @@ namespace AgOpenGPS.Culture {
         public static string gsManual {
             get {
                 return ResourceManager.GetString("gsManual", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Bing Map as Background.
+        /// </summary>
+        public static string gsMapForBackground {
+            get {
+                return ResourceManager.GetString("gsMapForBackground", resourceCulture);
             }
         }
         
@@ -1947,6 +2019,24 @@ namespace AgOpenGPS.Culture {
         public static string gsShiftGPSPosition {
             get {
                 return ResourceManager.GetString("gsShiftGPSPosition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shutdown.
+        /// </summary>
+        public static string gsShutdown {
+            get {
+                return ResourceManager.GetString("gsShutdown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shutdown in:.
+        /// </summary>
+        public static string gsShutdownIn {
+            get {
+                return ResourceManager.GetString("gsShutdownIn", resourceCulture);
             }
         }
         

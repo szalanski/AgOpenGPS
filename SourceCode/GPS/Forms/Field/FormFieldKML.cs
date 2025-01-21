@@ -24,7 +24,7 @@ namespace AgOpenGPS
 
             InitializeComponent();
 
-            label1.Text = gStr.gsEnterFieldName;
+            labelFieldname.Text = gStr.gsEnterFieldName;
             this.Text = gStr.gsCreateNewField;
         }
 

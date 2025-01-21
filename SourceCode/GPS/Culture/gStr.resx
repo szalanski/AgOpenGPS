@@ -177,6 +177,9 @@
   <data name="gsAutoSteerPort" xml:space="preserve">
     <value>AutoSteer Port</value>
   </data>
+  <data name="gsBackground" xml:space="preserve">
+    <value>Background</value>
+  </data>
   <data name="gsBasedOnField" xml:space="preserve">
     <value>Based on Field:</value>
   </data>
@@ -197,6 +200,9 @@
   </data>
   <data name="gsButFieldIsLoaded" xml:space="preserve">
     <value>But Field Is Loaded</value>
+  </data>
+  <data name="gsCancel" xml:space="preserve">
+    <value>Cancel</value>
   </data>
   <data name="gsCenter" xml:space="preserve">
     <value>Center</value>
@@ -261,6 +267,9 @@
   <data name="gsCreateNewField" xml:space="preserve">
     <value>Create New Field</value>
   </data>
+  <data name="gsCreateNewFromIsoXML" xml:space="preserve">
+    <value>Create New Field From ISO-XML</value>
+  </data>
   <data name="gsCurrent" xml:space="preserve">
     <value>Current</value>
   </data>
@@ -311,6 +320,9 @@
   </data>
   <data name="gsDistance" xml:space="preserve">
     <value>Distance</value>
+  </data>
+  <data name="gsDistanceToFlag" xml:space="preserve">
+    <value>Distance to Flag</value>
   </data>
   <data name="gsDriveIn" xml:space="preserve">
     <value>Drive In</value>
@@ -363,6 +375,12 @@
   <data name="gsErrorreadingKML" xml:space="preserve">
     <value>Error reading KML</value>
   </data>
+  <data name="gsExit" xml:space="preserve">
+    <value>Exit</value>
+  </data>
+  <data name="gsExitToWindows" xml:space="preserve">
+    <value>Exit to Windows in:</value>
+  </data>
   <data name="gsExtraGuideLines" xml:space="preserve">
     <value>Extra Guidelines</value>
   </data>
@@ -401,6 +419,9 @@
   </data>
   <data name="gsFlagFileIsCorrupt" xml:space="preserve">
     <value>Flag File Corrupt</value>
+  </data>
+  <data name="gsFlags" xml:space="preserve">
+    <value>Create Flags</value>
   </data>
   <data name="gsForNow" xml:space="preserve">
     <value>For Now</value>
@@ -521,6 +542,9 @@
   </data>
   <data name="gsManual" xml:space="preserve">
     <value>Manual</value>
+  </data>
+  <data name="gsMapForBackground" xml:space="preserve">
+    <value>Add Bing Map as Background</value>
   </data>
   <data name="gsMeters" xml:space="preserve">
     <value>Meters</value>
@@ -746,6 +770,12 @@
   </data>
   <data name="gsShiftGPSPosition" xml:space="preserve">
     <value>Shift GPS Position (cm)</value>
+  </data>
+  <data name="gsShutdown" xml:space="preserve">
+    <value>Shutdown</value>
+  </data>
+  <data name="gsShutdownIn" xml:space="preserve">
+    <value>Shutdown in:</value>
   </data>
   <data name="gsSimulatorOn" xml:space="preserve">
     <value>Simulator On</value>

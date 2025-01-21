@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using AgOpenGPS.Controls;
 using AgOpenGPS.Helpers;
+using AgOpenGPS.Culture;
 
 namespace AgOpenGPS
 {
@@ -15,6 +16,9 @@ namespace AgOpenGPS
             //get copy of the calling main form
             mf = callingForm as FormGPS;
             InitializeComponent();
+            this.Text = gStr.gsFlags;
+            labelDistanceToFlag.Text = gStr.gsDistanceToFlag;
+
         }
 
         private void UpdateLabels()
