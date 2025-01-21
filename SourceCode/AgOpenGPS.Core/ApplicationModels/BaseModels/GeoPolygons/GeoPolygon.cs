@@ -109,7 +109,7 @@ namespace AgOpenGPS.Core.ApplicationModels
 
         private GeoBoundingBox CalculateBoundingBox()
         {
-            GeoBoundingBox bb = GeoBoundingBox.CreateBoundingBox();
+            GeoBoundingBox bb = GeoBoundingBox.CreateEmptyBoundingBox();
 
             foreach (GeoCoord coord in _coords)
             {

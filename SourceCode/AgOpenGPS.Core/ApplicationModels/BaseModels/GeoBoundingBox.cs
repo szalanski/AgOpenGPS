@@ -9,7 +9,7 @@ namespace AgOpenGPS.Core.ApplicationModels
         private GeoCoord _maxCoord;
         private bool _isEmpty;
 
-        static public GeoBoundingBox CreateBoundingBox()
+        static public GeoBoundingBox CreateEmptyBoundingBox()
         {
             GeoCoord minCoord = new GeoCoord(double.MaxValue, double.MaxValue);
             GeoCoord maxCoord = new GeoCoord(double.MinValue, double.MinValue);

@@ -20,7 +20,7 @@ namespace AgOpenGPS.Core.ApplicationModels
 
         public double Distance(GeoCoord coord2)
         {
-            return Math.Sqrt(DistanceSquared(coord2));
+            return new GeoDelta(this, coord2).Length;
         }
 
         public GeoCoord Min(GeoCoord bCoord)

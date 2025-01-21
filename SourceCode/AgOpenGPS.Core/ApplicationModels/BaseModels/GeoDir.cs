@@ -4,45 +4,42 @@ namespace AgOpenGPS.Core.ApplicationModels
 {
     public struct GeoDir
     {
-        private double _angle;
         public GeoDir(double angle)
         {
-            _angle = angle;
+            Angle = angle;
         }
 
         public GeoDir(GeoDelta delta)
         {
-            _angle = Math.Atan2(delta.EastingDelta, delta.NorthingDelta);
+            Angle = Math.Atan2(delta.EastingDelta, delta.NorthingDelta);
         }
 
-        public double Angle => _angle;
-        public double Cos => Math.Cos(_angle);
-        public double Sin => Math.Sin(_angle);
+        public double Angle { get; private set; }
 
-        public GeoDir PerpendicularLeft => new GeoDir(_angle - 0.5 * Math.PI);
+        public GeoDir PerpendicularLeft => new GeoDir(Angle - 0.5 * Math.PI);
 
-        public GeoDir PerpendicularRight => new GeoDir(_angle + 0.5 * Math.PI);
-        public GeoDir Inverted => new GeoDir(_angle + Math.PI);
+        public GeoDir PerpendicularRight => new GeoDir(Angle + 0.5 * Math.PI);
+        public GeoDir Inverted => new GeoDir(Angle + Math.PI);
 
 
         public void Invert()
         {
-            _angle += Math.PI;
+            Angle += Math.PI;
         }
 
         public static GeoDelta operator *(double distance, GeoDir dir)
         {
-            return new GeoDelta(distance * dir.Cos, distance * dir.Sin);
+            return new GeoDelta(distance * Math.Cos(dir.Angle), distance * Math.Sin(dir.Angle));
         }
 
         public static GeoDir operator +(GeoDir dir, double angle)
         {
-            return new GeoDir(dir._angle + angle);
+            return new GeoDir(dir.Angle + angle);
         }
 
         public static GeoDir operator -(GeoDir dir, double angle)
         {
-            return new GeoDir(dir._angle - angle);
+            return new GeoDir(dir.Angle - angle);
         }
 
     }

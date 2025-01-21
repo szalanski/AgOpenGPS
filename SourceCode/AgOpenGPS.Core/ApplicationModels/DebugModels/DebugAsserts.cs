@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 
 namespace AgOpenGPS.Core.ApplicationModels
 {
@@ -23,8 +24,8 @@ namespace AgOpenGPS.Core.ApplicationModels
 
         public static void AreEqual(GeoDir a, GeoDir b)
         {
-            AreEqual(a.Cos, b.Cos);
-            AreEqual(a.Sin, b.Sin);
+            AreEqual(Math.Cos(a.Angle), Math.Cos(b.Angle));
+            AreEqual(Math.Sin(a.Angle), Math.Sin(b.Angle));
         }
 
         public static void AreEqual(GeoPath a, GeoPath b)
