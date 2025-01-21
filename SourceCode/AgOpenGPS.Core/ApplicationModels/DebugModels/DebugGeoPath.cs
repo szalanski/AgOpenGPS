@@ -4,7 +4,8 @@
     {
         private readonly GeoPath _goldenPath;
         private DebugGeoPath()
-        { }
+        {
+        }
 
         public DebugGeoPath(GeoPath goldenPath)
         {
@@ -14,13 +15,13 @@
         public override void Add(GeoCoord coord)
         {
             base.Add(coord);
-            DebugAsserts.AssertEqual(coord, _goldenPath[Count - 1]);
+            DebugAsserts.AreEqual(coord, _goldenPath[Count - 1]);
 
         }
 
         public void AssertEqual()
         {
-            DebugAsserts.AssertEqual(Count, _goldenPath.Count);
+            DebugAsserts.AreEqual(Count, _goldenPath.Count);
         }
     }
 }

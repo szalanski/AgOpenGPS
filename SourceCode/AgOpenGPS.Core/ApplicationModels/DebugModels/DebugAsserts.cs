@@ -4,7 +4,7 @@ namespace AgOpenGPS.Core.ApplicationModels
 {
     public class DebugAsserts
     {
-        public static void AssertEqual(double a, double b, double epsilon = 0.0001)
+        public static void AreEqual(double a, double b, double epsilon = 0.0001)
         {
             Debug.Assert(b < a + epsilon);
             Debug.Assert(a < b + epsilon);
@@ -15,33 +15,33 @@ namespace AgOpenGPS.Core.ApplicationModels
             Debug.Assert(a == b);
         }
 
-        public static void AssertEqual(GeoCoord a, GeoCoord b)
+        public static void AreEqual(GeoCoord a, GeoCoord b)
         {
-            AssertEqual(a.Northing, b.Northing);
-            AssertEqual(a.Easting, b.Easting);
+            AreEqual(a.Northing, b.Northing);
+            AreEqual(a.Easting, b.Easting);
         }
 
-        public static void AssertEqual(GeoDir a, GeoDir b)
+        public static void AreEqual(GeoDir a, GeoDir b)
         {
-            AssertEqual(a.Cos, b.Cos);
-            AssertEqual(a.Sin, b.Sin);
+            AreEqual(a.Cos, b.Cos);
+            AreEqual(a.Sin, b.Sin);
         }
 
-        public static void AssertEqual(GeoPath a, GeoPath b)
+        public static void AreEqual(GeoPath a, GeoPath b)
         {
-            DebugAsserts.AssertEqual(a.Count, b.Count);
+            DebugAsserts.AreEqual(a.Count, b.Count);
             for (int i = 0; i < a.Count; i++)
             {
-                DebugAsserts.AssertEqual(a[i], b[i]);
+                DebugAsserts.AreEqual(a[i], b[i]);
             }
         }
 
-        public static void AssertEqual(GeoPolygon a, GeoPolygon b)
+        public static void AreEqual(GeoPolygon a, GeoPolygon b)
         {
-            DebugAsserts.AssertEqual(a.Count, b.Count);
+            DebugAsserts.AreEqual(a.Count, b.Count);
             for (int i = 0; i < a.Count; i++)
             {
-                DebugAsserts.AssertEqual(a[i], b[i]);
+                DebugAsserts.AreEqual(a[i], b[i]);
             }
         }
     }

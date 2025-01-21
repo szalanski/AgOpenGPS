@@ -4,7 +4,8 @@
     {
         private readonly GeoPolygon _goldenPolygon;
         private DebugGeoPolygon()
-        { }
+        {
+        }
 
         public DebugGeoPolygon(GeoPolygon goldenPolygon)
         {
@@ -14,13 +15,13 @@
         public override void Add(GeoCoord coord)
         {
             base.Add(coord);
-            DebugAsserts.AssertEqual(coord, _goldenPolygon[Count - 1]);
+            DebugAsserts.AreEqual(coord, _goldenPolygon[Count - 1]);
 
         }
 
-        public void AssertEqual()
+        public void AreEqual()
         {
-            DebugAsserts.AssertEqual(Count, _goldenPolygon.Count);
+            DebugAsserts.AreEqual(Count, _goldenPolygon.Count);
         }
     }
 }
