@@ -266,6 +266,8 @@ namespace AgOpenGPS
             labelSectionLinesOnOff.Text = gStr.gsSectionLines;
             labelElevationOnOff.Text = gStr.gsElevationlog;
             unitsGroupBox.Text = gStr.gsUnits;
+            cboxIsAutoSwitchDualFixOn.Text = gStr.gsAutoSwitchDualFix;
+            labelAutoSwitchDualFixSpeed.Text = gStr.gsAutoSwitchDualFixSpeed;
 
             UpdateSummary();
 

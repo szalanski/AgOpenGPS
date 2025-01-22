@@ -170,10 +170,10 @@ namespace AgOpenGPS
             this.tabTHitch = new System.Windows.Forms.TabPage();
             this.label112 = new System.Windows.Forms.Label();
             this.labelTractorUnits = new System.Windows.Forms.Label();
+            this.picboxToolHitch = new System.Windows.Forms.PictureBox();
             this.nudTrailingHitchLength = new AgOpenGPS.NudlessNumericUpDown();
             this.nudDrawbarLength = new AgOpenGPS.NudlessNumericUpDown();
             this.nudTankHitch = new AgOpenGPS.NudlessNumericUpDown();
-            this.picboxToolHitch = new System.Windows.Forms.PictureBox();
             this.tabToolOffset = new System.Windows.Forms.TabPage();
             this.btnZeroOverlap = new System.Windows.Forms.Button();
             this.btnZeroToolOffset = new System.Windows.Forms.Button();
@@ -309,6 +309,9 @@ namespace AgOpenGPS
             this.label113 = new System.Windows.Forms.Label();
             this.labelFixAlarm = new System.Windows.Forms.Label();
             this.labelGboxDual = new System.Windows.Forms.GroupBox();
+            this.labelAutoSwitchDualFixSpeed = new System.Windows.Forms.Label();
+            this.nudAutoSwitchDualFixSpeed = new AgOpenGPS.NudlessNumericUpDown();
+            this.cboxIsAutoSwitchDualFixOn = new System.Windows.Forms.CheckBox();
             this.labelReverseDistance = new System.Windows.Forms.Label();
             this.nudDualReverseDistance = new AgOpenGPS.NudlessNumericUpDown();
             this.pictureBox13 = new System.Windows.Forms.PictureBox();
@@ -546,7 +549,6 @@ namespace AgOpenGPS
             this.btnOK = new System.Windows.Forms.Button();
             this.labelUnitsBottom = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.cboxIsAutoSwitchDualFix2FixOn = new System.Windows.Forms.CheckBox();
             this.panelLeftSideMenu.SuspendLayout();
             this.panelArduinoSubMenu.SuspendLayout();
             this.panelDataSourcesSubMenu.SuspendLayout();
@@ -563,23 +565,23 @@ namespace AgOpenGPS
             ((System.ComponentModel.ISupportInitialize)(this.pboxAlpha)).BeginInit();
             this.tabVAntenna.SuspendLayout();
             this.labelAntOffset.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pboxAntenna)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudAntennaOffset)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudAntennaHeight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudAntennaPivot)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pboxAntenna)).BeginInit();
             this.tabVDimensions.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudTractorHitchLength)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudVehicleTrack)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudWheelbase)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.tabTConfig.SuspendLayout();
             this.labelBoxAttachmentStyle.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pboxConfigHarvester)).BeginInit();
             this.tabTHitch.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picboxToolHitch)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudTrailingHitchLength)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudDrawbarLength)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudTankHitch)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picboxToolHitch)).BeginInit();
             this.tabToolOffset.SuspendLayout();
             this.labelOverlapGap.SuspendLayout();
             this.labelToolOffset.SuspendLayout();
@@ -630,6 +632,7 @@ namespace AgOpenGPS
             ((System.ComponentModel.ISupportInitialize)(this.nudLookAhead)).BeginInit();
             this.tabDHeading.SuspendLayout();
             this.labelGboxDual.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudAutoSwitchDualFixSpeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudDualReverseDistance)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox13)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudDualHeadingOffset)).BeginInit();
@@ -2401,10 +2404,10 @@ namespace AgOpenGPS
             this.tabVAntenna.Controls.Add(this.label100);
             this.tabVAntenna.Controls.Add(this.label99);
             this.tabVAntenna.Controls.Add(this.label98);
+            this.tabVAntenna.Controls.Add(this.pboxAntenna);
             this.tabVAntenna.Controls.Add(this.nudAntennaOffset);
             this.tabVAntenna.Controls.Add(this.nudAntennaHeight);
             this.tabVAntenna.Controls.Add(this.nudAntennaPivot);
-            this.tabVAntenna.Controls.Add(this.pboxAntenna);
             this.tabVAntenna.Location = new System.Drawing.Point(4, 44);
             this.tabVAntenna.Name = "tabVAntenna";
             this.tabVAntenna.Size = new System.Drawing.Size(859, 584);
@@ -2582,6 +2585,16 @@ namespace AgOpenGPS
             this.label98.Text = "cm";
             this.label98.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // pboxAntenna
+            // 
+            this.pboxAntenna.BackgroundImage = global::AgOpenGPS.Properties.Resources.AntennaTractor;
+            this.pboxAntenna.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.pboxAntenna.Location = new System.Drawing.Point(22, 106);
+            this.pboxAntenna.Name = "pboxAntenna";
+            this.pboxAntenna.Size = new System.Drawing.Size(514, 446);
+            this.pboxAntenna.TabIndex = 48;
+            this.pboxAntenna.TabStop = false;
+            // 
             // nudAntennaOffset
             // 
             this.nudAntennaOffset.BackColor = System.Drawing.Color.AliceBlue;
@@ -2658,16 +2671,6 @@ namespace AgOpenGPS
             0});
             this.nudAntennaPivot.Click += new System.EventHandler(this.nudAntennaPivot_Click);
             // 
-            // pboxAntenna
-            // 
-            this.pboxAntenna.BackgroundImage = global::AgOpenGPS.Properties.Resources.AntennaTractor;
-            this.pboxAntenna.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.pboxAntenna.Location = new System.Drawing.Point(22, 106);
-            this.pboxAntenna.Name = "pboxAntenna";
-            this.pboxAntenna.Size = new System.Drawing.Size(514, 446);
-            this.pboxAntenna.TabIndex = 48;
-            this.pboxAntenna.TabStop = false;
-            // 
             // tabVDimensions
             // 
             this.tabVDimensions.BackColor = System.Drawing.Color.WhiteSmoke;
@@ -2677,10 +2680,10 @@ namespace AgOpenGPS
             this.tabVDimensions.Controls.Add(this.labelHitchLength);
             this.tabVDimensions.Controls.Add(this.labelTrack);
             this.tabVDimensions.Controls.Add(this.labelWheelBase2);
+            this.tabVDimensions.Controls.Add(this.pictureBox1);
             this.tabVDimensions.Controls.Add(this.nudTractorHitchLength);
             this.tabVDimensions.Controls.Add(this.nudVehicleTrack);
             this.tabVDimensions.Controls.Add(this.nudWheelbase);
-            this.tabVDimensions.Controls.Add(this.pictureBox1);
             this.tabVDimensions.Location = new System.Drawing.Point(4, 44);
             this.tabVDimensions.Name = "tabVDimensions";
             this.tabVDimensions.Size = new System.Drawing.Size(859, 584);
@@ -2756,6 +2759,17 @@ namespace AgOpenGPS
             this.labelWheelBase2.Size = new System.Drawing.Size(70, 16);
             this.labelWheelBase2.TabIndex = 475;
             this.labelWheelBase2.Text = "Wheelbase";
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = global::AgOpenGPS.Properties.Resources.RadiusWheelBase;
+            this.pictureBox1.InitialImage = null;
+            this.pictureBox1.Location = new System.Drawing.Point(4, 22);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(814, 545);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.TabIndex = 32;
+            this.pictureBox1.TabStop = false;
             // 
             // nudTractorHitchLength
             // 
@@ -2838,17 +2852,6 @@ namespace AgOpenGPS
             0,
             0});
             this.nudWheelbase.Click += new System.EventHandler(this.nudWheelbase_Click);
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = global::AgOpenGPS.Properties.Resources.RadiusWheelBase;
-            this.pictureBox1.InitialImage = null;
-            this.pictureBox1.Location = new System.Drawing.Point(4, 22);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(814, 545);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 32;
-            this.pictureBox1.TabStop = false;
             // 
             // tabVGuidance
             // 
@@ -2967,10 +2970,10 @@ namespace AgOpenGPS
             this.tabTHitch.BackColor = System.Drawing.Color.WhiteSmoke;
             this.tabTHitch.Controls.Add(this.label112);
             this.tabTHitch.Controls.Add(this.labelTractorUnits);
+            this.tabTHitch.Controls.Add(this.picboxToolHitch);
             this.tabTHitch.Controls.Add(this.nudTrailingHitchLength);
             this.tabTHitch.Controls.Add(this.nudDrawbarLength);
             this.tabTHitch.Controls.Add(this.nudTankHitch);
-            this.tabTHitch.Controls.Add(this.picboxToolHitch);
             this.tabTHitch.Location = new System.Drawing.Point(4, 44);
             this.tabTHitch.Name = "tabTHitch";
             this.tabTHitch.Size = new System.Drawing.Size(859, 584);
@@ -3004,6 +3007,16 @@ namespace AgOpenGPS
             this.labelTractorUnits.TabIndex = 485;
             this.labelTractorUnits.Text = "Units:";
             this.labelTractorUnits.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // picboxToolHitch
+            // 
+            this.picboxToolHitch.BackgroundImage = global::AgOpenGPS.Properties.Resources.ToolHitchPageFront;
+            this.picboxToolHitch.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.picboxToolHitch.Location = new System.Drawing.Point(13, 12);
+            this.picboxToolHitch.Name = "picboxToolHitch";
+            this.picboxToolHitch.Size = new System.Drawing.Size(838, 407);
+            this.picboxToolHitch.TabIndex = 0;
+            this.picboxToolHitch.TabStop = false;
             // 
             // nudTrailingHitchLength
             // 
@@ -3084,16 +3097,6 @@ namespace AgOpenGPS
             0,
             0});
             this.nudTankHitch.Click += new System.EventHandler(this.nudTankHitch_Click);
-            // 
-            // picboxToolHitch
-            // 
-            this.picboxToolHitch.BackgroundImage = global::AgOpenGPS.Properties.Resources.ToolHitchPageFront;
-            this.picboxToolHitch.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.picboxToolHitch.Location = new System.Drawing.Point(13, 12);
-            this.picboxToolHitch.Name = "picboxToolHitch";
-            this.picboxToolHitch.Size = new System.Drawing.Size(838, 407);
-            this.picboxToolHitch.TabIndex = 0;
-            this.picboxToolHitch.TabStop = false;
             // 
             // tabToolOffset
             // 
@@ -5437,7 +5440,7 @@ namespace AgOpenGPS
             this.labelFixAlarmStop.Font = new System.Drawing.Font("Tahoma", 14.25F);
             this.labelFixAlarmStop.ForeColor = System.Drawing.Color.Black;
             this.labelFixAlarmStop.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.labelFixAlarmStop.Location = new System.Drawing.Point(187, 395);
+            this.labelFixAlarmStop.Location = new System.Drawing.Point(200, 438);
             this.labelFixAlarmStop.Name = "labelFixAlarmStop";
             this.labelFixAlarmStop.Size = new System.Drawing.Size(142, 53);
             this.labelFixAlarmStop.TabIndex = 478;
@@ -5479,7 +5482,7 @@ namespace AgOpenGPS
             this.labelFixAlarm.Font = new System.Drawing.Font("Tahoma", 14.25F);
             this.labelFixAlarm.ForeColor = System.Drawing.Color.Black;
             this.labelFixAlarm.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.labelFixAlarm.Location = new System.Drawing.Point(34, 422);
+            this.labelFixAlarm.Location = new System.Drawing.Point(47, 465);
             this.labelFixAlarm.Name = "labelFixAlarm";
             this.labelFixAlarm.Size = new System.Drawing.Size(127, 28);
             this.labelFixAlarm.TabIndex = 471;
@@ -5489,7 +5492,9 @@ namespace AgOpenGPS
             // labelGboxDual
             // 
             this.labelGboxDual.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.labelGboxDual.Controls.Add(this.cboxIsAutoSwitchDualFix2FixOn);
+            this.labelGboxDual.Controls.Add(this.labelAutoSwitchDualFixSpeed);
+            this.labelGboxDual.Controls.Add(this.nudAutoSwitchDualFixSpeed);
+            this.labelGboxDual.Controls.Add(this.cboxIsAutoSwitchDualFixOn);
             this.labelGboxDual.Controls.Add(this.labelReverseDistance);
             this.labelGboxDual.Controls.Add(this.nudDualReverseDistance);
             this.labelGboxDual.Controls.Add(this.pictureBox13);
@@ -5498,10 +5503,72 @@ namespace AgOpenGPS
             this.labelGboxDual.Font = new System.Drawing.Font("Tahoma", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelGboxDual.Location = new System.Drawing.Point(3, 116);
             this.labelGboxDual.Name = "labelGboxDual";
-            this.labelGboxDual.Size = new System.Drawing.Size(385, 276);
+            this.labelGboxDual.Size = new System.Drawing.Size(385, 304);
             this.labelGboxDual.TabIndex = 471;
             this.labelGboxDual.TabStop = false;
             this.labelGboxDual.Text = "Dual Antenna Settings";
+            // 
+            // labelAutoSwitchDualFixSpeed
+            // 
+            this.labelAutoSwitchDualFixSpeed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.labelAutoSwitchDualFixSpeed.AutoSize = true;
+            this.labelAutoSwitchDualFixSpeed.BackColor = System.Drawing.Color.Transparent;
+            this.labelAutoSwitchDualFixSpeed.Font = new System.Drawing.Font("Tahoma", 14.25F);
+            this.labelAutoSwitchDualFixSpeed.ForeColor = System.Drawing.Color.Black;
+            this.labelAutoSwitchDualFixSpeed.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.labelAutoSwitchDualFixSpeed.Location = new System.Drawing.Point(201, 225);
+            this.labelAutoSwitchDualFixSpeed.Name = "labelAutoSwitchDualFixSpeed";
+            this.labelAutoSwitchDualFixSpeed.Size = new System.Drawing.Size(184, 23);
+            this.labelAutoSwitchDualFixSpeed.TabIndex = 485;
+            this.labelAutoSwitchDualFixSpeed.Text = "Switch speed (km/h)";
+            this.labelAutoSwitchDualFixSpeed.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // nudAutoSwitchDualFixSpeed
+            // 
+            this.nudAutoSwitchDualFixSpeed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.nudAutoSwitchDualFixSpeed.AutoSize = true;
+            this.nudAutoSwitchDualFixSpeed.BackColor = System.Drawing.Color.AliceBlue;
+            this.nudAutoSwitchDualFixSpeed.Font = new System.Drawing.Font("Tahoma", 15.75F, System.Drawing.FontStyle.Bold);
+            this.nudAutoSwitchDualFixSpeed.InterceptArrowKeys = false;
+            this.nudAutoSwitchDualFixSpeed.Location = new System.Drawing.Point(230, 254);
+            this.nudAutoSwitchDualFixSpeed.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.nudAutoSwitchDualFixSpeed.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudAutoSwitchDualFixSpeed.Name = "nudAutoSwitchDualFixSpeed";
+            this.nudAutoSwitchDualFixSpeed.ReadOnly = true;
+            this.nudAutoSwitchDualFixSpeed.Size = new System.Drawing.Size(144, 33);
+            this.nudAutoSwitchDualFixSpeed.TabIndex = 484;
+            this.nudAutoSwitchDualFixSpeed.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.nudAutoSwitchDualFixSpeed.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.nudAutoSwitchDualFixSpeed.Click += new System.EventHandler(this.nudAutoSwitchDualFixSpeed_Click);
+            // 
+            // cboxIsAutoSwitchDualFixOn
+            // 
+            this.cboxIsAutoSwitchDualFixOn.Appearance = System.Windows.Forms.Appearance.Button;
+            this.cboxIsAutoSwitchDualFixOn.BackColor = System.Drawing.Color.AliceBlue;
+            this.cboxIsAutoSwitchDualFixOn.FlatAppearance.CheckedBackColor = System.Drawing.Color.LightGreen;
+            this.cboxIsAutoSwitchDualFixOn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cboxIsAutoSwitchDualFixOn.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cboxIsAutoSwitchDualFixOn.ForeColor = System.Drawing.Color.Black;
+            this.cboxIsAutoSwitchDualFixOn.Location = new System.Drawing.Point(15, 254);
+            this.cboxIsAutoSwitchDualFixOn.Name = "cboxIsAutoSwitchDualFixOn";
+            this.cboxIsAutoSwitchDualFixOn.Size = new System.Drawing.Size(209, 33);
+            this.cboxIsAutoSwitchDualFixOn.TabIndex = 483;
+            this.cboxIsAutoSwitchDualFixOn.Text = "Auto Dual <-> Fix";
+            this.cboxIsAutoSwitchDualFixOn.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.cboxIsAutoSwitchDualFixOn.UseVisualStyleBackColor = false;
+            this.cboxIsAutoSwitchDualFixOn.CheckedChanged += new System.EventHandler(this.cboxIsAutoSwitchDualFixOn_CheckedChanged);
             // 
             // labelReverseDistance
             // 
@@ -5511,7 +5578,7 @@ namespace AgOpenGPS
             this.labelReverseDistance.Font = new System.Drawing.Font("Tahoma", 14.25F);
             this.labelReverseDistance.ForeColor = System.Drawing.Color.Black;
             this.labelReverseDistance.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.labelReverseDistance.Location = new System.Drawing.Point(183, 143);
+            this.labelReverseDistance.Location = new System.Drawing.Point(182, 136);
             this.labelReverseDistance.Name = "labelReverseDistance";
             this.labelReverseDistance.Size = new System.Drawing.Size(189, 23);
             this.labelReverseDistance.TabIndex = 473;
@@ -5526,7 +5593,7 @@ namespace AgOpenGPS
             this.nudDualReverseDistance.DecimalPlaces = 2;
             this.nudDualReverseDistance.Font = new System.Drawing.Font("Tahoma", 27.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.nudDualReverseDistance.InterceptArrowKeys = false;
-            this.nudDualReverseDistance.Location = new System.Drawing.Point(201, 173);
+            this.nudDualReverseDistance.Location = new System.Drawing.Point(200, 166);
             this.nudDualReverseDistance.Maximum = new decimal(new int[] {
             9,
             0,
@@ -5567,7 +5634,7 @@ namespace AgOpenGPS
             this.nudDualHeadingOffset.DecimalPlaces = 1;
             this.nudDualHeadingOffset.Font = new System.Drawing.Font("Tahoma", 27.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.nudDualHeadingOffset.InterceptArrowKeys = false;
-            this.nudDualHeadingOffset.Location = new System.Drawing.Point(201, 82);
+            this.nudDualHeadingOffset.Location = new System.Drawing.Point(200, 75);
             this.nudDualHeadingOffset.Minimum = new decimal(new int[] {
             100,
             0,
@@ -5593,7 +5660,7 @@ namespace AgOpenGPS
             this.labelHeadingOffset.Font = new System.Drawing.Font("Tahoma", 14.25F);
             this.labelHeadingOffset.ForeColor = System.Drawing.Color.Black;
             this.labelHeadingOffset.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.labelHeadingOffset.Location = new System.Drawing.Point(156, 48);
+            this.labelHeadingOffset.Location = new System.Drawing.Point(155, 41);
             this.labelHeadingOffset.Name = "labelHeadingOffset";
             this.labelHeadingOffset.Size = new System.Drawing.Size(216, 23);
             this.labelHeadingOffset.TabIndex = 469;
@@ -5839,7 +5906,7 @@ namespace AgOpenGPS
             this.cboxIsRTK_KillAutoSteer.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cboxIsRTK_KillAutoSteer.ForeColor = System.Drawing.Color.Black;
             this.cboxIsRTK_KillAutoSteer.Image = global::AgOpenGPS.Properties.Resources.AutoSteerOff;
-            this.cboxIsRTK_KillAutoSteer.Location = new System.Drawing.Point(205, 451);
+            this.cboxIsRTK_KillAutoSteer.Location = new System.Drawing.Point(218, 494);
             this.cboxIsRTK_KillAutoSteer.Name = "cboxIsRTK_KillAutoSteer";
             this.cboxIsRTK_KillAutoSteer.Size = new System.Drawing.Size(103, 69);
             this.cboxIsRTK_KillAutoSteer.TabIndex = 477;
@@ -5856,7 +5923,7 @@ namespace AgOpenGPS
             this.cboxIsRTK.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cboxIsRTK.ForeColor = System.Drawing.Color.Black;
             this.cboxIsRTK.Image = global::AgOpenGPS.Properties.Resources.Con_SourcesRTKAlarm;
-            this.cboxIsRTK.Location = new System.Drawing.Point(46, 451);
+            this.cboxIsRTK.Location = new System.Drawing.Point(59, 494);
             this.cboxIsRTK.Name = "cboxIsRTK";
             this.cboxIsRTK.Size = new System.Drawing.Size(103, 69);
             this.cboxIsRTK.TabIndex = 309;
@@ -9712,24 +9779,6 @@ namespace AgOpenGPS
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // cboxIsAutoSwitchDualFix2FixOn
-            // 
-            this.cboxIsAutoSwitchDualFix2FixOn.Appearance = System.Windows.Forms.Appearance.Button;
-            this.cboxIsAutoSwitchDualFix2FixOn.BackColor = System.Drawing.Color.AliceBlue;
-            this.cboxIsAutoSwitchDualFix2FixOn.Checked = true;
-            this.cboxIsAutoSwitchDualFix2FixOn.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cboxIsAutoSwitchDualFix2FixOn.FlatAppearance.CheckedBackColor = System.Drawing.Color.LightGreen;
-            this.cboxIsAutoSwitchDualFix2FixOn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cboxIsAutoSwitchDualFix2FixOn.Font = new System.Drawing.Font("Tahoma", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cboxIsAutoSwitchDualFix2FixOn.ForeColor = System.Drawing.Color.Black;
-            this.cboxIsAutoSwitchDualFix2FixOn.Location = new System.Drawing.Point(19, 233);
-            this.cboxIsAutoSwitchDualFix2FixOn.Name = "cboxIsAutoSwitchDualFix2FixOn";
-            this.cboxIsAutoSwitchDualFix2FixOn.Size = new System.Drawing.Size(343, 37);
-            this.cboxIsAutoSwitchDualFix2FixOn.TabIndex = 483;
-            this.cboxIsAutoSwitchDualFix2FixOn.Text = "Autoswitch Dual Fix2Fix";
-            this.cboxIsAutoSwitchDualFix2FixOn.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.cboxIsAutoSwitchDualFix2FixOn.UseVisualStyleBackColor = false;
-            // 
             // FormConfig
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -9771,25 +9820,25 @@ namespace AgOpenGPS
             this.tabVAntenna.ResumeLayout(false);
             this.tabVAntenna.PerformLayout();
             this.labelAntOffset.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pboxAntenna)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudAntennaOffset)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudAntennaHeight)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudAntennaPivot)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pboxAntenna)).EndInit();
             this.tabVDimensions.ResumeLayout(false);
             this.tabVDimensions.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudTractorHitchLength)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudVehicleTrack)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudWheelbase)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.tabTConfig.ResumeLayout(false);
             this.labelBoxAttachmentStyle.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pboxConfigHarvester)).EndInit();
             this.tabTHitch.ResumeLayout(false);
             this.tabTHitch.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picboxToolHitch)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudTrailingHitchLength)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudDrawbarLength)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudTankHitch)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picboxToolHitch)).EndInit();
             this.tabToolOffset.ResumeLayout(false);
             this.tabToolOffset.PerformLayout();
             this.labelOverlapGap.ResumeLayout(false);
@@ -9848,6 +9897,7 @@ namespace AgOpenGPS
             this.tabDHeading.PerformLayout();
             this.labelGboxDual.ResumeLayout(false);
             this.labelGboxDual.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudAutoSwitchDualFixSpeed)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudDualReverseDistance)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox13)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudDualHeadingOffset)).EndInit();
@@ -10409,6 +10459,8 @@ namespace AgOpenGPS
         private System.Windows.Forms.Button btnVehicleNewSave;
         private System.Windows.Forms.TextBox tboxCreateNewVehicle;
         private System.Windows.Forms.Label labelNew;
-        private System.Windows.Forms.CheckBox cboxIsAutoSwitchDualFix2FixOn;
+        private System.Windows.Forms.CheckBox cboxIsAutoSwitchDualFixOn;
+        private System.Windows.Forms.Label labelAutoSwitchDualFixSpeed;
+        private NudlessNumericUpDown nudAutoSwitchDualFixSpeed;
     }
 }
