@@ -1,4 +1,4 @@
-﻿namespace AgOpenGPS.Core.ApplicationModels
+﻿namespace AgOpenGPS.Core.Models
 {
     // Represents a coordinate in the World Geodetic System 1984
     public struct Wgs84

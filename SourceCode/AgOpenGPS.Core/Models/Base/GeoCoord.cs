@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AgOpenGPS.Core.ApplicationModels
+namespace AgOpenGPS.Core.Models
 {
     public struct GeoCoord
     {

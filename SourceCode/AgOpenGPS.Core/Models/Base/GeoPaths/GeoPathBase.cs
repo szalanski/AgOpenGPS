@@ -1,11 +1,10 @@
-﻿namespace AgOpenGPS.Core.ApplicationModels
+﻿namespace AgOpenGPS.Core.Models
 {
     public abstract class GeoPathBase
     {
         public abstract int Count { get; }
 
         public abstract GeoCoord this[int i] { get; }
-
 
         public int GetClosestPointIndex(GeoCoord coord)
         {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace AgOpenGPS.Core.ApplicationModels
+namespace AgOpenGPS.Core.Models
 {
     public class GeoPolygon : GeoPathBase
     {

@@ -1,4 +1,4 @@
-﻿namespace AgOpenGPS.Core.ApplicationModels
+﻿namespace AgOpenGPS.Core.Models
 {
     public class DebugGeoPath : GeoPath
     {

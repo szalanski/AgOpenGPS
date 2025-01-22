@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace AgOpenGPS.Core.ApplicationModels
+namespace AgOpenGPS.Core.Models
 {
     public struct GeoBoundingBox
     {
