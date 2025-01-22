@@ -18,7 +18,7 @@ namespace AgOpenGPS
             
             if (rbtnHeadingHDT.Checked)
             {
-                if (Properties.Settings.Default.setAutoSwitchDualFixOn == true)
+                if (Properties.Settings.Default.setAutoSwitchDualFixOn)
                 {
                     rbtnHeadingFix.Enabled = false;
                     labelGboxSingle.Enabled = true;
@@ -49,7 +49,7 @@ namespace AgOpenGPS
 
             cboxIsReverseOn.Checked = Properties.Settings.Default.setIMU_isReverseOn;
             cboxIsAutoSwitchDualFixOn.Checked = Properties.Settings.Default.setAutoSwitchDualFixOn;
-            nudAutoSwitchDualFixSpeed.Value = Properties.Settings.Default.setAutoSwitchDualFixSpeed;
+            nudAutoSwitchDualFixSpeed.Value = (decimal)Properties.Settings.Default.setAutoSwitchDualFixSpeed;
 
             if (Properties.Settings.Default.setF_minHeadingStepDistance == 1.0)
                 cboxMinGPSStep.Checked = true;
@@ -80,11 +80,9 @@ namespace AgOpenGPS
                 hsbarFusion.Enabled = false;
             }
 
-            // FOR AUTOSWITCH DUALFIX START
-            if (cboxIsAutoSwitchDualFixOn.Checked == true) { 
+            if (cboxIsAutoSwitchDualFixOn.Checked) { 
                 hsbarFusion.Enabled = true;
             }
-            // FOR AUTOSWITCH DUALFIX STOP
 
             //nudMinimumFrameTime.Value = Properties.Settings.Default.SetGPS_udpWatchMsec;
 
@@ -126,18 +124,7 @@ namespace AgOpenGPS
 
             if (rbtnHeadingHDT.Checked)
             {
-                if (cboxIsAutoSwitchDualFixOn.Checked == true)
-                {
-                    rbtnHeadingFix.Enabled = false;
-                    labelGboxSingle.Enabled = true;
-                    labelGboxDual.Enabled = true;
-                }
-                else
-                {
-                    rbtnHeadingFix.Enabled = true;
-                    labelGboxSingle.Enabled = false;
-                    labelGboxDual.Enabled = true;
-                }
+                this.setAutoSwitchDualFixPanelOptions();
             }
             else
             {
@@ -212,25 +199,31 @@ namespace AgOpenGPS
 
         private void cboxIsAutoSwitchDualFixOn_CheckedChanged(object sender, EventArgs e)
         {
-            if (cboxIsAutoSwitchDualFixOn.Checked == true)
-            {
-                rbtnHeadingFix.Enabled = false;
-                labelGboxSingle.Enabled = true;
-                labelGboxDual.Enabled = true;
-            } else
-            {
-                rbtnHeadingFix.Enabled = true;
-                labelGboxSingle.Enabled = false;
-                labelGboxDual.Enabled = true;
-            }
+            this.setAutoSwitchDualFixPanelOptions();
         }
 
         private void nudAutoSwitchDualFixSpeed_Click(object sender, EventArgs e)
         {
             if (((NudlessNumericUpDown)sender).ShowKeypad(this))
             {
-                Properties.Settings.Default.setAutoSwitchDualFixSpeed = ((int)nudAutoSwitchDualFixSpeed.Value);
+                Properties.Settings.Default.setAutoSwitchDualFixSpeed = ((double)nudAutoSwitchDualFixSpeed.Value);
                 mf.ahrs.autoSwitchDualFixSpeed = Properties.Settings.Default.setAutoSwitchDualFixSpeed;
+            }
+        }
+
+        private void setAutoSwitchDualFixPanelOptions()
+        {
+            if (cboxIsAutoSwitchDualFixOn.Checked)
+            {
+                rbtnHeadingFix.Enabled = false;
+                labelGboxSingle.Enabled = true;
+                labelGboxDual.Enabled = true;
+            }
+            else
+            {
+                rbtnHeadingFix.Enabled = true;
+                labelGboxSingle.Enabled = false;
+                labelGboxDual.Enabled = true;
             }
         }
 

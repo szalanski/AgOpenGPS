@@ -150,10 +150,9 @@ namespace AgOpenGPS
             pn.speed = pn.vtgSpeed;
             pn.AverageTheSpeed();
 
-            // FOR AUTOSWITCH DUALFIX START
-            if (Properties.Settings.Default.setGPS_headingFromWhichSource == "Dual" && ahrs.autoSwitchDualFixOn == true)
+            if (Properties.Settings.Default.setGPS_headingFromWhichSource == "Dual" && ahrs.autoSwitchDualFixOn)
             {
-                if (pn.speed > ahrs.autoSwitchDualFixSpeed || pn.speed < (ahrs.autoSwitchDualFixSpeed * -1))
+                if (Math.Abs(pn.speed) > ahrs.autoSwitchDualFixSpeed)
                 {
                     headingFromSource = "Fix";
                     ahrs.isDualAsIMU = true;
@@ -165,7 +164,6 @@ namespace AgOpenGPS
                     ahrs.imuHeading = 99999;
                 }
             }
-            // FOR AUTOSWITCH DUALFIX END
 
             #region Heading
             switch (headingFromSource)
@@ -175,12 +173,10 @@ namespace AgOpenGPS
                     {
                         #region Start
 
-                        // FOR AUTOSWITCH DUALFIX START
-                        if (Properties.Settings.Default.setGPS_headingFromWhichSource == "Dual" && ahrs.autoSwitchDualFixOn == true)
+                        if (Properties.Settings.Default.setGPS_headingFromWhichSource == "Dual" && ahrs.autoSwitchDualFixOn)
                         {
                             lblSpeed.ForeColor = System.Drawing.Color.Red;
                         }
-                        // FOR AUTOSWITCH DUALFIX END
 
                         distanceCurrentStepFixDisplay = glm.Distance(prevDistFix, pn.fix);
                         distanceCurrentStepFixDisplay *= 100;
@@ -686,13 +682,11 @@ namespace AgOpenGPS
 
                 case "Dual":
                     {
-                        // FOR AUTOSWITCH DUALFIX START
-                        if (Properties.Settings.Default.setGPS_headingFromWhichSource == "Dual" && ahrs.autoSwitchDualFixOn == true)
+                        if (Properties.Settings.Default.setGPS_headingFromWhichSource == "Dual" && ahrs.autoSwitchDualFixOn)
                         {
                             lblSpeed.ForeColor = System.Drawing.Color.Green;
                             isChangingDirection = false;
                         }
-                        // FOR AUTOSWITCH DUALFIX END
 
                         isFirstHeadingSet = true;
                         //use Dual Antenna heading for camera and tractor graphic
