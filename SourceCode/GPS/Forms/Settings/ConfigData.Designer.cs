@@ -124,7 +124,7 @@ namespace AgOpenGPS
 
             if (rbtnHeadingHDT.Checked)
             {
-                this.setAutoSwitchDualFixPanelOptions();
+                SetAutoSwitchDualFixPanelOptions();
             }
             else
             {
@@ -199,7 +199,7 @@ namespace AgOpenGPS
 
         private void cboxIsAutoSwitchDualFixOn_CheckedChanged(object sender, EventArgs e)
         {
-            this.setAutoSwitchDualFixPanelOptions();
+            SetAutoSwitchDualFixPanelOptions();
         }
 
         private void nudAutoSwitchDualFixSpeed_Click(object sender, EventArgs e)
@@ -211,7 +211,7 @@ namespace AgOpenGPS
             }
         }
 
-        private void setAutoSwitchDualFixPanelOptions()
+        private void SetAutoSwitchDualFixPanelOptions()
         {
             if (cboxIsAutoSwitchDualFixOn.Checked)
             {
