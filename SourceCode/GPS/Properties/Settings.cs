@@ -274,6 +274,8 @@ namespace AgOpenGPS.Properties
         public bool setDisplay_isSectionLinesOn = true;
         public bool setDisplay_isLineSmooth = false;
         public Size setWindow_tramLineSize = new Size(921, 676);
+        public bool setAutoSwitchDualFixOn = false;
+        public double setAutoSwitchDualFixSpeed = 2.0;
 
         public LoadResult Load()
         {

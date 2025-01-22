@@ -18,8 +18,16 @@ namespace AgOpenGPS
             
             if (rbtnHeadingHDT.Checked)
             {
-                labelGboxSingle.Enabled = false;
-                labelGboxDual.Enabled = true;
+                if (Properties.Settings.Default.setAutoSwitchDualFixOn)
+                {
+                    rbtnHeadingFix.Enabled = false;
+                    labelGboxSingle.Enabled = true;
+                    labelGboxDual.Enabled = true;
+                } else
+                {
+                    labelGboxSingle.Enabled = false;
+                    labelGboxDual.Enabled = true;
+                }
             }
             else
             {
@@ -40,6 +48,8 @@ namespace AgOpenGPS
             nudFixJumpDistance.Value = Properties.Settings.Default.setGPS_jumpFixAlarmDistance;
 
             cboxIsReverseOn.Checked = Properties.Settings.Default.setIMU_isReverseOn;
+            cboxIsAutoSwitchDualFixOn.Checked = Properties.Settings.Default.setAutoSwitchDualFixOn;
+            nudAutoSwitchDualFixSpeed.Value = (decimal)Properties.Settings.Default.setAutoSwitchDualFixSpeed;
 
             if (Properties.Settings.Default.setF_minHeadingStepDistance == 1.0)
                 cboxMinGPSStep.Checked = true;
@@ -70,6 +80,10 @@ namespace AgOpenGPS
                 hsbarFusion.Enabled = false;
             }
 
+            if (cboxIsAutoSwitchDualFixOn.Checked) { 
+                hsbarFusion.Enabled = true;
+            }
+
             //nudMinimumFrameTime.Value = Properties.Settings.Default.SetGPS_udpWatchMsec;
 
             //nudForwardComp.Value = (decimal)(Properties.Settings.Default.setGPS_forwardComp);
@@ -85,6 +99,8 @@ namespace AgOpenGPS
             Properties.Settings.Default.setGPS_isRTK = mf.isRTK_AlarmOn = cboxIsRTK.Checked;
 
             Properties.Settings.Default.setIMU_isReverseOn = mf.ahrs.isReverseOn = cboxIsReverseOn.Checked;
+            Properties.Settings.Default.setAutoSwitchDualFixOn = mf.ahrs.autoSwitchDualFixOn = cboxIsAutoSwitchDualFixOn.Checked;
+
             Properties.Settings.Default.setGPS_isRTK_KillAutoSteer = mf.isRTK_KillAutosteer = cboxIsRTK_KillAutoSteer.Checked;
 
             if (cboxMinGPSStep.Checked)
@@ -108,11 +124,11 @@ namespace AgOpenGPS
 
             if (rbtnHeadingHDT.Checked)
             {
-                labelGboxSingle.Enabled = false;
-                labelGboxDual.Enabled = true;
+                SetAutoSwitchDualFixPanelOptions();
             }
             else
             {
+                rbtnHeadingFix.Enabled = true;
                 labelGboxSingle.Enabled = true;
                 labelGboxDual.Enabled= false;
             }
@@ -179,6 +195,36 @@ namespace AgOpenGPS
             lblFusionIMU.Text = (100 - hsbarFusion.Value).ToString()+"%";
 
             mf.ahrs.fusionWeight = (double)hsbarFusion.Value * 0.002;
+        }
+
+        private void cboxIsAutoSwitchDualFixOn_CheckedChanged(object sender, EventArgs e)
+        {
+            SetAutoSwitchDualFixPanelOptions();
+        }
+
+        private void nudAutoSwitchDualFixSpeed_Click(object sender, EventArgs e)
+        {
+            if (((NudlessNumericUpDown)sender).ShowKeypad(this))
+            {
+                Properties.Settings.Default.setAutoSwitchDualFixSpeed = ((double)nudAutoSwitchDualFixSpeed.Value);
+                mf.ahrs.autoSwitchDualFixSpeed = Properties.Settings.Default.setAutoSwitchDualFixSpeed;
+            }
+        }
+
+        private void SetAutoSwitchDualFixPanelOptions()
+        {
+            if (cboxIsAutoSwitchDualFixOn.Checked)
+            {
+                rbtnHeadingFix.Enabled = false;
+                labelGboxSingle.Enabled = true;
+                labelGboxDual.Enabled = true;
+            }
+            else
+            {
+                rbtnHeadingFix.Enabled = true;
+                labelGboxSingle.Enabled = false;
+                labelGboxDual.Enabled = true;
+            }
         }
 
         //private void nudForwardComp_Click(object sender, EventArgs e)

@@ -241,6 +241,24 @@ namespace AgOpenGPS.Culture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Auto Dual &lt;&gt; Fix.
+        /// </summary>
+        public static string gsAutoSwitchDualFix {
+            get {
+                return ResourceManager.GetString("gsAutoSwitchDualFix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Switch speed (km/h).
+        /// </summary>
+        public static string gsAutoSwitchDualFixSpeed {
+            get {
+                return ResourceManager.GetString("gsAutoSwitchDualFixSpeed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Background.
         /// </summary>
         public static string gsBackground {
