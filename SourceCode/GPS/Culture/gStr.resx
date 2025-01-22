@@ -177,6 +177,12 @@
   <data name="gsAutoSteerPort" xml:space="preserve">
     <value>AutoSteer Port</value>
   </data>
+  <data name="gsAutoSwitchDualFix" xml:space="preserve">
+    <value>Auto Dual &lt;&gt; Fix</value>
+  </data>
+  <data name="gsAutoSwitchDualFixSpeed" xml:space="preserve">
+    <value>Switch speed (km/h)</value>
+  </data>
   <data name="gsBackground" xml:space="preserve">
     <value>Background</value>
   </data>
@@ -237,6 +243,9 @@
   <data name="gsCloseFieldFirst" xml:space="preserve">
     <value>Close Field First</value>
   </data>
+  <data name="gsColorPicker" xml:space="preserve">
+    <value>Color Picker</value>
+  </data>
   <data name="gsColors" xml:space="preserve">
     <value>Colors</value>
   </data>
@@ -282,6 +291,9 @@
   <data name="gsCurveNotOn" xml:space="preserve">
     <value>Curve Not ON</value>
   </data>
+  <data name="gsDay" xml:space="preserve">
+    <value>Day</value>
+  </data>
   <data name="gsDelete" xml:space="preserve">
     <value>Delete</value>
   </data>
@@ -296,6 +308,9 @@
   </data>
   <data name="gsDeleteContourPaths" xml:space="preserve">
     <value>Delete Contour Paths</value>
+  </data>
+  <data name="gsDeleteField" xml:space="preserve">
+    <value>Delete Field</value>
   </data>
   <data name="gsDeleteForSure" xml:space="preserve">
     <value>Delete For Sure?</value>
@@ -398,6 +413,9 @@
   </data>
   <data name="gsFieldNotOpen" xml:space="preserve">
     <value>Field Not Open</value>
+  </data>
+  <data name="gsFieldPicker" xml:space="preserve">
+    <value>Load File</value>
   </data>
   <data name="gsFieldTexture" xml:space="preserve">
     <value>Field Texture</value>
@@ -576,6 +594,9 @@
   <data name="gsNew" xml:space="preserve">
     <value>New</value>
   </data>
+  <data name="gsNight" xml:space="preserve">
+    <value>Night</value>
+  </data>
   <data name="gsNoABLineActive" xml:space="preserve">
     <value>No ABLine Active</value>
   </data>
@@ -678,6 +699,9 @@
   <data name="gsPowerLoss" xml:space="preserve">
     <value>Power Loss Shutdown</value>
   </data>
+  <data name="gsPresetColor" xml:space="preserve">
+    <value>Select Preset Color</value>
+  </data>
   <data name="gsPressureSensorValueLabel" xml:space="preserve">
     <value>Pressure (bar)</value>
   </data>
@@ -704,6 +728,9 @@
   </data>
   <data name="gsRecordedPathMenu" xml:space="preserve">
     <value>Recorded Path</value>
+  </data>
+  <data name="gsRecordedPathPicker" xml:space="preserve">
+    <value>Record Path Load</value>
   </data>
   <data name="gsReducedPoints" xml:space="preserve">
     <value>Reduced Points</value>
@@ -888,6 +915,9 @@ USE AT OWN RISK.</value>
   <data name="gsTurnOffDelay" xml:space="preserve">
     <value>Turn Off Delay</value>
   </data>
+  <data name="gsTurnOffRecordedPath" xml:space="preserve">
+    <value>Turn Off Rec-Path</value>
+  </data>
   <data name="gsTurnOnContourOrMakeABLine" xml:space="preserve">
     <value>Turn On Contour of Make AB Line</value>
   </data>
@@ -968,11 +998,5 @@ USE AT OWN RISK.</value>
   </data>
   <data name="v_SteerSettingsForm" xml:space="preserve">
     <value>https://www.youtube.com/watch?v=3SdvYgx8HHc</value>
-  </data>
-  <data name="gsAutoSwitchDualFix" xml:space="preserve">
-    <value>Auto Dual &lt;&gt; Fix</value>
-  </data>
-  <data name="gsAutoSwitchDualFixSpeed" xml:space="preserve">
-    <value>Switch speed (km/h)</value>
   </data>
 </root>

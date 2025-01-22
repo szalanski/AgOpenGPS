@@ -234,6 +234,9 @@
   <data name="gsCloseFieldFirst" xml:space="preserve">
     <value>Sluit eerst perceel</value>
   </data>
+  <data name="gsColorPicker" xml:space="preserve">
+    <value>Kleuren-waaier</value>
+  </data>
   <data name="gsColors" xml:space="preserve">
     <value>Kleuren</value>
   </data>
@@ -279,6 +282,9 @@
   <data name="gsCurveNotOn" xml:space="preserve">
     <value>AB Curve niet ingeschakeld</value>
   </data>
+  <data name="gsDay" xml:space="preserve">
+    <value>Dag</value>
+  </data>
   <data name="gsDelete" xml:space="preserve">
     <value>Verwijder</value>
   </data>
@@ -293,6 +299,9 @@
   </data>
   <data name="gsDeleteContourPaths" xml:space="preserve">
     <value>Verwijder contour-paden</value>
+  </data>
+  <data name="gsDeleteField" xml:space="preserve">
+    <value>Verwijder Perceel</value>
   </data>
   <data name="gsDeleteForSure" xml:space="preserve">
     <value>Zeker verwijderen?</value>
@@ -395,6 +404,9 @@
   </data>
   <data name="gsFieldNotOpen" xml:space="preserve">
     <value>Geen perceel geopend</value>
+  </data>
+  <data name="gsFieldPicker" xml:space="preserve">
+    <value>Laad bestand</value>
   </data>
   <data name="gsFieldTexture" xml:space="preserve">
     <value>Achtergrond Textuur</value>
@@ -561,6 +573,9 @@
   <data name="gsNew" xml:space="preserve">
     <value>Nieuw</value>
   </data>
+  <data name="gsNight" xml:space="preserve">
+    <value>Nacht</value>
+  </data>
   <data name="gsNoABLineActive" xml:space="preserve">
     <value>Geen AB lijn actief</value>
   </data>
@@ -660,6 +675,9 @@
   <data name="gsPowerLoss" xml:space="preserve">
     <value>Schakel uit op batterij</value>
   </data>
+  <data name="gsPresetColor" xml:space="preserve">
+    <value>Selecteer Preset Kleur</value>
+  </data>
   <data name="gsPressureSensorValueLabel" xml:space="preserve">
     <value>Bar</value>
   </data>
@@ -686,6 +704,9 @@
   </data>
   <data name="gsRecordedPathMenu" xml:space="preserve">
     <value>Opgenomen pad Menu</value>
+  </data>
+  <data name="gsRecordedPathPicker" xml:space="preserve">
+    <value>Opgenomen Lijn Laden</value>
   </data>
   <data name="gsReducedPoints" xml:space="preserve">
     <value>Verminder Punten</value>
@@ -866,6 +887,9 @@ GEBRUIK OP EIGEN RISICO.</value>
   </data>
   <data name="gsTurnOffDelay" xml:space="preserve">
     <value>Uitschakel Vertraging</value>
+  </data>
+  <data name="gsTurnOffRecordedPath" xml:space="preserve">
+    <value>Zet Pad Uit</value>
   </data>
   <data name="gsTurnOnContourOrMakeABLine" xml:space="preserve">
     <value>Schakel Contour of AB lijn in</value>

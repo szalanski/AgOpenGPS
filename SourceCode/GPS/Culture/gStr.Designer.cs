@@ -439,6 +439,15 @@ namespace AgOpenGPS.Culture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Color Picker.
+        /// </summary>
+        public static string gsColorPicker {
+            get {
+                return ResourceManager.GetString("gsColorPicker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Colors.
         /// </summary>
         public static string gsColors {
@@ -574,6 +583,15 @@ namespace AgOpenGPS.Culture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Day.
+        /// </summary>
+        public static string gsDay {
+            get {
+                return ResourceManager.GetString("gsDay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete.
         /// </summary>
         public static string gsDelete {
@@ -615,6 +633,15 @@ namespace AgOpenGPS.Culture {
         public static string gsDeleteContourPaths {
             get {
                 return ResourceManager.GetString("gsDeleteContourPaths", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete Field.
+        /// </summary>
+        public static string gsDeleteField {
+            get {
+                return ResourceManager.GetString("gsDeleteField", resourceCulture);
             }
         }
         
@@ -921,6 +948,15 @@ namespace AgOpenGPS.Culture {
         public static string gsFieldNotOpen {
             get {
                 return ResourceManager.GetString("gsFieldNotOpen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Load File.
+        /// </summary>
+        public static string gsFieldPicker {
+            get {
+                return ResourceManager.GetString("gsFieldPicker", resourceCulture);
             }
         }
         
@@ -1456,6 +1492,15 @@ namespace AgOpenGPS.Culture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Night.
+        /// </summary>
+        public static string gsNight {
+            get {
+                return ResourceManager.GetString("gsNight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No ABLine Active.
         /// </summary>
         public static string gsNoABLineActive {
@@ -1762,6 +1807,15 @@ namespace AgOpenGPS.Culture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select Preset Color.
+        /// </summary>
+        public static string gsPresetColor {
+            get {
+                return ResourceManager.GetString("gsPresetColor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Pressure (bar).
         /// </summary>
         public static string gsPressureSensorValueLabel {
@@ -1839,6 +1893,15 @@ namespace AgOpenGPS.Culture {
         public static string gsRecordedPathMenu {
             get {
                 return ResourceManager.GetString("gsRecordedPathMenu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Record Path Load.
+        /// </summary>
+        public static string gsRecordedPathPicker {
+            get {
+                return ResourceManager.GetString("gsRecordedPathPicker", resourceCulture);
             }
         }
         
@@ -2376,6 +2439,15 @@ namespace AgOpenGPS.Culture {
         public static string gsTurnOffDelay {
             get {
                 return ResourceManager.GetString("gsTurnOffDelay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Turn Off Rec-Path.
+        /// </summary>
+        public static string gsTurnOffRecordedPath {
+            get {
+                return ResourceManager.GetString("gsTurnOffRecordedPath", resourceCulture);
             }
         }
         

@@ -1,4 +1,5 @@
-﻿using MechanikaDesign.WinForms.UI.ColorPicker;
+﻿using AgOpenGPS.Culture;
+using MechanikaDesign.WinForms.UI.ColorPicker;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -25,9 +26,12 @@ namespace AgOpenGPS
             InitializeComponent();
 
             inColor = _inColor;
-
+            this.Text = gStr.gsColorPicker;
             btnNight.BackColor = inColor;
             btnDay.BackColor = inColor;
+            btnNight.Text = gStr.gsNight;
+            btnDay.Text = gStr.gsDay;
+            labelGroupBoxSelectPresetColor.Text = gStr.gsPresetColor;
 
             useThisColor = inColor;
 
@@ -147,14 +151,14 @@ namespace AgOpenGPS
         {
             if (chkUse.Checked)
             {
-                groupBox1.Text = "Pick New Color and Select Square Below to Save Preset";
+                labelGroupBoxSelectPresetColor.Text = "Pick New Color and Select Square Below to Save Preset";
                 chkUse.Image = Properties.Resources.ColorUnlocked;
                 isUse = false;
             }
             else
             {
                 isUse = true;
-                groupBox1.Text = "Select Preset Color";
+                labelGroupBoxSelectPresetColor.Text = "Select Preset Color";
                 chkUse.Image = Properties.Resources.ColorLocked;
             }
         }
