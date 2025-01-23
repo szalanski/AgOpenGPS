@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 
 namespace AgOpenGPS.Core.Models
 {
@@ -7,9 +6,8 @@ namespace AgOpenGPS.Core.Models
     {
         private GeoCoord _minCoord;
         private GeoCoord _maxCoord;
-        private bool _isEmpty;
 
-        static public GeoBoundingBox CreateEmptyBoundingBox()
+        static public GeoBoundingBox CreateEmpty()
         {
             GeoCoord minCoord = new GeoCoord(double.MaxValue, double.MaxValue);
             GeoCoord maxCoord = new GeoCoord(double.MinValue, double.MinValue);
@@ -20,10 +18,11 @@ namespace AgOpenGPS.Core.Models
         {
             _minCoord = minCoord;
             _maxCoord = maxCoord;
-            _isEmpty = true;
         }
 
-        public bool IsEmpty => _isEmpty;
+        public bool IsEmpty =>
+            _maxCoord.Northing < _minCoord.Northing &&
+            _maxCoord.Easting < _minCoord.Easting;
         public double MinNorthing => _minCoord.Northing;
         public double MaxNorthing => _maxCoord.Northing;
         public double MinEasting => _minCoord.Easting;
@@ -33,7 +32,6 @@ namespace AgOpenGPS.Core.Models
         {
             _minCoord = _minCoord.Min(geoCoord);
             _maxCoord = _maxCoord.Max(geoCoord);
-            _isEmpty = false;
         }
 
         public bool IsInside(GeoCoord testCoord)
