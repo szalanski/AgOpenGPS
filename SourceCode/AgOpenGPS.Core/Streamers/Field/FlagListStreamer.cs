@@ -1,6 +1,7 @@
 ﻿using AgOpenGPS.Core.Interfaces;
 using AgOpenGPS.Core.Models;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace AgOpenGPS.Core.Streamers
@@ -14,9 +15,9 @@ namespace AgOpenGPS.Core.Streamers
         {
         }
 
-        public FlagList TryRead(string fieldPath)
+        public List<Flag> TryRead(string fieldPath)
         {
-            FlagList flagList = null;
+            List<Flag> flagList = null;
             string fullPath = FullPath(fieldPath);
             if (!File.Exists(fullPath))
             {
@@ -38,7 +39,7 @@ namespace AgOpenGPS.Core.Streamers
             return flagList;
         }
 
-        public void TryWrite(FlagList flags, string fieldPath)
+        public void TryWrite(List<Flag> flags, string fieldPath)
         {
             try
             {
@@ -63,9 +64,9 @@ namespace AgOpenGPS.Core.Streamers
             return FlagColor.Red;
         }
 
-        private FlagList Read(string fieldPath)
+        private List<Flag> Read(string fieldPath)
         {
-            FlagList flagList = new FlagList();
+            List<Flag> flagList = new List<Flag>();
             using (GeoStreamReader reader = new GeoStreamReader(FullPath(fieldPath)))
             {
                 string line = reader.ReadLine(); // skip header
@@ -86,7 +87,7 @@ namespace AgOpenGPS.Core.Streamers
                     string notes = isComplete ? words[7].Trim() : "";
 
                     Flag flag = new Flag(wgs84, geoCoord, new GeoDir(head), FlagColorFromInt(intColor), number, notes);
-                    flagList.List.Add(flag);
+                    flagList.Add(flag);
                 }
             }
             return flagList;
@@ -104,17 +105,17 @@ namespace AgOpenGPS.Core.Streamers
             return 0;
         }
 
-        private void Write(FlagList flags, string fieldPath)
+        private void Write(List<Flag> flags, string fieldPath)
         {
             CreateDirectory(fieldPath);
             using (GeoStreamWriter writer = new GeoStreamWriter(FullPath(fieldPath)))
             {
                 writer.WriteLine("$Flags");
 
-                int nFlags = flags.List.Count;
+                int nFlags = flags.Count;
                 writer.WriteLine(nFlags);
 
-                foreach (Flag flag in flags.List)
+                foreach (Flag flag in flags)
                 {
                     writer.WriteLine(
                         writer.Wgs84String(flag.Wgs84)

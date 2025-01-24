@@ -23,10 +23,10 @@ namespace AgOpenGPS.Core.Models
             get { return _polygon[index]; }
         }
 
-        public void Add(GeoCoord coordDir, GeoDir geoDir)
+        public void Add(GeoCoord geoCoord, GeoDir heading)
         {
-            _polygon.Add(coordDir);
-            _headings.Add(geoDir);
+            _polygon.Add(geoCoord);
+            _headings.Add(heading);
         }
 
         public GeoDir GetHeading(int i)

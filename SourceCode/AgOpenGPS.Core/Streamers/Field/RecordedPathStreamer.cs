@@ -1,7 +1,6 @@
 ﻿using AgOpenGPS.Core.Interfaces;
 using AgOpenGPS.Core.Models;
 using System;
-using System.Globalization;
 using System.IO;
 
 namespace AgOpenGPS.Core.Streamers
@@ -30,18 +29,14 @@ namespace AgOpenGPS.Core.Streamers
             return recordedPath;
         }
 
-        public void TryWrite(RecordedPath recordedPath, string fieldPath, string fileName)
-        {
-            CreateDirectory(fieldPath);
-            Write(recordedPath, fieldPath, fileName);
-        }
-
         private RecordedPath Read(string fieldPath, string fileName)
         {
-            RecordedPath recordedPath = new RecordedPath();
-            string fn = fileName != null ? fileName : _defaultFileName;
-            string fileAndDirectory = fieldPath + "\\" + fn;
+            string fileAndDirectory = FullPath(fieldPath, fileName);
             if (File.Exists(fileAndDirectory))
+            {
+                return null;
+            }
+            RecordedPath recordedPath = new RecordedPath();
             {
                 using (GeoStreamReader reader = new GeoStreamReader(fileAndDirectory))
                 {
@@ -66,7 +61,7 @@ namespace AgOpenGPS.Core.Streamers
             return recordedPath;
         }
 
-        private void Write(RecordedPath path, string fieldPath, string fileName)
+        public void Write(RecordedPath path, string fieldPath, string fileName)
         {
             CreateDirectory(fieldPath);
             using (GeoStreamWriter writer = new GeoStreamWriter(FullPath(fieldPath, fileName)))

@@ -4,40 +4,25 @@ namespace AgOpenGPS.Core.Models
 {
     public class TramLines
     {
-        private GeoPolygon _outerTrack;
-        private GeoPolygon _innerTrack;
-        private List<GeoPath> _tramList = new List<GeoPath>();
-
         public TramLines()
         {
+            TramList = new List<GeoPath>();
         }
 
-        public GeoPolygon OuterTrack
-        {
-            get { return _outerTrack; }
-            set { _outerTrack = value; }
-        }
+        public GeoPolygon OuterTrack { get; set; }
 
-        public GeoPolygon InnerTrack
-        {
-            get { return _innerTrack; }
-            set { _innerTrack = value; }
-        }
+        public GeoPolygon InnerTrack { get; set; }
 
-        public List<GeoPath> TramList
-        {
-            get { return _tramList; }
-            set { _tramList = value; }
-        }
+        public List<GeoPath> TramList { get; set; }
 
         public void Clear()
         {
-            _outerTrack = null;
-            _innerTrack = null;
-            _tramList.Clear();
+            OuterTrack = null;
+            InnerTrack = null;
+            TramList.Clear();
         }
 
-        public bool IsEmpty => 0 == TramList.Count && null == _outerTrack;
+        public bool IsEmpty => 0 == TramList.Count && null == OuterTrack;
 
     }
 

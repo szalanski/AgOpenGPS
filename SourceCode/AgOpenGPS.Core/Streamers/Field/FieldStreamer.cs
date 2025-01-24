@@ -13,7 +13,6 @@ namespace AgOpenGPS.Core.Streamers
         private readonly TramLinesStreamer _tramLinesStreamer;
 
         private IFieldStreamerPresenter _presenter;
-        private string _currentFieldPath;
 
         public FieldStreamer(Field field, ILogger logger)
         {
@@ -32,10 +31,7 @@ namespace AgOpenGPS.Core.Streamers
             _tramLinesStreamer.SetPresenter(presenter);
         }
 
-        public string CurrentFieldPath
-        {
-            set { _currentFieldPath = value; }
-        }
+        public string CurrentFieldPath { get; set; }
 
         public Boundary ReadBoundary(string fieldPath)
         {
@@ -44,47 +40,47 @@ namespace AgOpenGPS.Core.Streamers
 
         public void ReadBoundary()
         {
-            _field.Boundary = _boundaryStreamer.Read(_currentFieldPath);
+            _field.Boundary = _boundaryStreamer.Read(CurrentFieldPath);
         }
 
         public void WriteBoundary()
         {
-            _boundaryStreamer.Write(_field.Boundary, _currentFieldPath);
+            _boundaryStreamer.Write(_field.Boundary, CurrentFieldPath);
         }
 
         public void ReadFlagList()
         {
-            _field.Flags = _flagsStreamer.TryRead(_currentFieldPath);
+            _field.Flags = _flagsStreamer.TryRead(CurrentFieldPath);
         }
 
         public void WriteFlagList()
         {
-            _flagsStreamer.TryWrite(_field.Flags, _currentFieldPath);
+            _flagsStreamer.TryWrite(_field.Flags, CurrentFieldPath);
         }
 
         public void ReadRecordedPath(string fileName = null)
         {
-            _field.RecordedPath = _recordedPathStreamer.TryRead(_currentFieldPath, fileName);
+            _field.RecordedPath = _recordedPathStreamer.TryRead(CurrentFieldPath, fileName);
         }
 
         public void WriteRecordedPath(string fileName = null)
         {
-            _recordedPathStreamer.TryWrite(_field.RecordedPath, _currentFieldPath, fileName);
+            _recordedPathStreamer.Write(_field.RecordedPath, CurrentFieldPath, fileName);
         }
 
         public void CreateRecordedPathFile()
         {
-            _recordedPathStreamer.CreateFile(_currentFieldPath);
+            _recordedPathStreamer.CreateFile(CurrentFieldPath);
         }
 
         public void ReadTramLines()
         {
-            _field.TramLines = _tramLinesStreamer.TryRead(_currentFieldPath);
+            _field.TramLines = _tramLinesStreamer.TryRead(CurrentFieldPath);
         }
 
         public void WriteTramLines()
         {
-            _tramLinesStreamer.Write(_field.TramLines, _currentFieldPath);
+            _tramLinesStreamer.Write(_field.TramLines, CurrentFieldPath);
         }
     }
 }

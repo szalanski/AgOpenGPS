@@ -60,8 +60,7 @@ namespace AgOpenGPS.Core.Streamers
             if (reader.EndOfStream) return null;
 
             BoundaryPolygon polygon = new BoundaryPolygon();
-            bool peekedBool = false;
-            if (reader.PeekReadBool(ref peekedBool))
+            if (reader.PeekReadBool(out bool peekedBool))
             {
                 polygon.IsDriveThru = peekedBool;
             }
@@ -96,9 +95,7 @@ namespace AgOpenGPS.Core.Streamers
         public void CreateFile(string fieldPath)
         {
             CreateDirectory(fieldPath);
-            using (GeoStreamWriter writer = new GeoStreamWriter(FullPath(fieldPath)))
-            {
-            }
+            File.Create(FullPath(fieldPath));
         }
     }
 }

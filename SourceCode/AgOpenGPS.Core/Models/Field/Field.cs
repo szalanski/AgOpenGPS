@@ -1,4 +1,5 @@
 ﻿using AgOpenGPS.Core.Models;
+using System.Collections.Generic;
 
 namespace AgOpenGPS.Core.Models
 {
@@ -9,7 +10,7 @@ namespace AgOpenGPS.Core.Models
         }
 
         public Boundary Boundary { get; set; }
-        public FlagList Flags { get; set; }
+        public List<Flag> Flags { get; set; }
         public RecordedPath RecordedPath { get; set; }
         public TramLines TramLines { get; set; }
 

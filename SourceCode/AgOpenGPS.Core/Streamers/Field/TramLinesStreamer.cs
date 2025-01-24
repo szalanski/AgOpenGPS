@@ -37,8 +37,7 @@ namespace AgOpenGPS.Core.Streamers
                 using (GeoStreamReader reader = new GeoStreamReader(fullPath))
                 {
                     reader.ReadLine(); // skip header: $Tram
-
-                    if (-1 != reader.Peek())
+                    if (reader.Peek() == -1)
                     {
                         tramLines.OuterTrack = reader.ReadGeoPolygon();
                         tramLines.InnerTrack = reader.ReadGeoPolygon();

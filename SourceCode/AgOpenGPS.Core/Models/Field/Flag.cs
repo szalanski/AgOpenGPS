@@ -6,7 +6,7 @@
     {
         public Flag(Wgs84 wgs84, GeoCoord geoCoord, GeoDir heading, FlagColor flagColor, int uniqueNumber, string notes)
         {
-            Wgs84 = new Wgs84(wgs84.Latitude, wgs84.Longitude);
+            Wgs84 = wgs84;
             GeoCoordDir = new GeoCoordDir(geoCoord, heading);
             FlagColor = flagColor;
             UniqueNumber = uniqueNumber;
@@ -28,14 +28,5 @@
 
         public string Notes { get; set;}
 
-        public string ColorAsXbgrHexString()
-        {
-            if (FlagColor.Green == FlagColor)
-                return "ff44ff00";
-            if (FlagColor.Yellow == FlagColor)
-                return "ff44ffff";
-            // Assume Red
-            return "ff4400ff";
-        }
     }
 }

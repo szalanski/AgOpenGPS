@@ -97,8 +97,9 @@ namespace AgOpenGPS.Core.Streamers
             }
         }
 
-        public bool PeekReadBool(ref bool boolValue)
+        public bool PeekReadBool(out bool boolValue)
         {
+            boolValue = false;
             bool success = false;
             int asciiCode = Peek();
             if ('A' <= asciiCode && asciiCode <= 'Z')

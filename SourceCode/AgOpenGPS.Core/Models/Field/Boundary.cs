@@ -5,15 +5,14 @@ namespace AgOpenGPS.Core.Models
 {
     public class Boundary
     {
-        private readonly List<BoundaryPolygon> _innerBoundaries;
 
         public Boundary()
         {
-            _innerBoundaries = new List<BoundaryPolygon>();
+            InnerBoundaries = new List<BoundaryPolygon>();
         }
 
         public BoundaryPolygon OuterBoundary { get; set; }
-        public List<BoundaryPolygon> InnerBoundaries => _innerBoundaries;
+        public List<BoundaryPolygon> InnerBoundaries { get; }
 
         public double Area => OuterBoundary?.Area ?? 0.0;
 
