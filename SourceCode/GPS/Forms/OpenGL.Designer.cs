@@ -529,8 +529,14 @@ namespace AgOpenGPS
                         }
                     }
 
-                    bool isPreRelease = !string.IsNullOrEmpty(GitVersionInformation.PreReleaseTag);
-                    if (isPreRelease) DrawBeta();
+                    if (Program.IsDevelopVersion)
+                    {
+                        DrawVersion("DEVELOP VERSION");
+                    }
+                    else if (Program.IsPreRelease)
+                    {
+                        DrawVersion("Beta Testing v" + Program.SemVer);
+                    }
 
                     if (pn.age > pn.ageAlarm) DrawAge();
 
@@ -2757,10 +2763,10 @@ namespace AgOpenGPS
             font.DrawText(-oglMain.Width / 3, oglMain.Height / 3, "RTK Fix Lost", 2);
         }
 
-        private void DrawBeta()
+        private void DrawVersion(string version)
         {
             GL.Color3(1f, 1f, 1f);
-            font.DrawText(-oglMain.Width / 2.1, oglMain.Height / 1.2, "Beta Testing v" + GitVersionInformation.SemVer, 0.8);
+            font.DrawText(-oglMain.Width / 2.1, oglMain.Height / 1.2, version, 0.8);
         }
 
         private void DrawAge()

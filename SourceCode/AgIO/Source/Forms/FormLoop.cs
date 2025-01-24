@@ -259,7 +259,7 @@ namespace AgIO
             cboxAutoRunGPS_Out.Checked = Properties.Settings.Default.setDisplay_isAutoRunGPS_Out;
             
             this.Text =
-            "AgIO  v" + GitVersionInformation.MajorMinorPatch + " Profile: " + RegistrySettings.profileName;
+            "AgIO  v" + Program.Version + " Profile: " + RegistrySettings.profileName;
 
             if (RegistrySettings.profileName == "")
             {
@@ -278,7 +278,7 @@ namespace AgIO
                         Environment.Exit(0);
                     }
                 }
-                this.Text = "AgIO  v" + GitVersionInformation.MajorMinorPatch + " Profile: "
+                this.Text = "AgIO  v" + Program.Version + " Profile: "
                     + RegistrySettings.profileName;
             }
 
