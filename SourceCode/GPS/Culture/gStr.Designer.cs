@@ -151,6 +151,15 @@ namespace AgOpenGPS.Culture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to AOG Menu.
+        /// </summary>
+        public static string gsAOGMenu {
+            get {
+                return ResourceManager.GetString("gsAOGMenu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Applied.
         /// </summary>
         public static string gsApplied {
@@ -174,6 +183,17 @@ namespace AgOpenGPS.Culture {
         public static string gsAreYouSure {
             get {
                 return ResourceManager.GetString("gsAreYouSure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Touch the buttons on the left side you want to appear in the Menu (The right side). 
+        ///
+        ///The order you push them will be the order they appear on the menu from bottom up..
+        /// </summary>
+        public static string gsArrangeText {
+            get {
+                return ResourceManager.GetString("gsArrangeText", resourceCulture);
             }
         }
         
@@ -327,6 +347,24 @@ namespace AgOpenGPS.Culture {
         public static string gsButFieldIsLoaded {
             get {
                 return ResourceManager.GetString("gsButFieldIsLoaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Button Picker.
+        /// </summary>
+        public static string gsButtonPicker {
+            get {
+                return ResourceManager.GetString("gsButtonPicker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Camera Behavior.
+        /// </summary>
+        public static string gsCameraBehavior {
+            get {
+                return ResourceManager.GetString("gsCameraBehavior", resourceCulture);
             }
         }
         
@@ -592,6 +630,15 @@ namespace AgOpenGPS.Culture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Default.
+        /// </summary>
+        public static string gsDefault {
+            get {
+                return ResourceManager.GetString("gsDefault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete.
         /// </summary>
         public static string gsDelete {
@@ -651,6 +698,15 @@ namespace AgOpenGPS.Culture {
         public static string gsDeleteForSure {
             get {
                 return ResourceManager.GetString("gsDeleteForSure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Direct.
+        /// </summary>
+        public static string gsDirect {
+            get {
+                return ResourceManager.GetString("gsDirect", resourceCulture);
             }
         }
         
@@ -1825,6 +1881,15 @@ namespace AgOpenGPS.Culture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Preview.
+        /// </summary>
+        public static string gsPreview {
+            get {
+                return ResourceManager.GetString("gsPreview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Problem Making Path.
         /// </summary>
         public static string gsProblemMakingPath {
@@ -1929,6 +1994,15 @@ namespace AgOpenGPS.Culture {
         public static string gsRemoveOffset {
             get {
                 return ResourceManager.GetString("gsRemoveOffset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset.
+        /// </summary>
+        public static string gsReset {
+            get {
+                return ResourceManager.GetString("gsReset", resourceCulture);
             }
         }
         
@@ -2064,6 +2138,15 @@ namespace AgOpenGPS.Culture {
         public static string gsSections {
             get {
                 return ResourceManager.GetString("gsSections", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select Buttons.
+        /// </summary>
+        public static string gsSelectButtons {
+            get {
+                return ResourceManager.GetString("gsSelectButtons", resourceCulture);
             }
         }
         

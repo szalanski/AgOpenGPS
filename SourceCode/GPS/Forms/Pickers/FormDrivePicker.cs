@@ -17,7 +17,7 @@ namespace AgOpenGPS
             InitializeComponent();
 
             //translate all the controls
-            this.Text = Culture.gStr.gsDrivePicker;
+            this.Text = Culture.gStr.gsFieldPicker;
             btnOpenExistingLv.Text = Culture.gStr.gsUseSelected;
 
             string[] fileList = _fileList.Split(',');

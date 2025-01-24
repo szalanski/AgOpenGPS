@@ -26,6 +26,7 @@ namespace AgOpenGPS
             InitializeComponent();
 
             inColor = _inColor;
+            //translate all the controls
             this.Text = gStr.gsColorPicker;
             btnNight.BackColor = inColor;
             btnDay.BackColor = inColor;
