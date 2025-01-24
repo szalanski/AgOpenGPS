@@ -32,6 +32,16 @@ jobs:
     - name: Setup dotnet
       uses: actions/setup-dotnet@v4
 
+    - name: Setup GitVersion
+      uses: gittools/actions/gitversion/setup@v3.1.11
+      with:
+        versionSpec: '5.12.x'
+
+    - name: Determine Version
+      uses: gittools/actions/gitversion/execute@v3.1.11
+      with:
+        updateAssemblyInfo: true
+
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v2
 
