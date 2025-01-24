@@ -3,7 +3,7 @@
     // Represents a coordinate in the World Geodetic System 1984
     public struct Wgs84
     {
-        Wgs84(double latitude, double longitude)
+        public Wgs84(double latitude, double longitude)
         {
             Latitude = latitude;
             Longitude = longitude;
