@@ -123,6 +123,9 @@
   <data name="gsABline" xml:space="preserve">
     <value>AB-lijn</value>
   </data>
+  <data name="gsADConverter" xml:space="preserve">
+    <value>ADS-configuratie</value>
+  </data>
   <data name="gsAbout" xml:space="preserve">
     <value>Over...</value>
   </data>
@@ -149,6 +152,12 @@
   </data>
   <data name="gsApplied" xml:space="preserve">
     <value>Bewerkt</value>
+  </data>
+  <data name="gsAquire" xml:space="preserve">
+    <value>Aquisitie</value>
+  </data>
+  <data name="gsAquireFactor" xml:space="preserve">
+    <value>Aquisitie-Factor</value>
   </data>
   <data name="gsAreYouSure" xml:space="preserve">
     <value>Weet u het zeker?</value>
@@ -269,6 +278,9 @@ De volgorde waarin u ze indrukt, is de volgorde waarin ze van onder naar boven i
   <data name="gsCouldntGenerateValidPath" xml:space="preserve">
     <value>Geen juist pad</value>
   </data>
+  <data name="gsCountsPerDegree" xml:space="preserve">
+    <value>Stap-per-graad</value>
+  </data>
   <data name="gsCoverage" xml:space="preserve">
     <value>% Dekking</value>
   </data>
@@ -289,6 +301,9 @@ De volgorde waarin u ze indrukt, is de volgorde waarin ze van onder naar boven i
   </data>
   <data name="gsCurrentSensorValueLabel" xml:space="preserve">
     <value>Huidige Waarde</value>
+  </data>
+  <data name="gsCurrentTurnSensor" xml:space="preserve">
+    <value>Stroom-sensor</value>
   </data>
   <data name="gsCurveLineFileIsCorrupt" xml:space="preserve">
     <value>AB Curve lijn corrupt</value>
@@ -342,7 +357,7 @@ De volgorde waarin u ze indrukt, is de volgorde waarin ze van onder naar boven i
     <value>Activeer Knoppen</value>
   </data>
   <data name="gsDistance" xml:space="preserve">
-    <value>Afstand</value>
+    <value>Afstand:</value>
   </data>
   <data name="gsDistanceToFlag" xml:space="preserve">
     <value>Afstand tot Vlag</value>
@@ -370,6 +385,9 @@ De volgorde waarin u ze indrukt, is de volgorde waarin ze van onder naar boven i
   </data>
   <data name="gsEditABLine" xml:space="preserve">
     <value>Aanpassen AB-lijn</value>
+  </data>
+  <data name="gsEditColor" xml:space="preserve">
+    <value>Maak Kleur</value>
   </data>
   <data name="gsEditFieldName" xml:space="preserve">
     <value>Bewerk perceel naam</value>
@@ -406,6 +424,9 @@ De volgorde waarin u ze indrukt, is de volgorde waarin ze van onder naar boven i
   </data>
   <data name="gsExtraGuideLines" xml:space="preserve">
     <value>Extra geleidingslijnen</value>
+  </data>
+  <data name="gsFast" xml:space="preserve">
+    <value>Snel</value>
   </data>
   <data name="gsField" xml:space="preserve">
     <value>Perceel</value>
@@ -470,6 +491,9 @@ De volgorde waarin u ze indrukt, is de volgorde waarin ze van onder naar boven i
   <data name="gsHardwareMessages" xml:space="preserve">
     <value>Hardware berichtgeving</value>
   </data>
+  <data name="gsHeading" xml:space="preserve">
+    <value>Richting</value>
+  </data>
   <data name="gsHeadingChart" xml:space="preserve">
     <value>Richting grafiek</value>
   </data>
@@ -494,6 +518,9 @@ De volgorde waarin u ze indrukt, is de volgorde waarin ze van onder naar boven i
   <data name="gsHydraulicLiftLookAhead" xml:space="preserve">
     <value>Goal-punt Tijd</value>
   </data>
+  <data name="gsIMUAxis" xml:space="preserve">
+    <value>IMU Axis</value>
+  </data>
   <data name="gsIfWrongDirectionTapVehicle" xml:space="preserve">
     <value>Verkeerde richting? Druk op Voertuig</value>
   </data>
@@ -509,11 +536,26 @@ De volgorde waarin u ze indrukt, is de volgorde waarin ze van onder naar boven i
   <data name="gsInner" xml:space="preserve">
     <value>Binnenste</value>
   </data>
+  <data name="gsIntegral" xml:space="preserve">
+    <value>Integral</value>
+  </data>
+  <data name="gsIntegralInfo" xml:space="preserve">
+    <value>Het zal de stuurhoek langzaam vergroten om te afwijking op te lossen.</value>
+  </data>
   <data name="gsInvertHydraulicRelays" xml:space="preserve">
     <value>Inverteer Relais </value>
   </data>
+  <data name="gsInvertMotor" xml:space="preserve">
+    <value>Motor Directie</value>
+  </data>
+  <data name="gsInvertRelays" xml:space="preserve">
+    <value>Relays</value>
+  </data>
   <data name="gsInvertRoll" xml:space="preserve">
     <value>Inverteer Gyroscoop</value>
+  </data>
+  <data name="gsInvertWas" xml:space="preserve">
+    <value>Stuurh.sensor</value>
   </data>
   <data name="gsKMH" xml:space="preserve">
     <value>km/u</value>
@@ -532,6 +574,9 @@ De volgorde waarin u ze indrukt, is de volgorde waarin ze van onder naar boven i
   </data>
   <data name="gsLineSmooth" xml:space="preserve">
     <value>Lijn afvlakking</value>
+  </data>
+  <data name="gsLineWidth" xml:space="preserve">
+    <value>Lijn-dikte</value>
   </data>
   <data name="gsLookAhead" xml:space="preserve">
     <value>Goal-punt:</value>
@@ -557,11 +602,29 @@ De volgorde waarin u ze indrukt, is de volgorde waarin ze van onder naar boven i
   <data name="gsManual" xml:space="preserve">
     <value>Manueel</value>
   </data>
+  <data name="gsManualTurns" xml:space="preserve">
+    <value>Manuele Bocht</value>
+  </data>
   <data name="gsMapForBackground" xml:space="preserve">
     <value>Gebruik een Bing Map als Achtergrond</value>
   </data>
+  <data name="gsMaxLimit" xml:space="preserve">
+    <value>Maximale versterking</value>
+  </data>
+  <data name="gsMaxSpeed" xml:space="preserve">
+    <value>Max. Snelheid</value>
+  </data>
+  <data name="gsMaxSteerAngle" xml:space="preserve">
+    <value>Max. Stuurhoek</value>
+  </data>
   <data name="gsMeters" xml:space="preserve">
     <value>Meter</value>
+  </data>
+  <data name="gsMinSpeed" xml:space="preserve">
+    <value>Min. Snelheid</value>
+  </data>
+  <data name="gsMinToMove" xml:space="preserve">
+    <value>Minimale versterking</value>
   </data>
   <data name="gsMissingABLinesFile" xml:space="preserve">
     <value>AB Lijn bestand ontbreekt</value>
@@ -581,6 +644,12 @@ De volgorde waarin u ze indrukt, is de volgorde waarin ze van onder naar boven i
   <data name="gsMore" xml:space="preserve">
     <value>Meer</value>
   </data>
+  <data name="gsMotorDriver" xml:space="preserve">
+    <value>Motor-aansturing</value>
+  </data>
+  <data name="gsMultiColorSections" xml:space="preserve">
+    <value>Meerdere Kleuren</value>
+  </data>
   <data name="gsN_East" xml:space="preserve">
     <value>NoordOost</value>
   </data>
@@ -589,6 +658,9 @@ De volgorde waarin u ze indrukt, is de volgorde waarin ze van onder naar boven i
   </data>
   <data name="gsNew" xml:space="preserve">
     <value>Nieuw</value>
+  </data>
+  <data name="gsNextGuidanceLine" xml:space="preserve">
+    <value>Volgende lijn</value>
   </data>
   <data name="gsNight" xml:space="preserve">
     <value>Nacht</value>
@@ -623,6 +695,9 @@ De volgorde waarin u ze indrukt, is de volgorde waarin ze van onder naar boven i
   <data name="gsNudge" xml:space="preserve">
     <value>Lijn-Nudge:</value>
   </data>
+  <data name="gsNudgeDistance" xml:space="preserve">
+    <value>Verplaats-afstand</value>
+  </data>
   <data name="gsOff" xml:space="preserve">
     <value>Uit</value>
   </data>
@@ -634,6 +709,12 @@ De volgorde waarin u ze indrukt, is de volgorde waarin ze van onder naar boven i
   </data>
   <data name="gsOn" xml:space="preserve">
     <value>Aan</value>
+  </data>
+  <data name="gsOnDelay" xml:space="preserve">
+    <value>Vertraging</value>
+  </data>
+  <data name="gsOnOff" xml:space="preserve">
+    <value>Aan/Uit</value>
   </data>
   <data name="gsOpacity" xml:space="preserve">
     <value>Transparantie:</value>
@@ -698,6 +779,9 @@ De volgorde waarin u ze indrukt, is de volgorde waarin ze van onder naar boven i
   <data name="gsPressureSensorValueLabel" xml:space="preserve">
     <value>Bar</value>
   </data>
+  <data name="gsPressureTurnSensor" xml:space="preserve">
+    <value>Druk-sensor</value>
+  </data>
   <data name="gsPreview" xml:space="preserve">
     <value>Voorbeeld</value>
   </data>
@@ -706,6 +790,9 @@ De volgorde waarin u ze indrukt, is de volgorde waarin ze van onder naar boven i
   </data>
   <data name="gsProgramWillExitPleaseRestart" xml:space="preserve">
     <value>Programma word afgesloten, start opnieuw</value>
+  </data>
+  <data name="gsProportionalGain" xml:space="preserve">
+    <value>Versterking</value>
   </data>
   <data name="gsRaiseTime" xml:space="preserve">
     <value>Hef-tijd</value>
@@ -779,6 +866,9 @@ De volgorde waarin u ze indrukt, is de volgorde waarin ze van onder naar boven i
   <data name="gsScreenButtons" xml:space="preserve">
     <value>Scherm Knoppen</value>
   </data>
+  <data name="gsSectionColorsSet" xml:space="preserve">
+    <value>Stel sectie kleuren in</value>
+  </data>
   <data name="gsSectionLines" xml:space="preserve">
     <value>Sectie scheidingslijnen</value>
   </data>
@@ -788,8 +878,11 @@ De volgorde waarin u ze indrukt, is de volgorde waarin ze van onder naar boven i
   <data name="gsSelectButtons" xml:space="preserve">
     <value>Kies Knoppen</value>
   </data>
+  <data name="gsSelectPreset" xml:space="preserve">
+    <value>Kies kleuren Preset</value>
+  </data>
   <data name="gsSendAndSave" xml:space="preserve">
-    <value>Vestuur + Sla op</value>
+    <value>Verstuur + Opslaan</value>
   </data>
   <data name="gsSentToMachineModule" xml:space="preserve">
     <value>Verstuur naar machine-besturing</value>
@@ -806,11 +899,17 @@ De volgorde waarin u ze indrukt, is de volgorde waarin ze van onder naar boven i
   <data name="gsShutdownIn" xml:space="preserve">
     <value>Uitzetten over:</value>
   </data>
+  <data name="gsSideHillComp" xml:space="preserve">
+    <value>Helling-Compensatie</value>
+  </data>
   <data name="gsSimulatorOn" xml:space="preserve">
     <value>Simulator Aan</value>
   </data>
   <data name="gsSingleAntennaSetting" xml:space="preserve">
     <value>1 Antenne</value>
+  </data>
+  <data name="gsSlow" xml:space="preserve">
+    <value>Traag</value>
   </data>
   <data name="gsSlowDownBelow" xml:space="preserve">
     <value>Vertraag hieronder</value>
@@ -833,6 +932,9 @@ De volgorde waarin u ze indrukt, is de volgorde waarin ze van onder naar boven i
   <data name="gsSpacing" xml:space="preserve">
     <value>Afstand (cm)</value>
   </data>
+  <data name="gsSpeedFactor" xml:space="preserve">
+    <value>Snelheid-Factor</value>
+  </data>
   <data name="gsSpeedo" xml:space="preserve">
     <value>Kilometerteller</value>
   </data>
@@ -845,8 +947,20 @@ De volgorde waarin u ze indrukt, is de volgorde waarin ze van onder naar boven i
   <data name="gsStartNewField" xml:space="preserve">
     <value>Start nieuw perceel</value>
   </data>
+  <data name="gsSteerAngle" xml:space="preserve">
+    <value>Stuurhoek</value>
+  </data>
   <data name="gsSteerChart" xml:space="preserve">
     <value>Stuur grafiek</value>
+  </data>
+  <data name="gsSteerEnable" xml:space="preserve">
+    <value>Externe activatie</value>
+  </data>
+  <data name="gsSteerInReverse" xml:space="preserve">
+    <value>Automatisch sturen Achteruit</value>
+  </data>
+  <data name="gsSteerResponse" xml:space="preserve">
+    <value>Stuur-reactie</value>
   </data>
   <data name="gsSteerSwitch" xml:space="preserve">
     <value>Stuur Schakelaar</value>
@@ -920,6 +1034,9 @@ GEBRUIK OP EIGEN RISICO.</value>
   <data name="gsTurnOnContourOrMakeABLine" xml:space="preserve">
     <value>Schakel Contour of AB lijn in</value>
   </data>
+  <data name="gsTurnSensor" xml:space="preserve">
+    <value>Draai-sensor</value>
+  </data>
   <data name="gsUnit" xml:space="preserve">
     <value>Maatvoering:</value>
   </data>
@@ -932,6 +1049,9 @@ GEBRUIK OP EIGEN RISICO.</value>
   <data name="gsUturn" xml:space="preserve">
     <value>U-bocht</value>
   </data>
+  <data name="gsUturnCompensation" xml:space="preserve">
+    <value>U-turn Compensatie</value>
+  </data>
   <data name="gsUturnExtension" xml:space="preserve">
     <value>Extensie Lengte is minimaal 2-3x Radius</value>
   </data>
@@ -940,6 +1060,9 @@ GEBRUIK OP EIGEN RISICO.</value>
   </data>
   <data name="gsVehiclegroupbox" xml:space="preserve">
     <value>Voertuig Type:</value>
+  </data>
+  <data name="gsWasZero" xml:space="preserve">
+    <value>0-stellen Stuurhoeksensor</value>
   </data>
   <data name="gsWheelbase" xml:space="preserve">
     <value>Wielbasis:</value>
