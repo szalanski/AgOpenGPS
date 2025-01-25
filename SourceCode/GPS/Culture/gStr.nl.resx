@@ -120,6 +120,9 @@
   <data name="gsABCurve" xml:space="preserve">
     <value>AB-Curve</value>
   </data>
+  <data name="gsABDraw" xml:space="preserve">
+    <value>Maak AB - Klik 2 punten om te beginnen</value>
+  </data>
   <data name="gsABline" xml:space="preserve">
     <value>AB-lijn</value>
   </data>
@@ -407,6 +410,9 @@ De volgorde waarin u ze indrukt, is de volgorde waarin ze van onder naar boven i
   <data name="gsEnterFieldName" xml:space="preserve">
     <value>Voer perceelnaam in</value>
   </data>
+  <data name="gsEnterName" xml:space="preserve">
+    <value>Voer Naam In</value>
+  </data>
   <data name="gsEnterSimCoords" xml:space="preserve">
     <value>Voer sim-coörd. in</value>
   </data>
@@ -566,6 +572,9 @@ De volgorde waarin u ze indrukt, is de volgorde waarin ze van onder naar boven i
   <data name="gsLateral" xml:space="preserve">
     <value>Laterale lijn-swap</value>
   </data>
+  <data name="gsLatitude" xml:space="preserve">
+    <value>Lengtegraad</value>
+  </data>
   <data name="gsLeft" xml:space="preserve">
     <value>Links</value>
   </data>
@@ -577,6 +586,9 @@ De volgorde waarin u ze indrukt, is de volgorde waarin ze van onder naar boven i
   </data>
   <data name="gsLineWidth" xml:space="preserve">
     <value>Lijn-dikte</value>
+  </data>
+  <data name="gsLongtitude" xml:space="preserve">
+    <value>Breedtegraad</value>
   </data>
   <data name="gsLookAhead" xml:space="preserve">
     <value>Goal-punt:</value>
@@ -748,6 +760,9 @@ De volgorde waarin u ze indrukt, is de volgorde waarin ze van onder naar boven i
   </data>
   <data name="gsPause" xml:space="preserve">
     <value>Pauze</value>
+  </data>
+  <data name="gsPivot" xml:space="preserve">
+    <value>Cirkel</value>
   </data>
   <data name="gsPivotDistance" xml:space="preserve">
     <value>Afstand antenne tot achteras</value>
@@ -1015,6 +1030,9 @@ GEBRUIK OP EIGEN RISICO.</value>
   </data>
   <data name="gsTrack" xml:space="preserve">
     <value>Spoorbreedte</value>
+  </data>
+  <data name="gsTracks" xml:space="preserve">
+    <value>Maak Geleidingslijnen</value>
   </data>
   <data name="gsTramLines" xml:space="preserve">
     <value>Spuitpaden</value>
