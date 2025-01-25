@@ -32,7 +32,7 @@ namespace AgOpenGPS.Core.Streamers
         private RecordedPath Read(string fieldPath, string fileName)
         {
             string fileAndDirectory = FullPath(fieldPath, fileName);
-            if (File.Exists(fileAndDirectory))
+            if (!File.Exists(fileAndDirectory))
             {
                 return null;
             }

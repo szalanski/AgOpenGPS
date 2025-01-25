@@ -99,14 +99,14 @@ namespace AgOpenGPS.Core.Streamers
 
         public bool PeekReadBool(out bool boolValue)
         {
-            boolValue = false;
-            bool success = false;
             int asciiCode = Peek();
             if ('A' <= asciiCode && asciiCode <= 'Z')
             {
                 boolValue = bool.Parse(ReadLine());
+                return true;
             }
-            return success;
+            boolValue = false;
+            return false;
         }
     }
 }

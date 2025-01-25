@@ -30,26 +30,27 @@ namespace AgOpenGPS.Core.Streamers
 
         public TramLines Read(string fieldPath)
         {
-            TramLines tramLines = new TramLines();
             string fullPath = FullPath(fieldPath);
-            if (File.Exists(fullPath))
+            if (!File.Exists(fullPath))
             {
-                using (GeoStreamReader reader = new GeoStreamReader(fullPath))
+                return null;
+            }
+            TramLines tramLines = new TramLines();
+            using (GeoStreamReader reader = new GeoStreamReader(fullPath))
+            {
+                reader.ReadLine(); // skip header: $Tram
+                if (reader.Peek() != -1)
                 {
-                    reader.ReadLine(); // skip header: $Tram
-                    if (reader.Peek() == -1)
-                    {
-                        tramLines.OuterTrack = reader.ReadGeoPolygon();
-                        tramLines.InnerTrack = reader.ReadGeoPolygon();
+                    tramLines.OuterTrack = reader.ReadGeoPolygon();
+                    tramLines.InnerTrack = reader.ReadGeoPolygon();
 
-                        if (-1 != reader.Peek())
+                    if (-1 != reader.Peek())
+                    {
+                        int nTramLines = reader.ReadInt();
+                        for (int i = 0; i < nTramLines; i++)
                         {
-                            int nTramLines = reader.ReadInt();
-                            for (int i = 0; i < nTramLines; i++)
-                            {
-                                GeoPath tramLne = reader.ReadGeoPath();
-                                tramLines.TramList.Add(tramLne);
-                            }
+                            GeoPath tramLne = reader.ReadGeoPath();
+                            tramLines.TramList.Add(tramLne);
                         }
                     }
                 }
