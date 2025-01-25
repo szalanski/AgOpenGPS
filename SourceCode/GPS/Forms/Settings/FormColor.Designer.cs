@@ -41,12 +41,12 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.lblSmoothCam = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
+            this.labelSmooth = new System.Windows.Forms.Label();
             this.hsbarSmooth = new System.Windows.Forms.HScrollBar();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
+            this.labelDirect = new System.Windows.Forms.Label();
+            this.labelCameraBehavior = new System.Windows.Forms.Label();
             this.btnReset = new System.Windows.Forms.Button();
-            this.label6 = new System.Windows.Forms.Label();
+            this.labelReset = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // timer1
@@ -223,14 +223,14 @@
             this.lblSmoothCam.TabIndex = 465;
             this.lblSmoothCam.Text = "65%";
             // 
-            // label5
+            // labelSmooth
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(368, 89);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(51, 16);
-            this.label5.TabIndex = 464;
-            this.label5.Text = "Smooth";
+            this.labelSmooth.AutoSize = true;
+            this.labelSmooth.Location = new System.Drawing.Point(368, 89);
+            this.labelSmooth.Name = "labelSmooth";
+            this.labelSmooth.Size = new System.Drawing.Size(51, 16);
+            this.labelSmooth.TabIndex = 464;
+            this.labelSmooth.Text = "Smooth";
             // 
             // hsbarSmooth
             // 
@@ -243,25 +243,25 @@
             this.hsbarSmooth.Value = 50;
             this.hsbarSmooth.ValueChanged += new System.EventHandler(this.hsbarSmooth_ValueChanged);
             // 
-            // label4
+            // labelDirect
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(585, 89);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(40, 16);
-            this.label4.TabIndex = 466;
-            this.label4.Text = "Direct";
+            this.labelDirect.AutoSize = true;
+            this.labelDirect.Location = new System.Drawing.Point(585, 89);
+            this.labelDirect.Name = "labelDirect";
+            this.labelDirect.Size = new System.Drawing.Size(40, 16);
+            this.labelDirect.TabIndex = 466;
+            this.labelDirect.Text = "Direct";
             // 
-            // label3
+            // labelCameraBehavior
             // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Tahoma", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.ForeColor = System.Drawing.Color.Black;
-            this.label3.Location = new System.Drawing.Point(400, 38);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(204, 25);
-            this.label3.TabIndex = 467;
-            this.label3.Text = "Camera Behaviour";
+            this.labelCameraBehavior.AutoSize = true;
+            this.labelCameraBehavior.Font = new System.Drawing.Font("Tahoma", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelCameraBehavior.ForeColor = System.Drawing.Color.Black;
+            this.labelCameraBehavior.Location = new System.Drawing.Point(400, 38);
+            this.labelCameraBehavior.Name = "labelCameraBehavior";
+            this.labelCameraBehavior.Size = new System.Drawing.Size(204, 25);
+            this.labelCameraBehavior.TabIndex = 467;
+            this.labelCameraBehavior.Text = "Camera Behaviour";
             // 
             // btnReset
             // 
@@ -279,14 +279,14 @@
             this.btnReset.UseVisualStyleBackColor = true;
             this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
             // 
-            // label6
+            // labelReset
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(411, 340);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(98, 16);
-            this.label6.TabIndex = 469;
-            this.label6.Text = "Reset to Default";
+            this.labelReset.AutoSize = true;
+            this.labelReset.Location = new System.Drawing.Point(411, 340);
+            this.labelReset.Name = "labelReset";
+            this.labelReset.Size = new System.Drawing.Size(98, 16);
+            this.labelReset.TabIndex = 469;
+            this.labelReset.Text = "Reset to Default";
             // 
             // FormColor
             // 
@@ -298,12 +298,12 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.ClientSize = new System.Drawing.Size(665, 396);
             this.ControlBox = false;
-            this.Controls.Add(this.label6);
+            this.Controls.Add(this.labelReset);
             this.Controls.Add(this.btnReset);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label4);
+            this.Controls.Add(this.labelCameraBehavior);
+            this.Controls.Add(this.labelDirect);
             this.Controls.Add(this.lblSmoothCam);
-            this.Controls.Add(this.label5);
+            this.Controls.Add(this.labelSmooth);
             this.Controls.Add(this.hsbarSmooth);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -343,11 +343,11 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label lblSmoothCam;
-        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label labelSmooth;
         private System.Windows.Forms.HScrollBar hsbarSmooth;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label labelDirect;
+        private System.Windows.Forms.Label labelCameraBehavior;
         private System.Windows.Forms.Button btnReset;
-        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label labelReset;
     }
 }
