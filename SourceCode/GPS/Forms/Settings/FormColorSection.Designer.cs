@@ -66,8 +66,8 @@
             this.cb10 = new System.Windows.Forms.CheckBox();
             this.cb11 = new System.Windows.Forms.CheckBox();
             this.cb09 = new System.Windows.Forms.CheckBox();
-            this.labelGroupBoxSelectPreset = new System.Windows.Forms.GroupBox();
-            this.labelGroupBoxSelectPreset.SuspendLayout();
+            this.groupBoxSelectPreset = new System.Windows.Forms.GroupBox();
+            this.groupBoxSelectPreset.SuspendLayout();
             this.SuspendLayout();
             // 
             // timer1
@@ -654,32 +654,32 @@
             this.cb09.UseVisualStyleBackColor = true;
             this.cb09.Click += new System.EventHandler(this.cb01_Click);
             // 
-            // labelGroupBoxSelectPreset
+            // groupBoxSelectPreset
             // 
-            this.labelGroupBoxSelectPreset.Controls.Add(this.btnC02);
-            this.labelGroupBoxSelectPreset.Controls.Add(this.btnC10);
-            this.labelGroupBoxSelectPreset.Controls.Add(this.btnC01);
-            this.labelGroupBoxSelectPreset.Controls.Add(this.btnC03);
-            this.labelGroupBoxSelectPreset.Controls.Add(this.btnC09);
-            this.labelGroupBoxSelectPreset.Controls.Add(this.btnC11);
-            this.labelGroupBoxSelectPreset.Controls.Add(this.btnC16);
-            this.labelGroupBoxSelectPreset.Controls.Add(this.btnC04);
-            this.labelGroupBoxSelectPreset.Controls.Add(this.btnC08);
-            this.labelGroupBoxSelectPreset.Controls.Add(this.btnC12);
-            this.labelGroupBoxSelectPreset.Controls.Add(this.btnC15);
-            this.labelGroupBoxSelectPreset.Controls.Add(this.btnC05);
-            this.labelGroupBoxSelectPreset.Controls.Add(this.btnC07);
-            this.labelGroupBoxSelectPreset.Controls.Add(this.btnC13);
-            this.labelGroupBoxSelectPreset.Controls.Add(this.btnC14);
-            this.labelGroupBoxSelectPreset.Controls.Add(this.btnC06);
-            this.labelGroupBoxSelectPreset.Controls.Add(this.chkUse);
-            this.labelGroupBoxSelectPreset.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelGroupBoxSelectPreset.Location = new System.Drawing.Point(12, 254);
-            this.labelGroupBoxSelectPreset.Name = "labelGroupBoxSelectPreset";
-            this.labelGroupBoxSelectPreset.Size = new System.Drawing.Size(859, 220);
-            this.labelGroupBoxSelectPreset.TabIndex = 468;
-            this.labelGroupBoxSelectPreset.TabStop = false;
-            this.labelGroupBoxSelectPreset.Text = "Select Preset Color";
+            this.groupBoxSelectPreset.Controls.Add(this.btnC02);
+            this.groupBoxSelectPreset.Controls.Add(this.btnC10);
+            this.groupBoxSelectPreset.Controls.Add(this.btnC01);
+            this.groupBoxSelectPreset.Controls.Add(this.btnC03);
+            this.groupBoxSelectPreset.Controls.Add(this.btnC09);
+            this.groupBoxSelectPreset.Controls.Add(this.btnC11);
+            this.groupBoxSelectPreset.Controls.Add(this.btnC16);
+            this.groupBoxSelectPreset.Controls.Add(this.btnC04);
+            this.groupBoxSelectPreset.Controls.Add(this.btnC08);
+            this.groupBoxSelectPreset.Controls.Add(this.btnC12);
+            this.groupBoxSelectPreset.Controls.Add(this.btnC15);
+            this.groupBoxSelectPreset.Controls.Add(this.btnC05);
+            this.groupBoxSelectPreset.Controls.Add(this.btnC07);
+            this.groupBoxSelectPreset.Controls.Add(this.btnC13);
+            this.groupBoxSelectPreset.Controls.Add(this.btnC14);
+            this.groupBoxSelectPreset.Controls.Add(this.btnC06);
+            this.groupBoxSelectPreset.Controls.Add(this.chkUse);
+            this.groupBoxSelectPreset.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBoxSelectPreset.Location = new System.Drawing.Point(12, 254);
+            this.groupBoxSelectPreset.Name = "groupBoxSelectPreset";
+            this.groupBoxSelectPreset.Size = new System.Drawing.Size(859, 220);
+            this.groupBoxSelectPreset.TabIndex = 468;
+            this.groupBoxSelectPreset.TabStop = false;
+            this.groupBoxSelectPreset.Text = "Select Preset Color";
             // 
             // FormColorSection
             // 
@@ -706,7 +706,7 @@
             this.Controls.Add(this.cb02);
             this.Controls.Add(this.cb03);
             this.Controls.Add(this.cb01);
-            this.Controls.Add(this.labelGroupBoxSelectPreset);
+            this.Controls.Add(this.groupBoxSelectPreset);
             this.Controls.Add(this.labelSectionColor);
             this.Controls.Add(this.cboxIsMulti);
             this.Controls.Add(this.bntOK);
@@ -722,7 +722,7 @@
             this.Text = "Section Color Set";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormSectionColor_FormClosing);
             this.Load += new System.EventHandler(this.FormDisplaySettings_Load);
-            this.labelGroupBoxSelectPreset.ResumeLayout(false);
+            this.groupBoxSelectPreset.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -766,6 +766,6 @@
         private System.Windows.Forms.CheckBox cb10;
         private System.Windows.Forms.CheckBox cb11;
         private System.Windows.Forms.CheckBox cb09;
-        private System.Windows.Forms.GroupBox labelGroupBoxSelectPreset;
+        private System.Windows.Forms.GroupBox groupBoxSelectPreset;
     }
 }

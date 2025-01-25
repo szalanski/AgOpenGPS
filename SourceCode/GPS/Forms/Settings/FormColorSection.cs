@@ -28,7 +28,7 @@ namespace AgOpenGPS
 
             //Language keys
             this.Text = gStr.gsSectionColorsSet;
-            labelGroupBoxSelectPreset.Text = gStr.gsSelectPreset;
+            groupBoxSelectPreset.Text = gStr.gsSelectPreset;
             labelSectionColor.Text = gStr.gsSections + " " + gStr.gsColors;
             chkUse.Text = gStr.gsEditColor;
             cboxIsMulti.Text = gStr.gsMultiColorSections;
@@ -174,7 +174,7 @@ namespace AgOpenGPS
         {
             if (chkUse.Checked)
             {
-                labelGroupBoxSelectPreset.Text = "Select Square Below And Pick New Color";
+                groupBoxSelectPreset.Text = "Select Square Below And Pick New Color";
                 chkUse.Image = Properties.Resources.ColorUnlocked;
                 isChange = true;
                 isUse = false;
@@ -183,7 +183,7 @@ namespace AgOpenGPS
             {
                 isChange = false;
                 isUse = false;
-                labelGroupBoxSelectPreset.Text = "Select Preset Color";
+                groupBoxSelectPreset.Text = "Select Preset Color";
                 chkUse.Image = Properties.Resources.ColorLocked;
             }
         }

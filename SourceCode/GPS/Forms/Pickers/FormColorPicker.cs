@@ -32,7 +32,7 @@ namespace AgOpenGPS
             btnDay.BackColor = inColor;
             btnNight.Text = gStr.gsNight;
             btnDay.Text = gStr.gsDay;
-            labelGroupBoxSelectPresetColor.Text = gStr.gsPresetColor;
+            groupBoxSelectPresetColor.Text = gStr.gsPresetColor;
 
             useThisColor = inColor;
 
@@ -152,14 +152,14 @@ namespace AgOpenGPS
         {
             if (chkUse.Checked)
             {
-                labelGroupBoxSelectPresetColor.Text = "Pick New Color and Select Square Below to Save Preset";
+                groupBoxSelectPresetColor.Text = "Pick New Color and Select Square Below to Save Preset";
                 chkUse.Image = Properties.Resources.ColorUnlocked;
                 isUse = false;
             }
             else
             {
                 isUse = true;
-                labelGroupBoxSelectPresetColor.Text = "Select Preset Color";
+                groupBoxSelectPresetColor.Text = "Select Preset Color";
                 chkUse.Image = Properties.Resources.ColorLocked;
             }
         }

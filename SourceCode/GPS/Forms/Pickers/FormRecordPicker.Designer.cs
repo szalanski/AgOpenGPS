@@ -35,7 +35,7 @@ namespace AgOpenGPS.Forms.Pickers
             this.labelDeleteRecord = new System.Windows.Forms.Label();
             this.btnDeleteAB = new System.Windows.Forms.Button();
             this.labelCancel = new System.Windows.Forms.Label();
-            this.labelButtonOpenExistingLv = new System.Windows.Forms.Button();
+            this.buttonOpenExistingLv = new System.Windows.Forms.Button();
             this.btnTurnOffRecPath = new System.Windows.Forms.Button();
             this.labelPathOff = new System.Windows.Forms.Label();
             this.SuspendLayout();
@@ -114,25 +114,25 @@ namespace AgOpenGPS.Forms.Pickers
             this.labelCancel.TabIndex = 98;
             this.labelCancel.Text = "Cancel";
             // 
-            // labelButtonOpenExistingLv
+            // buttonOpenExistingLv
             // 
-            this.labelButtonOpenExistingLv.BackColor = System.Drawing.Color.Transparent;
-            this.labelButtonOpenExistingLv.DialogResult = System.Windows.Forms.DialogResult.Yes;
-            this.labelButtonOpenExistingLv.FlatAppearance.BorderSize = 0;
-            this.labelButtonOpenExistingLv.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.labelButtonOpenExistingLv.Font = new System.Drawing.Font("Tahoma", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelButtonOpenExistingLv.Image = global::AgOpenGPS.Properties.Resources.FileOpen;
-            this.labelButtonOpenExistingLv.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.labelButtonOpenExistingLv.Location = new System.Drawing.Point(702, 502);
-            this.labelButtonOpenExistingLv.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
-            this.labelButtonOpenExistingLv.Name = "labelButtonOpenExistingLv";
-            this.labelButtonOpenExistingLv.Size = new System.Drawing.Size(261, 63);
-            this.labelButtonOpenExistingLv.TabIndex = 99;
-            this.labelButtonOpenExistingLv.Text = " Use Selected";
-            this.labelButtonOpenExistingLv.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.labelButtonOpenExistingLv.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.labelButtonOpenExistingLv.UseVisualStyleBackColor = false;
-            this.labelButtonOpenExistingLv.Click += new System.EventHandler(this.btnOpenExistingLv_Click);
+            this.buttonOpenExistingLv.BackColor = System.Drawing.Color.Transparent;
+            this.buttonOpenExistingLv.DialogResult = System.Windows.Forms.DialogResult.Yes;
+            this.buttonOpenExistingLv.FlatAppearance.BorderSize = 0;
+            this.buttonOpenExistingLv.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonOpenExistingLv.Font = new System.Drawing.Font("Tahoma", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonOpenExistingLv.Image = global::AgOpenGPS.Properties.Resources.FileOpen;
+            this.buttonOpenExistingLv.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.buttonOpenExistingLv.Location = new System.Drawing.Point(702, 502);
+            this.buttonOpenExistingLv.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
+            this.buttonOpenExistingLv.Name = "buttonOpenExistingLv";
+            this.buttonOpenExistingLv.Size = new System.Drawing.Size(261, 63);
+            this.buttonOpenExistingLv.TabIndex = 99;
+            this.buttonOpenExistingLv.Text = " Use Selected";
+            this.buttonOpenExistingLv.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.buttonOpenExistingLv.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.buttonOpenExistingLv.UseVisualStyleBackColor = false;
+            this.buttonOpenExistingLv.Click += new System.EventHandler(this.btnOpenExistingLv_Click);
             // 
             // btnTurnOffRecPath
             // 
@@ -167,7 +167,7 @@ namespace AgOpenGPS.Forms.Pickers
             this.ControlBox = false;
             this.Controls.Add(this.labelPathOff);
             this.Controls.Add(this.btnTurnOffRecPath);
-            this.Controls.Add(this.labelButtonOpenExistingLv);
+            this.Controls.Add(this.buttonOpenExistingLv);
             this.Controls.Add(this.labelCancel);
             this.Controls.Add(this.btnDeleteAB);
             this.Controls.Add(this.labelDeleteRecord);
@@ -193,7 +193,7 @@ namespace AgOpenGPS.Forms.Pickers
         private System.Windows.Forms.Label labelDeleteRecord;
         private System.Windows.Forms.Button btnDeleteAB;
         private System.Windows.Forms.Label labelCancel;
-        private System.Windows.Forms.Button labelButtonOpenExistingLv;
+        private System.Windows.Forms.Button buttonOpenExistingLv;
         private System.Windows.Forms.Button btnTurnOffRecPath;
         private System.Windows.Forms.Label labelPathOff;
     }

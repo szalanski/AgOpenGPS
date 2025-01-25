@@ -22,7 +22,7 @@ namespace AgOpenGPS.Forms.Pickers
             InitializeComponent();
             //translate all the controls
             this.Text = gStr.gsRecordedPathPicker;
-            labelButtonOpenExistingLv.Text = gStr.gsUseSelected;
+            buttonOpenExistingLv.Text = gStr.gsUseSelected;
             labelCancel.Text = gStr.gsCancel;
             labelDeleteRecord.Text = gStr.gsDelete;
             labelPathOff.Text = gStr.gsTurnOffRecordedPath;
