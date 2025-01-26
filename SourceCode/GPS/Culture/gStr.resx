@@ -233,6 +233,12 @@ The order you push them will be the order they appear on the menu from bottom up
   <data name="gsBrightness" xml:space="preserve">
     <value>Brightness</value>
   </data>
+  <data name="gsBuild" xml:space="preserve">
+    <value>Build</value>
+  </data>
+  <data name="gsBuildAround" xml:space="preserve">
+    <value>Build Around</value>
+  </data>
   <data name="gsButFieldIsLoaded" xml:space="preserve">
     <value>But Field Is Loaded</value>
   </data>
@@ -268,6 +274,9 @@ The order you push them will be the order they appear on the menu from bottom up
   </data>
   <data name="gsChooseBuildDifferentone" xml:space="preserve">
     <value>Choose or Build a Different one</value>
+  </data>
+  <data name="gsClipLine" xml:space="preserve">
+    <value>Clip Line</value>
   </data>
   <data name="gsClose" xml:space="preserve">
     <value>Close</value>
@@ -1205,6 +1214,9 @@ USE AT OWN RISK.</value>
   </data>
   <data name="gsZones" xml:space="preserve">
     <value>Zones</value>
+  </data>
+  <data name="gsZoomIn" xml:space="preserve">
+    <value>Zoom In</value>
   </data>
   <data name="v_AboutIntro" xml:space="preserve">
     <value>https://www.youtube.com/watch?v=iN2cZ8avHag</value>

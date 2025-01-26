@@ -215,6 +215,12 @@ De volgorde waarin u ze indrukt, is de volgorde waarin ze van onder naar boven i
   <data name="gsBrightness" xml:space="preserve">
     <value>Helderheid</value>
   </data>
+  <data name="gsBuild" xml:space="preserve">
+    <value>Maak</value>
+  </data>
+  <data name="gsBuildAround" xml:space="preserve">
+    <value>Maak rondom</value>
+  </data>
   <data name="gsButFieldIsLoaded" xml:space="preserve">
     <value>maar veld is geladen</value>
   </data>
@@ -250,6 +256,9 @@ De volgorde waarin u ze indrukt, is de volgorde waarin ze van onder naar boven i
   </data>
   <data name="gsChooseBuildDifferentone" xml:space="preserve">
     <value>Kies of maak een ander</value>
+  </data>
+  <data name="gsClipLine" xml:space="preserve">
+    <value>Snij af</value>
   </data>
   <data name="gsClose" xml:space="preserve">
     <value>Sluiten</value>
