@@ -150,11 +150,17 @@
   <data name="gsActual" xml:space="preserve">
     <value>Actual</value>
   </data>
+  <data name="gsAdvancedTramLines" xml:space="preserve">
+    <value>Create Advanced Tramlines</value>
+  </data>
   <data name="gsAgree" xml:space="preserve">
     <value>I Agree to the Terms &amp; Conditions</value>
   </data>
   <data name="gsAgressiveness" xml:space="preserve">
     <value>Agressiveness</value>
+  </data>
+  <data name="gsAlpha" xml:space="preserve">
+    <value>Alpha</value>
   </data>
   <data name="gsAntennaHeight" xml:space="preserve">
     <value>Antenna Height</value>
@@ -455,6 +461,9 @@ The order you push them will be the order they appear on the menu from bottom up
   <data name="gsEnterName" xml:space="preserve">
     <value>Enter Name</value>
   </data>
+  <data name="gsEnterRecordName" xml:space="preserve">
+    <value>Enter Record Name</value>
+  </data>
   <data name="gsEnterSimCoords" xml:space="preserve">
     <value>Enter Sim Coords</value>
   </data>
@@ -719,6 +728,9 @@ The order you push them will be the order they appear on the menu from bottom up
   <data name="gsMissingSectionFile" xml:space="preserve">
     <value>Missing Section File</value>
   </data>
+  <data name="gsMode" xml:space="preserve">
+    <value>Mode</value>
+  </data>
   <data name="gsMore" xml:space="preserve">
     <value>More</value>
   </data>
@@ -775,6 +787,9 @@ The order you push them will be the order they appear on the menu from bottom up
   </data>
   <data name="gsNudgeDistance" xml:space="preserve">
     <value>Nudge Distance</value>
+  </data>
+  <data name="gsNudgeRefTrack" xml:space="preserve">
+    <value>Move Reference Track</value>
   </data>
   <data name="gsOff" xml:space="preserve">
     <value>Off</value>
@@ -877,6 +892,9 @@ The order you push them will be the order they appear on the menu from bottom up
   </data>
   <data name="gsProportionalGain" xml:space="preserve">
     <value>Proportional Gain</value>
+  </data>
+  <data name="gsQuickAB" xml:space="preserve">
+    <value>Quick AB Line creator</value>
   </data>
   <data name="gsRaiseTime" xml:space="preserve">
     <value>Raise Time</value>
@@ -986,6 +1004,9 @@ The order you push them will be the order they appear on the menu from bottom up
   <data name="gsSideHillComp" xml:space="preserve">
     <value>Side Hill per Degree Compensation</value>
   </data>
+  <data name="gsSimpleTramLines" xml:space="preserve">
+    <value>Simple Trams Creator</value>
+  </data>
   <data name="gsSimulatorOn" xml:space="preserve">
     <value>Simulator On</value>
   </data>
@@ -1021,6 +1042,9 @@ The order you push them will be the order they appear on the menu from bottom up
   </data>
   <data name="gsSpeedo" xml:space="preserve">
     <value>Speedo</value>
+  </data>
+  <data name="gsStart" xml:space="preserve">
+    <value>Start</value>
   </data>
   <data name="gsStartDeleteABoundary" xml:space="preserve">
     <value>Start or Delete A Boundary</value>
@@ -1199,6 +1223,9 @@ USE AT OWN RISK.</value>
   </data>
   <data name="gsWorkSwitch" xml:space="preserve">
     <value>Work Switch</value>
+  </data>
+  <data name="gsWorkWidth" xml:space="preserve">
+    <value>Width</value>
   </data>
   <data name="gsWorked" xml:space="preserve">
     <value>Worked</value>

@@ -141,6 +141,9 @@
   <data name="gsActual" xml:space="preserve">
     <value>Actueel</value>
   </data>
+  <data name="gsAdvancedTramLines" xml:space="preserve">
+    <value>Creer Uitgebreide Spuitpaden</value>
+  </data>
   <data name="gsAgree" xml:space="preserve">
     <value>Ik stem in met de algemene voorwaarden.</value>
   </data>
@@ -422,6 +425,9 @@ De volgorde waarin u ze indrukt, is de volgorde waarin ze van onder naar boven i
   <data name="gsEnterName" xml:space="preserve">
     <value>Voer Naam In</value>
   </data>
+  <data name="gsEnterRecordName" xml:space="preserve">
+    <value>Typ hier een naam</value>
+  </data>
   <data name="gsEnterSimCoords" xml:space="preserve">
     <value>Voer sim-coörd. in</value>
   </data>
@@ -662,6 +668,9 @@ De volgorde waarin u ze indrukt, is de volgorde waarin ze van onder naar boven i
   <data name="gsMissingSectionFile" xml:space="preserve">
     <value>Secties bestand ontbreekt</value>
   </data>
+  <data name="gsMode" xml:space="preserve">
+    <value>Modus</value>
+  </data>
   <data name="gsMore" xml:space="preserve">
     <value>Meer</value>
   </data>
@@ -718,6 +727,9 @@ De volgorde waarin u ze indrukt, is de volgorde waarin ze van onder naar boven i
   </data>
   <data name="gsNudgeDistance" xml:space="preserve">
     <value>Verplaats-afstand</value>
+  </data>
+  <data name="gsNudgeRefTrack" xml:space="preserve">
+    <value>Verplaatst Referentie Lijn</value>
   </data>
   <data name="gsOff" xml:space="preserve">
     <value>Uit</value>
@@ -817,6 +829,9 @@ De volgorde waarin u ze indrukt, is de volgorde waarin ze van onder naar boven i
   </data>
   <data name="gsProportionalGain" xml:space="preserve">
     <value>Versterking</value>
+  </data>
+  <data name="gsQuickAB" xml:space="preserve">
+    <value>Snelle AB-lijn maken</value>
   </data>
   <data name="gsRaiseTime" xml:space="preserve">
     <value>Hef-tijd</value>
@@ -926,6 +941,9 @@ De volgorde waarin u ze indrukt, is de volgorde waarin ze van onder naar boven i
   <data name="gsSideHillComp" xml:space="preserve">
     <value>Helling-Compensatie</value>
   </data>
+  <data name="gsSimpleTramLines" xml:space="preserve">
+    <value>Maak Eenvoudige Spuitpaden</value>
+  </data>
   <data name="gsSimulatorOn" xml:space="preserve">
     <value>Simulator Aan</value>
   </data>
@@ -961,6 +979,9 @@ De volgorde waarin u ze indrukt, is de volgorde waarin ze van onder naar boven i
   </data>
   <data name="gsSpeedo" xml:space="preserve">
     <value>Kilometerteller</value>
+  </data>
+  <data name="gsStart" xml:space="preserve">
+    <value>Start</value>
   </data>
   <data name="gsStartDeleteABoundary" xml:space="preserve">
     <value>Start of verwijder perceelgrens</value>
@@ -1102,6 +1123,9 @@ GEBRUIK OP EIGEN RISICO.</value>
   </data>
   <data name="gsWorkSwitch" xml:space="preserve">
     <value>Werk Schakelaar</value>
+  </data>
+  <data name="gsWorkWidth" xml:space="preserve">
+    <value>Werkbreedte</value>
   </data>
   <data name="gsWorked" xml:space="preserve">
     <value>Gedaan</value>
