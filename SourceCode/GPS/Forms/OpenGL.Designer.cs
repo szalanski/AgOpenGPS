@@ -821,7 +821,7 @@ namespace AgOpenGPS
             if (tool.isDisplayTramControl && tram.displayMode != 0 && (trk.idx > -1))
             {
                 GL.Color3((byte)0, (byte)245, (byte)0);
-                GL.LineWidth(8);
+                GL.LineWidth(4);
 
                 if ((tram.displayMode == 1 || tram.displayMode == 2))
                 {
