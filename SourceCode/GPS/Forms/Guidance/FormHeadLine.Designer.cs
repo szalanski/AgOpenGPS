@@ -37,7 +37,7 @@
             this.tlp1 = new System.Windows.Forms.TableLayoutPanel();
             this.btnClipLine = new System.Windows.Forms.Button();
             this.nudSetDistance = new AgOpenGPS.NudlessNumericUpDown();
-            this.btnZoomIn = new System.Windows.Forms.CheckBox();
+            this.checkBoxZoomIn = new System.Windows.Forms.CheckBox();
             this.btnDeletePoints = new System.Windows.Forms.Button();
             this.btnBndLoop = new System.Windows.Forms.Button();
             this.btnAShrink = new System.Windows.Forms.Button();
@@ -135,7 +135,7 @@
             this.tlp1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 47.69737F));
             this.tlp1.Controls.Add(this.btnClipLine, 0, 6);
             this.tlp1.Controls.Add(this.nudSetDistance, 0, 3);
-            this.tlp1.Controls.Add(this.btnZoomIn, 0, 7);
+            this.tlp1.Controls.Add(this.checkBoxZoomIn, 0, 7);
             this.tlp1.Controls.Add(this.btnDeletePoints, 1, 5);
             this.tlp1.Controls.Add(this.btnBndLoop, 0, 5);
             this.tlp1.Controls.Add(this.btnAShrink, 1, 1);
@@ -211,27 +211,27 @@
             0});
             this.nudSetDistance.Click += new System.EventHandler(this.nudSetDistance_Click);
             // 
-            // btnZoomIn
+            // checkBoxZoomIn
             // 
-            this.btnZoomIn.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btnZoomIn.Appearance = System.Windows.Forms.Appearance.Button;
-            this.btnZoomIn.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.btnZoomIn.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.btnZoomIn.FlatAppearance.BorderSize = 0;
-            this.btnZoomIn.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(255)))), ((int)(((byte)(160)))));
-            this.btnZoomIn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnZoomIn.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnZoomIn.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btnZoomIn.Image = global::AgOpenGPS.Properties.Resources.ZoomOGL;
-            this.btnZoomIn.Location = new System.Drawing.Point(25, 539);
-            this.btnZoomIn.Name = "btnZoomIn";
-            this.btnZoomIn.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.btnZoomIn.Size = new System.Drawing.Size(104, 81);
-            this.btnZoomIn.TabIndex = 564;
-            this.btnZoomIn.Text = "Zoom In";
-            this.btnZoomIn.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnZoomIn.UseVisualStyleBackColor = false;
-            this.btnZoomIn.CheckedChanged += new System.EventHandler(this.cboxIsZoom_CheckedChanged);
+            this.checkBoxZoomIn.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.checkBoxZoomIn.Appearance = System.Windows.Forms.Appearance.Button;
+            this.checkBoxZoomIn.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.checkBoxZoomIn.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.checkBoxZoomIn.FlatAppearance.BorderSize = 0;
+            this.checkBoxZoomIn.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(255)))), ((int)(((byte)(160)))));
+            this.checkBoxZoomIn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.checkBoxZoomIn.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxZoomIn.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.checkBoxZoomIn.Image = global::AgOpenGPS.Properties.Resources.ZoomOGL;
+            this.checkBoxZoomIn.Location = new System.Drawing.Point(25, 539);
+            this.checkBoxZoomIn.Name = "checkBoxZoomIn";
+            this.checkBoxZoomIn.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.checkBoxZoomIn.Size = new System.Drawing.Size(104, 81);
+            this.checkBoxZoomIn.TabIndex = 564;
+            this.checkBoxZoomIn.Text = "Zoom In";
+            this.checkBoxZoomIn.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.checkBoxZoomIn.UseVisualStyleBackColor = false;
+            this.checkBoxZoomIn.CheckedChanged += new System.EventHandler(this.cboxIsZoom_CheckedChanged);
             // 
             // btnDeletePoints
             // 
@@ -516,7 +516,7 @@
         private System.Windows.Forms.Button btnClipLine;
         private System.Windows.Forms.Button btnAShrink;
         private System.Windows.Forms.Button btnBShrink;
-        private System.Windows.Forms.CheckBox btnZoomIn;
+        private System.Windows.Forms.CheckBox checkBoxZoomIn;
         private System.Windows.Forms.TableLayoutPanel tlp1;
     }
 }

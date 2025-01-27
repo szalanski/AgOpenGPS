@@ -123,8 +123,8 @@
             this.btnEnter_LatLonLatLon = new System.Windows.Forms.Button();
             this.panelPivot = new System.Windows.Forms.Panel();
             this.btnFillLAtLonPivot = new System.Windows.Forms.Button();
-            this.t = new System.Windows.Forms.Label();
-            this.labelLat = new System.Windows.Forms.Label();
+            this.labelLongtitudePivot = new System.Windows.Forms.Label();
+            this.labelLatitudePivot = new System.Windows.Forms.Label();
             this.nudLatitudePivot = new AgOpenGPS.NudlessNumericUpDown();
             this.nudLongitudePivot = new AgOpenGPS.NudlessNumericUpDown();
             this.btnCancel_Pivot = new System.Windows.Forms.Button();
@@ -1665,8 +1665,8 @@
             // 
             this.panelPivot.BackColor = System.Drawing.Color.Gainsboro;
             this.panelPivot.Controls.Add(this.btnFillLAtLonPivot);
-            this.panelPivot.Controls.Add(this.t);
-            this.panelPivot.Controls.Add(this.labelLat);
+            this.panelPivot.Controls.Add(this.labelLongtitudePivot);
+            this.panelPivot.Controls.Add(this.labelLatitudePivot);
             this.panelPivot.Controls.Add(this.nudLatitudePivot);
             this.panelPivot.Controls.Add(this.nudLongitudePivot);
             this.panelPivot.Controls.Add(this.btnCancel_Pivot);
@@ -1692,31 +1692,31 @@
             this.btnFillLAtLonPivot.UseVisualStyleBackColor = false;
             this.btnFillLAtLonPivot.Click += new System.EventHandler(this.btnFillLAtLonPivot_Click);
             // 
-            // t
+            // labelLongtitudePivot
             // 
-            this.t.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.t.AutoSize = true;
-            this.t.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.t.ForeColor = System.Drawing.Color.Black;
-            this.t.Location = new System.Drawing.Point(101, 118);
-            this.t.Name = "t";
-            this.t.Size = new System.Drawing.Size(137, 18);
-            this.t.TabIndex = 453;
-            this.t.Text = "Longitude ( +- 180)";
-            this.t.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.labelLongtitudePivot.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelLongtitudePivot.AutoSize = true;
+            this.labelLongtitudePivot.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelLongtitudePivot.ForeColor = System.Drawing.Color.Black;
+            this.labelLongtitudePivot.Location = new System.Drawing.Point(101, 118);
+            this.labelLongtitudePivot.Name = "labelLongtitudePivot";
+            this.labelLongtitudePivot.Size = new System.Drawing.Size(137, 18);
+            this.labelLongtitudePivot.TabIndex = 453;
+            this.labelLongtitudePivot.Text = "Longitude ( +- 180)";
+            this.labelLongtitudePivot.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // labelLat
+            // labelLatitudePivot
             // 
-            this.labelLat.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelLat.AutoSize = true;
-            this.labelLat.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelLat.ForeColor = System.Drawing.Color.Black;
-            this.labelLat.Location = new System.Drawing.Point(101, 38);
-            this.labelLat.Name = "labelLat";
-            this.labelLat.Size = new System.Drawing.Size(118, 18);
-            this.labelLat.TabIndex = 452;
-            this.labelLat.Text = "Lattitude (+- 90)";
-            this.labelLat.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.labelLatitudePivot.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelLatitudePivot.AutoSize = true;
+            this.labelLatitudePivot.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelLatitudePivot.ForeColor = System.Drawing.Color.Black;
+            this.labelLatitudePivot.Location = new System.Drawing.Point(101, 38);
+            this.labelLatitudePivot.Name = "labelLatitudePivot";
+            this.labelLatitudePivot.Size = new System.Drawing.Size(118, 18);
+            this.labelLatitudePivot.TabIndex = 452;
+            this.labelLatitudePivot.Text = "Lattitude (+- 90)";
+            this.labelLatitudePivot.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // nudLatitudePivot
             // 
@@ -1968,8 +1968,8 @@
         private System.Windows.Forms.Label labelPivot;
         private System.Windows.Forms.Button btnLatLonPivot;
         private System.Windows.Forms.Panel panelPivot;
-        private System.Windows.Forms.Label t;
-        private System.Windows.Forms.Label labelLat;
+        private System.Windows.Forms.Label labelLongtitudePivot;
+        private System.Windows.Forms.Label labelLatitudePivot;
         private NudlessNumericUpDown nudLatitudePivot;
         private NudlessNumericUpDown nudLongitudePivot;
         private System.Windows.Forms.Button btnCancel_Pivot;

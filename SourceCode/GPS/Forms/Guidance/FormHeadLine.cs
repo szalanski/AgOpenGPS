@@ -80,7 +80,7 @@ namespace AgOpenGPS
             if (cboxIsSectionControlled.Checked) cboxIsSectionControlled.Image = Properties.Resources.HeadlandSectionOn;
             else cboxIsSectionControlled.Image = Properties.Resources.HeadlandSectionOff;
 
-            btnZoomIn.Checked = false;
+            checkBoxZoomIn.Checked = false;
 
             Size = Properties.Settings.Default.setWindow_HeadlineSize;
 
@@ -101,7 +101,7 @@ namespace AgOpenGPS
             btnBndLoop.Text = gStr.gsBuildAround;
             btnDeletePoints.Text = gStr.gsReset;
             btnClipLine.Text = gStr.gsClipLine;
-            btnZoomIn.Text = gStr.gsZoomIn;
+            checkBoxZoomIn.Text = gStr.gsZoomIn;
         }
 
         private void FormHeadLine_ResizeEnd(object sender, EventArgs e)
@@ -165,7 +165,7 @@ namespace AgOpenGPS
             int halfWid = oglSelf.Width / 2;
             double scale = (double)wid * 0.903;
 
-            if (btnZoomIn.Checked && !zoomToggle)
+            if (checkBoxZoomIn.Checked && !zoomToggle)
             {
                 sX = ((halfWid - (double)ptt.X) / wid) * 1.1;
                 sY = ((halfWid - (double)ptt.Y) / -wid) * 1.1;
