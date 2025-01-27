@@ -37,24 +37,22 @@ namespace AgOpenGPS.Core.Streamers
                 return null;
             }
             RecordedPath recordedPath = new RecordedPath();
+            using (GeoStreamReader reader = new GeoStreamReader(fileAndDirectory))
             {
-                using (GeoStreamReader reader = new GeoStreamReader(fileAndDirectory))
-                {
-                    reader.ReadLine(); // skip header
-                    int numPoints = reader.ReadInt();
+                reader.ReadLine(); // skip header
+                int numPoints = reader.ReadInt();
 
-                    while (!reader.EndOfStream)
+                while (!reader.EndOfStream)
+                {
+                    for (int v = 0; v < numPoints; v++)
                     {
-                        for (int v = 0; v < numPoints; v++)
-                        {
-                            string line = reader.ReadLine();
-                            string[] words = line.Split(',');
-                            RecordedPoint point = new RecordedPoint(
-                                reader.ParseGeoCoordDir(words[0], words[1], words[2]),
-                                reader.ParseDouble(words[3]),
-                                reader.ParseBool(words[4]));
-                            recordedPath.Add(point);
-                        }
+                        string line = reader.ReadLine();
+                        string[] words = line.Split(',');
+                        RecordedPoint point = new RecordedPoint(
+                            reader.ParseGeoCoordDir(words[0], words[1], words[2]),
+                            reader.ParseDouble(words[3]),
+                            reader.ParseBool(words[4]));
+                        recordedPath.Add(point);
                     }
                 }
             }
