@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace AgOpenGPS.Core.Models
 {
     public class DubinsPathSelector
     {
         private readonly DubinsPathConstraints _constraints;
-        public List<DubinsPath> paths = new List<DubinsPath>();
+        private List<DubinsPath> _paths = new List<DubinsPath>();
 
         public DubinsPathSelector(DubinsPathConstraints constraints)
         {
@@ -19,32 +20,35 @@ namespace AgOpenGPS.Core.Models
             // 2 x OuterDubinsPath
             if (RsrDubinsPath.PathIsPossible(startRightCircle, goalRightCircle))
             {
-                paths.Add(new RsrDubinsPath(_constraints));
+                _paths.Add(new RsrDubinsPath(_constraints));
             }
-            if (LslDubinsPath.PathIsPossible(startRightCircle, goalRightCircle))
+            if (LslDubinsPath.PathIsPossible(startLeftCircle, goalLeftCircle))
             {
-                paths.Add(new LslDubinsPath(_constraints));
+                _paths.Add(new LslDubinsPath(_constraints));
             }
             // 2 x CurvedDubinsPath
             if (LrlDubinsPath.PathIsPossible(startLeftCircle, goalLeftCircle))
             {
-                paths.Add(new LrlDubinsPath(_constraints));
+                _paths.Add(new LrlDubinsPath(_constraints));
             }
             if (RlrDubinsPath.PathIsPossible(startRightCircle, goalRightCircle))
             {
-                paths.Add(new RlrDubinsPath(_constraints));
+                _paths.Add(new RlrDubinsPath(_constraints));
             }
             // 2 x InnerDubinsPath
             if (RslDubinsPath.PathIsPossible(startRightCircle, goalLeftCircle))
             {
-                paths.Add(new RslDubinsPath(_constraints));
+                _paths.Add(new RslDubinsPath(_constraints));
             }
             if (LsrDubinsPath.PathIsPossible(startLeftCircle, goalRightCircle))
             {
-                paths.Add(new LsrDubinsPath(_constraints));
+                _paths.Add(new LsrDubinsPath(_constraints));
             }
-            paths.Sort((x, y) => x.TotalLength.CompareTo(y.TotalLength));
+            _paths.Sort((x, y) => x.TotalLength.CompareTo(y.TotalLength));
         }
+
+        public ReadOnlyCollection<DubinsPath> Paths => _paths.AsReadOnly();
+
     }
 
 }

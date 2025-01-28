@@ -119,7 +119,9 @@ namespace AgOpenGPS.Core.Models
 
         static public bool PathIsPossible(GeoCircle startCircle, GeoCircle goalCircle)
         {
-            bool isPossible = startCircle.Center.Easting != goalCircle.Center.Easting && startCircle.Center.Northing != goalCircle.Center.Northing;
+            bool isPossible =
+                startCircle.Center.Easting != goalCircle.Center.Easting ||
+                startCircle.Center.Northing != goalCircle.Center.Northing;
             return isPossible;
         }
 
@@ -155,7 +157,7 @@ namespace AgOpenGPS.Core.Models
         static public bool PathIsPossible(GeoCircle startCircle, GeoCircle goalCircle)
         {
             //RSL and LSR is only working of the circles don't intersect
-            return startCircle.Center.DistanceSquared(goalCircle.Center) > 2.0 * startCircle.Radius * 2.0 * goalCircle.Radius;
+            return startCircle.Center.Distance(goalCircle.Center) > startCircle.Radius + goalCircle.Radius;
         }
 
         protected override void ComputeTangents(
