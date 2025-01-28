@@ -144,9 +144,6 @@
   <data name="gsAutoSteer" xml:space="preserve">
     <value>Automata kormányzás</value>
   </data>
-  <data name="gsConfiguration" xml:space="preserve">
-    <value>Beállítások</value>
-  </data>
   <data name="gsAutoSteerConfiguration" xml:space="preserve">
     <value>Automata kormányzás beállítása</value>
   </data>
@@ -197,6 +194,9 @@
   </data>
   <data name="gsCompletelyDeleteBoundary" xml:space="preserve">
     <value>Művelési határ teljes törlése</value>
+  </data>
+  <data name="gsConfiguration" xml:space="preserve">
+    <value>Beállítások</value>
   </data>
   <data name="gsContourFileIsCorrupt" xml:space="preserve">
     <value>Kontúr fájl hibás</value>

@@ -144,9 +144,6 @@
   <data name="gsAutoSteer" xml:space="preserve">
     <value>Automatinio vairavimo</value>
   </data>
-  <data name="gsConfiguration" xml:space="preserve">
-    <value>Konfigūracija</value>
-  </data>
   <data name="gsAutoSteerConfiguration" xml:space="preserve">
     <value>Automatinio vairavimo konfigūracija</value>
   </data>
@@ -194,6 +191,9 @@
   </data>
   <data name="gsCompletelyDeleteBoundary" xml:space="preserve">
     <value>Visiškai ištrinkite ribą</value>
+  </data>
+  <data name="gsConfiguration" xml:space="preserve">
+    <value>Konfigūracija</value>
   </data>
   <data name="gsContourFileIsCorrupt" xml:space="preserve">
     <value>Sugadintas kontūro failas</value>
