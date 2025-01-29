@@ -197,7 +197,7 @@ namespace AgOpenGPS.Core.Models
         {
             // With the LRL and RLR paths, the distance between the circles has to be less than 4 * r
             return
-                startCircle.Center.DistanceSquared(goalCircle.Center) < 4.0 * startCircle.Radius * 4.0 * goalCircle.Radius;
+                startCircle.Center.Distance(goalCircle.Center) < 2.0 * (startCircle.Radius + goalCircle.Radius);
         }
 
         protected override void ComputeTangents(
