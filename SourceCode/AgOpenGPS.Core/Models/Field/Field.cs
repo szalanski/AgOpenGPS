@@ -13,6 +13,7 @@ namespace AgOpenGPS.Core.Models
         public List<Flag> Flags { get; set; }
         public RecordedPath RecordedPath { get; set; }
         public TramLines TramLines { get; set; }
+        public WorkedArea WorkedArea { get; set; }
 
     }
 }
