@@ -330,6 +330,27 @@
   <data name="gsInner" xml:space="preserve">
     <value>Vidinis</value>
   </data>
+  <data name="gsIntegralInfo" xml:space="preserve">
+    <value>Tai po truputį padidins posūkio kampą, kad pataisyti sekimą</value>
+  </data>
+  <data name="gsInvertHydraulicRelays" xml:space="preserve">
+    <value>Perversti rėles</value>
+  </data>
+  <data name="gsInvertMotor" xml:space="preserve">
+    <value>Pakeisti variklio suk. kryptį</value>
+  </data>
+  <data name="gsInvertRelays" xml:space="preserve">
+    <value>Perversti rėles</value>
+  </data>
+  <data name="gsInvertRoll" xml:space="preserve">
+    <value>Perversti virtimą</value>
+  </data>
+  <data name="gsInvertWas" xml:space="preserve">
+    <value>Perversti WAS</value>
+  </data>
+  <data name="gsKeyboard" xml:space="preserve">
+    <value>Klaviatūra</value>
+  </data>
   <data name="gsKMH" xml:space="preserve">
     <value>km/h</value>
   </data>

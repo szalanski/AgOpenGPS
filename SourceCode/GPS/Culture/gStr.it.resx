@@ -144,9 +144,6 @@
   <data name="gsAutoSteer" xml:space="preserve">
     <value>Autoguida</value>
   </data>
-  <data name="gsConfiguration" xml:space="preserve">
-    <value>Configurazione </value>
-  </data>
   <data name="gsAutoSteerConfiguration" xml:space="preserve">
     <value>Configurazione Autoguida</value>
   </data>
@@ -194,6 +191,9 @@
   </data>
   <data name="gsCompletelyDeleteBoundary" xml:space="preserve">
     <value>Cancellare Completamente Il Confine</value>
+  </data>
+  <data name="gsConfiguration" xml:space="preserve">
+    <value>Configurazione </value>
   </data>
   <data name="gsContourFileIsCorrupt" xml:space="preserve">
     <value>File Perimetri Corrotto</value>

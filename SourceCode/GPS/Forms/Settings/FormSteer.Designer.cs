@@ -464,10 +464,10 @@
             // pbarSensor
             // 
             this.pbarSensor.BackColor = System.Drawing.Color.White;
-            this.pbarSensor.Location = new System.Drawing.Point(114, 208);
+            this.pbarSensor.Location = new System.Drawing.Point(176, 205);
             this.pbarSensor.Maximum = 255;
             this.pbarSensor.Name = "pbarSensor";
-            this.pbarSensor.Size = new System.Drawing.Size(302, 53);
+            this.pbarSensor.Size = new System.Drawing.Size(257, 53);
             this.pbarSensor.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.pbarSensor.TabIndex = 496;
             // 
@@ -478,7 +478,7 @@
             this.lblPercentFS.Font = new System.Drawing.Font("Tahoma", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblPercentFS.ForeColor = System.Drawing.Color.Black;
             this.lblPercentFS.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.lblPercentFS.Location = new System.Drawing.Point(422, 219);
+            this.lblPercentFS.Location = new System.Drawing.Point(439, 216);
             this.lblPercentFS.Name = "lblPercentFS";
             this.lblPercentFS.Size = new System.Drawing.Size(57, 29);
             this.lblPercentFS.TabIndex = 495;
@@ -1745,7 +1745,7 @@
             this.labelPressureTurnSensor.AutoSize = true;
             this.labelPressureTurnSensor.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelPressureTurnSensor.ForeColor = System.Drawing.Color.Black;
-            this.labelPressureTurnSensor.Location = new System.Drawing.Point(175, 40);
+            this.labelPressureTurnSensor.Location = new System.Drawing.Point(24, 137);
             this.labelPressureTurnSensor.Name = "labelPressureTurnSensor";
             this.labelPressureTurnSensor.Size = new System.Drawing.Size(140, 19);
             this.labelPressureTurnSensor.TabIndex = 512;
@@ -1756,7 +1756,7 @@
             this.labelCurrentTurnSensor.AutoSize = true;
             this.labelCurrentTurnSensor.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelCurrentTurnSensor.ForeColor = System.Drawing.Color.Black;
-            this.labelCurrentTurnSensor.Location = new System.Drawing.Point(359, 40);
+            this.labelCurrentTurnSensor.Location = new System.Drawing.Point(24, 273);
             this.labelCurrentTurnSensor.Name = "labelCurrentTurnSensor";
             this.labelCurrentTurnSensor.Size = new System.Drawing.Size(131, 19);
             this.labelCurrentTurnSensor.TabIndex = 511;
@@ -1767,7 +1767,7 @@
             this.labelEncoder.AutoSize = true;
             this.labelEncoder.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelEncoder.ForeColor = System.Drawing.Color.Black;
-            this.labelEncoder.Location = new System.Drawing.Point(20, 41);
+            this.labelEncoder.Location = new System.Drawing.Point(24, 10);
             this.labelEncoder.Name = "labelEncoder";
             this.labelEncoder.Size = new System.Drawing.Size(117, 19);
             this.labelEncoder.TabIndex = 506;
@@ -1906,7 +1906,7 @@
             this.labelTurnSensor.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelTurnSensor.ForeColor = System.Drawing.Color.Black;
             this.labelTurnSensor.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.labelTurnSensor.Location = new System.Drawing.Point(3, 172);
+            this.labelTurnSensor.Location = new System.Drawing.Point(251, 10);
             this.labelTurnSensor.Name = "labelTurnSensor";
             this.labelTurnSensor.Size = new System.Drawing.Size(112, 32);
             this.labelTurnSensor.TabIndex = 494;
@@ -2073,10 +2073,10 @@
             // hsbarSensor
             // 
             this.hsbarSensor.LargeChange = 1;
-            this.hsbarSensor.Location = new System.Drawing.Point(114, 297);
+            this.hsbarSensor.Location = new System.Drawing.Point(176, 320);
             this.hsbarSensor.Maximum = 255;
             this.hsbarSensor.Name = "hsbarSensor";
-            this.hsbarSensor.Size = new System.Drawing.Size(302, 53);
+            this.hsbarSensor.Size = new System.Drawing.Size(257, 53);
             this.hsbarSensor.TabIndex = 516;
             this.hsbarSensor.Scroll += new System.Windows.Forms.ScrollEventHandler(this.hsbarSensor_Scroll);
             // 
@@ -2087,7 +2087,7 @@
             this.lblhsbarSensor.Font = new System.Drawing.Font("Tahoma", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblhsbarSensor.ForeColor = System.Drawing.Color.Black;
             this.lblhsbarSensor.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.lblhsbarSensor.Location = new System.Drawing.Point(422, 306);
+            this.lblhsbarSensor.Location = new System.Drawing.Point(439, 329);
             this.lblhsbarSensor.Name = "lblhsbarSensor";
             this.lblhsbarSensor.Size = new System.Drawing.Size(57, 29);
             this.lblhsbarSensor.TabIndex = 518;
@@ -2200,7 +2200,7 @@
             this.cboxCurrentSensor.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cboxCurrentSensor.ForeColor = System.Drawing.SystemColors.ControlText;
             this.cboxCurrentSensor.Image = global::AgOpenGPS.Properties.Resources.ConSt_TurnSensorCurrent;
-            this.cboxCurrentSensor.Location = new System.Drawing.Point(367, 63);
+            this.cboxCurrentSensor.Location = new System.Drawing.Point(28, 295);
             this.cboxCurrentSensor.Name = "cboxCurrentSensor";
             this.cboxCurrentSensor.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.cboxCurrentSensor.Size = new System.Drawing.Size(114, 78);
@@ -2219,7 +2219,7 @@
             this.cboxEncoder.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cboxEncoder.ForeColor = System.Drawing.SystemColors.ControlText;
             this.cboxEncoder.Image = global::AgOpenGPS.Properties.Resources.ConSt_TurnSensor;
-            this.cboxEncoder.Location = new System.Drawing.Point(21, 63);
+            this.cboxEncoder.Location = new System.Drawing.Point(25, 32);
             this.cboxEncoder.Name = "cboxEncoder";
             this.cboxEncoder.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.cboxEncoder.Size = new System.Drawing.Size(114, 78);
@@ -2238,7 +2238,7 @@
             this.cboxPressureSensor.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cboxPressureSensor.ForeColor = System.Drawing.SystemColors.ControlText;
             this.cboxPressureSensor.Image = global::AgOpenGPS.Properties.Resources.ConSt_TurnSensorPressure;
-            this.cboxPressureSensor.Location = new System.Drawing.Point(188, 63);
+            this.cboxPressureSensor.Location = new System.Drawing.Point(27, 159);
             this.cboxPressureSensor.Name = "cboxPressureSensor";
             this.cboxPressureSensor.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.cboxPressureSensor.Size = new System.Drawing.Size(114, 78);
@@ -2997,7 +2997,7 @@
             this.nudMaxCounts.BackColor = System.Drawing.Color.White;
             this.nudMaxCounts.Font = new System.Drawing.Font("Tahoma", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.nudMaxCounts.InterceptArrowKeys = false;
-            this.nudMaxCounts.Location = new System.Drawing.Point(8, 207);
+            this.nudMaxCounts.Location = new System.Drawing.Point(256, 45);
             this.nudMaxCounts.Maximum = new decimal(new int[] {
             255,
             0,

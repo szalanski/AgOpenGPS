@@ -144,9 +144,6 @@
   <data name="gsAutoSteer" xml:space="preserve">
     <value>Automātiskās stūrēšanas</value>
   </data>
-  <data name="gsConfiguration" xml:space="preserve">
-    <value>Konfigurācija</value>
-  </data>
   <data name="gsAutoSteerConfiguration" xml:space="preserve">
     <value>Automātiskās stūrēšanas konfigurācija</value>
   </data>
@@ -194,6 +191,9 @@
   </data>
   <data name="gsCompletelyDeleteBoundary" xml:space="preserve">
     <value>Pilnībā dzēst robežu</value>
+  </data>
+  <data name="gsConfiguration" xml:space="preserve">
+    <value>Konfigurācija</value>
   </data>
   <data name="gsContourFileIsCorrupt" xml:space="preserve">
     <value>Kontūras fails ir bojāts</value>

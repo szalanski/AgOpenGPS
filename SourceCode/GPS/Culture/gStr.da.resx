@@ -144,9 +144,6 @@
   <data name="gsAutoSteer" xml:space="preserve">
     <value>Autostyrins</value>
   </data>
-  <data name="gsConfiguration" xml:space="preserve">
-    <value>Indstillinger</value>
-  </data>
   <data name="gsAutoSteerConfiguration" xml:space="preserve">
     <value>Autostyrins Indstillinger</value>
   </data>
@@ -194,6 +191,9 @@
   </data>
   <data name="gsCompletelyDeleteBoundary" xml:space="preserve">
     <value>Slet Kant Fuldstændig</value>
+  </data>
+  <data name="gsConfiguration" xml:space="preserve">
+    <value>Indstillinger</value>
   </data>
   <data name="gsContourFileIsCorrupt" xml:space="preserve">
     <value>Fejl i Fil Forager Spor</value>

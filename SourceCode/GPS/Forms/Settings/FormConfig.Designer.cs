@@ -8387,7 +8387,7 @@ namespace AgOpenGPS
             this.labelSectionSoundOnOff.AutoSize = true;
             this.labelSectionSoundOnOff.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelSectionSoundOnOff.ForeColor = System.Drawing.Color.Black;
-            this.labelSectionSoundOnOff.Location = new System.Drawing.Point(728, 384);
+            this.labelSectionSoundOnOff.Location = new System.Drawing.Point(716, 385);
             this.labelSectionSoundOnOff.Name = "labelSectionSoundOnOff";
             this.labelSectionSoundOnOff.Size = new System.Drawing.Size(55, 16);
             this.labelSectionSoundOnOff.TabIndex = 526;
@@ -8450,7 +8450,7 @@ namespace AgOpenGPS
             this.labelHydLiftSoundOnOff.AutoSize = true;
             this.labelHydLiftSoundOnOff.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelHydLiftSoundOnOff.ForeColor = System.Drawing.Color.Black;
-            this.labelHydLiftSoundOnOff.Location = new System.Drawing.Point(732, 270);
+            this.labelHydLiftSoundOnOff.Location = new System.Drawing.Point(716, 270);
             this.labelHydLiftSoundOnOff.Name = "labelHydLiftSoundOnOff";
             this.labelHydLiftSoundOnOff.Size = new System.Drawing.Size(49, 16);
             this.labelHydLiftSoundOnOff.TabIndex = 516;
@@ -8462,7 +8462,7 @@ namespace AgOpenGPS
             this.labelAutosteerSoundOnOff.AutoSize = true;
             this.labelAutosteerSoundOnOff.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelAutosteerSoundOnOff.ForeColor = System.Drawing.Color.Black;
-            this.labelAutosteerSoundOnOff.Location = new System.Drawing.Point(723, 40);
+            this.labelAutosteerSoundOnOff.Location = new System.Drawing.Point(716, 40);
             this.labelAutosteerSoundOnOff.Name = "labelAutosteerSoundOnOff";
             this.labelAutosteerSoundOnOff.Size = new System.Drawing.Size(68, 16);
             this.labelAutosteerSoundOnOff.TabIndex = 514;
@@ -8474,7 +8474,7 @@ namespace AgOpenGPS
             this.labelUturnSoundOnOff.AutoSize = true;
             this.labelUturnSoundOnOff.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelUturnSoundOnOff.ForeColor = System.Drawing.Color.Black;
-            this.labelUturnSoundOnOff.Location = new System.Drawing.Point(728, 156);
+            this.labelUturnSoundOnOff.Location = new System.Drawing.Point(716, 155);
             this.labelUturnSoundOnOff.Name = "labelUturnSoundOnOff";
             this.labelUturnSoundOnOff.Size = new System.Drawing.Size(59, 16);
             this.labelUturnSoundOnOff.TabIndex = 513;
@@ -8619,9 +8619,9 @@ namespace AgOpenGPS
             this.labelScreenButtons.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelScreenButtons.ForeColor = System.Drawing.Color.Black;
             this.labelScreenButtons.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.labelScreenButtons.Location = new System.Drawing.Point(366, 2);
+            this.labelScreenButtons.Location = new System.Drawing.Point(323, 2);
             this.labelScreenButtons.Name = "labelScreenButtons";
-            this.labelScreenButtons.Size = new System.Drawing.Size(190, 25);
+            this.labelScreenButtons.Size = new System.Drawing.Size(284, 25);
             this.labelScreenButtons.TabIndex = 474;
             this.labelScreenButtons.Text = "Screen Buttons";
             this.labelScreenButtons.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;

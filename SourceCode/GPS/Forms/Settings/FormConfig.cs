@@ -462,5 +462,10 @@ namespace AgOpenGPS
             }
 
         }
+
+        private void nudHydEarlyUp_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

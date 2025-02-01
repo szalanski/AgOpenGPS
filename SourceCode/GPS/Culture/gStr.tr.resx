@@ -118,52 +118,22 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="gsABCurve" xml:space="preserve">
-    <value>AB Eğrisi</value>
-  </data>
-  <data name="gsABDraw" xml:space="preserve">
-    <value>AB çizgisinde rota oluşturmak için 2 sınır noktasına tıkla </value>
+    <value>AB Eğri</value>
   </data>
   <data name="gsABline" xml:space="preserve">
-    <value>AB Çizgisi</value>
-  </data>
-  <data name="gsADConverter" xml:space="preserve">
-    <value>AD dönüştürücüsü</value>
-  </data>
-  <data name="gsAOGMenu" xml:space="preserve">
-    <value>AOG Menü</value>
-  </data>
-  <data name="gsAPlus" xml:space="preserve">
-    <value>A+</value>
+    <value>AB Çizgi</value>
   </data>
   <data name="gsAbout" xml:space="preserve">
     <value>Hakkında...</value>
   </data>
-  <data name="gsAckermann" xml:space="preserve">
-    <value>Ackermann</value>
-  </data>
   <data name="gsActionHasBeenCancelled" xml:space="preserve">
     <value>İşlem İptal Edildi</value>
   </data>
-  <data name="gsActive" xml:space="preserve">
-    <value>aktifleştir</value>
-  </data>
   <data name="gsActual" xml:space="preserve">
-    <value>gerçek</value>
-  </data>
-  <data name="gsAdvancedTramLines" xml:space="preserve">
-    <value>Gelişmiş Rota oluştur</value>
-  </data>
-  <data name="gsAgree" xml:space="preserve">
-    <value>şartlar ve koşulları kabul ediyorum</value>
+    <value>Actual</value>
   </data>
   <data name="gsAgressiveness" xml:space="preserve">
-    <value>Agresif</value>
-  </data>
-  <data name="gsAntennaHeight" xml:space="preserve">
-    <value>Anten Yüksekliği</value>
-  </data>
-  <data name="gsAntennaOffset" xml:space="preserve">
-    <value>anten sapma değeri</value>
+    <value>Agressif</value>
   </data>
   <data name="gsAreYouSure" xml:space="preserve">
     <value>Emin misin ?</value>

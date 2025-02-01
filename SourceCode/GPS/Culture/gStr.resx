@@ -626,11 +626,11 @@ The order you push them will be the order they appear on the menu from bottom up
   <data name="gsInvertWas" xml:space="preserve">
     <value>Invert WAS</value>
   </data>
-  <data name="gsKMH" xml:space="preserve">
-    <value>kmh</value>
-  </data>
   <data name="gsKeyboard" xml:space="preserve">
     <value>Keyboard</value>
+  </data>
+  <data name="gsKMH" xml:space="preserve">
+    <value>kmh</value>
   </data>
   <data name="gsLanguage" xml:space="preserve">
     <value>Language</value>
@@ -819,7 +819,7 @@ The order you push them will be the order they appear on the menu from bottom up
     <value>Outer</value>
   </data>
   <data name="gsOverlap" xml:space="preserve">
-    <value>Overlap</value>
+    <value>Overlap:</value>
   </data>
   <data name="gsOverlapGap" xml:space="preserve">
     <value>Overlap / Gap</value>

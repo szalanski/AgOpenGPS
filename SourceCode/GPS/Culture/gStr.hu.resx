@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -339,6 +339,30 @@
   </data>
   <data name="gsInner" xml:space="preserve">
     <value>Belső</value>
+  </data>
+  <data name="gsIntegral" xml:space="preserve">
+    <value>Integrál</value>
+  </data>
+  <data name="gsIntegralInfo" xml:space="preserve">
+    <value>Lassan korrigálja a szögértéket a nem jól nullázott szögszenzor esetén</value>
+  </data>
+  <data name="gsInvertHydraulicRelays" xml:space="preserve">
+    <value>Lock kimenet invertálása</value>
+  </data>
+  <data name="gsInvertMotor" xml:space="preserve">
+    <value>Motor irány megfordítása</value>
+  </data>
+  <data name="gsInvertRelays" xml:space="preserve">
+    <value>Relék invertálása</value>
+  </data>
+  <data name="gsInvertRoll" xml:space="preserve">
+    <value>Dőlés invertálása</value>
+  </data>
+  <data name="gsInvertWas" xml:space="preserve">
+    <value>Szögszenzor invertálása</value>
+  </data>
+  <data name="gsKeyboard" xml:space="preserve">
+    <value>Billentyűzet</value>
   </data>
   <data name="gsKMH" xml:space="preserve">
     <value>Km/h</value>

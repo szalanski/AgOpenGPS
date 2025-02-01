@@ -542,7 +542,7 @@ Kolejność, w jakiej je naciśniesz, będzie kolejnością, w jakiej pojawią s
     <value>Długość zaczepu</value>
   </data>
   <data name="gsHydraulicLift" xml:space="preserve">
-    <value>Podnośnik hydrauliczny</value>
+    <value>Podnośnik hydr.</value>
   </data>
   <data name="gsHydraulicLiftConfig" xml:space="preserve">
     <value>Konfig. podnośnika hydr.</value>
@@ -755,7 +755,7 @@ Kolejność, w jakiej je naciśniesz, będzie kolejnością, w jakiej pojawią s
     <value>Zewnętrzny</value>
   </data>
   <data name="gsOverlap" xml:space="preserve">
-    <value>Nakładka</value>
+    <value>Nakładka:</value>
   </data>
   <data name="gsOverlapGap" xml:space="preserve">
     <value>Nakładka / Odstęp</value>
@@ -878,7 +878,7 @@ Kolejność, w jakiej je naciśniesz, będzie kolejnością, w jakiej pojawią s
     <value>Zapisz jako</value>
   </data>
   <data name="gsScreenButtons" xml:space="preserve">
-    <value>rzyciski ekranowe</value>
+    <value>Przyciski ekranowe</value>
   </data>
   <data name="gsSectionColorsSet" xml:space="preserve">
     <value>Ustaw kolory sekcji</value>
