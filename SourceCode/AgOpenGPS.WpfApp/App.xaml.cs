@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace AogWpf
+namespace AgOpenGPS.WpfApp
 {
     public partial class App : Application
     {
