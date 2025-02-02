@@ -10,10 +10,7 @@ namespace AgOpenGPS
     {
         private readonly FormGPS mf;
 
-        public double antennaHeight;
-        public double antennaPivot;
         public double wheelbase;
-        public double antennaOffset;
         public int deadZoneHeading, deadZoneDelay;
         public int deadZoneDelayCounter;
         public bool isInDeadZone;
@@ -53,9 +50,9 @@ namespace AgOpenGPS
 
             Vehicle = new Vehicle();
 
-            antennaHeight = Properties.Settings.Default.setVehicle_antennaHeight;
-            antennaPivot = Properties.Settings.Default.setVehicle_antennaPivot;
-            antennaOffset = Properties.Settings.Default.setVehicle_antennaOffset;
+            Vehicle.AntennaHeight = Properties.Settings.Default.setVehicle_antennaHeight;
+            Vehicle.AntennaPivot = Properties.Settings.Default.setVehicle_antennaPivot;
+            Vehicle.AntennaOffset = Properties.Settings.Default.setVehicle_antennaOffset;
 
             wheelbase = Properties.Settings.Default.setVehicle_wheelbase;
 
@@ -447,7 +444,7 @@ namespace AgOpenGPS
             {
                 GL.Color4(1.2, 1.20, 0.0, mf.vehicleOpacity);
                 GL.Begin(PrimitiveType.TriangleFan);
-                GL.Vertex3(0, antennaPivot, -0.0);
+                GL.Vertex3(0, Vehicle.AntennaPivot, -0.0);
                 GL.Vertex3(1.0, -0, 0.0);
                 GL.Color4(0.0, 1.20, 1.22, mf.vehicleOpacity);
                 GL.Vertex3(0, wheelbase, 0.0);
@@ -473,13 +470,13 @@ namespace AgOpenGPS
                 GL.PointSize(16);
                 GL.Begin(PrimitiveType.Points);
                 GL.Color3(0, 0, 0);
-                GL.Vertex3(-antennaOffset, antennaPivot, 0.1);
+                GL.Vertex3(-Vehicle.AntennaOffset, Vehicle.AntennaPivot, 0.1);
                 GL.End();
 
                 GL.PointSize(10);
                 GL.Begin(PrimitiveType.Points);
                 GL.Color3(0.20, 0.98, 0.98);
-                GL.Vertex3(-antennaOffset, antennaPivot, 0.1);
+                GL.Vertex3(-Vehicle.AntennaOffset, Vehicle.AntennaPivot, 0.1);
                 GL.End();
             }
 

@@ -1187,7 +1187,7 @@ namespace AgOpenGPS
             if (((NudlessNumericUpDown)sender).ShowKeypad(this))
             {
                 Properties.Settings.Default.setVehicle_antennaPivot = (double)nudAntennaPivot.Value * mf.inchOrCm2m;
-                mf.vehicle.antennaPivot = Properties.Settings.Default.setVehicle_antennaPivot;
+                mf.vehicle.Vehicle.AntennaPivot = Properties.Settings.Default.setVehicle_antennaPivot;
                 Properties.Settings.Default.Save();
             }
         }
@@ -1231,7 +1231,7 @@ namespace AgOpenGPS
             if (((NudlessNumericUpDown)sender).ShowKeypad(this))
             {
                 Properties.Settings.Default.setVehicle_antennaHeight = (double)nudAntennaHeight.Value * mf.inchOrCm2m;
-                mf.vehicle.antennaHeight = Properties.Settings.Default.setVehicle_antennaHeight;
+                mf.vehicle.Vehicle.AntennaHeight = Properties.Settings.Default.setVehicle_antennaHeight;
                 Properties.Settings.Default.Save();
             }
         }
@@ -1241,7 +1241,7 @@ namespace AgOpenGPS
             if (((NudlessNumericUpDown)sender).ShowKeypad(this))
             {
                 Properties.Settings.Default.setVehicle_antennaOffset = (double)nudAntennaOffset.Value * mf.inchOrCm2m;
-                mf.vehicle.antennaOffset = Properties.Settings.Default.setVehicle_antennaOffset;
+                mf.vehicle.Vehicle.AntennaOffset = Properties.Settings.Default.setVehicle_antennaOffset;
                 Properties.Settings.Default.Save();
             }
         }
