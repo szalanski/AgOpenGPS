@@ -249,7 +249,7 @@ L'ordre dans lequel vous cliquez, sera l'ordre dans lequel ils apparaîtrons dan
     <value>Annuler</value>
   </data>
   <data name="gsCenter" xml:space="preserve">
-    <value>Centrer</value>
+    <value>Milieu</value>
   </data>
   <data name="gsCentimeters" xml:space="preserve">
     <value>Centimètre</value>

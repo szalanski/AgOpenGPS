@@ -186,6 +186,18 @@
   <data name="gsButFieldIsLoaded" xml:space="preserve">
     <value>Laukas užkrautas</value>
   </data>
+  <data name="gsButtonPicker" xml:space="preserve">
+    <value>Mygtuko parinkimas</value>
+  </data>
+  <data name="gsCameraBehavior" xml:space="preserve">
+    <value>Kameros elegsena</value>
+  </data>
+  <data name="gsCancel" xml:space="preserve">
+    <value>Atšaukti</value>
+  </data>
+  <data name="gsCenter" xml:space="preserve">
+    <value>Vidurio</value>
+  </data>
   <data name="gsCentimeters" xml:space="preserve">
     <value>Centimetras</value>
   </data>

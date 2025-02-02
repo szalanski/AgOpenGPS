@@ -245,7 +245,7 @@ Kolejność, w jakiej je naciśniesz, będzie kolejnością, w jakiej pojawią s
     <value>Zamknij</value>
   </data>
   <data name="gsCenter" xml:space="preserve">
-    <value>Center</value>
+    <value>środek</value>
   </data>
   <data name="gsCentimeters" xml:space="preserve">
     <value>cm</value>

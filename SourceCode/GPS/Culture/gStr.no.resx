@@ -184,7 +184,7 @@
     <value>Er du sikker?</value>
   </data>
   <data name="gsArea" xml:space="preserve">
-    <value>Areal</value>
+    <value>Område</value>
   </data>
   <data name="gsArrangeText" xml:space="preserve">
     <value>Trykk på knappene på venstre side som du vil skal vises i menyen (høyre side). Rekkefølgen du trykker på dem, vil være rekkefølgen de vises i menyen fra bunnen opp.</value>
@@ -253,7 +253,7 @@
     <value>Avbryt</value>
   </data>
   <data name="gsCenter" xml:space="preserve">
-    <value>Senter</value>
+    <value>Midten</value>
   </data>
   <data name="gsCentimeters" xml:space="preserve">
     <value>Centimeter</value>
