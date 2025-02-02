@@ -14,5 +14,8 @@
         public double AntennaHeight { get; set; }
         public double AntennaPivot { get; set; }
         public double AntennaOffset { get; set; }
+
+        public double Wheelbase { get; set; }
+        public double TrackWidth { get; set; }
     }
 }

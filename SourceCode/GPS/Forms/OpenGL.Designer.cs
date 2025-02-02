@@ -964,7 +964,7 @@ namespace AgOpenGPS
             double deg = glm.toDegrees(Math.Atan(theta));
 
             //tram and hydraulics
-            if (tram.displayMode > 0 && tool.width > vehicle.trackWidth)
+            if (tram.displayMode > 0 && tool.width > vehicle.Vehicle.TrackWidth)
             {
                 tram.controlByte = 0;
                 //1 pixels in is there a tram line?

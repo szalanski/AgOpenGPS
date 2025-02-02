@@ -10,7 +10,6 @@ namespace AgOpenGPS
     {
         private readonly FormGPS mf;
 
-        public double wheelbase;
         public int deadZoneHeading, deadZoneDelay;
         public int deadZoneDelayCounter;
         public bool isInDeadZone;
@@ -25,7 +24,7 @@ namespace AgOpenGPS
         public double minLookAheadDistance = 2.0;
         public double maxSteerAngle, maxSteerSpeed, minSteerSpeed;
         public double maxAngularVelocity;
-        public double hydLiftLookAheadTime, trackWidth;
+        public double hydLiftLookAheadTime;
 
         public double hydLiftLookAheadDistanceLeft, hydLiftLookAheadDistanceRight;
 
@@ -54,7 +53,7 @@ namespace AgOpenGPS
             Vehicle.AntennaPivot = Properties.Settings.Default.setVehicle_antennaPivot;
             Vehicle.AntennaOffset = Properties.Settings.Default.setVehicle_antennaOffset;
 
-            wheelbase = Properties.Settings.Default.setVehicle_wheelbase;
+            Vehicle.Wheelbase = Properties.Settings.Default.setVehicle_wheelbase;
 
             slowSpeedCutoff = Properties.Settings.Default.setVehicle_slowSpeedCutoff;
 
@@ -70,7 +69,7 @@ namespace AgOpenGPS
 
             isHydLiftOn = false;
 
-            trackWidth = Properties.Settings.Default.setVehicle_trackWidth;
+            Vehicle.TrackWidth = Properties.Settings.Default.setVehicle_trackWidth;
 
             stanleyIntegralGainAB = Properties.Settings.Default.stanleyIntegralGainAB;
             stanleyIntegralDistanceAwayTriggerAB = Properties.Settings.Default.stanleyIntegralDistanceAwayTriggerAB;
@@ -274,26 +273,26 @@ namespace AgOpenGPS
                     }
 
                     GL.Begin(PrimitiveType.TriangleStrip);              // Build Quad From A Triangle Strip
-                    GL.TexCoord2(1, 0); GL.Vertex2(trackWidth, wheelbase * 1.5); // Top Right
-                    GL.TexCoord2(0, 0); GL.Vertex2(-trackWidth, wheelbase * 1.5); // Top Left
-                    GL.TexCoord2(1, 1); GL.Vertex2(trackWidth, -wheelbase * 0.5); // Bottom Right
-                    GL.TexCoord2(0, 1); GL.Vertex2(-trackWidth, -wheelbase * 0.5); // Bottom Left
+                    GL.TexCoord2(1, 0); GL.Vertex2(Vehicle.TrackWidth, Vehicle.Wheelbase * 1.5); // Top Right
+                    GL.TexCoord2(0, 0); GL.Vertex2(-Vehicle.TrackWidth, Vehicle.Wheelbase * 1.5); // Top Left
+                    GL.TexCoord2(1, 1); GL.Vertex2(Vehicle.TrackWidth, -Vehicle.Wheelbase * 0.5); // Bottom Right
+                    GL.TexCoord2(0, 1); GL.Vertex2(-Vehicle.TrackWidth, -Vehicle.Wheelbase * 0.5); // Bottom Left
 
                     GL.End();                       // Done Building Triangle Strip
 
                     //right wheel
                     GL.PushMatrix();
-                    GL.Translate(trackWidth * 0.5, wheelbase, 0);
+                    GL.Translate(Vehicle.TrackWidth * 0.5, Vehicle.Wheelbase, 0);
                     GL.Rotate(rightAckerman, 0, 0, 1);
 
                     GL.BindTexture(TextureTarget.Texture2D, mf.texture[(int)FormGPS.textures.FrontWheels]);        // Select Our Texture
                     GL.Color4(mf.vehicleColor.R, mf.vehicleColor.G, mf.vehicleColor.B, mf.vehicleOpacityByte);
 
                     GL.Begin(PrimitiveType.TriangleStrip);              // Build Quad From A Triangle Strip
-                    GL.TexCoord2(1, 0); GL.Vertex2(trackWidth * 0.5, wheelbase * 0.75); // Top Right
-                    GL.TexCoord2(0, 0); GL.Vertex2(-trackWidth * 0.5, wheelbase * 0.75); // Top Left
-                    GL.TexCoord2(1, 1); GL.Vertex2(trackWidth * 0.5, -wheelbase * 0.75); // Bottom Right
-                    GL.TexCoord2(0, 1); GL.Vertex2(-trackWidth * 0.5, -wheelbase * 0.75); // Bottom Left
+                    GL.TexCoord2(1, 0); GL.Vertex2(Vehicle.TrackWidth * 0.5, Vehicle.Wheelbase * 0.75); // Top Right
+                    GL.TexCoord2(0, 0); GL.Vertex2(-Vehicle.TrackWidth * 0.5, Vehicle.Wheelbase * 0.75); // Top Left
+                    GL.TexCoord2(1, 1); GL.Vertex2(Vehicle.TrackWidth * 0.5, -Vehicle.Wheelbase * 0.75); // Bottom Right
+                    GL.TexCoord2(0, 1); GL.Vertex2(-Vehicle.TrackWidth * 0.5, -Vehicle.Wheelbase * 0.75); // Bottom Left
                     GL.End();                       // Done Building Triangle Strip
 
                     GL.PopMatrix();
@@ -301,14 +300,14 @@ namespace AgOpenGPS
                     //Left Wheel
                     GL.PushMatrix();
 
-                    GL.Translate(-trackWidth * 0.5, wheelbase, 0);
+                    GL.Translate(-Vehicle.TrackWidth * 0.5, Vehicle.Wheelbase, 0);
                     GL.Rotate(leftAckermam, 0, 0, 1);
 
                     GL.Begin(PrimitiveType.TriangleStrip);              // Build Quad From A Triangle Strip
-                    GL.TexCoord2(1, 0); GL.Vertex2(trackWidth * 0.5, wheelbase * 0.75); // Top Right
-                    GL.TexCoord2(0, 0); GL.Vertex2(-trackWidth * 0.5, wheelbase * 0.75); // Top Left
-                    GL.TexCoord2(1, 1); GL.Vertex2(trackWidth * 0.5, -wheelbase * 0.75); // Bottom Right
-                    GL.TexCoord2(0, 1); GL.Vertex2(-trackWidth * 0.5, -wheelbase * 0.75); // Bottom Left
+                    GL.TexCoord2(1, 0); GL.Vertex2(Vehicle.TrackWidth * 0.5, Vehicle.Wheelbase * 0.75); // Top Right
+                    GL.TexCoord2(0, 0); GL.Vertex2(-Vehicle.TrackWidth * 0.5, Vehicle.Wheelbase * 0.75); // Top Left
+                    GL.TexCoord2(1, 1); GL.Vertex2(Vehicle.TrackWidth * 0.5, -Vehicle.Wheelbase * 0.75); // Bottom Right
+                    GL.TexCoord2(0, 1); GL.Vertex2(-Vehicle.TrackWidth * 0.5, -Vehicle.Wheelbase * 0.75); // Bottom Left
                     GL.End();                       // Done Building Triangle Strip
 
                     GL.PopMatrix();
@@ -353,16 +352,16 @@ namespace AgOpenGPS
                     GL.Color4((byte)20, (byte)20, (byte)20, mf.vehicleOpacityByte);
                     //right wheel
                     GL.PushMatrix();
-                    GL.Translate(trackWidth * 0.5, -wheelbase, 0);
+                    GL.Translate(Vehicle.TrackWidth * 0.5, -Vehicle.Wheelbase, 0);
                     GL.Rotate(rightAckerman, 0, 0, 1);
 
                     GL.BindTexture(TextureTarget.Texture2D, mf.texture[(int)FormGPS.textures.FrontWheels]);        // Select Our Texture
 
                     GL.Begin(PrimitiveType.TriangleStrip);              // Build Quad From A Triangle Strip
-                    GL.TexCoord2(1, 0); GL.Vertex2(trackWidth * 0.25, wheelbase * 0.5); // Top Right
-                    GL.TexCoord2(0, 0); GL.Vertex2(-trackWidth * 0.25, wheelbase * 0.5); // Top Left
-                    GL.TexCoord2(1, 1); GL.Vertex2(trackWidth * 0.25, -wheelbase * 0.5); // Bottom Right
-                    GL.TexCoord2(0, 1); GL.Vertex2(-trackWidth * 0.25, -wheelbase * 0.5); // Bottom Left
+                    GL.TexCoord2(1, 0); GL.Vertex2(Vehicle.TrackWidth * 0.25, Vehicle.Wheelbase * 0.5); // Top Right
+                    GL.TexCoord2(0, 0); GL.Vertex2(-Vehicle.TrackWidth * 0.25, Vehicle.Wheelbase * 0.5); // Top Left
+                    GL.TexCoord2(1, 1); GL.Vertex2(Vehicle.TrackWidth * 0.25, -Vehicle.Wheelbase * 0.5); // Bottom Right
+                    GL.TexCoord2(0, 1); GL.Vertex2(-Vehicle.TrackWidth * 0.25, -Vehicle.Wheelbase * 0.5); // Bottom Left
                     GL.End();                       // Done Building Triangle Strip
 
                     GL.PopMatrix();
@@ -370,14 +369,14 @@ namespace AgOpenGPS
                     //Left Wheel
                     GL.PushMatrix();
 
-                    GL.Translate(-trackWidth * 0.5, -wheelbase, 0);
+                    GL.Translate(-Vehicle.TrackWidth * 0.5, -Vehicle.Wheelbase, 0);
                     GL.Rotate(leftAckermam, 0, 0, 1);
 
                     GL.Begin(PrimitiveType.TriangleStrip);              // Build Quad From A Triangle Strip
-                    GL.TexCoord2(1, 0); GL.Vertex2(trackWidth * 0.25, wheelbase * 0.5); // Top Right
-                    GL.TexCoord2(0, 0); GL.Vertex2(-trackWidth * 0.25, wheelbase * 0.5); // Top Left
-                    GL.TexCoord2(1, 1); GL.Vertex2(trackWidth * 0.25, -wheelbase * 0.5); // Bottom Right
-                    GL.TexCoord2(0, 1); GL.Vertex2(-trackWidth * 0.25, -wheelbase * 0.5); // Bottom Left
+                    GL.TexCoord2(1, 0); GL.Vertex2(Vehicle.TrackWidth * 0.25, Vehicle.Wheelbase * 0.5); // Top Right
+                    GL.TexCoord2(0, 0); GL.Vertex2(-Vehicle.TrackWidth * 0.25, Vehicle.Wheelbase * 0.5); // Top Left
+                    GL.TexCoord2(1, 1); GL.Vertex2(Vehicle.TrackWidth * 0.25, -Vehicle.Wheelbase * 0.5); // Bottom Right
+                    GL.TexCoord2(0, 1); GL.Vertex2(-Vehicle.TrackWidth * 0.25, -Vehicle.Wheelbase * 0.5); // Bottom Left
                     GL.End();                       // Done Building Triangle Strip
 
                     GL.PopMatrix();
@@ -385,10 +384,10 @@ namespace AgOpenGPS
                     GL.Color4(mf.vehicleColor.R, mf.vehicleColor.G, mf.vehicleColor.B, mf.vehicleOpacityByte);
                     GL.BindTexture(TextureTarget.Texture2D, mf.texture[(uint)FormGPS.textures.Harvester]);        // Select Our Texture
                     GL.Begin(PrimitiveType.TriangleStrip);              // Build Quad From A Triangle Strip
-                    GL.TexCoord2(1, 0); GL.Vertex2(trackWidth, wheelbase * 1.5); // Top Right
-                    GL.TexCoord2(0, 0); GL.Vertex2(-trackWidth, wheelbase * 1.5); // Top Left
-                    GL.TexCoord2(1, 1); GL.Vertex2(trackWidth, -wheelbase * 1.5); // Bottom Right
-                    GL.TexCoord2(0, 1); GL.Vertex2(-trackWidth, -wheelbase * 1.5); // Bottom Left
+                    GL.TexCoord2(1, 0); GL.Vertex2(Vehicle.TrackWidth, Vehicle.Wheelbase * 1.5); // Top Right
+                    GL.TexCoord2(0, 0); GL.Vertex2(-Vehicle.TrackWidth, Vehicle.Wheelbase * 1.5); // Top Left
+                    GL.TexCoord2(1, 1); GL.Vertex2(Vehicle.TrackWidth, -Vehicle.Wheelbase * 1.5); // Bottom Right
+                    GL.TexCoord2(0, 1); GL.Vertex2(-Vehicle.TrackWidth, -Vehicle.Wheelbase * 1.5); // Bottom Left
 
                     GL.End();                       // Done Building Triangle Strip
 
@@ -411,14 +410,14 @@ namespace AgOpenGPS
                     GL.BindTexture(TextureTarget.Texture2D, mf.texture[(int)FormGPS.textures.FourWDRear]);        // Select Our Texture
 
                     GL.PushMatrix();
-                    GL.Translate(0, -wheelbase * 0.5, 0);
+                    GL.Translate(0, -Vehicle.Wheelbase * 0.5, 0);
                     GL.Rotate(modelSteerAngle, 0, 0, 1);
 
                     GL.Begin(PrimitiveType.TriangleStrip);              // Build Quad From A Triangle Strip
-                    GL.TexCoord2(1, 0); GL.Vertex2(trackWidth, wheelbase * 0.65); // Top Right
-                    GL.TexCoord2(0, 0); GL.Vertex2(-trackWidth, wheelbase * 0.65); // Top Left
-                    GL.TexCoord2(1, 1); GL.Vertex2(trackWidth, -wheelbase * 0.65); // Bottom Right
-                    GL.TexCoord2(0, 1); GL.Vertex2(-trackWidth, -wheelbase * 0.65); // Bottom Left
+                    GL.TexCoord2(1, 0); GL.Vertex2(Vehicle.TrackWidth, Vehicle.Wheelbase * 0.65); // Top Right
+                    GL.TexCoord2(0, 0); GL.Vertex2(-Vehicle.TrackWidth, Vehicle.Wheelbase * 0.65); // Top Left
+                    GL.TexCoord2(1, 1); GL.Vertex2(Vehicle.TrackWidth, -Vehicle.Wheelbase * 0.65); // Bottom Right
+                    GL.TexCoord2(0, 1); GL.Vertex2(-Vehicle.TrackWidth, -Vehicle.Wheelbase * 0.65); // Bottom Left
                     GL.End();                       // Done Building Triangle Strip
 
                     GL.PopMatrix();
@@ -426,14 +425,14 @@ namespace AgOpenGPS
                     GL.BindTexture(TextureTarget.Texture2D, mf.texture[(int)FormGPS.textures.FourWDFront]);        // Select Our Texture
 
                     GL.PushMatrix();
-                    GL.Translate(0, wheelbase * 0.5, 0);
+                    GL.Translate(0, Vehicle.Wheelbase * 0.5, 0);
                     GL.Rotate(-modelSteerAngle, 0, 0, 1);
 
                     GL.Begin(PrimitiveType.TriangleStrip);              // Build Quad From A Triangle Strip
-                    GL.TexCoord2(1, 0); GL.Vertex2(trackWidth, wheelbase * 0.65); // Top Right
-                    GL.TexCoord2(0, 0); GL.Vertex2(-trackWidth, wheelbase * 0.65); // Top Left
-                    GL.TexCoord2(1, 1); GL.Vertex2(trackWidth, -wheelbase * 0.65); // Bottom Right
-                    GL.TexCoord2(0, 1); GL.Vertex2(-trackWidth, -wheelbase * 0.65); // Bottom Left
+                    GL.TexCoord2(1, 0); GL.Vertex2(Vehicle.TrackWidth, Vehicle.Wheelbase * 0.65); // Top Right
+                    GL.TexCoord2(0, 0); GL.Vertex2(-Vehicle.TrackWidth, Vehicle.Wheelbase * 0.65); // Top Left
+                    GL.TexCoord2(1, 1); GL.Vertex2(Vehicle.TrackWidth, -Vehicle.Wheelbase * 0.65); // Bottom Right
+                    GL.TexCoord2(0, 1); GL.Vertex2(-Vehicle.TrackWidth, -Vehicle.Wheelbase * 0.65); // Bottom Left
                     GL.End();                       // Done Building Triangle Strip
 
                     GL.PopMatrix();
@@ -447,7 +446,7 @@ namespace AgOpenGPS
                 GL.Vertex3(0, Vehicle.AntennaPivot, -0.0);
                 GL.Vertex3(1.0, -0, 0.0);
                 GL.Color4(0.0, 1.20, 1.22, mf.vehicleOpacity);
-                GL.Vertex3(0, wheelbase, 0.0);
+                GL.Vertex3(0, Vehicle.Wheelbase, 0.0);
                 GL.Color4(1.220, 0.0, 1.2, mf.vehicleOpacity);
                 GL.Vertex3(-1.0, -0, 0.0);
                 GL.Vertex3(1.0, -0, 0.0);
@@ -459,7 +458,7 @@ namespace AgOpenGPS
                 {
                     GL.Vertex3(-1.0, 0, 0);
                     GL.Vertex3(1.0, 0, 0);
-                    GL.Vertex3(0, wheelbase, 0);
+                    GL.Vertex3(0, Vehicle.Wheelbase, 0);
                 }
                 GL.End();
             }
@@ -522,9 +521,9 @@ namespace AgOpenGPS
                 GL.Color3(0.95, 0.95, 0.10);
                 GL.Begin(PrimitiveType.LineStrip);
                 {
-                    GL.Vertex3(svennWidth, wheelbase + svennDist, 0.0);
-                    GL.Vertex3(0, wheelbase + svennWidth + 0.5 + svennDist, 0.0);
-                    GL.Vertex3(-svennWidth, wheelbase + svennDist, 0.0);
+                    GL.Vertex3(svennWidth, Vehicle.Wheelbase + svennDist, 0.0);
+                    GL.Vertex3(0, Vehicle.Wheelbase + svennWidth + 0.5 + svennDist, 0.0);
+                    GL.Vertex3(-svennWidth, Vehicle.Wheelbase + svennDist, 0.0);
                 }
                 GL.End();
             }

@@ -1257,8 +1257,8 @@ namespace AgOpenGPS
             pivotAxlePos.northing = pn.fix.northing - (Math.Cos(fixHeading) * vehicle.Vehicle.AntennaPivot);
             pivotAxlePos.heading = fixHeading;
 
-            steerAxlePos.easting = pivotAxlePos.easting + (Math.Sin(fixHeading) * vehicle.wheelbase);
-            steerAxlePos.northing = pivotAxlePos.northing + (Math.Cos(fixHeading) * vehicle.wheelbase);
+            steerAxlePos.easting = pivotAxlePos.easting + (Math.Sin(fixHeading) * vehicle.Vehicle.Wheelbase);
+            steerAxlePos.northing = pivotAxlePos.northing + (Math.Cos(fixHeading) * vehicle.Vehicle.Wheelbase);
             steerAxlePos.heading = fixHeading;
 
             //guidance look ahead distance based on time or tool width at least 

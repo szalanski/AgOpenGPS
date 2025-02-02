@@ -265,7 +265,7 @@ namespace AgOpenGPS
 
                 if (cntr > 9)
                 {
-                    steerAngleRight = Math.Atan(mf.vehicle.wheelbase / ((diameter - mf.vehicle.trackWidth * 0.5) / 2));
+                    steerAngleRight = Math.Atan(mf.vehicle.Vehicle.Wheelbase / ((diameter - mf.vehicle.Vehicle.TrackWidth * 0.5) / 2));
                     steerAngleRight = glm.toDegrees(steerAngleRight);
 
                     lblCalcSteerAngleInner.Text = steerAngleRight.ToString("N1") + "\u00B0";
@@ -303,7 +303,7 @@ namespace AgOpenGPS
 
                 if (cntr > 9)
                 {
-                    steerAngleLeft = Math.Atan(mf.vehicle.wheelbase / ((diameter - mf.vehicle.trackWidth * 0.5) / 2));
+                    steerAngleLeft = Math.Atan(mf.vehicle.Vehicle.Wheelbase / ((diameter - mf.vehicle.Vehicle.TrackWidth * 0.5) / 2));
                     steerAngleLeft = glm.toDegrees(steerAngleLeft);
 
                     lblCalcSteerAngleLeft.Text = steerAngleLeft.ToString("N1") + "\u00B0";
@@ -1166,7 +1166,7 @@ namespace AgOpenGPS
             if (((NudlessNumericUpDown)sender).ShowKeypad(this))
             {
                 Properties.Settings.Default.setVehicle_wheelbase = (double)nudWheelbase.Value * mf.inchOrCm2m;
-                mf.vehicle.wheelbase = Properties.Settings.Default.setVehicle_wheelbase;
+                mf.vehicle.Vehicle.Wheelbase = Properties.Settings.Default.setVehicle_wheelbase;
                 Properties.Settings.Default.Save();
             }
         }
@@ -1176,8 +1176,8 @@ namespace AgOpenGPS
             if (((NudlessNumericUpDown)sender).ShowKeypad(this))
             {
                 Properties.Settings.Default.setVehicle_trackWidth = (double)nudVehicleTrack.Value * mf.inchOrCm2m;
-                mf.vehicle.trackWidth = Properties.Settings.Default.setVehicle_trackWidth;
-                mf.tram.halfWheelTrack = mf.vehicle.trackWidth * 0.5;
+                mf.vehicle.Vehicle.TrackWidth = Properties.Settings.Default.setVehicle_trackWidth;
+                mf.tram.halfWheelTrack = mf.vehicle.Vehicle.TrackWidth * 0.5;
                 Properties.Settings.Default.Save();
             }
         }

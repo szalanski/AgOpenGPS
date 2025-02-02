@@ -480,7 +480,7 @@ namespace AgOpenGPS
             if (((NudlessNumericUpDown)sender).ShowKeypad(this))
             {
                 Properties.Settings.Default.setVehicle_wheelbase = (double)nudWheelbase.Value * mf.inchOrCm2m;
-                mf.vehicle.wheelbase = Properties.Settings.Default.setVehicle_wheelbase;
+                mf.vehicle.Vehicle.Wheelbase = Properties.Settings.Default.setVehicle_wheelbase;
                 Properties.Settings.Default.Save();
             }
         }
@@ -490,8 +490,8 @@ namespace AgOpenGPS
             if (((NudlessNumericUpDown)sender).ShowKeypad(this))
             {
                 Properties.Settings.Default.setVehicle_trackWidth = (double)nudVehicleTrack.Value * mf.inchOrCm2m;
-                mf.vehicle.trackWidth = Properties.Settings.Default.setVehicle_trackWidth;
-                mf.tram.halfWheelTrack = mf.vehicle.trackWidth * 0.5;
+                mf.vehicle.Vehicle.TrackWidth = Properties.Settings.Default.setVehicle_trackWidth;
+                mf.tram.halfWheelTrack = mf.vehicle.Vehicle.TrackWidth * 0.5;
                 Properties.Settings.Default.Save();
             }
         }
