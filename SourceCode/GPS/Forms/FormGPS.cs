@@ -269,12 +269,6 @@ namespace AgOpenGPS
             //winform initialization
             InitializeComponent();
 
-            //translate
-            guidelinesToolStripMenuItem.Text = gStr.gsExtraGuideLines;
-            wizardsMenu.Text = gStr.gsWizards;
-            boundariesToolStripMenuItem.Text = gStr.gsBoundaryMenu;
-            SmoothABtoolStripMenu.Text = gStr.gsSmoothABCurve;
-
             //time keeper
             secondsSinceStart = (DateTime.Now - Process.GetCurrentProcess().StartTime).TotalSeconds;
 
