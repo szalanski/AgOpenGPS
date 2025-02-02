@@ -46,7 +46,6 @@ namespace AgOpenGPS
 
         public Color vehicleColor;
         public double vehicleOpacity;
-        public byte vehicleOpacityByte;
         public bool isVehicleImage;
 
         //Is it in 2D or 3D, metric or imperial, display lightbar, display grid etc
@@ -521,7 +520,6 @@ namespace AgOpenGPS
             panelDrag.Location = new System.Drawing.Point(87, 268);
 
             vehicleOpacity = ((double)(Properties.Settings.Default.setDisplay_vehicleOpacity) * 0.01);
-            vehicleOpacityByte = (byte)(255 * ((double)(Properties.Settings.Default.setDisplay_vehicleOpacity) * 0.01));
             isVehicleImage = Properties.Settings.Default.setDisplay_isVehicleImage;
 
             string directoryName = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);

@@ -236,11 +236,13 @@ namespace AgOpenGPS
 
             if (mf.isVehicleImage)
             {
+                byte vehicleOpacityByte = (byte)(255 * mf.vehicleOpacity);
+
                 if (Vehicle.Type == VehicleType.Tractor)
                 {
                     //vehicle body
                     GL.Enable(EnableCap.Texture2D);
-                    GL.Color4(mf.vehicleColor.R, mf.vehicleColor.G, mf.vehicleColor.B, mf.vehicleOpacityByte);
+                    GL.Color4(mf.vehicleColor.R, mf.vehicleColor.G, mf.vehicleColor.B, vehicleOpacityByte);
                     GL.BindTexture(TextureTarget.Texture2D, mf.texture[(int)FormGPS.textures.Tractor]);        // Select Our Texture
 
                     double leftAckermam, rightAckerman;
@@ -286,7 +288,7 @@ namespace AgOpenGPS
                     GL.Rotate(rightAckerman, 0, 0, 1);
 
                     GL.BindTexture(TextureTarget.Texture2D, mf.texture[(int)FormGPS.textures.FrontWheels]);        // Select Our Texture
-                    GL.Color4(mf.vehicleColor.R, mf.vehicleColor.G, mf.vehicleColor.B, mf.vehicleOpacityByte);
+                    GL.Color4(mf.vehicleColor.R, mf.vehicleColor.G, mf.vehicleColor.B, vehicleOpacityByte);
 
                     GL.Begin(PrimitiveType.TriangleStrip);              // Build Quad From A Triangle Strip
                     GL.TexCoord2(1, 0); GL.Vertex2(Vehicle.TrackWidth * 0.5, Vehicle.Wheelbase * 0.75); // Top Right
@@ -349,7 +351,7 @@ namespace AgOpenGPS
                         }
                     }
 
-                    GL.Color4((byte)20, (byte)20, (byte)20, mf.vehicleOpacityByte);
+                    GL.Color4((byte)20, (byte)20, (byte)20, vehicleOpacityByte);
                     //right wheel
                     GL.PushMatrix();
                     GL.Translate(Vehicle.TrackWidth * 0.5, -Vehicle.Wheelbase, 0);
@@ -381,7 +383,7 @@ namespace AgOpenGPS
 
                     GL.PopMatrix();
 
-                    GL.Color4(mf.vehicleColor.R, mf.vehicleColor.G, mf.vehicleColor.B, mf.vehicleOpacityByte);
+                    GL.Color4(mf.vehicleColor.R, mf.vehicleColor.G, mf.vehicleColor.B, vehicleOpacityByte);
                     GL.BindTexture(TextureTarget.Texture2D, mf.texture[(uint)FormGPS.textures.Harvester]);        // Select Our Texture
                     GL.Begin(PrimitiveType.TriangleStrip);              // Build Quad From A Triangle Strip
                     GL.TexCoord2(1, 0); GL.Vertex2(Vehicle.TrackWidth, Vehicle.Wheelbase * 1.5); // Top Right
@@ -405,7 +407,7 @@ namespace AgOpenGPS
                         modelSteerAngle = 0.5 * mf.mc.actualSteerAngleDegrees;
 
                     GL.Enable(EnableCap.Texture2D);
-                    GL.Color4(mf.vehicleColor.R, mf.vehicleColor.G, mf.vehicleColor.B, mf.vehicleOpacityByte);
+                    GL.Color4(mf.vehicleColor.R, mf.vehicleColor.G, mf.vehicleColor.B, vehicleOpacityByte);
 
                     GL.BindTexture(TextureTarget.Texture2D, mf.texture[(int)FormGPS.textures.FourWDRear]);        // Select Our Texture
 

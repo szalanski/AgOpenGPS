@@ -549,7 +549,6 @@ namespace AgOpenGPS
             //the old brand code
             Properties.Settings.Default.setDisplay_isVehicleImage = !cboxIsImage.Checked;
 
-            mf.vehicleOpacityByte = (byte)(255 * (mf.vehicleOpacity));
             Properties.Settings.Default.setDisplay_vehicleOpacity = (int)(mf.vehicleOpacity * 100);
 
             Properties.Settings.Default.setDisplay_colorVehicle = mf.vehicleColor;
@@ -633,7 +632,7 @@ namespace AgOpenGPS
         {
             if (original == null) original = (Bitmap)pboxAlpha.BackgroundImage.Clone();
             pboxAlpha.BackColor = Color.Transparent;
-            pboxAlpha.BackgroundImage = SetAlpha((Bitmap)original, (byte)(mf.vehicleOpacityByte));
+            pboxAlpha.BackgroundImage = SetAlpha((Bitmap)original, (byte)(255 * mf.vehicleOpacity));
         }
 
         private void btnOpacityUp_Click(object sender, EventArgs e)
@@ -651,7 +650,6 @@ namespace AgOpenGPS
         private void OpacityChanged()
         {
             lblOpacityPercent.Text = ((int)(mf.vehicleOpacity * 100)).ToString() + "%";
-            mf.vehicleOpacityByte = (byte)(255 * (mf.vehicleOpacity));
             Properties.Settings.Default.setDisplay_vehicleOpacity = (int)(mf.vehicleOpacity * 100);
             Properties.Settings.Default.Save();
             SetOpacity();
@@ -671,7 +669,6 @@ namespace AgOpenGPS
         private void cboxIsImage_Click(object sender, EventArgs e)
         {
             //mf.vehicleOpacity = (hsbarOpacity.Value * 0.01);
-            mf.vehicleOpacityByte = (byte)(255 * (mf.vehicleOpacity));
             Properties.Settings.Default.setDisplay_vehicleOpacity = (int)(mf.vehicleOpacity * 100);
 
             mf.isVehicleImage = (!cboxIsImage.Checked);
@@ -767,7 +764,6 @@ namespace AgOpenGPS
                     pboxAlpha.BackgroundImage = mf.Get4WDBrandFront(Settings.Default.setBrand_WDBrand);
                 }
 
-                mf.vehicleOpacityByte = (byte)(255 * (mf.vehicleOpacity));
                 Properties.Settings.Default.setDisplay_vehicleOpacity = (int)(mf.vehicleOpacity * 100);
                 lblOpacityPercent.Text = ((int)(mf.vehicleOpacity * 100)).ToString() + "%";
                 mf.vehicleColor = Color.FromArgb(254, 254, 254);
