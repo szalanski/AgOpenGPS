@@ -11,6 +11,9 @@
     {
         public VehicleType Type { get; set; }
 
+        public ColorRgb Color { get; set; }
+        public double Opacity { get; set; }
+
         public double AntennaHeight { get; set; }
         public double AntennaPivot { get; set; }
         public double AntennaOffset { get; set; }

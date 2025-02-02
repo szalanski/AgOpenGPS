@@ -549,9 +549,9 @@ namespace AgOpenGPS
             //the old brand code
             Properties.Settings.Default.setDisplay_isVehicleImage = !cboxIsImage.Checked;
 
-            Properties.Settings.Default.setDisplay_vehicleOpacity = (int)(mf.vehicleOpacity * 100);
+            Properties.Settings.Default.setDisplay_vehicleOpacity = (int)(mf.vehicle.Vehicle.Opacity * 100);
 
-            Properties.Settings.Default.setDisplay_colorVehicle = mf.vehicleColor;
+            Properties.Settings.Default.setDisplay_colorVehicle = (Color)mf.vehicle.Vehicle.Color;
 
             if (rbtnTractor.Checked)
             {
@@ -632,25 +632,25 @@ namespace AgOpenGPS
         {
             if (original == null) original = (Bitmap)pboxAlpha.BackgroundImage.Clone();
             pboxAlpha.BackColor = Color.Transparent;
-            pboxAlpha.BackgroundImage = SetAlpha((Bitmap)original, (byte)(255 * mf.vehicleOpacity));
+            pboxAlpha.BackgroundImage = SetAlpha((Bitmap)original, (byte)(255 * mf.vehicle.Vehicle.Opacity));
         }
 
         private void btnOpacityUp_Click(object sender, EventArgs e)
         {
-            mf.vehicleOpacity = Math.Min(mf.vehicleOpacity + 0.2, 1);
+            mf.vehicle.Vehicle.Opacity = Math.Min(mf.vehicle.Vehicle.Opacity + 0.2, 1);
             OpacityChanged();
         }
 
         private void btnOpacityDn_Click(object sender, EventArgs e)
         {
-            mf.vehicleOpacity = Math.Max(mf.vehicleOpacity - 0.2, 0.2);
+            mf.vehicle.Vehicle.Opacity = Math.Max(mf.vehicle.Vehicle.Opacity - 0.2, 0.2);
             OpacityChanged();
         }
 
         private void OpacityChanged()
         {
-            lblOpacityPercent.Text = ((int)(mf.vehicleOpacity * 100)).ToString() + "%";
-            Properties.Settings.Default.setDisplay_vehicleOpacity = (int)(mf.vehicleOpacity * 100);
+            lblOpacityPercent.Text = ((int)(mf.vehicle.Vehicle.Opacity * 100)).ToString() + "%";
+            Properties.Settings.Default.setDisplay_vehicleOpacity = (int)(mf.vehicle.Vehicle.Opacity * 100);
             Properties.Settings.Default.Save();
             SetOpacity();
         }
@@ -669,7 +669,7 @@ namespace AgOpenGPS
         private void cboxIsImage_Click(object sender, EventArgs e)
         {
             //mf.vehicleOpacity = (hsbarOpacity.Value * 0.01);
-            Properties.Settings.Default.setDisplay_vehicleOpacity = (int)(mf.vehicleOpacity * 100);
+            Properties.Settings.Default.setDisplay_vehicleOpacity = (int)(mf.vehicle.Vehicle.Opacity * 100);
 
             mf.isVehicleImage = (!cboxIsImage.Checked);
             Properties.Settings.Default.setDisplay_isVehicleImage = mf.isVehicleImage;
@@ -764,15 +764,15 @@ namespace AgOpenGPS
                     pboxAlpha.BackgroundImage = mf.Get4WDBrandFront(Settings.Default.setBrand_WDBrand);
                 }
 
-                Properties.Settings.Default.setDisplay_vehicleOpacity = (int)(mf.vehicleOpacity * 100);
-                lblOpacityPercent.Text = ((int)(mf.vehicleOpacity * 100)).ToString() + "%";
-                mf.vehicleColor = Color.FromArgb(254, 254, 254);
+                Properties.Settings.Default.setDisplay_vehicleOpacity = (int)(mf.vehicle.Vehicle.Opacity * 100);
+                lblOpacityPercent.Text = ((int)(mf.vehicle.Vehicle.Opacity * 100)).ToString() + "%";
+                mf.vehicle.Vehicle.Color = new ColorRgb(254, 254, 254);
             }
             else
             {
                 pboxAlpha.BackgroundImage = Properties.Resources.TriangleVehicle;
-                lblOpacityPercent.Text = ((int)(mf.vehicleOpacity * 100)).ToString() + "%";
-                mf.vehicleColor = Color.FromArgb(254, 254, 254);
+                lblOpacityPercent.Text = ((int)(mf.vehicle.Vehicle.Opacity * 100)).ToString() + "%";
+                mf.vehicle.Vehicle.Color = new ColorRgb(254, 254, 254);
             }
 
             cboxIsImage.Checked = !mf.isVehicleImage;

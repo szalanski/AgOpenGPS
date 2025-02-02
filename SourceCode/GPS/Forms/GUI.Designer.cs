@@ -11,6 +11,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
+using AgOpenGPS.Core.Models;
 
 namespace AgOpenGPS
 {
@@ -44,8 +45,6 @@ namespace AgOpenGPS
         public Color textColorDay;
         public Color textColorNight;
 
-        public Color vehicleColor;
-        public double vehicleOpacity;
         public bool isVehicleImage;
 
         //Is it in 2D or 3D, metric or imperial, display lightbar, display grid etc
@@ -519,7 +518,7 @@ namespace AgOpenGPS
             panelNavigation.Location = new System.Drawing.Point(90, 100);
             panelDrag.Location = new System.Drawing.Point(87, 268);
 
-            vehicleOpacity = ((double)(Properties.Settings.Default.setDisplay_vehicleOpacity) * 0.01);
+            vehicle.Vehicle.Opacity = ((double)(Properties.Settings.Default.setDisplay_vehicleOpacity) * 0.01);
             isVehicleImage = Properties.Settings.Default.setDisplay_isVehicleImage;
 
             string directoryName = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
@@ -541,7 +540,7 @@ namespace AgOpenGPS
             //set the flag mark button to red dot
             btnFlag.Image = Properties.Resources.FlagRed;
 
-            vehicleColor = Settings.Default.setDisplay_colorVehicle.CheckColorFor255();
+            vehicle.Vehicle.Color = (ColorRgb)Settings.Default.setDisplay_colorVehicle.CheckColorFor255();
 
             isLightbarOn = Settings.Default.setMenu_isLightbarOn;
             isLightBarNotSteerBar = Settings.Default.setMenu_isLightbarNotSteerBar;

@@ -236,13 +236,13 @@ namespace AgOpenGPS
 
             if (mf.isVehicleImage)
             {
-                byte vehicleOpacityByte = (byte)(255 * mf.vehicleOpacity);
+                byte vehicleOpacityByte = (byte)(255 * Vehicle.Opacity);
 
                 if (Vehicle.Type == VehicleType.Tractor)
                 {
                     //vehicle body
                     GL.Enable(EnableCap.Texture2D);
-                    GL.Color4(mf.vehicleColor.R, mf.vehicleColor.G, mf.vehicleColor.B, vehicleOpacityByte);
+                    GL.Color4(Vehicle.Color.Red, Vehicle.Color.Green, Vehicle.Color.Blue, vehicleOpacityByte);
                     GL.BindTexture(TextureTarget.Texture2D, mf.texture[(int)FormGPS.textures.Tractor]);        // Select Our Texture
 
                     double leftAckermam, rightAckerman;
@@ -288,7 +288,7 @@ namespace AgOpenGPS
                     GL.Rotate(rightAckerman, 0, 0, 1);
 
                     GL.BindTexture(TextureTarget.Texture2D, mf.texture[(int)FormGPS.textures.FrontWheels]);        // Select Our Texture
-                    GL.Color4(mf.vehicleColor.R, mf.vehicleColor.G, mf.vehicleColor.B, vehicleOpacityByte);
+                    GL.Color4(Vehicle.Color.Red, Vehicle.Color.Green, Vehicle.Color.Blue, vehicleOpacityByte);
 
                     GL.Begin(PrimitiveType.TriangleStrip);              // Build Quad From A Triangle Strip
                     GL.TexCoord2(1, 0); GL.Vertex2(Vehicle.TrackWidth * 0.5, Vehicle.Wheelbase * 0.75); // Top Right
@@ -383,7 +383,7 @@ namespace AgOpenGPS
 
                     GL.PopMatrix();
 
-                    GL.Color4(mf.vehicleColor.R, mf.vehicleColor.G, mf.vehicleColor.B, vehicleOpacityByte);
+                    GL.Color4(Vehicle.Color.Red, Vehicle.Color.Green, Vehicle.Color.Blue, vehicleOpacityByte);
                     GL.BindTexture(TextureTarget.Texture2D, mf.texture[(uint)FormGPS.textures.Harvester]);        // Select Our Texture
                     GL.Begin(PrimitiveType.TriangleStrip);              // Build Quad From A Triangle Strip
                     GL.TexCoord2(1, 0); GL.Vertex2(Vehicle.TrackWidth, Vehicle.Wheelbase * 1.5); // Top Right
@@ -407,7 +407,7 @@ namespace AgOpenGPS
                         modelSteerAngle = 0.5 * mf.mc.actualSteerAngleDegrees;
 
                     GL.Enable(EnableCap.Texture2D);
-                    GL.Color4(mf.vehicleColor.R, mf.vehicleColor.G, mf.vehicleColor.B, vehicleOpacityByte);
+                    GL.Color4(Vehicle.Color.Red, Vehicle.Color.Green, Vehicle.Color.Blue, vehicleOpacityByte);
 
                     GL.BindTexture(TextureTarget.Texture2D, mf.texture[(int)FormGPS.textures.FourWDRear]);        // Select Our Texture
 
@@ -443,13 +443,13 @@ namespace AgOpenGPS
             }
             else
             {
-                GL.Color4(1.2, 1.20, 0.0, mf.vehicleOpacity);
+                GL.Color4(1.2, 1.20, 0.0, Vehicle.Opacity);
                 GL.Begin(PrimitiveType.TriangleFan);
                 GL.Vertex3(0, Vehicle.AntennaPivot, -0.0);
                 GL.Vertex3(1.0, -0, 0.0);
-                GL.Color4(0.0, 1.20, 1.22, mf.vehicleOpacity);
+                GL.Color4(0.0, 1.20, 1.22, Vehicle.Opacity);
                 GL.Vertex3(0, Vehicle.Wheelbase, 0.0);
-                GL.Color4(1.220, 0.0, 1.2, mf.vehicleOpacity);
+                GL.Color4(1.220, 0.0, 1.2, Vehicle.Opacity);
                 GL.Vertex3(-1.0, -0, 0.0);
                 GL.Vertex3(1.0, -0, 0.0);
                 GL.End();
