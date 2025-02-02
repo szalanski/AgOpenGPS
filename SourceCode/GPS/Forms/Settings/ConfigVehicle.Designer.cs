@@ -10,6 +10,7 @@ using AgOpenGPS.Controls;
 using AgOpenGPS.Culture;
 using AgOpenGPS.Properties;
 using OpenTK.Graphics.OpenGL;
+using AgOpenGPS.Core.Models;
 
 namespace AgOpenGPS
 {
@@ -439,15 +440,15 @@ namespace AgOpenGPS
 
             nudTractorHitchLength.Value = (int)(Math.Abs(Properties.Settings.Default.setVehicle_hitchLength) * mf.m2InchOrCm);
 
-            if (mf.vehicle.vehicleType == 0)
+            if (mf.vehicle.Vehicle.Type == VehicleType.Tractor)
             {
                 pictureBox1.Image = Properties.Resources.RadiusWheelBase;
             }
-            else if (mf.vehicle.vehicleType == 1)
+            else if (mf.vehicle.Vehicle.Type == VehicleType.Harvester)
             {
                 pictureBox1.Image = Properties.Resources.RadiusWheelBaseHarvester;
             }
-            else if (mf.vehicle.vehicleType == 2)
+            else if (mf.vehicle.Vehicle.Type == VehicleType.Articulated)
             {
                 pictureBox1.Image = Properties.Resources.RadiusWheelBase4WD;
             }
@@ -512,9 +513,9 @@ namespace AgOpenGPS
 
         private void tabVConfig_Enter(object sender, EventArgs e)
         {
-            if (mf.vehicle.vehicleType == 0) rbtnTractor.Checked = true;
-            else if (mf.vehicle.vehicleType == 1) rbtnHarvester.Checked = true;
-            else if (mf.vehicle.vehicleType == 2) rbtn4WD.Checked = true;
+            if (mf.vehicle.Vehicle.Type == VehicleType.Tractor) rbtnTractor.Checked = true;
+            else if (mf.vehicle.Vehicle.Type == VehicleType.Harvester) rbtnHarvester.Checked = true;
+            else if (mf.vehicle.Vehicle.Type == VehicleType.Articulated) rbtn4WD.Checked = true;
 
             original = null;
             TabImageSetup();
@@ -524,12 +525,12 @@ namespace AgOpenGPS
         {
             if (rbtnTractor.Checked)
             {
-                mf.vehicle.vehicleType = 0;
+                mf.vehicle.Vehicle.Type = VehicleType.Tractor;
                 Properties.Settings.Default.setVehicle_vehicleType = 0;
             }
             if (rbtnHarvester.Checked)
             {
-                mf.vehicle.vehicleType = 1;
+                mf.vehicle.Vehicle.Type = VehicleType.Harvester;
                 Properties.Settings.Default.setVehicle_vehicleType = 1;
 
                 if ( mf.tool.hitchLength < 0) mf.tool.hitchLength *= -1;
@@ -541,7 +542,7 @@ namespace AgOpenGPS
             }
             if (rbtn4WD.Checked)
             {
-                mf.vehicle.vehicleType = 2;
+                mf.vehicle.Vehicle.Type = VehicleType.Articulated;
                 Properties.Settings.Default.setVehicle_vehicleType = 2;
             }
 
@@ -610,17 +611,17 @@ namespace AgOpenGPS
         {
             if (rbtnTractor.Checked)
             {
-                mf.vehicle.vehicleType = 0;
+                mf.vehicle.Vehicle.Type = VehicleType.Tractor;
                 Properties.Settings.Default.setVehicle_vehicleType = 0;
             }
             if (rbtnHarvester.Checked)
             {
-                mf.vehicle.vehicleType = 1;
+                mf.vehicle.Vehicle.Type = VehicleType.Harvester;
                 Properties.Settings.Default.setVehicle_vehicleType = 1;
             }
             if (rbtn4WD.Checked)
             {
-                mf.vehicle.vehicleType = 2;
+                mf.vehicle.Vehicle.Type = VehicleType.Articulated;
                 Properties.Settings.Default.setVehicle_vehicleType = 2;
             }
 
@@ -688,7 +689,7 @@ namespace AgOpenGPS
 
             if (mf.isVehicleImage)
             {
-                if (mf.vehicle.vehicleType == 0)
+                if (mf.vehicle.Vehicle.Type == VehicleType.Tractor)
                 {
                     panelTractorBrands.Visible = true;
 
@@ -725,7 +726,7 @@ namespace AgOpenGPS
 
                     pboxAlpha.BackgroundImage = mf.GetTractorBrand(Settings.Default.setBrand_TBrand);
                 }
-                else if (mf.vehicle.vehicleType == 1)
+                else if (mf.vehicle.Vehicle.Type == VehicleType.Harvester)
                 {
                     panelHarvesterBrands.Visible = true;
 
@@ -744,7 +745,7 @@ namespace AgOpenGPS
 
                     pboxAlpha.BackgroundImage = mf.GetHarvesterBrand(Settings.Default.setBrand_HBrand);
                 }
-                else if (mf.vehicle.vehicleType == 2)
+                else if (mf.vehicle.Vehicle.Type == VehicleType.Articulated)
                 {
                     panel4WdBrands.Visible = true;
 

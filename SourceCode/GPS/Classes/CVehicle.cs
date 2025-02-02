@@ -1,5 +1,6 @@
 ﻿//Please, if you use this, share the improvements
 
+using AgOpenGPS.Core.Models;
 using OpenTK.Graphics.OpenGL;
 using System;
 
@@ -14,7 +15,7 @@ namespace AgOpenGPS
         public double wheelbase;
         public double antennaOffset;
         public int deadZoneHeading, deadZoneDelay;
-        public int vehicleType, deadZoneDelayCounter;
+        public int deadZoneDelayCounter;
         public bool isInDeadZone;
 
         //min vehicle speed allowed before turning shit off
@@ -50,6 +51,8 @@ namespace AgOpenGPS
             //constructor
             mf = _f;
 
+            Vehicle = new Vehicle();
+
             antennaHeight = Properties.Settings.Default.setVehicle_antennaHeight;
             antennaPivot = Properties.Settings.Default.setVehicle_antennaPivot;
             antennaOffset = Properties.Settings.Default.setVehicle_antennaOffset;
@@ -76,7 +79,7 @@ namespace AgOpenGPS
             stanleyIntegralDistanceAwayTriggerAB = Properties.Settings.Default.stanleyIntegralDistanceAwayTriggerAB;
 
             purePursuitIntegralGain = Properties.Settings.Default.purePursuitIntegralGainAB;
-            vehicleType = Properties.Settings.Default.setVehicle_vehicleType;
+            Vehicle.Type = (VehicleType)Properties.Settings.Default.setVehicle_vehicleType;
 
             hydLiftLookAheadTime = Properties.Settings.Default.setVehicle_hydraulicLiftLookAhead;
 
@@ -100,6 +103,8 @@ namespace AgOpenGPS
 
         public int modeTimeCounter = 0;
         public double goalDistance = 0;
+
+        public Vehicle Vehicle { get; }
 
         public double UpdateGoalPointDistance()
         {
@@ -235,7 +240,7 @@ namespace AgOpenGPS
 
             if (mf.isVehicleImage)
             {
-                if (vehicleType == 0)
+                if (Vehicle.Type == VehicleType.Tractor)
                 {
                     //vehicle body
                     GL.Enable(EnableCap.Texture2D);
@@ -314,7 +319,7 @@ namespace AgOpenGPS
                     GL.Disable(EnableCap.Texture2D);
                     //GL.Disable(EnableCap.Blend);
                 }
-                else if (vehicleType == 1) //Harvestor
+                else if (Vehicle.Type == VehicleType.Harvester)
                 {
                     //vehicle body
                     GL.Enable(EnableCap.Texture2D);
@@ -394,7 +399,7 @@ namespace AgOpenGPS
                     GL.Disable(EnableCap.Texture2D);
                     //GL.Disable(EnableCap.Blend);
                 }
-                else if (vehicleType == 2) //4WD - Image Text # Front is 16 Rear is 17
+                else if (Vehicle.Type == VehicleType.Articulated) // Image Text # Front is 16 Rear is 17
                 {
                     double modelSteerAngle;
 
