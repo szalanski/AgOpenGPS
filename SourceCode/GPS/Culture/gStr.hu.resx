@@ -361,11 +361,11 @@
   <data name="gsInvertWas" xml:space="preserve">
     <value>Szögszenzor invertálása</value>
   </data>
-  <data name="gsKeyboard" xml:space="preserve">
-    <value>Billentyűzet</value>
-  </data>
   <data name="gsKMH" xml:space="preserve">
     <value>Km/h</value>
+  </data>
+  <data name="gsKeyboard" xml:space="preserve">
+    <value>Billentyűzet</value>
   </data>
   <data name="gsLanguage" xml:space="preserve">
     <value>Nyelv</value>

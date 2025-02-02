@@ -615,11 +615,11 @@
   <data name="gsInvertWas" xml:space="preserve">
     <value>Inverter WAS</value>
   </data>
-  <data name="gsKeyboard" xml:space="preserve">
-    <value>Tastatur</value>
-  </data>
   <data name="gsKMH" xml:space="preserve">
     <value>km/t</value>
+  </data>
+  <data name="gsKeyboard" xml:space="preserve">
+    <value>Tastatur</value>
   </data>
   <data name="gsLanguage" xml:space="preserve">
     <value>Språk</value>

@@ -608,11 +608,11 @@ L'ordre dans lequel vous cliquez, sera l'ordre dans lequel ils apparaîtrons dan
   <data name="gsInvertWas" xml:space="preserve">
     <value>Inverser WAS</value>
   </data>
-  <data name="gsKeyboard" xml:space="preserve">
-    <value>Clavier</value>
-  </data>
   <data name="gsKMH" xml:space="preserve">
     <value>km/h</value>
+  </data>
+  <data name="gsKeyboard" xml:space="preserve">
+    <value>Clavier</value>
   </data>
   <data name="gsLanguage" xml:space="preserve">
     <value>Langue</value>

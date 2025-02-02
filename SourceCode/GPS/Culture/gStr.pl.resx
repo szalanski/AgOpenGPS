@@ -931,6 +931,9 @@ Kolejność, w jakiej je naciśniesz, będzie kolejnością, w jakiej pojawią s
   <data name="gsSort" xml:space="preserve">
     <value>Sortuj</value>
   </data>
+  <data name="gsSound" xml:space="preserve">
+    <value>Dzwieki</value>
+  </data>
   <data name="gsSouth" xml:space="preserve">
     <value>Południe</value>
   </data>

@@ -135,6 +135,27 @@
   <data name="gsAgressiveness" xml:space="preserve">
     <value>Agresyvumas</value>
   </data>
+  <data name="gsAlpha" xml:space="preserve">
+    <value>Alpha</value>
+  </data>
+  <data name="gsAntennaHeight" xml:space="preserve">
+    <value>Antenos aukštis</value>
+  </data>
+  <data name="gsAntennaOffset" xml:space="preserve">
+    <value>Antenos poz. kompensavimas</value>
+  </data>
+  <data name="gsApplied" xml:space="preserve">
+    <value>Apdirbta</value>
+  </data>
+  <data name="gsAquire" xml:space="preserve">
+    <value>Pasiekti</value>
+  </data>
+  <data name="gsAquireDescription" xml:space="preserve">
+    <value>Pasiekti = Faktorius * Išlaikymas</value>
+  </data>
+  <data name="gsAquireFactor" xml:space="preserve">
+    <value>Pasiekimo faktorius</value>
+  </data>
   <data name="gsAreYouSure" xml:space="preserve">
     <value>Ar tikrai?</value>
   </data>
@@ -154,7 +175,7 @@
     <value>Remiantis lauku:</value>
   </data>
   <data name="gsBoundary" xml:space="preserve">
-    <value>Riba</value>
+    <value>Ribos</value>
   </data>
   <data name="gsBoundaryLineFilesAreCorrupt" xml:space="preserve">
     <value>Ribinių linijų failas sugadintas</value>
@@ -181,7 +202,7 @@
     <value>Pasirinkite arba sukurkite kitą</value>
   </data>
   <data name="gsClose" xml:space="preserve">
-    <value>Baigti</value>
+    <value>Uždaryti</value>
   </data>
   <data name="gsCloseFieldFirst" xml:space="preserve">
     <value>Pirmiausia uždaryti lauką</value>
@@ -223,7 +244,7 @@
     <value>Ištrinkite visas sekcijas ir kontūrus</value>
   </data>
   <data name="gsDeleteAppliedArea" xml:space="preserve">
-    <value>Ištrinti taikomą plotą</value>
+    <value>Ištrinti apdirbtą plotą</value>
   </data>
   <data name="gsDeleteContourPaths" xml:space="preserve">
     <value>Ištrinkite kontūro kelius</value>
@@ -313,7 +334,7 @@
     <value>Važiavimo krypties diagrama</value>
   </data>
   <data name="gsHeadland" xml:space="preserve">
-    <value>Užribis</value>
+    <value>Galulaukės</value>
   </data>
   <data name="gsHeadlandForm" xml:space="preserve">
     <value>Užribio kūrimas ir redagavimas</value>
@@ -348,11 +369,11 @@
   <data name="gsInvertWas" xml:space="preserve">
     <value>Perversti WAS</value>
   </data>
-  <data name="gsKeyboard" xml:space="preserve">
-    <value>Klaviatūra</value>
-  </data>
   <data name="gsKMH" xml:space="preserve">
     <value>km/h</value>
+  </data>
+  <data name="gsKeyboard" xml:space="preserve">
+    <value>Klaviatūra</value>
   </data>
   <data name="gsLanguage" xml:space="preserve">
     <value>Kalba</value>
@@ -430,7 +451,7 @@
     <value>Poslinkio pataisymas</value>
   </data>
   <data name="gsOpen" xml:space="preserve">
-    <value>Atidaryta</value>
+    <value>Atidaryti</value>
   </data>
   <data name="gsOuter" xml:space="preserve">
     <value>Išorinis</value>
@@ -447,6 +468,15 @@
   <data name="gsPause" xml:space="preserve">
     <value>Pauzė</value>
   </data>
+  <data name="gsPivot" xml:space="preserve">
+    <value>Posūkio ašis</value>
+  </data>
+  <data name="gsPivotDistance" xml:space="preserve">
+    <value>Atstumas nuo galinės ašies</value>
+  </data>
+  <data name="gsPlantPop" xml:space="preserve">
+    <value>Padargo pop</value>
+  </data>
   <data name="gsPleaseEnterABLine" xml:space="preserve">
     <value>Prašome įvesti į AB liniją</value>
   </data>
@@ -458,6 +488,18 @@
   </data>
   <data name="gsProgramWillExitPleaseRestart" xml:space="preserve">
     <value>Programa išsijungs, prašome paleisti iš naujo</value>
+  </data>
+  <data name="gsProportionalGain" xml:space="preserve">
+    <value>Proporcingas priartėjimas</value>
+  </data>
+  <data name="gsQuickAB" xml:space="preserve">
+    <value>Greitas AB kūrimas</value>
+  </data>
+  <data name="gsRaiseTime" xml:space="preserve">
+    <value>Kėlimo laikas</value>
+  </data>
+  <data name="gsRate" xml:space="preserve">
+    <value>Sparta</value>
   </data>
   <data name="gsReallyResetEverything" xml:space="preserve">
     <value>Nustatyti iš naujo</value>
@@ -479,6 +521,21 @@
   </data>
   <data name="gsResume" xml:space="preserve">
     <value>Atnaujinti</value>
+  </data>
+  <data name="gsReverseDistance" xml:space="preserve">
+    <value>Atgalinis atstumas</value>
+  </data>
+  <data name="gsReverseSteer" xml:space="preserve">
+    <value>Atbulinio aptikimas</value>
+  </data>
+  <data name="gsRight" xml:space="preserve">
+    <value>Dešinė</value>
+  </data>
+  <data name="gsRightMenu" xml:space="preserve">
+    <value>Dešinys menu</value>
+  </data>
+  <data name="gsRollFilter" xml:space="preserve">
+    <value>Pasvirimo filtras</value>
   </data>
   <data name="gsS_East" xml:space="preserve">
     <value>Pietryčiai</value>
@@ -563,5 +620,26 @@
   </data>
   <data name="gsXTEChart" xml:space="preserve">
     <value>Diagrama: nuokrypis nuo linijos (XTE)</value>
+  </data>
+  <data name="gsZeroRoll" xml:space="preserve">
+    <value>Posvyrio nulinimas</value>
+  </data>
+  <data name="gsZone" xml:space="preserve">
+    <value>Zona</value>
+  </data>
+  <data name="gsZones" xml:space="preserve">
+    <value>Zonos</value>
+  </data>
+  <data name="gsZoomIn" xml:space="preserve">
+    <value>Pritraukti</value>
+  </data>
+  <data name="v_AboutIntro" xml:space="preserve">
+    <value>https://www.youtube.com/watch?v=iN2cZ8avHag</value>
+  </data>
+  <data name="v_RecordedPathForm" xml:space="preserve">
+    <value>https://www.youtube.com/watch?v=fE3TPRIRSFg</value>
+  </data>
+  <data name="v_SteerSettingsForm" xml:space="preserve">
+    <value>https://www.youtube.com/watch?v=3SdvYgx8HHc</value>
   </data>
 </root>

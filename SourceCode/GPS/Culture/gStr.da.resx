@@ -211,7 +211,7 @@
     <value>Opret Ny Mark</value>
   </data>
   <data name="gsCurrent" xml:space="preserve">
-    <value>Strøm</value>
+    <value>Aktuelt</value>
   </data>
   <data name="gsCurveLineFileIsCorrupt" xml:space="preserve">
     <value>Fejl i Kurve Fil</value>

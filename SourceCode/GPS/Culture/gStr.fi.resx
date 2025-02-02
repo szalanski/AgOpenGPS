@@ -214,7 +214,7 @@
     <value>Luo uusi pelto</value>
   </data>
   <data name="gsCurrent" xml:space="preserve">
-    <value>Nykyinen</value>
+    <value>nykyinen</value>
   </data>
   <data name="gsCurveLineFileIsCorrupt" xml:space="preserve">
     <value>Käyräviivatetiedosto korruptoitunut</value>

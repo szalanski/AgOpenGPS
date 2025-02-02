@@ -271,7 +271,7 @@
     <value>Novo polje iz ISO-XML</value>
   </data>
   <data name="gsCurrent" xml:space="preserve">
-    <value>Trenutni (A)</value>
+    <value>струја</value>
   </data>
   <data name="gsCurrentSensorValueLabel" xml:space="preserve">
     <value>Trenutna vrednost (A)</value>
