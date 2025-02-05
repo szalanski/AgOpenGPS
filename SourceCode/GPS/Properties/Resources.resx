@@ -1444,4 +1444,10 @@
   <data name="ABPivotCircle" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\btnImages\ABPivotCircle.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="JCB" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\btnImages\Config\Brand\JCB.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="z_TractorJCB" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\btnImages\Config\Tractor\z_TractorJCB.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>
