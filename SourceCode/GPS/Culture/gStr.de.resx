@@ -132,6 +132,9 @@
   <data name="gsAbout" xml:space="preserve">
     <value>Über...</value>
   </data>
+  <data name="gsAckermann" xml:space="preserve">
+    <value>Geometrieversatz</value>
+  </data>
   <data name="gsActionHasBeenCancelled" xml:space="preserve">
     <value>Aktion abgebrochen</value>
   </data>
@@ -319,7 +322,7 @@
     <value>Tag</value>
   </data>
   <data name="gsDeadzone" xml:space="preserve">
-    <value>---Nullbereich---</value>
+    <value>--Totbereich--</value>
   </data>
   <data name="gsDefault" xml:space="preserve">
     <value>Standart</value>
@@ -409,7 +412,7 @@
     <value>Aktivieren</value>
   </data>
   <data name="gsEncoderCounts" xml:space="preserve">
-    <value>Encoder Zählwert</value>
+    <value>Anzahl</value>
   </data>
   <data name="gsEnterCoordinatesForSimulator" xml:space="preserve">
     <value>Koordinaten für Simulator eingeben</value>
@@ -526,7 +529,7 @@
     <value>Hubwerkseinstellungen</value>
   </data>
   <data name="gsIMUAxis" xml:space="preserve">
-    <value>IMU Invertieren </value>
+    <value>IMU Achse</value>
   </data>
   <data name="gsIfWrongDirectionTapVehicle" xml:space="preserve">
     <value>Falsche Richtung? Fahrzeug antippen</value>
@@ -577,7 +580,7 @@
     <value>Linienglättung</value>
   </data>
   <data name="gsLineWidth" xml:space="preserve">
-    <value>Linienstärke</value>
+    <value>Linienbreite</value>
   </data>
   <data name="gsLookAheadTiming" xml:space="preserve">
     <value>Ein-/Aus-Zeitkonfiguration</value>
@@ -592,13 +595,13 @@
     <value>Manuell</value>
   </data>
   <data name="gsManualTurns" xml:space="preserve">
-    <value>Manuelle Wendung</value>
+    <value>Maximale U-Turn Geschwindigkeit</value>
   </data>
   <data name="gsMapForBackground" xml:space="preserve">
     <value>Verwende Bing Map als Hintergrund</value>
   </data>
   <data name="gsMaxLimit" xml:space="preserve">
-    <value>Max. PWM</value>
+    <value>Maximal PWM</value>
   </data>
   <data name="gsMaxSpeed" xml:space="preserve">
     <value>Max. Geschwindigkeit</value>
@@ -781,7 +784,7 @@
     <value>Programm wird beendet – bitte neu starten</value>
   </data>
   <data name="gsProportionalGain" xml:space="preserve">
-    <value>Proportionaler Verstärkungsfaktor</value>
+    <value>Proportionaler Faktor</value>
   </data>
   <data name="gsQuickAB" xml:space="preserve">
     <value>A+  AB-Gearde  AB-Kurve</value>
@@ -940,20 +943,19 @@
     <value>Lenkwinkel</value>
   </data>
   <data name="gsSteerBar" xml:space="preserve">
-    <value>Lenkleiste</value>
+    <value>Lenklinie</value>
   </data>
   <data name="gsSteerChart" xml:space="preserve">
     <value>Lenkdiagramm</value>
   </data>
   <data name="gsSteerDescription" xml:space="preserve">
-    <value>Knopf
-Schalter</value>
+    <value>Kein / Taster / Schalter</value>
   </data>
   <data name="gsSteerEnable" xml:space="preserve">
     <value>Externe Aktivierung</value>
   </data>
   <data name="gsSteerInReverse" xml:space="preserve">
-    <value>Beim Rückwärtsfahren lenken</value>
+    <value>Lenken bei Rückwärtsfahrt</value>
   </data>
   <data name="gsSteerResponse" xml:space="preserve">
     <value>Lenkreaktion</value>
