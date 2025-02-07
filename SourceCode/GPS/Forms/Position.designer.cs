@@ -1655,7 +1655,7 @@ namespace AgOpenGPS
                 {
                     pn.latStart = pn.latitude;
                     pn.lonStart = pn.longitude;
-                    pn.SetLocalMetersPerDegree();
+                    pn.SetLocalMetersPerDegree(false);
                 }
 
                 pn.ConvertWGS84ToLocal(pn.latitude, pn.longitude, out pn.fix.northing, out pn.fix.easting);

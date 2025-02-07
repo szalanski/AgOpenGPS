@@ -1410,39 +1410,13 @@ namespace AgOpenGPS
                     simulatorOnToolStripMenuItem.Checked = false;
                     return;
                 }
-
-                simulatorOnToolStripMenuItem.Checked = true;
-                panelSim.Visible = true;
-                timerSim.Enabled = true;
-                //DialogResult result3 = MessageBox.Show(gStr.gsAgOpenGPSWillExitPlzRestart, gStr.gsTurningOnSimulator, MessageBoxButtons.OK);
-                Settings.Default.setMenu_isSimulatorOn = simulatorOnToolStripMenuItem.Checked;
-                Settings.Default.Save();
-
-                isFirstFixPositionSet = false;
-                isFirstHeadingSet = false;
-                isGPSPositionInitialized = false;
-                startCounter = 0;
-
-                //System.Environment.Exit(1);
             }
-            else
-            {
-                panelSim.Visible = false;
-                timerSim.Enabled = false;
-                simulatorOnToolStripMenuItem.Checked = false;
-                //TimedMessageBox(3000, "Simulator Turning Off", "Application will Exit");
-                //DialogResult result3 = MessageBox.Show(gStr.gsAgOpenGPSWillExitPlzRestart, gStr.gsTurningOffSimulator, MessageBoxButtons.OK);
-                Settings.Default.setMenu_isSimulatorOn = simulatorOnToolStripMenuItem.Checked;
-                Settings.Default.Save();
 
-                //worldGrid.CreateWorldGrid(0, 0);
-                isFirstFixPositionSet = false;
-                isGPSPositionInitialized = false;
-                isFirstHeadingSet = false;
-                startCounter = 0;
-
-                //System.Environment.Exit(1);
-            }
+            timerSim.Enabled = panelSim.Visible = simulatorOnToolStripMenuItem.Checked;
+            isFirstFixPositionSet = false;
+            isGPSPositionInitialized = false;
+            isFirstHeadingSet = false;
+            startCounter = 0;
 
             Settings.Default.setMenu_isSimulatorOn = simulatorOnToolStripMenuItem.Checked;
             Settings.Default.Save();
