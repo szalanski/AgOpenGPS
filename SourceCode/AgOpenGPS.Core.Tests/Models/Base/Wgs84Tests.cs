@@ -29,7 +29,7 @@ namespace AgOpenGPS.Core.Tests.Models
         {
             // Arrange
             Wgs84 amsterdam = new Wgs84(52.377956, 4.897070);
-            Wgs84 opposite = new Wgs84(-52.377956, 4.897070 + 180);
+            Wgs84 opposite = new Wgs84(-52.377956, 4.897070 - 180);
 
             // Act
             double distance = amsterdam.Distance(opposite);
