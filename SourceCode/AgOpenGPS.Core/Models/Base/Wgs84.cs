@@ -16,7 +16,7 @@ namespace AgOpenGPS.Core.Models
 
         public double Distance(Wgs84 b) // In meters
         {
-            const double EarthRadius = 6376500.0;
+            const double EarthRadius = 6371 * 1000.0;
             double degreesToRad = Math.PI / 180.0;
 
             double aLatRad = Latitude * degreesToRad;
