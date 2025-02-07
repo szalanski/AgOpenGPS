@@ -1153,6 +1153,7 @@ namespace AgOpenGPS
                                     }
                                 }
                             }
+                            else break;
                         }
                     }
 
