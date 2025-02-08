@@ -358,7 +358,7 @@ namespace AgOpenGPS
                         }
 
                         //Draw headland
-                        if (bnd.isHeadlandOn)
+                        if (bnd.isHeadlandOn && bnd.bndList.Count > 0)
                         {
                             GL.LineWidth(ABLine.lineWidth * 3);
 
