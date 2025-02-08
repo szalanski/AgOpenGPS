@@ -142,10 +142,12 @@ namespace AgOpenGPS
                             if (nodePart.Name == "LSG" && nodePart.ChildNodes[0].Attributes.GetNamedItem("A") != null && nodePart.Attributes["A"].Value == "5")
                             {
                                 if (nodePart.ChildNodes[0].Attributes.GetNamedItem("B") != null)
-	                                if (nodePart.ChildNodes.Count < 3)
-	                                    tree.Nodes[tree.Nodes.Count - 1].Nodes.Add("ABLine: " + nodePart.Attributes["B"].Value);
-	                                else
-	                                    tree.Nodes[tree.Nodes.Count - 1].Nodes.Add("Curve: " + nodePart.Attributes["B"].Value);
+                                {
+                                    if (nodePart.ChildNodes.Count < 3)
+                                        tree.Nodes[tree.Nodes.Count - 1].Nodes.Add("ABLine: " + nodePart.Attributes["B"].Value);
+                                    else
+                                        tree.Nodes[tree.Nodes.Count - 1].Nodes.Add("Curve: " + nodePart.Attributes["B"].Value);
+                                }
                             }
                         }
                     }
@@ -540,10 +542,9 @@ namespace AgOpenGPS
                                 {
                                     //get the name
                                     if (nodePart.ChildNodes[0].Attributes.GetNamedItem("B") != null)
-                                    mf.ABLine.desName = nodePart.ChildNodes[0].Attributes["B"].Value;
-                                    else if(nodePart.ChildNodes[0].Attributes.GetNamedItem("A") != null)
+                                        mf.ABLine.desName = nodePart.ChildNodes[0].Attributes["B"].Value;
+                                    else if (nodePart.ChildNodes[0].Attributes.GetNamedItem("A") != null)
                                         mf.ABLine.desName = nodePart.Attributes["B"].Value; // fallback, if ChildNodes[0].Attributes["B"] is null
-
                                     double.TryParse(nodePart.ChildNodes[0].ChildNodes[0].ChildNodes[0].Attributes["C"].Value, NumberStyles.Float, CultureInfo.InvariantCulture, out latK);
                                     double.TryParse(nodePart.ChildNodes[0].ChildNodes[0].ChildNodes[0].Attributes["D"].Value, NumberStyles.Float, CultureInfo.InvariantCulture, out lonK);
 
