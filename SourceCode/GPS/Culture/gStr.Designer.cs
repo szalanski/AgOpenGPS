@@ -711,7 +711,7 @@ namespace AgOpenGPS.Culture {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Current (A).
+        ///   Looks up a localized string similar to Current.
         /// </summary>
         public static string gsCurrent {
             get {

@@ -336,7 +336,7 @@ The order you push them will be the order they appear on the menu from bottom up
     <value>Create New Field From ISO-XML</value>
   </data>
   <data name="gsCurrent" xml:space="preserve">
-    <value>Current (A)</value>
+    <value>Current</value>
   </data>
   <data name="gsCurrentSensorValueLabel" xml:space="preserve">
     <value>Current Value (A)</value>
