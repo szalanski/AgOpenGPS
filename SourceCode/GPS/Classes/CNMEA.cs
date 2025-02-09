@@ -54,8 +54,8 @@ namespace AgOpenGPS
         {
             if (setSim && mf.timerSim.Enabled)
             {
-                latitude = mf.sim.latitude = Properties.Settings.Default.setGPS_SimLatitude = latitude;
-                longitude = mf.sim.longitude = Properties.Settings.Default.setGPS_SimLongitude = longitude;
+                latitude = mf.sim.latitude = Properties.Settings.Default.setGPS_SimLatitude = latStart;
+                longitude = mf.sim.longitude = Properties.Settings.Default.setGPS_SimLongitude = lonStart;
                 Properties.Settings.Default.Save();
             }
 
