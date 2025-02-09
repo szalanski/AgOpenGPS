@@ -5547,6 +5547,7 @@ namespace AgOpenGPS
             this.nudAutoSwitchDualFixSpeed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.nudAutoSwitchDualFixSpeed.AutoSize = true;
             this.nudAutoSwitchDualFixSpeed.BackColor = System.Drawing.Color.AliceBlue;
+            this.nudAutoSwitchDualFixSpeed.DecimalPlaces = 1;
             this.nudAutoSwitchDualFixSpeed.Font = new System.Drawing.Font("Tahoma", 15.75F, System.Drawing.FontStyle.Bold);
             this.nudAutoSwitchDualFixSpeed.InterceptArrowKeys = false;
             this.nudAutoSwitchDualFixSpeed.Location = new System.Drawing.Point(230, 254);
