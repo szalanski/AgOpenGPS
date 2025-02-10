@@ -20,13 +20,4 @@ namespace AgOpenGPS.Core.Models
         public int APoint { get; }
     }
 
-    public class HeadLines
-    {
-        public HeadLines()
-        {
-            HeadPaths = new List<HeadPath>();
-        }
-
-        public List<HeadPath> HeadPaths { get; set; }
-    }
 }

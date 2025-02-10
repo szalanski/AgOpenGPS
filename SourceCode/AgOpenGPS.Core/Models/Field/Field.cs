@@ -14,12 +14,11 @@ namespace AgOpenGPS.Core.Models
 
         public string Name { get; }
         public Background Background { get; set; }
-        public Bitmap BackGroundPicture { get; set; }
         public Boundary Boundary { get; set; }
         public Contour Contour { get; set; }
         public FieldOverview FieldOverview { get; set; }
         public List<Flag> Flags { get; set; }
-        public HeadLines HeadLines { get; set; }
+        public List<HeadPath> HeadLines { get; set; }
         public RecordedPath RecordedPath { get; set; }
         public TramLines TramLines { get; set; }
         public WorkedArea WorkedArea { get; set; }
