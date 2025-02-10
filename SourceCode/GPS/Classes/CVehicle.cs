@@ -409,7 +409,7 @@ namespace AgOpenGPS
                     GL.Enable(EnableCap.Texture2D);
                     GL.Color4(Vehicle.Color.Red, Vehicle.Color.Green, Vehicle.Color.Blue, vehicleOpacityByte);
 
-                    GL.BindTexture(TextureTarget.Texture2D, mf.texture[(int)FormGPS.textures.FourWDRear]);        // Select Our Texture
+                    GL.BindTexture(TextureTarget.Texture2D, mf.texture[(int)FormGPS.textures.ArticulatedRear]);        // Select Our Texture
 
                     GL.PushMatrix();
                     GL.Translate(0, -Vehicle.Wheelbase * 0.5, 0);
@@ -424,7 +424,7 @@ namespace AgOpenGPS
 
                     GL.PopMatrix();
 
-                    GL.BindTexture(TextureTarget.Texture2D, mf.texture[(int)FormGPS.textures.FourWDFront]);        // Select Our Texture
+                    GL.BindTexture(TextureTarget.Texture2D, mf.texture[(int)FormGPS.textures.ArticulatedFront]);        // Select Our Texture
 
                     GL.PushMatrix();
                     GL.Translate(0, Vehicle.Wheelbase * 0.5, 0);

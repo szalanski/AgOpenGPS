@@ -15,9 +15,9 @@ using AgOpenGPS.Core.Models;
 
 namespace AgOpenGPS
 {
-    public enum TBrand { AGOpenGPS, Case, Claas, Deutz, Fendt, JDeere, Kubota, Massey, NewHolland, Same, Steyr, Ursus, Valtra, JCB }
-    public enum HBrand { AgOpenGPS, Case, Claas, JDeere, NewHolland }
-    public enum WDBrand { AgOpenGPS, Case, Challenger, JDeere, NewHolland, Holder }
+    public enum TractorBrand { AGOpenGPS, Case, Claas, Deutz, Fendt, JDeere, Kubota, Massey, NewHolland, Same, Steyr, Ursus, Valtra, JCB }
+    public enum HarvesterBrand { AgOpenGPS, Case, Claas, JDeere, NewHolland }
+    public enum ArticulatedBrand { AgOpenGPS, Case, Challenger, JDeere, NewHolland, Holder }
 
     public partial class FormGPS
     {
@@ -1564,95 +1564,94 @@ namespace AgOpenGPS
         #endregion properties 
 
         //Load Bitmaps brand
-        public Bitmap GetTractorBrand(TBrand brand)
+        public Bitmap GetTractorBrand(TractorBrand brand)
         {
-            Bitmap bitmap;
-            if (brand == TBrand.Case)
-                bitmap = Resources.z_TractorCase;
-            else if (brand == TBrand.Claas)
-                bitmap = Resources.z_TractorClaas;
-            else if (brand == TBrand.Deutz)
-                bitmap = Resources.z_TractorDeutz;
-            else if (brand == TBrand.Fendt)
-                bitmap = Resources.z_TractorFendt;
-            else if (brand == TBrand.JDeere)
-                bitmap = Resources.z_TractorJDeere;
-            else if (brand == TBrand.Kubota)
-                bitmap = Resources.z_TractorKubota;
-            else if (brand == TBrand.Massey)
-                bitmap = Resources.z_TractorMassey;
-            else if (brand == TBrand.NewHolland)
-                bitmap = Resources.z_TractorNH;
-            else if (brand == TBrand.Same)
-                bitmap = Resources.z_TractorSame;
-            else if (brand == TBrand.Steyr)
-                bitmap = Resources.z_TractorSteyr;
-            else if (brand == TBrand.Ursus)
-                bitmap = Resources.z_TractorUrsus;
-            else if (brand == TBrand.Valtra)
-                bitmap = Resources.z_TractorValtra;
-            else if (brand == TBrand.JCB)
-                bitmap = Resources.z_TractorJCB;
-
-            else
-                bitmap = Resources.z_TractorAoG;
-
-            return bitmap;
+            switch (brand)
+            {
+                case TractorBrand.Case:
+                    return Resources.z_TractorCase;
+                case TractorBrand.Claas:
+                    return Resources.z_TractorClaas;
+                case TractorBrand.Deutz:
+                    return Resources.z_TractorDeutz;
+                case TractorBrand.Fendt:
+                    return Resources.z_TractorFendt;
+                case TractorBrand.JDeere:
+                    return Resources.z_TractorJDeere;
+                case TractorBrand.Kubota:
+                    return Resources.z_TractorKubota;
+                case TractorBrand.Massey:
+                    return Resources.z_TractorMassey;
+                case TractorBrand.NewHolland:
+                    return Resources.z_TractorNH;
+                case TractorBrand.Same:
+                    return Resources.z_TractorSame;
+                case TractorBrand.Steyr:
+                    return Resources.z_TractorSteyr;
+                case TractorBrand.Ursus:
+                    return Resources.z_TractorUrsus;
+                case TractorBrand.Valtra:
+                    return Resources.z_TractorValtra;
+                case TractorBrand.JCB:
+                    return Resources.z_TractorJCB;
+                default:
+                    return Resources.z_TractorAoG;
+            }
         }
 
-        public Bitmap GetHarvesterBrand(HBrand brandH)
+        public Bitmap GetHarvesterBrand(HarvesterBrand brand)
         {
-            Bitmap harvesterbitmap;
-            if (brandH == HBrand.Case)
-                harvesterbitmap = Resources.z_HarvesterCase;
-            else if (brandH == HBrand.Claas)
-                harvesterbitmap = Resources.z_HarvesterClaas;
-            else if (brandH == HBrand.JDeere)
-                harvesterbitmap = Resources.z_HarvesterJD;
-            else if (brandH == HBrand.NewHolland)
-                harvesterbitmap = Resources.z_HarvesterNH;
-            else
-                harvesterbitmap = Resources.z_HarvesterAoG;
-
-            return harvesterbitmap;
+            switch (brand)
+            {
+                case HarvesterBrand.Case:
+                    return Resources.z_HarvesterCase;
+                case HarvesterBrand.Claas:
+                    return Resources.z_HarvesterClaas;
+                case HarvesterBrand.JDeere:
+                    return Resources.z_HarvesterJD;
+                case HarvesterBrand.NewHolland:
+                    return Resources.z_HarvesterNH;
+                default:
+                    return Resources.z_HarvesterAoG;
+            }
         }
 
-        public Bitmap Get4WDBrandFront(WDBrand brandWDF)
+        public Bitmap GetArticulatedBrandFront(ArticulatedBrand brand)
         {
-            Bitmap bitmap4WDFront;
-            if (brandWDF == WDBrand.Case)
-                bitmap4WDFront = Resources.z_4WDFrontCase;
-            else if (brandWDF == WDBrand.Challenger)
-                bitmap4WDFront = Resources.z_4WDFrontChallenger;
-            else if (brandWDF == WDBrand.JDeere)
-                bitmap4WDFront = Resources.z_4WDFrontJDeere;
-            else if (brandWDF == WDBrand.NewHolland)
-                bitmap4WDFront = Resources.z_4WDFrontNH;
-            else if (brandWDF == WDBrand.Holder)
-                bitmap4WDFront = Resources.z_4WDFrontHolder;
-            else
-                bitmap4WDFront = Resources.z_4WDFrontAoG;
-
-            return bitmap4WDFront;
+            switch (brand)
+            {
+                case ArticulatedBrand.Case:
+                    return Resources.z_ArticulatedFrontCase;
+                case ArticulatedBrand.Challenger:
+                    return Resources.z_ArticulatedFrontChallenger;
+                case ArticulatedBrand.JDeere:
+                    return Resources.z_ArticulatedFrontJDeere;
+                case ArticulatedBrand.NewHolland:
+                    return Resources.z_ArticulatedFrontNH;
+                case ArticulatedBrand.Holder:
+                    return Resources.z_ArticulatedFrontHolder;
+                default:
+                    return Resources.z_ArticulatedFrontAoG;
+            }
         }
         
-        public Bitmap Get4WDBrandRear(WDBrand brandWDR)
+        public Bitmap GetArticulatedBrandRear(ArticulatedBrand brand)
         {
-            Bitmap bitmap4WDRear;
-            if (brandWDR == WDBrand.Case)
-                bitmap4WDRear = Resources.z_4WDRearCase;
-            else if (brandWDR == WDBrand.Challenger)
-                bitmap4WDRear = Resources.z_4WDRearChallenger;
-            else if (brandWDR == WDBrand.JDeere)
-                bitmap4WDRear = Resources.z_4WDRearJDeere;
-            else if (brandWDR == WDBrand.NewHolland)
-                bitmap4WDRear = Resources.z_4WDRearNH;
-            else if (brandWDR == WDBrand.Holder)
-                bitmap4WDRear = Resources.z_4WDRearHolder;
-            else
-                bitmap4WDRear = Resources.z_4WDRearAoG;
-
-            return bitmap4WDRear;
+            switch (brand)
+            {
+                case ArticulatedBrand.Case:
+                    return Resources.z_ArticulatedRearCase;
+                case ArticulatedBrand.Challenger:
+                    return Resources.z_ArticulatedRearChallenger;
+                case ArticulatedBrand.JDeere:
+                    return Resources.z_ArticulatedRearJDeere;
+                case ArticulatedBrand.NewHolland:
+                    return Resources.z_ArticulatedRearNH;
+                case ArticulatedBrand.Holder:
+                    return Resources.z_ArticulatedRearHolder;
+                default:
+                    return Resources.z_ArticulatedRearAoG;
+            }
         }
 
     }//end class
