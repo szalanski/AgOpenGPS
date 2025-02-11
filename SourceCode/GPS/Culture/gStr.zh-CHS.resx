@@ -204,9 +204,6 @@
   <data name="gsCurrent" xml:space="preserve">
     <value>当前(A)</value>
   </data>
-  <data name="gsCurrentSensorValueLabel" xml:space="preserve">
-    <value>当前(A)</value>
-  </data>
   <data name="gsCurveLineFileIsCorrupt" xml:space="preserve">
     <value>曲线文件损坏</value>
   </data>

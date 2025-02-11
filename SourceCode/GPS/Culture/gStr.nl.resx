@@ -314,9 +314,6 @@ De volgorde waarin u ze indrukt, is de volgorde waarin ze van onder naar boven i
   <data name="gsCurrent" xml:space="preserve">
     <value>Huidig</value>
   </data>
-  <data name="gsCurrentSensorValueLabel" xml:space="preserve">
-    <value>Stroom-waarde (A)</value>
-  </data>
   <data name="gsCurrentTurnSensor" xml:space="preserve">
     <value>Stroom-sensor</value>
   </data>

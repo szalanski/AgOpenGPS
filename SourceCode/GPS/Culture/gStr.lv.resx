@@ -336,9 +336,6 @@
   <data name="gsCurrent" xml:space="preserve">
     <value>Pašreizējais</value>
   </data>
-  <data name="gsCurrentSensorValueLabel" xml:space="preserve">
-    <value>Pašreizējā vērtība</value>
-  </data>
   <data name="gsCurrentTurnSensor" xml:space="preserve">
     <value>Stūres sensora pašreizējā vērtība</value>
   </data>

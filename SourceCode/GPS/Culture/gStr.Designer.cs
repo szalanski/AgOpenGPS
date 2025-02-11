@@ -720,15 +720,6 @@ namespace AgOpenGPS.Culture {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Current Value (A).
-        /// </summary>
-        public static string gsCurrentSensorValueLabel {
-            get {
-                return ResourceManager.GetString("gsCurrentSensorValueLabel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Current Turn Sensor.
         /// </summary>
         public static string gsCurrentTurnSensor {

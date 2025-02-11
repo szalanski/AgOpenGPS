@@ -329,9 +329,6 @@ L'ordre dans lequel vous cliquez, sera l'ordre dans lequel ils apparaîtrons dan
   <data name="gsCurrent" xml:space="preserve">
     <value>En cours:</value>
   </data>
-  <data name="gsCurrentSensorValueLabel" xml:space="preserve">
-    <value>Valeur courant (A)</value>
-  </data>
   <data name="gsCurrentTurnSensor" xml:space="preserve">
     <value>Capteur courant</value>
   </data>

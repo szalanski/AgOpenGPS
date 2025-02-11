@@ -288,9 +288,6 @@
   <data name="gsCurrent" xml:space="preserve">
     <value>Текущий</value>
   </data>
-  <data name="gsCurrentSensorValueLabel" xml:space="preserve">
-    <value>Текущее значение</value>
-  </data>
   <data name="gsCurve" xml:space="preserve">
     <value>Кривая</value>
   </data>

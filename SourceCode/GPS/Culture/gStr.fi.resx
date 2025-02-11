@@ -327,10 +327,7 @@
     <value>Luo uusi pelto ISO-XML:stä</value>
   </data>
   <data name="gsCurrent" xml:space="preserve">
-    <value>Virta (A)</value>
-  </data>
-  <data name="gsCurrentSensorValueLabel" xml:space="preserve">
-    <value>Hetkellinen Virta (A)</value>
+    <value>Nykyinen</value>
   </data>
   <data name="gsCurrentTurnSensor" xml:space="preserve">
     <value>Kääntöanturin Pulssit</value>

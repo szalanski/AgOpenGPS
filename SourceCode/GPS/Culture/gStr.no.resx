@@ -331,10 +331,7 @@
     <value>Lag nytt skifte fra ISO-XML</value>
   </data>
   <data name="gsCurrent" xml:space="preserve">
-    <value>Spenning (A)</value>
-  </data>
-  <data name="gsCurrentSensorValueLabel" xml:space="preserve">
-    <value>Spennings verdi (A)</value>
+    <value>Nåværende</value>
   </data>
   <data name="gsCurrentTurnSensor" xml:space="preserve">
     <value>Spennings-vinkel-sensor</value>

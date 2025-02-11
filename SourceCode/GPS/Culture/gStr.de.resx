@@ -304,10 +304,7 @@
     <value>Neues Feld aus ISO-XML erstellen</value>
   </data>
   <data name="gsCurrent" xml:space="preserve">
-    <value>Strom (A)</value>
-  </data>
-  <data name="gsCurrentSensorValueLabel" xml:space="preserve">
-    <value>Aktueller Wert (A)</value>
+    <value>Aktuell</value>
   </data>
   <data name="gsCurve" xml:space="preserve">
     <value>Kurve</value>
@@ -508,7 +505,7 @@
     <value>Richtung</value>
   </data>
   <data name="gsHeadingOffset" xml:space="preserve">
-    <value>Einbauversatz (Grad)</value>
+    <value>Richtungsversatz (Grad)</value>
   </data>
   <data name="gsHeadland" xml:space="preserve">
     <value>Vorgewende</value>
@@ -688,7 +685,7 @@
     <value>Referenzspur verschieben</value>
   </data>
   <data name="gsOff" xml:space="preserve">
-    <value>Ab</value>
+    <value>Aus</value>
   </data>
   <data name="gsOffset" xml:space="preserve">
     <value>Offset</value>
@@ -787,7 +784,7 @@
     <value>Proportionaler Faktor</value>
   </data>
   <data name="gsQuickAB" xml:space="preserve">
-    <value>A+  AB-Gearde  AB-Kurve</value>
+    <value>A+  AB-Gerade  AB-Kurve</value>
   </data>
   <data name="gsRaiseTime" xml:space="preserve">
     <value>Zeit erhöhen</value>
@@ -907,7 +904,7 @@
     <value>Langsamer fahren als</value>
   </data>
   <data name="gsSmooth" xml:space="preserve">
-    <value>glätten</value>
+    <value>Glätten</value>
   </data>
   <data name="gsSmoothABCurve" xml:space="preserve">
     <value>A-B-Kurve glätten</value>
@@ -1006,7 +1003,7 @@
     <value>Spur</value>
   </data>
   <data name="gsTracks" xml:space="preserve">
-    <value>Spurren</value>
+    <value>Spuren</value>
   </data>
   <data name="gsTramLines" xml:space="preserve">
     <value>Fahrgassen</value>

@@ -273,9 +273,6 @@
   <data name="gsCurrent" xml:space="preserve">
     <value>струја</value>
   </data>
-  <data name="gsCurrentSensorValueLabel" xml:space="preserve">
-    <value>Trenutna vrednost (A)</value>
-  </data>
   <data name="gsCurrentTurnSensor" xml:space="preserve">
     <value>Senzor intenziteta</value>
   </data>

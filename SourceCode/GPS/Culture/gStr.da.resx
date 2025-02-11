@@ -175,7 +175,9 @@
     <value>Areal</value>
   </data>
   <data name="gsArrangeText" xml:space="preserve">
-    <value>Klik på de knapper til venstre, som du ønsker skal være i Menu (den højre side)                  Rækkefølgen du klikker på dem, angiver placeringen nedefra og op</value>
+    <value>Klik på de knapper til venstre, som du ønsker skal være i Menu (den højre side)
+
+Rækkefølgen du klikker på dem, angiver placeringen nedefra og op</value>
   </data>
   <data name="gsAttachmentStyle" xml:space="preserve">
     <value>Påhæng type</value>
@@ -305,9 +307,6 @@
   </data>
   <data name="gsCurrent" xml:space="preserve">
     <value>Aktuelt</value>
-  </data>
-  <data name="gsCurrentSensorValueLabel" xml:space="preserve">
-    <value>Strøm værdi (A)</value>
   </data>
   <data name="gsCurrentTurnSensor" xml:space="preserve">
     <value>Strøm sensor</value>

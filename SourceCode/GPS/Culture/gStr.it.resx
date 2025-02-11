@@ -334,10 +334,7 @@
     <value>Crea Nuovo Campo da file ISO-XML</value>
   </data>
   <data name="gsCurrent" xml:space="preserve">
-    <value>Ampere</value>
-  </data>
-  <data name="gsCurrentSensorValueLabel" xml:space="preserve">
-    <value>Valore Ampere (A)</value>
+    <value>Attuale</value>
   </data>
   <data name="gsCurrentTurnSensor" xml:space="preserve">
     <value>Sensore di Correte rotazione volante</value>

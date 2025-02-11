@@ -338,9 +338,6 @@ The order you push them will be the order they appear on the menu from bottom up
   <data name="gsCurrent" xml:space="preserve">
     <value>Current</value>
   </data>
-  <data name="gsCurrentSensorValueLabel" xml:space="preserve">
-    <value>Current Value (A)</value>
-  </data>
   <data name="gsCurrentTurnSensor" xml:space="preserve">
     <value>Current Turn Sensor</value>
   </data>

@@ -332,9 +332,6 @@ A választott sorrend alapján fognak megjelenni alulról felfelé.</value>
   <data name="gsCurrent" xml:space="preserve">
     <value>Jelenlegi profil</value>
   </data>
-  <data name="gsCurrentSensorValueLabel" xml:space="preserve">
-    <value>Amper érték</value>
-  </data>
   <data name="gsCurrentTurnSensor" xml:space="preserve">
     <value>Impulzus szenzor</value>
   </data>
