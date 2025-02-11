@@ -1,6 +1,5 @@
 ﻿using AgOpenGPS.Core.Models;
 using System.Collections.Generic;
-using System.Drawing;
 
 namespace AgOpenGPS.Core.Models
 {
@@ -13,7 +12,7 @@ namespace AgOpenGPS.Core.Models
         }
 
         public string Name { get; }
-        public Background Background { get; set; }
+        public BackgroundPicture BackgroundPicture { get; set; }
         public Boundary Boundary { get; set; }
         public Contour Contour { get; set; }
         public FieldOverview FieldOverview { get; set; }
