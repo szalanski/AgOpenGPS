@@ -7,7 +7,7 @@
         Articulated = 2
     }
 
-    public class Vehicle
+    public class VehicleConfig
     {
         public VehicleType Type { get; set; }
 

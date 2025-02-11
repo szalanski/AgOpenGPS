@@ -60,15 +60,15 @@ namespace AgOpenGPS
 
         private void btnVehicleColor_Click(object sender, EventArgs e)
         {
-            using (FormColorPicker form = new FormColorPicker(mf, (Color)mf.vehicle.Vehicle.Color))
+            using (FormColorPicker form = new FormColorPicker(mf, (Color)mf.vehicle.VehicleConfig.Color))
             {
                 if (form.ShowDialog(this) == DialogResult.OK)
                 {
-                    mf.vehicle.Vehicle.Color = (ColorRgb)form.useThisColor;
+                    mf.vehicle.VehicleConfig.Color = (ColorRgb)form.useThisColor;
                 }
             }
 
-            Properties.Settings.Default.setDisplay_colorVehicle = (Color)mf.vehicle.Vehicle.Color;
+            Properties.Settings.Default.setDisplay_colorVehicle = (Color)mf.vehicle.VehicleConfig.Color;
             Settings.Default.Save();
         }
 
