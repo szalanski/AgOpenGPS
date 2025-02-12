@@ -1194,8 +1194,9 @@ namespace AgOpenGPS
             // 
             // rollCheckToolStripMenuItem
             // 
+            this.rollCheckToolStripMenuItem.Image = global::AgOpenGPS.Properties.Resources.ConS_SourcesRoll;
             this.rollCheckToolStripMenuItem.Name = "rollCheckToolStripMenuItem";
-            this.rollCheckToolStripMenuItem.Size = new System.Drawing.Size(322, 44);
+            this.rollCheckToolStripMenuItem.Size = new System.Drawing.Size(366, 66);
             this.rollCheckToolStripMenuItem.Text = "Roll Check";
             this.rollCheckToolStripMenuItem.Click += new System.EventHandler(this.correctionToolStrip_Click);
             // 
