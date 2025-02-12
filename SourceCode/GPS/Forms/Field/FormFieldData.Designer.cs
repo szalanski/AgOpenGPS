@@ -191,7 +191,7 @@ namespace AgOpenGPS
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.White;
-            this.label1.Location = new System.Drawing.Point(10, 38);
+            this.label1.Location = new System.Drawing.Point(4, 38);
             this.label1.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(189, 19);
@@ -338,9 +338,9 @@ namespace AgOpenGPS
             this.label2.Location = new System.Drawing.Point(7, 364);
             this.label2.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(162, 19);
+            this.label2.Size = new System.Drawing.Size(189, 19);
             this.label2.TabIndex = 501;
-            this.label2.Text = "_________________";
+            this.label2.Text = "____________________";
             // 
             // labelDistance
             // 
@@ -381,7 +381,7 @@ namespace AgOpenGPS
             // btnTripReset
             // 
             this.btnTripReset.Image = global::AgOpenGPS.Properties.Resources.back_button;
-            this.btnTripReset.Location = new System.Drawing.Point(52, 436);
+            this.btnTripReset.Location = new System.Drawing.Point(63, 436);
             this.btnTripReset.Name = "btnTripReset";
             this.btnTripReset.Size = new System.Drawing.Size(76, 44);
             this.btnTripReset.TabIndex = 500;
@@ -393,7 +393,7 @@ namespace AgOpenGPS
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.Black;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.ClientSize = new System.Drawing.Size(176, 483);
+            this.ClientSize = new System.Drawing.Size(197, 483);
             this.Controls.Add(this.labelTrip);
             this.Controls.Add(this.labelDistanceDriven);
             this.Controls.Add(this.labelDistance);
