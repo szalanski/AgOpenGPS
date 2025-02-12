@@ -852,7 +852,11 @@ Rækkefølgen du klikker på dem, angiver placeringen nedefra og op</value>
     <value>Hvis du omdeler kopier af dette FRIE program, uanset om det er gratis eller mod betaling, forbedret, ændret, skal du give modtageren samme friheder som du modtog som det står i GPLv3 licensen</value>
   </data>
   <data name="gsTermsThree" xml:space="preserve">
-    <value>AgOpenGPS er udelukkende undervisnings software, til at lære om autostyrings systemer, GPS meddelelser, og teoretisk tildeling af maskin kontrol.    Det må på ingen måde bruges på rigtige maskiner.                                      En simulator er inkluderet for at tilbyde eleven, sikkert at opleve maskin styring.              Der er ingen sikkerhedssystemer i softwaren, og ingen er underforstået. 
+    <value>AgOpenGPS er udelukkende undervisnings software, til at lære om autostyrings systemer, GPS meddelelser, og teoretisk tildeling af maskin kontrol.
+
+Det må på ingen måde bruges på rigtige maskiner.                                      En simulator er inkluderet for at tilbyde eleven, sikkert at opleve maskin styring.
+
+Der er ingen sikkerhedssystemer i softwaren, og ingen er underforstået. 
 
 ANVENDELSE PÅ EGET RISIKO</value>
   </data>

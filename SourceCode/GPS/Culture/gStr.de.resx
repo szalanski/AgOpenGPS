@@ -190,7 +190,7 @@
     <value>AutoSteer Port</value>
   </data>
   <data name="gsAutoSwitchDualFixSpeed" xml:space="preserve">
-    <value>Schaltgeschwindigkeit (km/h)</value>
+    <value>Umschaltgeschwindigkeit</value>
   </data>
   <data name="gsBackground" xml:space="preserve">
     <value>Hintergrund</value>
@@ -205,7 +205,7 @@
     <value>Schlaggrenze erstellen</value>
   </data>
   <data name="gsBoundaryLineFilesAreCorrupt" xml:space="preserve">
-    <value>Außengrenze fehlerhaft</value>
+    <value>Außengrenze datei fehlerhaft</value>
   </data>
   <data name="gsBoundaryMenu" xml:space="preserve">
     <value>Kontur an der Außengrenze</value>
@@ -229,7 +229,7 @@
     <value>Kameraverhalten</value>
   </data>
   <data name="gsCancel" xml:space="preserve">
-    <value>abbrechen</value>
+    <value>Abbrechen</value>
   </data>
   <data name="gsCenter" xml:space="preserve">
     <value>Mitte</value>
@@ -247,13 +247,13 @@
     <value>Wählen</value>
   </data>
   <data name="gsChooseADifferentField" xml:space="preserve">
-    <value>Wähle ein anderes Feld</value>
+    <value>Wählen sie ein anderes Feld</value>
   </data>
   <data name="gsChooseADifferentName" xml:space="preserve">
-    <value>Wähle einen anderen Namen</value>
+    <value>Wählen sie einen anderen Namen</value>
   </data>
   <data name="gsChooseBuildDifferentone" xml:space="preserve">
-    <value>Wähle oder erstelle ein Anderes</value>
+    <value>Wählen sie oder erstelle ein Anderes</value>
   </data>
   <data name="gsClipLine" xml:space="preserve">
     <value>Linie schneiden</value>
@@ -262,7 +262,7 @@
     <value>Schließen</value>
   </data>
   <data name="gsCloseAllWindowsFirst" xml:space="preserve">
-    <value>Bitter alle Fenster schließen</value>
+    <value>Bitte alle Fenster schließen</value>
   </data>
   <data name="gsCloseFieldFirst" xml:space="preserve">
     <value>Feld vorher schließen</value>
