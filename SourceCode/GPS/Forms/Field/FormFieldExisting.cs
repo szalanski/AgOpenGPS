@@ -452,6 +452,11 @@ namespace AgOpenGPS
                     destinationDirectory = Path.Combine(directoryName, "Tram.txt");
                     if (File.Exists(fileToCopy))
                         File.Copy(fileToCopy, destinationDirectory);
+
+                    fileToCopy = Path.Combine(templateDirectoryName, "TrackLines.txt");
+                    destinationDirectory = Path.Combine(directoryName, "TrackLines.txt");
+                    if (File.Exists(fileToCopy))
+                        File.Copy(fileToCopy, destinationDirectory);
                 }
                 else
                 {
