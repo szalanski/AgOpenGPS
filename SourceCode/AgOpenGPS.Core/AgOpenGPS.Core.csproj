@@ -6,4 +6,9 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\AgLibrary\AgLibrary.csproj" />
+  </ItemGroup>
+
+
 </Project>

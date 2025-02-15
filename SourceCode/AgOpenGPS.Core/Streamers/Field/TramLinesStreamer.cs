@@ -1,15 +1,13 @@
 ﻿using System;
 using System.IO;
-using AgOpenGPS.Core.Interfaces;
+using AgLibrary.Logging;
 using AgOpenGPS.Core.Models;
 
 namespace AgOpenGPS.Core.Streamers
 {
     public class TramLinesStreamer : FieldAspectStreamer
     {
-        public TramLinesStreamer(
-            ILogger logger
-        ) : base(logger, "Tram.txt")
+        public TramLinesStreamer() : base("Tram.txt")
         {
         }
 
@@ -23,7 +21,7 @@ namespace AgOpenGPS.Core.Streamers
             catch (Exception e)
             {
                 _presenter.PresentTramLinesFileCorrupt();
-                _logger.LogError("Load Boundary Line" + e.ToString());
+                Log.EventWriter("Load Boundary Line" + e.ToString());
             }
             return tramLines;
         }

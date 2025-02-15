@@ -5,16 +5,13 @@ namespace AgOpenGPS.Core.Streamers
 {
     public abstract class FieldAspectStreamer
     {
-        protected readonly ILogger _logger;
         protected readonly string _defaultFileName;
 
         protected IFieldStreamerPresenter _presenter;
 
         public FieldAspectStreamer(
-            ILogger logger,
             string defaultFileName)
         {
-            _logger = logger;
             _defaultFileName = defaultFileName;
         }
 
