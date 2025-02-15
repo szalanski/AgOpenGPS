@@ -222,7 +222,7 @@ namespace AgOpenGPS
             if (!mf.isFirstHeadingSet && mf.headingFromSource != "Dual")
             {
                 GL.Color4(1,1,1, 0.75);
-                mf.ScreenTextures.QuestionMark.Draw(1.0, 5.0, 5.0, 1.0);
+                mf.ScreenTextures.QuestionMark.Draw(new XyCoord(1.0, 5.0), new XyCoord(5.0, 1.0));
             }
 
             //3 vehicle types  tractor=0 harvestor=1 Articulated=2
@@ -283,7 +283,8 @@ namespace AgOpenGPS
 
                     GL.Color4(VehicleConfig.Color.Red, VehicleConfig.Color.Green, VehicleConfig.Color.Blue, vehicleOpacityByte);
 
-                    mf.VehicleTextures.FrontWheel.DrawCentered(0.5 * VehicleConfig.TrackWidth, - 0.75 * VehicleConfig.Wheelbase);
+                    XyDelta frontWheelDelta = new XyDelta(0.5 * VehicleConfig.TrackWidth, -0.75 * VehicleConfig.Wheelbase);
+                    mf.VehicleTextures.FrontWheel.DrawCenteredAroundOrigin(frontWheelDelta);
 
                     GL.PopMatrix();
 
@@ -293,7 +294,7 @@ namespace AgOpenGPS
                     GL.Translate(-VehicleConfig.TrackWidth * 0.5, VehicleConfig.Wheelbase, 0);
                     GL.Rotate(leftAckermam, 0, 0, 1);
 
-                    mf.VehicleTextures.FrontWheel.DrawCentered(0.5 * VehicleConfig.TrackWidth, - 0.75 * VehicleConfig.Wheelbase);
+                    mf.VehicleTextures.FrontWheel.DrawCenteredAroundOrigin(frontWheelDelta);
 
                     GL.PopMatrix();
                     //disable, straight color
@@ -336,14 +337,15 @@ namespace AgOpenGPS
                     GL.PushMatrix();
                     GL.Translate(VehicleConfig.TrackWidth * 0.5, -VehicleConfig.Wheelbase, 0);
                     GL.Rotate(rightAckerman, 0, 0, 1);
-                    mf.VehicleTextures.FrontWheel.DrawCentered(0.25 * VehicleConfig.TrackWidth, 0.5 * VehicleConfig.Wheelbase);
+                    XyDelta forntWheelDelta = new XyDelta(0.25 * VehicleConfig.TrackWidth, 0.5 * VehicleConfig.Wheelbase);
+                    mf.VehicleTextures.FrontWheel.DrawCenteredAroundOrigin(forntWheelDelta);
                     GL.PopMatrix();
 
                     //Left Wheel
                     GL.PushMatrix();
                     GL.Translate(- VehicleConfig.TrackWidth * 0.5, -VehicleConfig.Wheelbase, 0);
                     GL.Rotate(leftAckermam, 0, 0, 1);
-                    mf.VehicleTextures.FrontWheel.DrawCentered(0.25 * VehicleConfig.TrackWidth, 0.5 * VehicleConfig.Wheelbase);
+                    mf.VehicleTextures.FrontWheel.DrawCenteredAroundOrigin(forntWheelDelta);
                     GL.PopMatrix();
 
                     GL.Enable(EnableCap.Texture2D);

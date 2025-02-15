@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 using System.Drawing.Imaging;
-
+using AgOpenGPS.Core.Models;
 using OpenTK.Graphics.OpenGL;
 
 namespace AgOpenGPS.Core.Drawing
@@ -12,7 +12,7 @@ namespace AgOpenGPS.Core.Drawing
         public Texture2D(Bitmap bitmap)
         {
             GL.GenTextures(1, out _textureId);
-            if (bitmap != null) SetBitmap(bitmap);
+            SetBitmap(bitmap);
         }
 
         public void Bind()
@@ -20,28 +20,39 @@ namespace AgOpenGPS.Core.Drawing
             GL.BindTexture(TextureTarget.Texture2D, _textureId);
         }
 
-        public void Draw(double x0, double x1, double y0, double y1)
+        public void Draw(
+            XyCoord u0v0, // The corner (u==0.0 && v==0.0) of the texture will be mapped to this coord
+            XyCoord u1v1  // The coord (u==1.0 && v==1.0) of the texture will be apped to this coord
+        )
         {
             GL.Enable(EnableCap.Texture2D);
 
             Bind();
             GL.Begin(PrimitiveType.Quads);
-            GL.TexCoord2(0, 0); GL.Vertex2(x0, y0);
-            GL.TexCoord2(1, 0); GL.Vertex2(x1, y0);
-            GL.TexCoord2(1, 1); GL.Vertex2(x1, y1);
-            GL.TexCoord2(0, 1); GL.Vertex2(x0, y1);
+            GL.TexCoord2(0, 0); GL.Vertex2(u0v0.X, u0v0.Y);
+            GL.TexCoord2(1, 0); GL.Vertex2(u1v1.X, u0v0.Y);
+            GL.TexCoord2(1, 1); GL.Vertex2(u1v1.X, u1v1.Y);
+            GL.TexCoord2(0, 1); GL.Vertex2(u0v0.X, u1v1.Y);
             GL.End();
             GL.Disable(EnableCap.Texture2D);
         }
 
-        public void DrawCentered(
-            double halfSizeX,  // Pass minus hafSizeX to flip positive X-axis to negative X-axis
-            double halfSizeY)  // Pass minus hafSizeXYto flip positive Y-axis to negative Y-axis
+        public void DrawCenteredAroundOrigin(
+            XyDelta centerToU1V1)
         {
-            Draw(-halfSizeX, halfSizeX, -halfSizeY, halfSizeY);
+            XyCoord origin = new XyCoord(0.0, 0.0);
+            Draw(origin - centerToU1V1, origin + centerToU1V1);
         }
 
-        public void SetBitmap(Bitmap bitmap)
+        public void DrawCentered(
+            XyCoord center,      // The center of the texture will be mapped to this coord
+            XyDelta centerToU1V1 // Typically 0.5 * the size. Negative values for X and/or Y will flip the corresponding U and/or V axis of the texture.
+        )
+        {
+            Draw(center - centerToU1V1, center + centerToU1V1);
+        }
+
+        private void SetBitmap(Bitmap bitmap)
         {
             GL.Enable(EnableCap.Texture2D);
             GL.BindTexture(TextureTarget.Texture2D, _textureId);

@@ -6,6 +6,7 @@ using System.Text;
 using System.Drawing;
 using AgLibrary.Logging;
 using AgOpenGPS.Core.Drawing;
+using AgOpenGPS.Core.Models;
 
 namespace AgOpenGPS
 {
@@ -648,7 +649,7 @@ namespace AgOpenGPS
                 deadCam += 5;
 
                 GL.Color4(1.25f, 1.25f, 1.275f, 0.75);
-                ScreenTextures.NoGps.DrawCentered(2.5, - 2.5);
+                ScreenTextures.NoGps.DrawCenteredAroundOrigin(new XyDelta(2.5, - 2.5));
 
                 // 2D Ortho ---------------------------------------////////-------------------------------------------------
 
@@ -1686,13 +1687,14 @@ namespace AgOpenGPS
         private void DrawManUTurnBtn()
         {
             int bottomSide = 90;
+            int two3 = oglMain.Width / 4;
 
             if (!isStanleyUsed && isUTurnOn)
             {
                 GL.Color3(0.90f, 0.90f, 0.293f);
-
-                int two3 = oglMain.Width / 4;
-                ScreenTextures.TurnManual.Draw(-82 - two3, 82 - two3, bottomSide, bottomSide + 60);
+                XyCoord center = new XyCoord(two3, 120);
+                XyDelta delta = new XyDelta(82, 30);
+                ScreenTextures.TurnManual.DrawCentered(center, delta);
             }
 
             //lateral line move
@@ -1701,9 +1703,10 @@ namespace AgOpenGPS
             if (isLateralOn)
             {
                 GL.Color3(0.590f, 0.90f, 0.93f);
-                int two3 = oglMain.Width / 4;
+                XyCoord center = new XyCoord(two3, 200);
+                XyDelta delta = new XyDelta(100, 30);
 
-                ScreenTextures.LateralManual.Draw(-100.0 - two3, 100.0 - two3, bottomSide, bottomSide + 60.0);
+                ScreenTextures.LateralManual.DrawCentered(center, delta);
             }
         }
 
@@ -1726,16 +1729,10 @@ namespace AgOpenGPS
             }
 
             Texture2D turnTexture = !yt.isYouTurnTriggered ? ScreenTextures.Turn : ScreenTextures.TurnCancel;
-            int bottom = 90;
+            //int bottom = 90;
             int two3 = oglMain.Width / 5;
-            if (!yt.isTurnLeft)
-            {
-                turnTexture.Draw(-62 + two3, 62 + two3, bottom, bottom + 60);
-            }
-            else
-            {
-                turnTexture.Draw(62 + two3, - 62 + two3, bottom, bottom + 60);
-            }
+            XyCoord turnTextureCenter = new XyCoord(two3, 120);
+            turnTexture.DrawCentered(turnTextureCenter, !yt.isTurnLeft ? new XyDelta(62, 30) : new XyDelta(-62, 30));
 
             //draw K turn/ normal turn button
             two3 += 140;
@@ -1743,7 +1740,8 @@ namespace AgOpenGPS
             GL.Color3(1.0f, 1.0f, 1.0f);
 
             Texture2D uTurnTexture = yt.uTurnStyle == 0 ? ScreenTextures.UTurnU : ScreenTextures.UTurnH;
-            uTurnTexture.Draw(- 32.0 + two3, 32.0 + two3, 100.0, 160.0);
+            XyCoord uTurnTextureCenter = new XyCoord(two3, 130);
+            uTurnTexture.DrawCentered(uTurnTextureCenter, new XyDelta(32, 30));
 
             two3 -= 140;
             GL.Color3(0.927f, 0.9635f, 0.74f);
@@ -1777,6 +1775,7 @@ namespace AgOpenGPS
             int sizer = oglMain.Width / 15;
             int center = oglMain.Width / 2 - sizer;
             int bottomSide = oglMain.Height - sizer / 2;
+            XyDelta textureDelta = new XyDelta(0.5 * sizer, 0.5 * sizer);
 
             //draw the clock
             GL.Color4(0.9752f, 0.80f, 0.3f, 0.98);
@@ -1813,7 +1812,7 @@ namespace AgOpenGPS
             GL.Translate(center, bottomSide, 0);
             GL.Rotate(ahrs.imuRoll, 0, 0, 1);
 
-            ScreenTextures.SteerPointer.DrawCentered(sizer, sizer);
+            ScreenTextures.SteerPointer.DrawCenteredAroundOrigin(textureDelta);
 
             if ((ahrs.imuRoll != 88888))
             {
@@ -1828,7 +1827,7 @@ namespace AgOpenGPS
 
             GL.Translate(center, bottomSide, 0);
 
-            ScreenTextures.SteerDot.DrawCentered(sizer, sizer);
+            ScreenTextures.SteerDot.DrawCenteredAroundOrigin(textureDelta);
 
             GL.PopMatrix();
         }
@@ -1836,8 +1835,10 @@ namespace AgOpenGPS
         private void DrawTramMarkers()
         {
             //int sizer = 60;
-            int center = -50;
             int bottomSide = oglMain.Height / 5;
+            XyCoord leftDotCenter = new XyCoord(-50, bottomSide);
+            XyCoord rightDotCenter = new XyCoord(+50, bottomSide);
+            XyDelta dotDelta = new XyDelta(24, 24);
 
             if ((tram.controlByte & 2) == 2) GL.Color4(0.29f, 0.990f, 0.290f, 0.983f);
             else GL.Color4(0.9f, 0.0f, 0.0f, 0.53f);
@@ -1847,7 +1848,7 @@ namespace AgOpenGPS
                 if (isFlashOnOff) GL.Color4(0.0f, 0.0f, 0.0f, 0.993f);
                 else GL.Color4(0.99f, 0.990f, 0.0f, 0.993f);
             }
-            ScreenTextures.TramDot.Draw(center - 24, center + 24, bottomSide - 24, bottomSide + 24);
+            ScreenTextures.TramDot.DrawCentered(leftDotCenter, dotDelta);
 
             if ((tram.controlByte & 1) == 1) GL.Color4(0.29f, 0.990f, 0.290f, 0.983f);
             else GL.Color4(0.9f, 0.0f, 0.0f, 0.53f);
@@ -1858,8 +1859,7 @@ namespace AgOpenGPS
                 else GL.Color4(0.99f, 0.990f, 0.0f, 0.993f);
             }
 
-            center += 100;
-            ScreenTextures.TramDot.Draw(center - 24, center + 24, bottomSide - 24, bottomSide + 24);
+            ScreenTextures.TramDot.DrawCentered(rightDotCenter, dotDelta);
         }
 
         private void MakeFlagMark()
@@ -2346,8 +2346,12 @@ namespace AgOpenGPS
 
             int center = oglMain.Width / 2 - 60;
 
-            ScreenTextures.ZoomIn.Draw(center, center + 32.0, 50.0, 82.0);
-            ScreenTextures.ZoomOut.Draw(center, center + 32.0, 200.0, 232.0);
+            XyCoord zoomInCoord = new XyCoord(center, 50);
+            XyCoord zoomOutCoord = new XyCoord(center, 200);
+            XyDelta sizeDelta = new XyDelta(32, 32);
+
+            ScreenTextures.ZoomIn.Draw(zoomInCoord, zoomInCoord + sizeDelta);
+            ScreenTextures.ZoomOut.Draw(zoomOutCoord, zoomOutCoord + sizeDelta);
 
             //Pan
             if (isJobStarted)
@@ -2355,12 +2359,14 @@ namespace AgOpenGPS
                 center = oglMain.Width / -2 + 30;
                 if (!isPanFormVisible)
                 {
-                    ScreenTextures.Pan.Draw(center, center + 32.0, 50.0, 82.0);
+                    XyCoord panCoord = new XyCoord(center, 50);
+                    ScreenTextures.Pan.Draw(panCoord, panCoord + sizeDelta);
                 }
 
                 //hide show bottom menu
                 int hite = oglMain.Height - 30;
-                ScreenTextures.MenuShowHide.Draw(center, center + 32.0, hite - 32.0, hite);
+                XyCoord menuShowHideCoord = new XyCoord(center, hite -32);
+                ScreenTextures.MenuShowHide.Draw(menuShowHideCoord, menuShowHideCoord + sizeDelta);
 
                 center += 50;
                 font.DrawText(center - 56, hite - 72, "x" + gridToolSpacing.ToString(), 1);
@@ -2399,7 +2405,7 @@ namespace AgOpenGPS
             GL.Translate(center, 78, 0);
             GL.Rotate(-camHeading, 0, 0, 1);
 
-            ScreenTextures.Compass.DrawCentered(52.0, 52.0);
+            ScreenTextures.Compass.DrawCenteredAroundOrigin(new XyDelta(52.0, 52.0));
 
             GL.PopMatrix();
         }
@@ -2480,7 +2486,7 @@ namespace AgOpenGPS
                 GL.Rotate(180, 0, 0, 1);
                 GL.Color3(0.952f, 0.40f, 0.0f);
             }
-            ScreenTextures.Lift.DrawCentered(48, 64);
+            ScreenTextures.Lift.DrawCenteredAroundOrigin(new XyDelta(48, 64));
 
             GL.PopMatrix();
         }
@@ -2493,7 +2499,7 @@ namespace AgOpenGPS
 
             GL.Translate(oglMain.Width / 2 - 130, 65, 0);
 
-            ScreenTextures.Speedo.DrawCentered(58, 58);
+            ScreenTextures.Speedo.DrawCenteredAroundOrigin(new XyDelta(58, 58));
 
             // speedoSpeed is just a number without a unit
             double speedoSpeed = Math.Abs(isMetric ? avgSpeed : avgSpeed * 0.62137);
@@ -2504,7 +2510,7 @@ namespace AgOpenGPS
             else GL.Color3(0.952f, 0.0f, 0.0f);
 
             GL.Rotate(angle, 0, 0, 1);
-            ScreenTextures.SpeedoNeedle.DrawCentered(48 ,48);
+            ScreenTextures.SpeedoNeedle.DrawCenteredAroundOrigin(new XyDelta(48 ,48));
 
             GL.PopMatrix();
         }

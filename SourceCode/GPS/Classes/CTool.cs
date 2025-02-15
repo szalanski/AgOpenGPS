@@ -1,4 +1,5 @@
-﻿using OpenTK.Graphics.OpenGL;
+﻿using AgOpenGPS.Core.Models;
+using OpenTK.Graphics.OpenGL;
 using System;
 using System.Drawing;
 
@@ -168,7 +169,9 @@ namespace AgOpenGPS
                 GL.End();
 
                 GL.Color4(1, 1, 1, 0.75);
-                mf.VehicleTextures.ToolAxle.Draw(-1.5, 1.5, trailingTank - 1.0, trailingTank + 1.0);
+                XyCoord toolAxleCenter = new XyCoord(0.0, trailingTank);
+                XyDelta deltaToU1V1 = new XyDelta(1.5, 1.0);
+                mf.VehicleTextures.ToolAxle.DrawCentered(toolAxleCenter, deltaToU1V1);
 
                 //move down the tank hitch, unwind, rotate to section heading
                 GL.Translate(0.0, trailingTank, 0.0);
@@ -200,8 +203,12 @@ namespace AgOpenGPS
                 {
                     textRotate += (mf.sim.stepDistance);
                     GL.Color4(1, 1, 1, 0.75);
-                    mf.VehicleTextures.Tire.Draw( 0.75 + offset , 1.4 + offset, trailingTool + 0.51, trailingTool - 0.51);
-                    mf.VehicleTextures.Tire.Draw(-0.75 + offset, -1.4 + offset, trailingTool + 0.51, trailingTool - 0.51);
+                    XyCoord rightTire00 = new XyCoord(0.75 + offset, trailingTool + 0.51);
+                    XyCoord rightTire11 = new XyCoord(1.4 + offset, trailingTool - 0.51);
+                    XyCoord leftTire00 = new XyCoord(-0.75 + offset, trailingTool + 0.51);
+                    XyCoord lefttTire11 = new XyCoord(-1.4 + offset, trailingTool - 0.51);
+                    mf.VehicleTextures.Tire.Draw(rightTire00, rightTire11);
+                    mf.VehicleTextures.Tire.Draw(leftTire00, lefttTire11);
                 }
                 trailingTool -= trailingToolToPivotLength;
             }
