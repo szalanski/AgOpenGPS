@@ -1,4 +1,4 @@
-﻿using AgOpenGPS.Core.Interfaces;
+﻿using AgLibrary.Logging;
 using AgOpenGPS.Core.Models;
 using System.IO;
 
@@ -6,32 +6,32 @@ namespace AgOpenGPS.Core.Streamers
 {
     public class WorkedAreaStreamer : FieldAspectStreamer
     {
-        public WorkedAreaStreamer(
-            ILogger logger
-        )
-            : base(logger, "Sections.txt")
+        public WorkedAreaStreamer() : base("Sections.txt")
         {
         }
 
-        public void TryRead(WorkedArea workedArea, string fieldPath)
+        public WorkedArea TryRead(string fieldPath)
         {
+            WorkedArea workedArea = null;
             if (!File.Exists(FullPath(fieldPath)))
             {
                 _presenter.PresentSectionFileMissing();
             }
             try
             {
-                Read(workedArea, fieldPath);
+                workedArea = Read(fieldPath);
             }
             catch (System.Exception e)
             {
                 _presenter.PresentSectionFileCorrupt();
-                _logger.LogError("Section file" + e.ToString());
+                Log.EventWriter("Section file" + e.ToString());
             }
+            return workedArea;
         }
 
-        public void Read(WorkedArea workedArea, string fieldPath)
+        public WorkedArea Read(string fieldPath)
         {
+            WorkedArea workedArea = new WorkedArea();
             using (GeoStreamReader reader = new GeoStreamReader(FullPath(fieldPath)))
             {
                 //read header
@@ -50,6 +50,7 @@ namespace AgOpenGPS.Core.Streamers
                     workedArea.AddStrip(strip);
                 }
             }
+            return workedArea;
         }
 
         public void AppendUnsavedWork(WorkedArea workedArea, string fieldPath)

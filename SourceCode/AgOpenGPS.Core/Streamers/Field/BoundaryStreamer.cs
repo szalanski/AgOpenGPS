@@ -1,4 +1,4 @@
-﻿using AgOpenGPS.Core.Interfaces;
+﻿using AgLibrary.Logging;
 using AgOpenGPS.Core.Models;
 using System;
 using System.IO;
@@ -7,10 +7,7 @@ namespace AgOpenGPS.Core.Streamers
 {
     public class BoundaryStreamer : FieldAspectStreamer
     {
-        public BoundaryStreamer(
-            ILogger logger
-        ) :
-            base(logger, "Boundary.txt")
+        public BoundaryStreamer() : base("Boundary.txt")
         {
         }
 
@@ -32,7 +29,7 @@ namespace AgOpenGPS.Core.Streamers
                 catch (Exception e)
                 {
                     _presenter.PresentBoundaryFileCorrupt();
-                    _logger.LogError("FieldOpen, Loading Flags, Corrupt Flag File" + e.ToString());
+                    Log.EventWriter("FieldOpen, Loading Boundary, Corrupt Boundary File" + e.ToString());
                 }
             }
             return boundary;

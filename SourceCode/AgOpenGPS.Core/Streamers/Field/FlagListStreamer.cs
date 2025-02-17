@@ -1,4 +1,4 @@
-﻿using AgOpenGPS.Core.Interfaces;
+﻿using AgLibrary.Logging;
 using AgOpenGPS.Core.Models;
 using System;
 using System.Collections.Generic;
@@ -8,10 +8,7 @@ namespace AgOpenGPS.Core.Streamers
 {
     public class FlagListStreamer : FieldAspectStreamer
     {
-        public FlagListStreamer(
-            ILogger logger
-        )
-            : base(logger, "Flags.txt")
+        public FlagListStreamer() : base("Flags.txt")
         {
         }
 
@@ -33,7 +30,7 @@ namespace AgOpenGPS.Core.Streamers
                 catch (Exception e)
                 {
                     _presenter.PresentFlagsFileCorrupt();
-                    _logger.LogError("FieldOpen, Loading Flags, Corrupt Flag File" + e.ToString());
+                    Log.EventWriter("FieldOpen, Loading Flags, Corrupt Flag File" + e.ToString());
                 }
             }
             return flagList;
@@ -48,7 +45,7 @@ namespace AgOpenGPS.Core.Streamers
             catch (Exception e)
             {
                 Console.WriteLine(e.Message + "\n Cannot write to file.");
-                _logger.LogError("Saving Flags" + e.ToString());
+                Log.EventWriter("Saving Flags" + e.ToString());
             }
         }
 
