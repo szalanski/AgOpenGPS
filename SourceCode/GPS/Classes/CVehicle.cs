@@ -238,34 +238,10 @@ namespace AgOpenGPS
                     GL.Color4(VehicleConfig.Color.Red, VehicleConfig.Color.Green, VehicleConfig.Color.Blue, vehicleOpacityByte);
                     GL.BindTexture(TextureTarget.Texture2D, mf.texture[(int)FormGPS.textures.Tractor]);        // Select Our Texture
 
-                    double leftAckermam, rightAckerman;
-
-                    if (mf.timerSim.Enabled)
-                    {
-                        if (mf.sim.steerangleAve < 0)
-                        {
-                            leftAckermam = 1.25 * -mf.sim.steerangleAve;
-                            rightAckerman = -mf.sim.steerangleAve;
-                        }
-                        else
-                        {
-                            leftAckermam = -mf.sim.steerangleAve;
-                            rightAckerman = 1.25 * -mf.sim.steerangleAve;
-                        }
-                    }
-                    else
-                    {
-                        if (mf.mc.actualSteerAngleDegrees < 0)
-                        {
-                            leftAckermam = 1.25 * -mf.mc.actualSteerAngleDegrees;
-                            rightAckerman = -mf.mc.actualSteerAngleDegrees;
-                        }
-                        else
-                        {
-                            leftAckermam = -mf.mc.actualSteerAngleDegrees;
-                            rightAckerman = 1.25 * -mf.mc.actualSteerAngleDegrees;
-                        }
-                    }
+                    AckermannAngles(
+                        - (mf.timerSim.Enabled ? mf.sim.steerangleAve : mf.mc.actualSteerAngleDegrees),
+                        out double leftAckermann,
+                        out double rightAckermann);
 
                     GL.Begin(PrimitiveType.TriangleStrip);              // Build Quad From A Triangle Strip
                     GL.TexCoord2(1, 0); GL.Vertex2(VehicleConfig.TrackWidth, VehicleConfig.Wheelbase * 1.5); // Top Right
@@ -279,7 +255,7 @@ namespace AgOpenGPS
                     //right wheel
                     GL.PushMatrix();
                     GL.Translate(0.5 * VehicleConfig.TrackWidth, VehicleConfig.Wheelbase, 0);
-                    GL.Rotate(rightAckerman, 0, 0, 1);
+                    GL.Rotate(rightAckermann, 0, 0, 1);
 
                     GL.Color4(VehicleConfig.Color.Red, VehicleConfig.Color.Green, VehicleConfig.Color.Blue, vehicleOpacityByte);
 
@@ -292,7 +268,7 @@ namespace AgOpenGPS
                     GL.PushMatrix();
 
                     GL.Translate(-VehicleConfig.TrackWidth * 0.5, VehicleConfig.Wheelbase, 0);
-                    GL.Rotate(leftAckermam, 0, 0, 1);
+                    GL.Rotate(leftAckermann, 0, 0, 1);
 
                     mf.VehicleTextures.FrontWheel.DrawCenteredAroundOrigin(frontWheelDelta);
 
@@ -303,40 +279,16 @@ namespace AgOpenGPS
                 {
                     //vehicle body
 
-                    double leftAckermam, rightAckerman;
-
-                    if (mf.timerSim.Enabled)
-                    {
-                        if (mf.sim.steerAngle < 0)
-                        {
-                            leftAckermam = 1.25 * mf.sim.steerAngle;
-                            rightAckerman = mf.sim.steerAngle;
-                        }
-                        else
-                        {
-                            leftAckermam = mf.sim.steerAngle;
-                            rightAckerman = 1.25 * mf.sim.steerAngle;
-                        }
-                    }
-                    else
-                    {
-                        if (mf.mc.actualSteerAngleDegrees < 0)
-                        {
-                            leftAckermam = 1.25 * mf.mc.actualSteerAngleDegrees;
-                            rightAckerman = mf.mc.actualSteerAngleDegrees;
-                        }
-                        else
-                        {
-                            leftAckermam = mf.mc.actualSteerAngleDegrees;
-                            rightAckerman = 1.25 * mf.mc.actualSteerAngleDegrees;
-                        }
-                    }
+                    AckermannAngles(
+                        mf.timerSim.Enabled ? mf.sim.steerAngle : mf.mc.actualSteerAngleDegrees,
+                        out double leftAckermannAngle,
+                        out double rightAckermannAngle);
 
                     GL.Color4((byte)20, (byte)20, (byte)20, vehicleOpacityByte);
                     //right wheel
                     GL.PushMatrix();
                     GL.Translate(VehicleConfig.TrackWidth * 0.5, -VehicleConfig.Wheelbase, 0);
-                    GL.Rotate(rightAckerman, 0, 0, 1);
+                    GL.Rotate(rightAckermannAngle, 0, 0, 1);
                     XyDelta forntWheelDelta = new XyDelta(0.25 * VehicleConfig.TrackWidth, 0.5 * VehicleConfig.Wheelbase);
                     mf.VehicleTextures.FrontWheel.DrawCenteredAroundOrigin(forntWheelDelta);
                     GL.PopMatrix();
@@ -344,7 +296,7 @@ namespace AgOpenGPS
                     //Left Wheel
                     GL.PushMatrix();
                     GL.Translate(- VehicleConfig.TrackWidth * 0.5, -VehicleConfig.Wheelbase, 0);
-                    GL.Rotate(leftAckermam, 0, 0, 1);
+                    GL.Rotate(leftAckermannAngle, 0, 0, 1);
                     mf.VehicleTextures.FrontWheel.DrawCenteredAroundOrigin(forntWheelDelta);
                     GL.PopMatrix();
 
@@ -493,9 +445,22 @@ namespace AgOpenGPS
                 }
                 GL.End();
             }
-
             GL.LineWidth(1);
-
         }
+
+        private void AckermannAngles(double wheelAngle, out double leftAckermannAngle, out double rightAckermannAngle)
+        {
+            leftAckermannAngle = wheelAngle;
+            rightAckermannAngle = wheelAngle;
+            if (wheelAngle > 0.0)
+            {
+                leftAckermannAngle *= 1.25;
+            }
+            else
+            {
+                rightAckermannAngle *= 1.25;
+            }
+        }
+
     }
 }
