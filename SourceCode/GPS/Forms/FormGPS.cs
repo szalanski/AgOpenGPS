@@ -2,6 +2,7 @@
 
 using AgLibrary.Logging;
 using AgOpenGPS;
+using AgOpenGPS.Classes;
 using AgOpenGPS.Culture;
 using AgOpenGPS.Properties;
 using Microsoft.Win32;
@@ -60,6 +61,8 @@ namespace AgOpenGPS
 
         //texture holders
         public uint[] texture;
+        public ScreenTextures ScreenTextures = new ScreenTextures();
+        public VehicleTextures VehicleTextures = new VehicleTextures();
 
         //create instance of a stopwatch for timing of frames and NMEA hz determination
         private readonly Stopwatch swFrame = new Stopwatch();
@@ -680,18 +683,13 @@ namespace AgOpenGPS
 
         public enum textures : uint
         {
-            Floor, Font,
-            Turn, TurnCancel, TurnManual,
-            Compass, Speedo, SpeedoNeedle,
-            Lift, SteerPointer,
-            SteerDot, Tractor, QuestionMark,
-            FrontWheels, ArticulatedFront, ArticulatedRear,
+            Floor,
+            Tractor,
+            ArticulatedFront,
+            ArticulatedRear,
             Harvester,
-            Lateral, bingGrid,
-            NoGPS, ZoomIn48, ZoomOut48,
-            Pan, MenuHideShow,
-            ToolWheels, Tire, TramDot,
-            YouTurnU, YouTurnH, CrossTrackBkgrnd
+            bingGrid,
+            CrossTrackBkgrnd
         }
 
         public void LoadGLTextures()
@@ -700,19 +698,13 @@ namespace AgOpenGPS
 
             Bitmap[] oglTextures = new Bitmap[]
             {
-                Resources.z_Floor,Resources.z_Font,
-                Resources.z_Turn,Resources.z_TurnCancel,Resources.z_TurnManual,
-                Resources.z_Compass,Resources.z_Speedo,Resources.z_SpeedoNeedle,
-                Resources.z_Lift,Resources.z_SteerPointer,
-                Resources.z_SteerDot,GetTractorBrand(Settings.Default.setBrand_TBrand),Resources.z_QuestionMark,
-                Resources.z_FrontWheels,GetArticulatedBrandFront(Settings.Default.setBrand_WDBrand),
+                Resources.z_Floor,
+                GetTractorBrand(Settings.Default.setBrand_TBrand),
+                GetArticulatedBrandFront(Settings.Default.setBrand_WDBrand),
                 GetArticulatedBrandRear(Settings.Default.setBrand_WDBrand),
                 GetHarvesterBrand(Settings.Default.setBrand_HBrand),
-                Resources.z_LateralManual, Resources.z_bingMap,
-                Resources.z_NoGPS, Resources.ZoomIn48, Resources.ZoomOut48,
-                Resources.Pan, Resources.MenuHideShow,
-                Resources.z_Tool, Resources.z_Tire, Resources.z_TramOnOff,
-                Resources.YouTurnU, Resources.YouTurnH, Resources.z_crossTrackBkgnd
+                Resources.z_bingMap,
+                Resources.z_crossTrackBkgnd
             };
 
             texture = new uint[oglTextures.Length];
