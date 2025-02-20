@@ -20,17 +20,14 @@ namespace AgOpenGPS.Core.Streamers
             _presenter = presenter;
         }
 
-        public string FullPath(string fieldPath, string fileName = null)
+        public string FullPath(DirectoryInfo fieldDirectory, string fileName = null)
         {
-            return Path.Combine(fieldPath, fileName ?? _defaultFileName);
+            return Path.Combine(fieldDirectory.FullName, fileName ?? _defaultFileName);
         }
 
-        public void CreateDirectory(string fieldPath)
+        public void CreateDirectory(DirectoryInfo fieldDirectory)
         {
-            if (0 < fieldPath.Length && !Directory.Exists(fieldPath))
-            {
-                Directory.CreateDirectory(fieldPath);
-            }
+            fieldDirectory.Create();
         }
     }
 }
