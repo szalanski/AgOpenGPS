@@ -55,7 +55,7 @@ namespace AgOpenGPS.Core.Streamers
 
         public void Write(FieldOverview fieldOverview, DirectoryInfo fieldDirectory)
         {
-            CreateDirectory(fieldDirectory);
+            fieldDirectory.Create();
             using (GeoStreamWriter writer = new GeoStreamWriter(FullPath(fieldDirectory)))
             {
                 writer.WriteDateTime();

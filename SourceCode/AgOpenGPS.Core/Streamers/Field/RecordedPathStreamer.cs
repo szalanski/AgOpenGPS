@@ -58,7 +58,7 @@ namespace AgOpenGPS.Core.Streamers
 
         public void Write(RecordedPath path, DirectoryInfo fieldDirectory, string fileName)
         {
-            CreateDirectory(fieldDirectory);
+            fieldDirectory.Create();
             using (GeoStreamWriter writer = new GeoStreamWriter(FullPath(fieldDirectory, fileName)))
             {
                 writer.WriteLine("$RecPath");
@@ -75,7 +75,7 @@ namespace AgOpenGPS.Core.Streamers
 
         public void CreateFile(DirectoryInfo fieldDirectory)
         {
-            CreateDirectory(fieldDirectory);
+            fieldDirectory.Create();
             using (StreamWriter writer = new StreamWriter(FullPath(fieldDirectory)))
             {
                 //write paths # of sections

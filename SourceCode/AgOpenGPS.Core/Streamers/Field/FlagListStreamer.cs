@@ -104,7 +104,7 @@ namespace AgOpenGPS.Core.Streamers
 
         private void Write(List<Flag> flags, DirectoryInfo fieldDirectory)
         {
-            CreateDirectory(fieldDirectory);
+            fieldDirectory.Create();
             using (GeoStreamWriter writer = new GeoStreamWriter(FullPath(fieldDirectory)))
             {
                 writer.WriteLine("$Flags");
@@ -126,7 +126,7 @@ namespace AgOpenGPS.Core.Streamers
 
         public void CreateFile(DirectoryInfo fieldDirectory)
         {
-            CreateDirectory(fieldDirectory);
+            fieldDirectory.Create();
             using (StreamWriter writer = new StreamWriter(FullPath(fieldDirectory)))
             {
             }

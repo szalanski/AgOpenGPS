@@ -74,7 +74,7 @@ namespace AgOpenGPS.Core.Streamers
 
         public void Write(Boundary boundary, DirectoryInfo fieldDirectory)
         {
-            CreateDirectory(fieldDirectory);
+            fieldDirectory.Create();
             using (GeoStreamWriter writer = new GeoStreamWriter(FullPath(fieldDirectory)))
             {
                 writer.WriteLine("$Boundary");
@@ -91,7 +91,7 @@ namespace AgOpenGPS.Core.Streamers
 
         public void CreateFile(DirectoryInfo fieldDirectory)
         {
-            CreateDirectory(fieldDirectory);
+            fieldDirectory.Create();
             File.Create(FullPath(fieldDirectory));
         }
     }

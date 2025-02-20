@@ -9,8 +9,7 @@ namespace AgOpenGPS.Core.Streamers
 
         protected IFieldStreamerPresenter _presenter;
 
-        public FieldAspectStreamer(
-            string defaultFileName)
+        public FieldAspectStreamer(string defaultFileName)
         {
             _defaultFileName = defaultFileName;
         }
@@ -25,9 +24,5 @@ namespace AgOpenGPS.Core.Streamers
             return Path.Combine(fieldDirectory.FullName, fileName ?? _defaultFileName);
         }
 
-        public void CreateDirectory(DirectoryInfo fieldDirectory)
-        {
-            fieldDirectory.Create();
-        }
     }
 }
