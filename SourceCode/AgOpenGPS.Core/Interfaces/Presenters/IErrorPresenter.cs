@@ -1,9 +1,11 @@
-﻿namespace AgOpenGPS.Core.Interfaces
+﻿using System;
+
+namespace AgOpenGPS.Core.Interfaces
 {
     public interface IErrorPresenter
     {
         void PresentTimedMessage(
-            int timeInMilliSec,
+            TimeSpan timeSpan,
             string titleString,
             string messageString);
     }

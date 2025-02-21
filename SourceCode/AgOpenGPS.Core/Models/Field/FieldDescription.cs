@@ -12,8 +12,8 @@ namespace AgOpenGPS.Core.Models
         }
 
         public string Name { get; }
-        public Wgs84? Wgs84Start { get; set; } // No value indicates error indicates error in Field.txt file
-        public double? Area { get; set; } // In Meters. No value indicates error in reading Boundary file
+        public Wgs84? Wgs84Start { get; set; } // No value indicates error in Field.txt file
+        public double? Area { get; set; } // In Square meters. No value indicates error in reading Boundary file
 
     }
 

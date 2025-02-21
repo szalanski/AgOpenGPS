@@ -1,6 +1,7 @@
 ﻿using AgOpenGPS.Core.Interfaces;
 using AgOpenGPS.Core.Models;
 using AgOpenGPS.Core.Streamers;
+using System.IO;
 
 namespace AgOpenGPS.Core
 {
@@ -9,10 +10,10 @@ namespace AgOpenGPS.Core
 
         private IApplicationPresenter _applicationPresenter;
 
-        public ApplicationModel(string baseDirectory)
+        public ApplicationModel(DirectoryInfo baseDirectory)
         {
             BaseDirectories = new BaseDirectories(baseDirectory);
-            Fields = new Fields(BaseDirectories.FieldsDir);
+            Fields = new Fields(BaseDirectories.FieldsDirectory);
         }
 
         public void SetPresenter(IApplicationPresenter applicationPresenter)

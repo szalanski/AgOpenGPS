@@ -1,11 +1,12 @@
 ﻿using AgOpenGPS.Core.Models;
+using System.IO;
 
 namespace AgOpenGPS.Core
 {
     public class ApplicationCore
     {
 
-        public ApplicationCore(string baseDirectory)
+        public ApplicationCore(DirectoryInfo baseDirectory)
         {
             AppModel = new ApplicationModel(baseDirectory);
         }
