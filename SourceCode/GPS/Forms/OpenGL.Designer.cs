@@ -1687,7 +1687,7 @@ namespace AgOpenGPS
         private void DrawManUTurnBtn()
         {
             int bottomSide = 90;
-            int two3 = oglMain.Width / 4;
+            int two3 = -oglMain.Width / 4;
 
             if (!isStanleyUsed && isUTurnOn)
             {
