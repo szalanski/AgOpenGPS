@@ -493,6 +493,10 @@ namespace AgOpenGPS
             }
         }
 
+        private void toolStripDropDownButton1_Click(object sender, EventArgs e)
+        {
+
+        }
 
         private void FormGPS_FormClosing(object sender, FormClosingEventArgs e)
         {
