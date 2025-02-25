@@ -150,6 +150,7 @@ namespace AgOpenGPS
             this.nudAntennaPivot = new AgOpenGPS.NudlessNumericUpDown();
             this.pboxAntenna = new System.Windows.Forms.PictureBox();
             this.tabVDimensions = new System.Windows.Forms.TabPage();
+            this.HitchLengthBlindBox = new System.Windows.Forms.PictureBox();
             this.label97 = new System.Windows.Forms.Label();
             this.label95 = new System.Windows.Forms.Label();
             this.label94 = new System.Windows.Forms.Label();
@@ -571,6 +572,7 @@ namespace AgOpenGPS
             ((System.ComponentModel.ISupportInitialize)(this.nudAntennaPivot)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pboxAntenna)).BeginInit();
             this.tabVDimensions.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.HitchLengthBlindBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudTractorHitchLength)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudVehicleTrack)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudWheelbase)).BeginInit();
@@ -2693,6 +2695,7 @@ namespace AgOpenGPS
             // tabVDimensions
             // 
             this.tabVDimensions.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.tabVDimensions.Controls.Add(this.HitchLengthBlindBox);
             this.tabVDimensions.Controls.Add(this.label97);
             this.tabVDimensions.Controls.Add(this.label95);
             this.tabVDimensions.Controls.Add(this.label94);
@@ -2709,6 +2712,15 @@ namespace AgOpenGPS
             this.tabVDimensions.TabIndex = 13;
             this.tabVDimensions.Text = "vDim";
             this.tabVDimensions.Enter += new System.EventHandler(this.tabVDimensions_Enter);
+            // 
+            // HitchLengthBlindBox
+            // 
+            this.HitchLengthBlindBox.Location = new System.Drawing.Point(21, 36);
+            this.HitchLengthBlindBox.Name = "HitchLengthBlindBox";
+            this.HitchLengthBlindBox.Size = new System.Drawing.Size(349, 230);
+            this.HitchLengthBlindBox.TabIndex = 484;
+            this.HitchLengthBlindBox.TabStop = false;
+            this.HitchLengthBlindBox.Visible = false;
             // 
             // label97
             // 
@@ -3274,6 +3286,7 @@ namespace AgOpenGPS
             this.labelToolOffset.Controls.Add(this.rbtnLeftNegative);
             this.labelToolOffset.Controls.Add(this.rbtnToolRightPositive);
             this.labelToolOffset.Controls.Add(this.labelToolLeft);
+            this.labelToolOffset.Cursor = System.Windows.Forms.Cursors.Default;
             this.labelToolOffset.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelToolOffset.Location = new System.Drawing.Point(28, 201);
             this.labelToolOffset.Name = "labelToolOffset";
@@ -5511,6 +5524,7 @@ namespace AgOpenGPS
             // labelGboxDual
             // 
             this.labelGboxDual.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.labelGboxDual.BackColor = System.Drawing.Color.WhiteSmoke;
             this.labelGboxDual.Controls.Add(this.labelAutoSwitchDualFixSpeed);
             this.labelGboxDual.Controls.Add(this.nudAutoSwitchDualFixSpeed);
             this.labelGboxDual.Controls.Add(this.cboxIsAutoSwitchDualFixOn);
@@ -6480,7 +6494,7 @@ namespace AgOpenGPS
             // 
             // tabRelay
             // 
-            this.tabRelay.BackColor = System.Drawing.Color.Gainsboro;
+            this.tabRelay.BackColor = System.Drawing.Color.WhiteSmoke;
             this.tabRelay.Controls.Add(this.cboxPin23);
             this.tabRelay.Controls.Add(this.cboxPin22);
             this.tabRelay.Controls.Add(this.cboxPin21);
@@ -7664,7 +7678,7 @@ namespace AgOpenGPS
             // 
             // tabAMachine
             // 
-            this.tabAMachine.BackColor = System.Drawing.Color.Gainsboro;
+            this.tabAMachine.BackColor = System.Drawing.Color.WhiteSmoke;
             this.tabAMachine.Controls.Add(this.labelUser4);
             this.tabAMachine.Controls.Add(this.labelUser3);
             this.tabAMachine.Controls.Add(this.labelUser2);
@@ -8117,7 +8131,7 @@ namespace AgOpenGPS
             // 
             // tabTram
             // 
-            this.tabTram.BackColor = System.Drawing.Color.Gainsboro;
+            this.tabTram.BackColor = System.Drawing.Color.WhiteSmoke;
             this.tabTram.Controls.Add(this.labelDisplay);
             this.tabTram.Controls.Add(this.labelOverride);
             this.tabTram.Controls.Add(this.lblTramWidthUnits);
@@ -9083,7 +9097,7 @@ namespace AgOpenGPS
             // 
             // tabDisplay
             // 
-            this.tabDisplay.BackColor = System.Drawing.Color.Gainsboro;
+            this.tabDisplay.BackColor = System.Drawing.Color.WhiteSmoke;
             this.tabDisplay.Controls.Add(this.labelLineSmoothOnOff);
             this.tabDisplay.Controls.Add(this.labelSectionLinesOnOff);
             this.tabDisplay.Controls.Add(this.labelDirectionMarkOnOff);
@@ -9823,6 +9837,7 @@ namespace AgOpenGPS
             ((System.ComponentModel.ISupportInitialize)(this.pboxAntenna)).EndInit();
             this.tabVDimensions.ResumeLayout(false);
             this.tabVDimensions.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.HitchLengthBlindBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudTractorHitchLength)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudVehicleTrack)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudWheelbase)).EndInit();
@@ -10455,5 +10470,6 @@ namespace AgOpenGPS
         private System.Windows.Forms.RadioButton rbtnBrandTJCB;
         private System.Windows.Forms.Label labelUser1;
         private System.Windows.Forms.Label labelABSmoothOnOff;
+        private System.Windows.Forms.PictureBox HitchLengthBlindBox;
     }
 }
