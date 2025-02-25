@@ -14,33 +14,33 @@ namespace AgOpenGPS.Core.Models
             switch (brand)
             {
                 case TractorBrand.Case:
-                    return BrandBitmaps.TractorCase;
+                    return BrandImages.TractorCase;
                 case TractorBrand.Claas:
-                    return BrandBitmaps.TractorClaas;
+                    return BrandImages.TractorClaas;
                 case TractorBrand.Deutz:
-                    return BrandBitmaps.TractorDeutz;
+                    return BrandImages.TractorDeutz;
                 case TractorBrand.Fendt:
-                    return BrandBitmaps.TractorFendt;
+                    return BrandImages.TractorFendt;
                 case TractorBrand.JohnDeere:
-                    return BrandBitmaps.TractorJohnDeere;
+                    return BrandImages.TractorJohnDeere;
                 case TractorBrand.Kubota:
-                    return BrandBitmaps.TractorKubota;
+                    return BrandImages.TractorKubota;
                 case TractorBrand.Massey:
-                    return BrandBitmaps.TractorMassey;
+                    return BrandImages.TractorMassey;
                 case TractorBrand.NewHolland:
-                    return BrandBitmaps.TractorNewHolland;
+                    return BrandImages.TractorNewHolland;
                 case TractorBrand.Same:
-                    return BrandBitmaps.TractorSame;
+                    return BrandImages.TractorSame;
                 case TractorBrand.Steyr:
-                    return BrandBitmaps.TractorSteyr;
+                    return BrandImages.TractorSteyr;
                 case TractorBrand.Ursus:
-                    return BrandBitmaps.TractorUrsus;
+                    return BrandImages.TractorUrsus;
                 case TractorBrand.Valtra:
-                    return BrandBitmaps.TractorValtra;
+                    return BrandImages.TractorValtra;
                 case TractorBrand.JCB:
-                    return BrandBitmaps.TractorJCB;
+                    return BrandImages.TractorJCB;
                 default:
-                    return BrandBitmaps.TractorAoG;
+                    return BrandImages.TractorAoG;
             }
         }
     }
@@ -52,15 +52,15 @@ namespace AgOpenGPS.Core.Models
             switch (brand)
             {
                 case HarvesterBrand.Case:
-                    return BrandBitmaps.HarvesterCase;
+                    return BrandImages.HarvesterCase;
                 case HarvesterBrand.Claas:
-                    return BrandBitmaps.HarvesterClaas;
+                    return BrandImages.HarvesterClaas;
                 case HarvesterBrand.JohnDeere:
-                    return BrandBitmaps.HarvesterJohnDeere;
+                    return BrandImages.HarvesterJohnDeere;
                 case HarvesterBrand.NewHolland:
-                    return BrandBitmaps.HarvesterNewHolland;
+                    return BrandImages.HarvesterNewHolland;
                 default:
-                    return BrandBitmaps.HarvesterAoG;
+                    return BrandImages.HarvesterAoG;
             }
         }
     }
@@ -72,17 +72,17 @@ namespace AgOpenGPS.Core.Models
             switch (brand)
             {
                 case ArticulatedBrand.Case:
-                    return BrandBitmaps.ArticulatedFrontCase;
+                    return BrandImages.ArticulatedFrontCase;
                 case ArticulatedBrand.Challenger:
-                    return BrandBitmaps.ArticulatedFrontChallenger;
+                    return BrandImages.ArticulatedFrontChallenger;
                 case ArticulatedBrand.JohnDeere:
-                    return BrandBitmaps.ArticulatedFrontJohnDeere;
+                    return BrandImages.ArticulatedFrontJohnDeere;
                 case ArticulatedBrand.NewHolland:
-                    return BrandBitmaps.ArticulatedFrontNewHolland;
+                    return BrandImages.ArticulatedFrontNewHolland;
                 case ArticulatedBrand.Holder:
-                    return BrandBitmaps.ArticulatedFrontHolder;
+                    return BrandImages.ArticulatedFrontHolder;
                 default:
-                    return BrandBitmaps.ArticulatedFrontAoG;
+                    return BrandImages.ArticulatedFrontAoG;
             }
         }
 
@@ -91,17 +91,17 @@ namespace AgOpenGPS.Core.Models
             switch (brand)
             {
                 case ArticulatedBrand.Case:
-                    return BrandBitmaps.ArticulatedRearCase;
+                    return BrandImages.ArticulatedRearCase;
                 case ArticulatedBrand.Challenger:
-                    return BrandBitmaps.ArticulatedRearChallenger;
+                    return BrandImages.ArticulatedRearChallenger;
                 case ArticulatedBrand.JohnDeere:
-                    return BrandBitmaps.ArticulatedRearJohnDeere;
+                    return BrandImages.ArticulatedRearJohnDeere;
                 case ArticulatedBrand.NewHolland:
-                    return BrandBitmaps.ArticulatedRearNewHolland;
+                    return BrandImages.ArticulatedRearNewHolland;
                 case ArticulatedBrand.Holder:
-                    return BrandBitmaps.ArticulatedRearHolder;
+                    return BrandImages.ArticulatedRearHolder;
                 default:
-                    return BrandBitmaps.ArticulatedRearAoG;
+                    return BrandImages.ArticulatedRearAoG;
             }
         }
     }
