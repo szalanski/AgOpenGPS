@@ -493,7 +493,6 @@ namespace AgOpenGPS
             }
         }
 
-
         private void FormGPS_FormClosing(object sender, FormClosingEventArgs e)
         {
             Form f = Application.OpenForms["FormGPSData"];
