@@ -1,5 +1,6 @@
 ﻿//Please, if you use this, share the improvements
 
+using AgOpenGPS.Core.Models;
 using System;
 
 namespace AgOpenGPS
@@ -29,6 +30,10 @@ namespace AgOpenGPS
             heading = v.heading;
         }
 
+        public GeoCoord ToGeoCoord()
+        {
+            return new GeoCoord(northing, easting);
+        }
     }
 
     public struct vecFix2Fix
@@ -49,8 +54,8 @@ namespace AgOpenGPS
 
     public struct vec2
     {
-        public double easting; //easting
-        public double northing; //northing
+        public double easting;
+        public double northing;
 
         public vec2(double easting, double northing)
         {
@@ -64,7 +69,10 @@ namespace AgOpenGPS
             northing = v.northing;
         }
 
-
+        public GeoCoord ToGeoCoord()
+        {
+            return new GeoCoord(northing, easting);
+        }
 
         public static vec2 operator -(vec2 lhs, vec2 rhs)
         {
