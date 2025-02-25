@@ -24,6 +24,8 @@ namespace AgOpenGPS
             labelOverlap.Text = gStr.gsOverlap + ":";
             labelActual.Text = gStr.gsActual;
             labelRate.Text = gStr.gsRate + ":";
+            labelArea.Text = gStr.gsArea + ":";
+            labelDistance.Text = gStr.gsDistance + ":";
 
         }
         private void FormFieldData_Load(object sender, EventArgs e)
