@@ -153,10 +153,10 @@ namespace AgOpenGPS
 
         }
 
-        public void checkZoomWorldGrid(double northing, double easting)
+        public void checkZoomWorldGrid(GeoCoord geoCoord)
         {
-            double n = Math.Round(northing / (GridSize / Count * 2), MidpointRounding.AwayFromZero) * (GridSize / Count * 2);
-            double e = Math.Round(easting / (GridSize / Count * 2), MidpointRounding.AwayFromZero) * (GridSize / Count * 2);
+            double n = Math.Round(geoCoord.Northing / (GridSize / Count * 2), MidpointRounding.AwayFromZero) * (GridSize / Count * 2);
+            double e = Math.Round(geoCoord.Easting / (GridSize / Count * 2), MidpointRounding.AwayFromZero) * (GridSize / Count * 2);
 
             northingMax = n + GridSize;
             northingMin = n - GridSize;

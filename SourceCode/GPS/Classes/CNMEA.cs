@@ -69,22 +69,20 @@ namespace AgOpenGPS
             * Math.Cos(3.0 * latStart * degreesToRadians) + 0.118
             * Math.Cos(5.0 * latStart * degreesToRadians);
 
-            ConvertWGS84ToLocal(latitude, longitude, out double northing, out double easting);
-            mf.worldGrid.checkZoomWorldGrid(northing, easting);
+            GeoCoord geoCoord = ConvertWgs84ToGeoCoord(new Wgs84(latitude, longitude));
+            mf.worldGrid.checkZoomWorldGrid(geoCoord);
         }
 
-        public void ConvertWGS84ToLocal(double Lat, double Lon, out double Northing, out double Easting)
+        public GeoCoord ConvertWgs84ToGeoCoord(Wgs84 latLon)
         {
             mPerDegreeLon =
-                111412.84 * Math.Cos(Lat * degreesToRadians)
-                - 93.5 * Math.Cos(3.0 * Lat * degreesToRadians)
-                + 0.118 * Math.Cos(5.0 * Lat * degreesToRadians);
+                111412.84 * Math.Cos(latLon.Latitude * degreesToRadians)
+                - 93.5 * Math.Cos(3.0 * latLon.Latitude * degreesToRadians)
+                + 0.118 * Math.Cos(5.0 * latLon.Latitude * degreesToRadians);
 
-            Northing = (Lat - latStart) * mPerDegreeLat;
-            Easting = (Lon - lonStart) * mPerDegreeLon;
-
-            //Northing += mf.RandomNumber(-0.02, 0.02);
-            //Easting += mf.RandomNumber(-0.02, 0.02);
+            return new GeoCoord(
+                (latLon.Latitude - latStart) * mPerDegreeLat,
+                (latLon.Longitude - lonStart) * mPerDegreeLon);
         }
 
         public Wgs84 ConvertGeoCoordToWgs84(GeoCoord geoCoord)

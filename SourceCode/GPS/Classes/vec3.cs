@@ -5,11 +5,6 @@ using System;
 
 namespace AgOpenGPS
 {
-    /// <summary>
-    /// Represents a three dimensional vector.
-    /// </summary>
-    ///
-
     public struct vec3
     {
         public double easting;
@@ -28,6 +23,13 @@ namespace AgOpenGPS
             easting = v.easting;
             northing = v.northing;
             heading = v.heading;
+        }
+
+        public vec3(GeoCoord geoCoord)
+        {
+            easting = geoCoord.Easting;
+            northing = geoCoord.Northing;
+            heading = 0.0;
         }
 
         public GeoCoord ToGeoCoord()
@@ -67,6 +69,12 @@ namespace AgOpenGPS
         {
             easting = v.easting;
             northing = v.northing;
+        }
+
+        public vec2(GeoCoord geoCoord)
+        {
+            northing = geoCoord.Northing;
+            easting = geoCoord.Easting;
         }
 
         public GeoCoord ToGeoCoord()
