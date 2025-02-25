@@ -1656,8 +1656,9 @@ namespace AgOpenGPS
                     pn.SetLocalMetersPerDegree(false);
                 }
 
-                pn.ConvertWGS84ToLocal(pn.latitude, pn.longitude, out pn.fix.northing, out pn.fix.easting);
-
+                GeoCoord fixCoord = pn.ConvertWgs84ToGeoCoord(new Wgs84(pn.latitude, pn.longitude));
+                pn.fix.northing = fixCoord.Northing;
+                pn.fix.easting = fixCoord.Easting;
                 //Draw a grid once we know where in the world we are.
                 isFirstFixPositionSet = true;
 
