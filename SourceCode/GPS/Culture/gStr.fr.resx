@@ -396,7 +396,7 @@ L'ordre dans lequel vous cliquez, sera l'ordre dans lequel ils apparaîtrons dan
     <value>Afficher</value>
   </data>
   <data name="gsDistance" xml:space="preserve">
-    <value>Distance:</value>
+    <value>Distance</value>
   </data>
   <data name="gsDistanceToFlag" xml:space="preserve">
     <value>Distance drapeau</value>

@@ -309,12 +309,12 @@ namespace AgOpenGPS
             // labelAreaValue
             // 
             this.labelAreaValue.AutoSize = true;
-            this.labelAreaValue.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelAreaValue.Font = new System.Drawing.Font("Tahoma", 12.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelAreaValue.ForeColor = System.Drawing.Color.White;
-            this.labelAreaValue.Location = new System.Drawing.Point(93, 382);
+            this.labelAreaValue.Location = new System.Drawing.Point(102, 382);
             this.labelAreaValue.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.labelAreaValue.Name = "labelAreaValue";
-            this.labelAreaValue.Size = new System.Drawing.Size(18, 23);
+            this.labelAreaValue.Size = new System.Drawing.Size(17, 21);
             this.labelAreaValue.TabIndex = 499;
             this.labelAreaValue.Text = "-";
             // 
@@ -357,12 +357,12 @@ namespace AgOpenGPS
             // labelDistanceDriven
             // 
             this.labelDistanceDriven.AutoSize = true;
-            this.labelDistanceDriven.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelDistanceDriven.Font = new System.Drawing.Font("Tahoma", 12.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelDistanceDriven.ForeColor = System.Drawing.Color.White;
-            this.labelDistanceDriven.Location = new System.Drawing.Point(93, 407);
+            this.labelDistanceDriven.Location = new System.Drawing.Point(102, 407);
             this.labelDistanceDriven.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.labelDistanceDriven.Name = "labelDistanceDriven";
-            this.labelDistanceDriven.Size = new System.Drawing.Size(18, 23);
+            this.labelDistanceDriven.Size = new System.Drawing.Size(17, 21);
             this.labelDistanceDriven.TabIndex = 503;
             this.labelDistanceDriven.Text = "-";
             // 

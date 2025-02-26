@@ -397,7 +397,7 @@
     <value>Vis</value>
   </data>
   <data name="gsDistance" xml:space="preserve">
-    <value>Avstand:</value>
+    <value>Avstand</value>
   </data>
   <data name="gsDistanceToFlag" xml:space="preserve">
     <value>Avstand til flagg</value>
