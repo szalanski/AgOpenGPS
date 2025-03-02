@@ -779,8 +779,8 @@ namespace AgOpenGPS
                     //start positions
                     if (!reader.EndOfStream)
                     {
+                        reader.ReadLine(); // Skip line 'StartFix'
                         pn.StartLatLon = reader.ReadWgs84();
-
                         pn.SetLocalMetersPerDegree(true);
                     }
                 }
