@@ -12,7 +12,6 @@ using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
 using AgOpenGPS.Core.Models;
-using AgOpenGPS.Core.Resources;
 
 namespace AgOpenGPS
 {
@@ -47,7 +46,7 @@ namespace AgOpenGPS
 
         //Is it in 2D or 3D, metric or imperial, display lightbar, display grid etc
         public bool isMetric = true, isLightbarOn = true, isGridOn, isFullScreen;
-        public bool isUTurnAlwaysOn, isCompassOn, isSpeedoOn, isSideGuideLines = true;
+        public bool isUTurnAlwaysOn, isSpeedoOn, isSideGuideLines = true;
         public bool isPureDisplayOn = true, isSkyOn = true, isRollMeterOn = false, isTextureOn = true;
         public bool isDay = true, isDayTime = true, isBrightnessOn = true;
         public bool isLogElevation = false, isDirectionMarkers;
@@ -514,7 +513,6 @@ namespace AgOpenGPS
             isGridOn = Settings.Default.setMenu_isGridOn;
             isBrightnessOn = Settings.Default.setDisplay_isBrightnessOn;
 
-            isCompassOn = Settings.Default.setMenu_isCompassOn;
             isSpeedoOn = Settings.Default.setMenu_isSpeedoOn;
             isSideGuideLines = Settings.Default.setMenu_isSideGuideLines;
             isSvennArrowOn = Settings.Default.setDisplay_isSvennArrowOn;
@@ -1138,9 +1136,6 @@ namespace AgOpenGPS
             Properties.Settings.Default.setDisplay_camZoom = camera.zoomValue;
 
             Settings.Default.setF_UserTotalArea = fd.workedAreaTotalUser;
-
-            //Settings.Default.setDisplay_panelSnapLocation = panelSnap.Location;
-            Settings.Default.setDisplay_panelSimLocation = panelSim.Location;
 
             Settings.Default.Save();
         }
