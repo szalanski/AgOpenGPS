@@ -42,9 +42,7 @@ namespace AgDiag.Protocol
                     {
                         var result = await udpClient.ReceiveAsync().ConfigureAwait(false);
 
-                        byte[] localMsg = result.Buffer;
-                        int port = result.RemoteEndPoint.Port;
-                        ReceiveFromLoopBack(port, localMsg);
+                        HandleMessage(result.Buffer);
                     }
                 }
             }
@@ -54,8 +52,7 @@ namespace AgDiag.Protocol
             }
         }
 
-        //loopback functions
-        private void ReceiveFromLoopBack(int port, byte[] data)
+        private void HandleMessage(byte[] data)
         {
             if (data[0] == 0x80 && data[1] == 0x81)
             {
