@@ -9,13 +9,9 @@ namespace AgDiag.Protocol
     {
         private readonly PGNs _pgns;
 
-        // Server socket
-        private Socket recvFromLoopBackSocket;
+        private UdpClient _udpClient;
 
-        private EndPoint epSender = new IPEndPoint(IPAddress.Any, 0);
-
-        // Data stream
-        private byte[] buffer = new byte[1024];
+        private IPEndPoint epSender = new IPEndPoint(IPAddress.Any, 0);
 
         private int cntr;
 
@@ -30,18 +26,9 @@ namespace AgDiag.Protocol
         {
             try //loopback
             {
-                // Initialise the socket
-                recvFromLoopBackSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+                _udpClient = new UdpClient(17777);
 
-                // AgDiag listens on this port
-                recvFromLoopBackSocket.Bind(new IPEndPoint(IPAddress.Any, 17777)); //old version is 15555
-
-                // Initialise the IPEndPoint for the client
-                EndPoint client = new IPEndPoint(IPAddress.Any, 0);
-
-                // Start listening for incoming data
-                recvFromLoopBackSocket.BeginReceiveFrom(buffer, 0, buffer.Length, SocketFlags.None, ref client, new AsyncCallback(ReceiveDataLoopAsync), recvFromLoopBackSocket);
-
+                _udpClient.BeginReceive(new AsyncCallback(ReceiveDataLoopAsync), null);
             }
             catch (Exception ex)
             {
@@ -52,14 +39,7 @@ namespace AgDiag.Protocol
 
         public void CloseLoopback()
         {
-            if (recvFromLoopBackSocket != null)
-            {
-                try
-                {
-                    recvFromLoopBackSocket.Shutdown(SocketShutdown.Both);
-                }
-                finally { recvFromLoopBackSocket.Close(); }
-            }
+            _udpClient?.Close();
         }
 
         //loopback functions
@@ -137,21 +117,12 @@ namespace AgDiag.Protocol
         {
             try
             {
-                // Initialise the IPEndPoint for the clients
+                byte[] localMsg = _udpClient.EndReceive(asyncResult, ref epSender);
 
-                // Receive all data
-                int msgLen = recvFromLoopBackSocket.EndReceiveFrom(asyncResult, ref epSender);
-
-                byte[] localMsg = new byte[msgLen];
-                Array.Copy(buffer, localMsg, msgLen);
-
-                // Listen for more connections again...
-                recvFromLoopBackSocket.BeginReceiveFrom(buffer, 0, buffer.Length, SocketFlags.None, ref epSender, new AsyncCallback(ReceiveDataLoopAsync), recvFromLoopBackSocket);
-
-                //string text = Encoding.ASCII.GetString(localMsg);
+                _udpClient.BeginReceive(new AsyncCallback(ReceiveDataLoopAsync), null);
 
                 // Update status through a delegate
-                int port = ((IPEndPoint)epSender).Port;
+                int port = epSender.Port;
                 ReceiveFromLoopBack(port, localMsg);
             }
             catch (Exception)
