@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Net.Sockets;
-using System.Net;
 using System.Windows.Forms;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace AgDiag.Protocol
 {
@@ -9,9 +10,7 @@ namespace AgDiag.Protocol
     {
         private readonly PGNs _pgns;
 
-        private UdpClient _udpClient;
-
-        private IPEndPoint epSender = new IPEndPoint(IPAddress.Any, 0);
+        private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
 
         private int cntr;
 
@@ -24,22 +23,35 @@ namespace AgDiag.Protocol
 
         public void LoadLoopback()
         {
-            try //loopback
-            {
-                _udpClient = new UdpClient(17777);
-
-                _udpClient.BeginReceive(new AsyncCallback(ReceiveDataLoopAsync), null);
-            }
-            catch (Exception ex)
-            {
-                //lblStatus.Text = "Error";
-                MessageBox.Show("Load Error: " + ex.Message, "UDP Server", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            var cancellationToken = _cancellationTokenSource.Token;
+            Task.Factory.StartNew(() => ReceiveLoopAsync(cancellationToken), cancellationToken, TaskCreationOptions.LongRunning, TaskScheduler.Default);
         }
 
         public void CloseLoopback()
         {
-            _udpClient?.Close();
+            _cancellationTokenSource.Cancel();
+        }
+
+        private async Task ReceiveLoopAsync(CancellationToken cancellationToken)
+        {
+            try
+            {
+                using (UdpClient udpClient = new UdpClient(17777))
+                {
+                    while (!cancellationToken.IsCancellationRequested)
+                    {
+                        var result = await udpClient.ReceiveAsync().ConfigureAwait(false);
+
+                        byte[] localMsg = result.Buffer;
+                        int port = result.RemoteEndPoint.Port;
+                        ReceiveFromLoopBack(port, localMsg);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("UDP Error: " + ex.Message, "UDP Server", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         //loopback functions
@@ -110,24 +122,6 @@ namespace AgDiag.Protocol
             {
                 cntr += data.Length;
                 DefaultSendsUpdated?.Invoke(this, cntr);
-            }
-        }
-
-        private void ReceiveDataLoopAsync(IAsyncResult asyncResult)
-        {
-            try
-            {
-                byte[] localMsg = _udpClient.EndReceive(asyncResult, ref epSender);
-
-                _udpClient.BeginReceive(new AsyncCallback(ReceiveDataLoopAsync), null);
-
-                // Update status through a delegate
-                int port = epSender.Port;
-                ReceiveFromLoopBack(port, localMsg);
-            }
-            catch (Exception)
-            {
-                //MessageBox.Show("ReceiveData Error: " + ex.Message, "UDP Server", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }
