@@ -16,17 +16,10 @@ namespace AgDiag
         {
             if (Mutex.WaitOne(TimeSpan.Zero, true))
             {
-                ////opening the subkey
-                //if (Environment.OSVersion.Version.Major >= 6) SetProcessDPIAware();
-
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new FormLoop());
             }
-            //else
-            //{
-            //    MessageBox.Show("AgDiag is Already Running"); 
-            //}
         }
     }
 }

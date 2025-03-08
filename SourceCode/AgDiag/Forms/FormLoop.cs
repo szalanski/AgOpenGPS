@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Drawing;
 using System.Net.Sockets;
 using System.Windows.Forms;
@@ -8,19 +7,10 @@ namespace AgDiag
 {
     public partial class FormLoop : Form
     {
-        [System.Runtime.InteropServices.DllImport("User32.dll")]
-        private static extern bool SetForegroundWindow(IntPtr handle);
-
-        [System.Runtime.InteropServices.DllImport("User32.dll")]
-        private static extern bool ShowWindow(IntPtr hWind, int nCmdShow);
-
         public FormLoop()
         {
             InitializeComponent();
-
         }
-
-        public double secondsSinceStart, lastSecond, currentLat, currentLon;
 
         private static string ByteArrayToHex(byte[] barray)
         {
@@ -37,16 +27,8 @@ namespace AgDiag
             return new string(c);
         }
 
-        private void btnDeviceManager_Click(object sender, EventArgs e)
-        {
-            Process.Start("devmgmt.msc");
-        }
         private void timer1_Tick(object sender, EventArgs e)
         {
-            secondsSinceStart = (DateTime.Now - Process.GetCurrentProcess().StartTime).TotalSeconds;
-
-            DoTraffic();
-
             if ((asData.pgn[asData.sc1to8] & 1) == 1) lblSection1.BackColor = Color.Green;
             else lblSection1.BackColor = Color.Red;
             if ((asData.pgn[asData.sc1to8] & 2) == 2) lblSection2.BackColor = Color.Green;
@@ -113,14 +95,10 @@ namespace AgDiag
             //machine bytes
             lblPNGMachine.Text = ByteArrayToHex(maData.pgn);
             TreeLbl.Text = maData.pgn[maData.tree].ToString();
-            
-
-
         }
 
         private void FormLoop_Load(object sender, EventArgs e)
         {
-
             timer1.Enabled = true;
             LoadLoopback();
         }
@@ -135,42 +113,7 @@ namespace AgDiag
                 }
                 finally { recvFromLoopBackSocket.Close(); }
             }
-
-
-            if (sendToLoopBackSocket != null)
-            {
-                try
-                {
-                    sendToLoopBackSocket.Shutdown(SocketShutdown.Both);
-                }
-                finally { sendToLoopBackSocket.Close(); }
-            }
-
-            if (sendSocket != null)
-            {
-                try
-                {
-                    sendSocket.Shutdown(SocketShutdown.Both);
-                }
-                finally { sendSocket.Close(); }
-            }
-
-            if (recvSocket != null)
-            {
-                try
-                {
-                    recvSocket.Shutdown(SocketShutdown.Both);
-                }
-                finally { recvSocket.Close(); }
-            }
         }
-
-        private void DoTraffic()
-        {
-        }
-
-
-
     }
 }
 

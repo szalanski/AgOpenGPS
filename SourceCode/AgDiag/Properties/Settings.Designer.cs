@@ -22,17 +22,5 @@ namespace AgDiag.Properties {
                 return defaultInstance;
             }
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool setUDP_isOn {
-            get {
-                return ((bool)(this["setUDP_isOn"]));
-            }
-            set {
-                this["setUDP_isOn"] = value;
-            }
-        }
     }
 }
