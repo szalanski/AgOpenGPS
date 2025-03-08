@@ -1,12 +1,14 @@
 ﻿using System;
-using System.Net;
 using System.Net.Sockets;
+using System.Net;
 using System.Windows.Forms;
 
-namespace AgDiag
+namespace AgDiag.Protocol
 {
-    public partial class FormLoop
+    public class UDP
     {
+        private readonly PGNs _pgns;
+
         // Server socket
         private Socket recvFromLoopBackSocket;
 
@@ -17,8 +19,15 @@ namespace AgDiag
 
         private int cntr;
 
-        private void LoadLoopback()
-        { 
+        public UDP(PGNs pgns)
+        {
+            _pgns = pgns;
+        }
+
+        public event EventHandler<int> DefaultSendsUpdated;
+
+        public void LoadLoopback()
+        {
             try //loopback
             {
                 // Initialise the socket
@@ -41,6 +50,18 @@ namespace AgDiag
             }
         }
 
+        public void CloseLoopback()
+        {
+            if (recvFromLoopBackSocket != null)
+            {
+                try
+                {
+                    recvFromLoopBackSocket.Shutdown(SocketShutdown.Both);
+                }
+                finally { recvFromLoopBackSocket.Close(); }
+            }
+        }
+
         //loopback functions
         private void ReceiveFromLoopBack(int port, byte[] data)
         {
@@ -52,7 +73,7 @@ namespace AgDiag
                         {
                             for (int i = 5; i < data.Length; i++)
                             {
-                                asModule.pgn[i] = data[i];
+                                _pgns.asModule.pgn[i] = data[i];
                             }
 
                             break;
@@ -62,7 +83,7 @@ namespace AgDiag
 
                             for (int i = 5; i < data.Length; i++)
                             {
-                                asData.pgn[i] = data[i];
+                                _pgns.asData.pgn[i] = data[i];
                             }
 
                             break;
@@ -72,7 +93,7 @@ namespace AgDiag
 
                             for (int i = 5; i < data.Length; i++)
                             {
-                                asSet.pgn[i] = data[i];
+                                _pgns.asSet.pgn[i] = data[i];
                             }
 
                             break;
@@ -82,7 +103,7 @@ namespace AgDiag
 
                             for (int i = 5; i < data.Length; i++)
                             {
-                                asConfig.pgn[i] = data[i];
+                                _pgns.asConfig.pgn[i] = data[i];
                             }
 
                             break;
@@ -92,7 +113,7 @@ namespace AgDiag
 
                             for (int i = 5; i < data.Length; i++)
                             {
-                                maData.pgn[i] = data[i];
+                                _pgns.maData.pgn[i] = data[i];
                             }
 
                             break;
@@ -100,7 +121,7 @@ namespace AgDiag
 
                     default:
                         {
-                            lblDefaultSends.Text = data.Length.ToString();
+                            DefaultSendsUpdated?.Invoke(this, data.Length);
                             break;
                         }
                 }
@@ -108,7 +129,7 @@ namespace AgDiag
             else
             {
                 cntr += data.Length;
-                lblDefaultSends.Text = cntr.ToString();
+                DefaultSendsUpdated?.Invoke(this, cntr);
             }
         }
 
@@ -131,7 +152,7 @@ namespace AgDiag
 
                 // Update status through a delegate
                 int port = ((IPEndPoint)epSender).Port;
-                BeginInvoke((MethodInvoker)(() => ReceiveFromLoopBack(port, localMsg)));
+                ReceiveFromLoopBack(port, localMsg);
             }
             catch (Exception)
             {

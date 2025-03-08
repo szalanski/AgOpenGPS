@@ -1,6 +1,6 @@
-﻿namespace AgDiag
+﻿namespace AgDiag.Protocol
 {
-    public partial class FormLoop
+    public class PGNs
     {
         //AutoSteerData
         public class CPGN_FE
@@ -105,7 +105,6 @@
             public int set0 = 8;
         }
 
-
         //pgn instances
 
         /// <summary>
@@ -127,7 +126,6 @@
         /// autoSteerConfig PGN - 251 - FB
         /// </summary>
         public CPGN_FB asConfig = new CPGN_FB();
-
 
         /// <summary>
         /// machineData PGN - 239 - EF
