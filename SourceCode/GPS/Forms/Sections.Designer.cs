@@ -18,24 +18,33 @@ namespace AgOpenGPS
         public btnStates manualBtnState = btnStates.Off;
         public btnStates autoBtnState = btnStates.Off;
 
-        private void markAsWorkedTrack()
+        private void MarkAsWorkedTrack()
         {
-            //is it an AB Line or a Curve?
-            if (trk.gArr[this.trk.idx].mode == TrackMode.AB)
+            // only mark if there was a track selected
+            if (this.trk.idx >= 0)
             {
-                //AB Line
-                if (!this.trk.gArr[this.trk.idx].workedTracks.Contains(this.ABLine.howManyPathsAway))
-                    this.trk.gArr[this.trk.idx].workedTracks.Add(this.ABLine.howManyPathsAway);
+                var track = this.trk.gArr[this.trk.idx];
 
-            }
-            else if (trk.gArr[this.trk.idx].mode == TrackMode.Curve)
-            {
-                //Curve
-                if (!this.trk.gArr[this.trk.idx].workedTracks.Contains(this.curve.howManyPathsAway))
-                    this.trk.gArr[this.trk.idx].workedTracks.Add(this.curve.howManyPathsAway);
-
+                if (track.mode == TrackMode.AB)
+                {
+                    AddToWorkedTracksList(this.ABLine.howManyPathsAway);
+                }
+                else if (track.mode == TrackMode.Curve)
+                {
+                    AddToWorkedTracksList(this.curve.howManyPathsAway);
+                }
             }
         }
+
+        private void AddToWorkedTracksList(double pathsAway)
+        {
+            //add the track to the workedTrackList if it isn't already in
+            if (!this.trk.gArr[this.trk.idx].workedTracks.Contains(pathsAway))
+            {
+                this.trk.gArr[this.trk.idx].workedTracks.Add(pathsAway);
+            }
+        }
+
 
 
         //Section Manual and Auto buttons on right side
@@ -55,7 +64,7 @@ namespace AgOpenGPS
                     btnSectionMasterManual.Image = Properties.Resources.ManualOn;
 
                     //add current track when it doesn't exist in the worked track list
-                    markAsWorkedTrack();
+                    MarkAsWorkedTrack();
 
                     break;
 
@@ -87,7 +96,7 @@ namespace AgOpenGPS
                     if (sounds.isSectionsSoundOn) sounds.sndSectionOn.Play();
 
                     //add current track when it doesn't exist in the worked track list
-                    markAsWorkedTrack();
+                    MarkAsWorkedTrack();
 
                     break;
 
