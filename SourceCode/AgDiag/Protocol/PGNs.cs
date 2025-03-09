@@ -1,8 +1,16 @@
-﻿namespace AgDiag.Protocol
+﻿using System.Drawing;
+using System;
+
+namespace AgDiag.Protocol
 {
     public abstract class PGN
     {
         public byte[] Bytes { get; set; }
+
+        public string ToHexString()
+        {
+            return BitConverter.ToString(Bytes);
+        }
     }
 
     public class PGNs
