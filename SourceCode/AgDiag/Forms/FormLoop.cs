@@ -20,21 +20,6 @@ namespace AgDiag
             InitializeComponent();
         }
 
-        private static string ByteArrayToHex(byte[] barray)
-        {
-            char[] c = new char[barray.Length * 3];
-            byte b;
-            for (int i = 0; i < barray.Length; ++i)
-            {
-                b = ((byte)(barray[i] >> 4));
-                c[i * 3] = (char)(b > 9 ? b + 0x37 : b + 0x30);
-                b = ((byte)(barray[i] & 0xF));
-                c[i * 3 + 1] = (char)(b > 9 ? b + 0x37 : b + 0x30);
-                c[i * 3 + 2] = (char)0x2D;
-            }
-            return new string(c);
-        }
-
         private void timer1_Tick(object sender, EventArgs e)
         {
             if ((_pgns.asData.Bytes[_pgns.asData.sc1to8] & 1) == 1) lblSection1.BackColor = Color.Green;
@@ -59,7 +44,7 @@ namespace AgDiag
             lblSetSteerAngle.Text = (_pgns.asData.Bytes[_pgns.asData.steerAngleHi] << 8 | _pgns.asData.Bytes[_pgns.asData.steerAngleLo]).ToString();
             lblStatus.Text = _pgns.asData.Bytes[_pgns.asData.status].ToString();
 
-            lblSteerDataPGN.Text = ByteArrayToHex(_pgns.asData.Bytes);
+            lblSteerDataPGN.Text = BitConverter.ToString(_pgns.asData.Bytes);
 
             //from autosteer  module
             lblSteerAngleActual.Text = ((Int16)((_pgns.asModule.Bytes[_pgns.asModule.actualHi] << 8)
@@ -81,10 +66,10 @@ namespace AgDiag
                 lblSteerSwitch.BackColor = Color.Red;
             else lblSteerSwitch.BackColor = Color.Green;
 
-            lblPGNFromAutosteerModule.Text = ByteArrayToHex(_pgns.asModule.Bytes);
+            lblPGNFromAutosteerModule.Text = BitConverter.ToString(_pgns.asModule.Bytes);
 
             //Autosteer settings
-            lblPGNSteerSettings.Text = ByteArrayToHex(_pgns.asSet.Bytes);
+            lblPGNSteerSettings.Text = BitConverter.ToString(_pgns.asSet.Bytes);
             lblP.Text = _pgns.asSet.Bytes[_pgns.asSet.gainProportional].ToString();
             lblHiPWM.Text = _pgns.asSet.Bytes[_pgns.asSet.highPWM].ToString();
             lblLoPWM.Text = _pgns.asSet.Bytes[_pgns.asSet.lowPWM].ToString();
@@ -95,13 +80,13 @@ namespace AgDiag
 
 
             //autosteer config bytes
-            lblPGNAutoSteerConfig.Text = ByteArrayToHex(_pgns.asConfig.Bytes);
+            lblPGNAutoSteerConfig.Text = BitConverter.ToString(_pgns.asConfig.Bytes);
             lblSet0.Text = _pgns.asConfig.Bytes[_pgns.asConfig.set0].ToString();
             lblPulseCount.Text = _pgns.asConfig.Bytes[_pgns.asConfig.maxPulse].ToString();
             lblMinSpeed.Text = _pgns.asConfig.Bytes[_pgns.asConfig.minSpeed].ToString();
 
             //machine bytes
-            lblPNGMachine.Text = ByteArrayToHex(_pgns.maData.Bytes);
+            lblPNGMachine.Text = BitConverter.ToString(_pgns.maData.Bytes);
             TreeLbl.Text = _pgns.maData.Bytes[_pgns.maData.tree].ToString();
         }
 
