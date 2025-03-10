@@ -21,7 +21,7 @@ namespace AgOpenGPS
         private void MarkAsWorkedTrack()
         {
             // only mark if there was a track selected
-            if (this.trk.idx >= 0)
+            if (this.trk.idx < 0) return;
             {
                 var track = this.trk.gArr[this.trk.idx];
 
