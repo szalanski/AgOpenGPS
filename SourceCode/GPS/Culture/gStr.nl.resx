@@ -150,6 +150,9 @@
   <data name="gsAgressiveness" xml:space="preserve">
     <value>Agressiviteit</value>
   </data>
+  <data name="gsAllSettings" xml:space="preserve">
+    <value>Open alle instellingen</value>
+  </data>
   <data name="gsAntennaHeight" xml:space="preserve">
     <value>Antenne Hoogte</value>
   </data>
@@ -169,7 +172,7 @@
     <value>Weet u het zeker?</value>
   </data>
   <data name="gsArea" xml:space="preserve">
-    <value>Oppervlakte</value>
+    <value>Areaal</value>
   </data>
   <data name="gsArrangeText" xml:space="preserve">
     <value>Gebruik de knoppen aan de linkerkant die u in het menu wilt laten verschijnen (de rechterkant).
@@ -369,7 +372,7 @@ De volgorde waarin u ze indrukt, is de volgorde waarin ze van onder naar boven i
     <value>Activeer Knoppen</value>
   </data>
   <data name="gsDistance" xml:space="preserve">
-    <value>Afstand:</value>
+    <value>Afstand</value>
   </data>
   <data name="gsDistanceToFlag" xml:space="preserve">
     <value>Afstand tot Vlag</value>

@@ -28,7 +28,7 @@ namespace AgOpenGPS
             this.Text = gStr.gsStartDeleteABoundary;
 
             //Column Header
-            Boundary.Text = "Bounds";
+            labelBounds.Text = gStr.gsBoundary;
             Thru.Text = gStr.gsDriveThru;
             Area.Text = gStr.gsArea;
             btnDelete.Enabled = false;

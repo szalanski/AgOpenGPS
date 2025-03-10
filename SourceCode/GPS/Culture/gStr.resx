@@ -159,6 +159,9 @@
   <data name="gsAgressiveness" xml:space="preserve">
     <value>Agressiveness</value>
   </data>
+  <data name="gsAllSettings" xml:space="preserve">
+    <value>View All Settings</value>
+  </data>
   <data name="gsAlpha" xml:space="preserve">
     <value>Alpha</value>
   </data>
