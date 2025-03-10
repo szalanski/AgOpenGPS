@@ -385,7 +385,7 @@ namespace AgOpenGPS
             toolStripConfig.Text = gStr.gsConfiguration;
             toolStripSteerSettings.Text = gStr.gsAutoSteer;
             toolStripWorkingDirectories.Text = gStr.gsDirectories;
-            //toolStripAllSettings.Text = gStr.gsAllSettings;
+            toolStripAllSettings.Text = gStr.gsAllSettings;
 
             resetEverythingToolStripMenuItem.Text = gStr.gsResetAllForSure;
             steerChartStripMenu.Text = gStr.gsCharts;

@@ -150,6 +150,9 @@
   <data name="gsAgressiveness" xml:space="preserve">
     <value>Agressiviteit</value>
   </data>
+  <data name="gsAllSettings" xml:space="preserve">
+    <value>Open alle instellingen</value>
+  </data>
   <data name="gsAntennaHeight" xml:space="preserve">
     <value>Antenne Hoogte</value>
   </data>
