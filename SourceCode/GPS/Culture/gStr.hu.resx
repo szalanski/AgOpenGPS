@@ -139,7 +139,7 @@
     <value>A programról...</value>
   </data>
   <data name="gsAckermann" xml:space="preserve">
-    <value>Akermann</value>
+    <value>Ackermann</value>
   </data>
   <data name="gsActionHasBeenCancelled" xml:space="preserve">
     <value>Művelet megszakítva</value>
@@ -169,7 +169,7 @@
     <value>Antenna eltolás</value>
   </data>
   <data name="gsApplied" xml:space="preserve">
-    <value>Alkalmaz</value>
+    <value>Megművelt</value>
   </data>
   <data name="gsAquire" xml:space="preserve">
     <value>Rátalálás</value>
@@ -234,7 +234,7 @@ A választott sorrend alapján fognak megjelenni alulról felfelé.</value>
     <value>Fényerő</value>
   </data>
   <data name="gsBuild" xml:space="preserve">
-    <value>Épít</value>
+    <value>Létrehoz</value>
   </data>
   <data name="gsBuildAround" xml:space="preserve">
     <value>Körbe épít</value>
@@ -312,10 +312,10 @@ A választott sorrend alapján fognak megjelenni alulról felfelé.</value>
     <value>Nem sikerült az útvonalkészítés</value>
   </data>
   <data name="gsCountsPerDegree" xml:space="preserve">
-    <value>CPD osztószáma</value>
+    <value>CPD osztószám</value>
   </data>
   <data name="gsCoverage" xml:space="preserve">
-    <value>% művelve</value>
+    <value>lefedési cél %</value>
   </data>
   <data name="gsCreate" xml:space="preserve">
     <value>Készít</value>
@@ -333,7 +333,7 @@ A választott sorrend alapján fognak megjelenni alulról felfelé.</value>
     <value>Jelenlegi profil</value>
   </data>
   <data name="gsCurrentTurnSensor" xml:space="preserve">
-    <value>Impulzus szenzor</value>
+    <value>Ampermérő</value>
   </data>
   <data name="gsCurve" xml:space="preserve">
     <value>Görbe</value>
@@ -396,7 +396,7 @@ A választott sorrend alapján fognak megjelenni alulról felfelé.</value>
     <value>Fórum:</value>
   </data>
   <data name="gsDisplay" xml:space="preserve">
-    <value>Kijelző</value>
+    <value>Megjelenít</value>
   </data>
   <data name="gsDistance" xml:space="preserve">
     <value>Távolság</value>
@@ -445,7 +445,7 @@ A választott sorrend alapján fognak megjelenni alulról felfelé.</value>
     <comment>-4000 és 4000 közötti szám az A/D-tól</comment>
   </data>
   <data name="gsEnterCoordinatesForSimulator" xml:space="preserve">
-    <value>Szimulátor koordináták megadása (Bp 47.5  19)</value>
+    <value>Szimulátor koordináták megadása</value>
   </data>
   <data name="gsEnterFieldName" xml:space="preserve">
     <value>Területnév megadása</value>
@@ -811,7 +811,7 @@ A választott sorrend alapján fognak megjelenni alulról felfelé.</value>
     <value>Külső</value>
   </data>
   <data name="gsOverlap" xml:space="preserve">
-    <value>Átfedés:</value>
+    <value>Átfedés</value>
   </data>
   <data name="gsOverlapGap" xml:space="preserve">
     <value>Átfedés / Kihagyás</value>
@@ -913,7 +913,7 @@ A választott sorrend alapján fognak megjelenni alulról felfelé.</value>
     <value>Kevesebb pont</value>
   </data>
   <data name="gsRemain" xml:space="preserve">
-    <value>Megtart</value>
+    <value>Hátralévő</value>
   </data>
   <data name="gsRemoveOffset" xml:space="preserve">
     <value>Eltolás törlése</value>
@@ -967,7 +967,7 @@ A választott sorrend alapján fognak megjelenni alulról felfelé.</value>
     <value>Szakasz határvonalak</value>
   </data>
   <data name="gsSections" xml:space="preserve">
-    <value>Szakaszok:</value>
+    <value>Szakaszok</value>
   </data>
   <data name="gsSelectButtons" xml:space="preserve">
     <value>Gombok választása</value>
@@ -1064,7 +1064,7 @@ A választott sorrend alapján fognak megjelenni alulról felfelé.</value>
 Kapcsoló - Benyom be, Elenged ki</value>
   </data>
   <data name="gsSteerEnable" xml:space="preserve">
-    <value>Kényelmi kapcoló</value>
+    <value>Kényelmi kapcsoló</value>
   </data>
   <data name="gsSteerInReverse" xml:space="preserve">
     <value>Kormányzás hátramenetben</value>
@@ -1118,7 +1118,7 @@ HASZNÁLAT SAJÁT FELELŐSSÉGRE.</value>
     <value>Munkaeszköz jobbra</value>
   </data>
   <data name="gsToolsMenu" xml:space="preserve">
-    <value>Eszkö menü</value>
+    <value>Eszköz menü</value>
   </data>
   <data name="gsTopFieldView" xml:space="preserve">
     <value>Terület felülnézete</value>
@@ -1181,10 +1181,10 @@ HASZNÁLAT SAJÁT FELELŐSSÉGRE.</value>
     <value>Automata forduló kompenzálása</value>
   </data>
   <data name="gsUturnExtension" xml:space="preserve">
-    <value>Állítsd a hosszabbítás távolságát a rádius dupla tripla értékére</value>
+    <value>vonalhosszabbítás rádius 2x+</value>
   </data>
   <data name="gsUturnSmooth" xml:space="preserve">
-    <value>Állítsd a simítást a rádius három-négyszeres értékére</value>
+    <value>Omega forma simítása rádiusz 3x+</value>
   </data>
   <data name="gsVehiclegroupbox" xml:space="preserve">
     <value>Jármű típus:</value>
@@ -1199,7 +1199,7 @@ HASZNÁLAT SAJÁT FELELŐSSÉGRE.</value>
     <value>Nyugat</value>
   </data>
   <data name="gsWheelbase" xml:space="preserve">
-    <value>Tengelytáv:</value>
+    <value>Tengelytáv</value>
   </data>
   <data name="gsWidth" xml:space="preserve">
     <value>Szélesség</value>

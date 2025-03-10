@@ -169,6 +169,15 @@ namespace AgOpenGPS.Culture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to View All Settings.
+        /// </summary>
+        public static string gsAllSettings {
+            get {
+                return ResourceManager.GetString("gsAllSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Alpha.
         /// </summary>
         public static string gsAlpha {
