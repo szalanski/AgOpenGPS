@@ -403,7 +403,7 @@
     <value>Schermo</value>
   </data>
   <data name="gsDistance" xml:space="preserve">
-    <value>Distanza:</value>
+    <value>Distanza</value>
   </data>
   <data name="gsDistanceToFlag" xml:space="preserve">
     <value>Distanza da Punto Interesse</value>
