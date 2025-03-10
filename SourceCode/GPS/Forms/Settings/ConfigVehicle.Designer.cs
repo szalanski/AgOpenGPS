@@ -183,7 +183,7 @@ namespace AgOpenGPS
             btnVehicleDelete.Enabled = false;
 
             lvVehicles.SelectedItems.Clear();
-
+        }
         //Functions
         private static readonly Regex InvalidFileRegex = new Regex(string.Format("[{0}]", Regex.Escape(@"<>:""/\|?*")));
         public static string SanitizeFileName(string fileName)
