@@ -184,7 +184,7 @@
     <value>Er du sikker?</value>
   </data>
   <data name="gsArea" xml:space="preserve">
-    <value>Område</value>
+    <value>Areal</value>
   </data>
   <data name="gsArrangeText" xml:space="preserve">
     <value>Trykk på knappene på venstre side som du vil skal vises i menyen (høyre side). Rekkefølgen du trykker på dem, vil være rekkefølgen de vises i menyen fra bunnen opp.</value>
@@ -361,7 +361,7 @@
     <value>Nullstill alle seksjoner og konturer</value>
   </data>
   <data name="gsDeleteAppliedArea" xml:space="preserve">
-    <value>Nullstill bearbeidet område</value>
+    <value>Nullstill bearbeidet areal</value>
   </data>
   <data name="gsDeleteBoundaryMapping" xml:space="preserve">
     <value>Denne handlingen vil slette alle grensene. Vil du fortsette?</value>
@@ -397,7 +397,7 @@
     <value>Vis</value>
   </data>
   <data name="gsDistance" xml:space="preserve">
-    <value>Avstand</value>
+    <value>Avstand:</value>
   </data>
   <data name="gsDistanceToFlag" xml:space="preserve">
     <value>Avstand til flagg</value>
@@ -765,6 +765,12 @@
   <data name="gsNothingDeleted" xml:space="preserve">
     <value>Ingenting slettet</value>
   </data>
+  <data name="gsNudge" xml:space="preserve">
+    <value>Flytt</value>
+  </data>
+  <data name="gsNudgeDistance" xml:space="preserve">
+    <value>Flytt avstand</value>
+  </data>
   <data name="gsNudgeRefTrack" xml:space="preserve">
     <value>Flytt referansespor</value>
   </data>
@@ -824,9 +830,6 @@
   </data>
   <data name="gsPivotDistance" xml:space="preserve">
     <value>Pivotavstand</value>
-  </data>
-  <data name="gsPlantPop" xml:space="preserve">
-    <value>Plantepop</value>
   </data>
   <data name="gsPleaseEnterABLine" xml:space="preserve">
     <value>Vennligst skriv inn AB-linje</value>
@@ -1051,7 +1054,7 @@
     <value>Styr under rygging</value>
   </data>
   <data name="gsSteerResponse" xml:space="preserve">
-    <value>Styringsrespons</value>
+    <value>Respons styring</value>
   </data>
   <data name="gsSteerSwitch" xml:space="preserve">
     <value>Styringsbryter</value>
