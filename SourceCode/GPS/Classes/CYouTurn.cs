@@ -108,7 +108,7 @@ namespace AgOpenGPS
         //find next not worked lane after the defined lanes to skip
         private int GetNextNotWorkedTrack(bool isTurnLeft, int rowSkipsWidth, bool isAB)
         {
-            double goalLane;
+            int goalLane;
 
             if (isAB)
             {

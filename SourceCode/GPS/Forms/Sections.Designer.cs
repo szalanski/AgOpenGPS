@@ -36,7 +36,7 @@ namespace AgOpenGPS
             
         }
 
-        private void AddToWorkedTracksList(double pathsAway)
+        private void AddToWorkedTracksList(int pathsAway)
         {
             //add the track to the workedTrackList if it isn't already in
             if (!this.trk.gArr[this.trk.idx].workedTracks.Contains(pathsAway))
