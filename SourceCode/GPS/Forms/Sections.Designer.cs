@@ -20,20 +20,20 @@ namespace AgOpenGPS
 
         private void MarkAsWorkedTrack()
         {
-            // only mark if there was a track selected
+            // return if there was a track selected
             if (this.trk.idx < 0) return;
-            {
-                var track = this.trk.gArr[this.trk.idx];
+            
+            var track = this.trk.gArr[this.trk.idx];
 
-                if (track.mode == TrackMode.AB)
-                {
-                    AddToWorkedTracksList(this.ABLine.howManyPathsAway);
-                }
-                else if (track.mode == TrackMode.Curve)
-                {
-                    AddToWorkedTracksList(this.curve.howManyPathsAway);
-                }
+            if (track.mode == TrackMode.AB)
+            {
+                AddToWorkedTracksList(this.ABLine.howManyPathsAway);
             }
+            else if (track.mode == TrackMode.Curve)
+            {
+                AddToWorkedTracksList(this.curve.howManyPathsAway);
+            }
+            
         }
 
         private void AddToWorkedTracksList(double pathsAway)
