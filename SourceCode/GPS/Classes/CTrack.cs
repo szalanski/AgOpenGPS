@@ -318,7 +318,7 @@ namespace AgOpenGPS
         public vec2 endPtB;
         public TrackMode mode;
         public double nudgeDistance;
-        public List<int> workedTracks = new List<int>();
+        public HashSet<int> workedTracks = new HashSet<int>();
 
         public CTrk()
         {

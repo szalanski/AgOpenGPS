@@ -22,29 +22,18 @@ namespace AgOpenGPS
         {
             // return if there was a track selected
             if (this.trk.idx < 0) return;
-            
+
             var track = this.trk.gArr[this.trk.idx];
 
             if (track.mode == TrackMode.AB)
             {
-                AddToWorkedTracksList(this.ABLine.howManyPathsAway);
+                track.workedTracks.Add(this.ABLine.howManyPathsAway);
             }
             else if (track.mode == TrackMode.Curve)
             {
-                AddToWorkedTracksList(this.curve.howManyPathsAway);
-            }
-            
-        }
-
-        private void AddToWorkedTracksList(int pathsAway)
-        {
-            //add the track to the workedTrackList if it isn't already in
-            if (!this.trk.gArr[this.trk.idx].workedTracks.Contains(pathsAway))
-            {
-                this.trk.gArr[this.trk.idx].workedTracks.Add(pathsAway);
+                track.workedTracks.Add(this.curve.howManyPathsAway);
             }
         }
-
 
 
         //Section Manual and Auto buttons on right side
