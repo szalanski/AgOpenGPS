@@ -18,22 +18,20 @@ namespace AgOpenGPS
         public btnStates manualBtnState = btnStates.Off;
         public btnStates autoBtnState = btnStates.Off;
 
-        private void markAsWorkedTrack()
+        private void MarkAsWorkedTrack()
         {
-            //is it an AB Line or a Curve?
-            if (trk.gArr[this.trk.idx].mode == TrackMode.AB)
-            {
-                //AB Line
-                if (!this.trk.gArr[this.trk.idx].workedTracks.Contains(this.ABLine.howManyPathsAway))
-                    this.trk.gArr[this.trk.idx].workedTracks.Add(this.ABLine.howManyPathsAway);
+            // return if there was a track selected
+            if (this.trk.idx < 0) return;
 
+            var track = this.trk.gArr[this.trk.idx];
+
+            if (track.mode == TrackMode.AB)
+            {
+                track.workedTracks.Add(this.ABLine.howManyPathsAway);
             }
-            else if (trk.gArr[this.trk.idx].mode == TrackMode.Curve)
+            else if (track.mode == TrackMode.Curve)
             {
-                //Curve
-                if (!this.trk.gArr[this.trk.idx].workedTracks.Contains(this.curve.howManyPathsAway))
-                    this.trk.gArr[this.trk.idx].workedTracks.Add(this.curve.howManyPathsAway);
-
+                track.workedTracks.Add(this.curve.howManyPathsAway);
             }
         }
 
@@ -55,7 +53,7 @@ namespace AgOpenGPS
                     btnSectionMasterManual.Image = Properties.Resources.ManualOn;
 
                     //add current track when it doesn't exist in the worked track list
-                    markAsWorkedTrack();
+                    MarkAsWorkedTrack();
 
                     break;
 
@@ -87,7 +85,7 @@ namespace AgOpenGPS
                     if (sounds.isSectionsSoundOn) sounds.sndSectionOn.Play();
 
                     //add current track when it doesn't exist in the worked track list
-                    markAsWorkedTrack();
+                    MarkAsWorkedTrack();
 
                     break;
 
