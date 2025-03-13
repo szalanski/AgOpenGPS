@@ -60,27 +60,27 @@ namespace AgDiag.Protocol
                 {
                     case 253:
                         {
-                            Buffer.BlockCopy(data, 5, _pgns.asModule.Bytes, 5, data.Length - 5);
+                            _pgns.asModule.SetBytesFromMessage(data);
                             break;
                         }
                     case 254:
                         {
-                            Buffer.BlockCopy(data, 5, _pgns.asData.Bytes, 5, data.Length - 5);
+                            _pgns.asData.SetBytesFromMessage(data);
                             break;
                         }
                     case 252:
                         {
-                            Buffer.BlockCopy(data, 5, _pgns.asSet.Bytes, 5, data.Length - 5);
+                            _pgns.asSet.SetBytesFromMessage(data);
                             break;
                         }
                     case 251:
                         {
-                            Buffer.BlockCopy(data, 5, _pgns.asConfig.Bytes, 5, data.Length - 5);
+                            _pgns.asConfig.SetBytesFromMessage(data);
                             break;
                         }
                     case 239:
                         {
-                            Buffer.BlockCopy(data, 5, _pgns.maData.Bytes, 5, data.Length - 5);
+                            _pgns.maData.SetBytesFromMessage(data);
                             break;
                         }
 

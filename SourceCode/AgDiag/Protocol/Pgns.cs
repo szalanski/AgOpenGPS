@@ -5,7 +5,7 @@ namespace AgDiag.Protocol
 {
     public abstract class PgnBase
     {
-        public byte[] Bytes { get; set; }
+        protected byte[] Bytes { get; set; }
 
         protected byte GetByte(int byteIndex)
         {
@@ -20,6 +20,11 @@ namespace AgDiag.Protocol
         protected bool IsBitOn(int byteIndex, int bit)
         {
             return (Bytes[byteIndex] & (1 << bit)) != 0;
+        }
+
+        public void SetBytesFromMessage(byte[] data)
+        {
+            Buffer.BlockCopy(data, 5, Bytes, 5, data.Length - 5);
         }
 
         public string ToHexString()
