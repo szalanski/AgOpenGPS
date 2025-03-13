@@ -6,15 +6,15 @@ using System.Threading;
 
 namespace AgDiag.Protocol
 {
-    public class UDP
+    public class UdpCommunication
     {
-        private readonly PGNs _pgns;
+        private readonly Pgns _pgns;
 
         private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
 
         private int cntr;
 
-        public UDP(PGNs pgns)
+        public UdpCommunication(Pgns pgns)
         {
             _pgns = pgns;
         }

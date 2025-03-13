@@ -7,15 +7,15 @@ namespace AgDiag
 {
     public partial class FormLoop : Form
     {
-        private PGNs _pgns;
-        private UDP _udp;
+        private Pgns _pgns;
+        private UdpCommunication _udpCommunication;
 
         public FormLoop()
         {
-            _pgns = new PGNs();
-            _udp = new UDP(_pgns);
+            _pgns = new Pgns();
+            _udpCommunication = new UdpCommunication(_pgns);
 
-            _udp.DefaultSendsUpdated += (s, e) => BeginInvoke((MethodInvoker)(() => UpdateDefaultSends(e)));
+            _udpCommunication.DefaultSendsUpdated += (s, e) => BeginInvoke((MethodInvoker)(() => UpdateDefaultSends(e)));
 
             InitializeComponent();
         }
@@ -81,12 +81,12 @@ namespace AgDiag
         private void FormLoop_Load(object sender, EventArgs e)
         {
             timer1.Enabled = true;
-            _udp.LoadLoopback();
+            _udpCommunication.LoadLoopback();
         }
 
         private void FormLoop_FormClosing(object sender, FormClosingEventArgs e)
         {
-            _udp.CloseLoopback();
+            _udpCommunication.CloseLoopback();
         }
     }
 }

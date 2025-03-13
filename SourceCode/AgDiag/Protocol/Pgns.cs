@@ -3,7 +3,7 @@ using System;
 
 namespace AgDiag.Protocol
 {
-    public abstract class PGN
+    public abstract class PgnBase
     {
         public byte[] Bytes { get; set; }
 
@@ -13,10 +13,10 @@ namespace AgDiag.Protocol
         }
     }
 
-    public class PGNs
+    public class Pgns
     {
         //AutoSteerData
-        public class CPGN_FE : PGN
+        public class CPGN_FE : PgnBase
         {
             private const int speedLo = 5;
             private const int speedHi = 6;
@@ -48,7 +48,7 @@ namespace AgDiag.Protocol
         }
 
         //From steer module
-        public class CPGN_FD : PGN
+        public class CPGN_FD : PgnBase
         {
             private const int actualLo = 5;
             private const int actualHi = 6;
@@ -73,7 +73,7 @@ namespace AgDiag.Protocol
         }
 
         //AutoSteer Settings
-        public class CPGN_FC : PGN
+        public class CPGN_FC : PgnBase
         {
             private const int gainProportional = 5;
             private const int highPWM = 6;
@@ -103,7 +103,7 @@ namespace AgDiag.Protocol
         }
 
         //Autosteer Board Config
-        public class CPGN_FB : PGN
+        public class CPGN_FB : PgnBase
         {
             private const int set0 = 5;
             private const int maxPulse = 6;
@@ -124,7 +124,7 @@ namespace AgDiag.Protocol
         }
 
         //Machine Data
-        public class CPGN_EF : PGN
+        public class CPGN_EF : PgnBase
         {
             private const int speed = 6;
 
@@ -141,7 +141,7 @@ namespace AgDiag.Protocol
         }
 
         //Machine Config
-        public class CPGN_EE : PGN
+        public class CPGN_EE : PgnBase
         {
             public int raiseTime = 5;
             public int lowerTime = 6;
