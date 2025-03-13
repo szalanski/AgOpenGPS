@@ -7,6 +7,21 @@ namespace AgDiag.Protocol
     {
         public byte[] Bytes { get; set; }
 
+        protected byte GetByte(int byteIndex)
+        {
+            return Bytes[byteIndex];
+        }
+
+        protected int GetInt(int lowByteIndex, int highByteIndex)
+        {
+            return (Bytes[highByteIndex] << 8) | Bytes[lowByteIndex];
+        }
+
+        protected bool IsBitOn(int byteIndex, int bit)
+        {
+            return (Bytes[byteIndex] & (1 << bit)) != 0;
+        }
+
         public string ToHexString()
         {
             return BitConverter.ToString(Bytes);
@@ -34,16 +49,15 @@ namespace AgDiag.Protocol
                 Bytes = new byte[] { 0x80, 0x81, 0x7f, 0xFE, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0xCC };
             }
 
-            public int Speed => Bytes[speedHi] << 8 | Bytes[speedLo];
-            public byte Status => Bytes[status];
-            public int SteerAngle => Bytes[steerAngleHi] << 8 | Bytes[steerAngleLo];
+            public int Speed => GetInt(speedLo, speedHi);
+            public byte Status => GetByte(status);
+            public int SteerAngle => GetInt(steerAngleLo, steerAngleHi);
 
             public bool IsSectionOn(int section)
             {
                 if (section < 1 || section > 8) throw new ArgumentOutOfRangeException(nameof(section));
 
-                int bitmask = (1 << (section - 1));
-                return (Bytes[sc1to8] & bitmask) != 0;
+                return IsBitOn(sc1to8, section - 1);
             }
         }
 
@@ -64,12 +78,12 @@ namespace AgDiag.Protocol
                 Bytes = new byte[] { 0x80, 0x81, 0x7f, 0xFD, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0xCC };
             }
 
-            public int ActualSteerAngle => Bytes[actualHi] << 8 | Bytes[actualLo];
-            public int Heading => Bytes[headHi] << 8 | Bytes[headLo];
-            public int Roll => Bytes[rollHi] << 8 | Bytes[rollLo];
-            public byte PWM => Bytes[pwm];
-            public bool IsWorkSwitchOn => (Bytes[switchStatus] & 1) != 0;
-            public bool IsSteerSwitchOn => (Bytes[switchStatus] & 2) != 0;
+            public int ActualSteerAngle => GetInt(actualLo, actualHi);
+            public int Heading => GetInt(headLo, headHi);
+            public int Roll => GetInt(rollLo, rollHi);
+            public byte PWM => GetByte(pwm);
+            public bool IsWorkSwitchOn => IsBitOn(switchStatus, 0);
+            public bool IsSteerSwitchOn => IsBitOn(switchStatus, 1);
         }
 
         //AutoSteer Settings
@@ -93,13 +107,13 @@ namespace AgDiag.Protocol
                 Bytes = new byte[] { 0x80, 0x81, 0x7f, 0xFC, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0xCC };
             }
 
-            public byte GainProportional => Bytes[gainProportional];
-            public byte HighPWM => Bytes[highPWM];
-            public byte LowPWM => Bytes[lowPWM];
-            public byte MinPWM => Bytes[minPWM];
-            public byte CountsPerDegree => Bytes[countsPerDegree];
-            public int SteerOffset => Bytes[wasOffsetHi] << 8 | Bytes[wasOffsetLo];
-            public byte Ackerman => Bytes[ackerman];
+            public byte GainProportional => GetByte(gainProportional);
+            public byte HighPWM => GetByte(highPWM);
+            public byte LowPWM => GetByte(lowPWM);
+            public byte MinPWM => GetByte(minPWM);
+            public byte CountsPerDegree => GetByte(countsPerDegree);
+            public int SteerOffset => GetInt(wasOffsetLo, wasOffsetHi);
+            public byte Ackerman => GetByte(ackerman);
         }
 
         //Autosteer Board Config
@@ -118,9 +132,9 @@ namespace AgDiag.Protocol
                 Bytes = new byte[] { 0x80, 0x81, 0x7f, 0xFB, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0xCC };
             }
 
-            public byte Set0 => Bytes[set0];
-            public byte MaxPulse => Bytes[maxPulse];
-            public byte MinSpeed => Bytes[minSpeed];
+            public byte Set0 => GetByte(set0);
+            public byte MaxPulse => GetByte(maxPulse);
+            public byte MinSpeed => GetByte(minSpeed);
         }
 
         //Machine Data
@@ -137,7 +151,7 @@ namespace AgDiag.Protocol
                 Bytes = new byte[] { 0x80, 0x81, 0x7f, 0xEF, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0xCC };
             }
 
-            public byte Speed => Bytes[speed];
+            public byte Speed => GetByte(speed);
         }
 
         //Machine Config
