@@ -921,9 +921,6 @@
   <data name="gsSaveAndReturn" xml:space="preserve">
     <value>Saglabāt un atgriezties</value>
   </data>
-  <data name="gsSaveAs" xml:space="preserve">
-    <value>Saglabāt kā</value>
-  </data>
   <data name="gsScreenButtons" xml:space="preserve">
     <value>Ekrāna pogas</value>
   </data>

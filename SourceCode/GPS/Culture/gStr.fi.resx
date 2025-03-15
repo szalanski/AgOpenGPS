@@ -915,9 +915,6 @@ Haluatko jatkaa?</value>
   <data name="gsSaveAndReturn" xml:space="preserve">
     <value>Tallenna ja palaa</value>
   </data>
-  <data name="gsSaveAs" xml:space="preserve">
-    <value>Tallenna nimellä</value>
-  </data>
   <data name="gsScreenButtons" xml:space="preserve">
     <value>Näytön Napit</value>
   </data>

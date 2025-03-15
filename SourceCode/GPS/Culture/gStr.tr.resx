@@ -447,9 +447,6 @@
   <data name="gsSaveAndReturn" xml:space="preserve">
     <value>Kaydet ve Geri Dön</value>
   </data>
-  <data name="gsSaveAs" xml:space="preserve">
-    <value>Farklı kaydet</value>
-  </data>
   <data name="gsSentToMachineModule" xml:space="preserve">
     <value>Makine Modülüne Gönderildi</value>
   </data>

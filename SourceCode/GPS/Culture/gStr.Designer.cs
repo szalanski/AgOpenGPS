@@ -2493,15 +2493,6 @@ namespace AgOpenGPS.Culture {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Save As.
-        /// </summary>
-        public static string gsSaveAs {
-            get {
-                return ResourceManager.GetString("gsSaveAs", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Screen Buttons.
         /// </summary>
         public static string gsScreenButtons {

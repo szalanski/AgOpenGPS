@@ -909,9 +909,6 @@
   <data name="gsSaveAndReturn" xml:space="preserve">
     <value>Lagre og returner</value>
   </data>
-  <data name="gsSaveAs" xml:space="preserve">
-    <value>Lagre som</value>
-  </data>
   <data name="gsScreenButtons" xml:space="preserve">
     <value>Skjermknapper</value>
   </data>

@@ -819,9 +819,6 @@
   <data name="gsSaveAndReturn" xml:space="preserve">
     <value>Speichern und zurück</value>
   </data>
-  <data name="gsSaveAs" xml:space="preserve">
-    <value>Speichern unter</value>
-  </data>
   <data name="gsScreenButtons" xml:space="preserve">
     <value>Bildschirmtasten</value>
   </data>

@@ -115,10 +115,8 @@ namespace AgOpenGPS
             SectionFeetInchesTotalWidthLabelUpdate();
 
             tab1.SelectedTab = tabSummary;
-            tboxVehicleNameSave.Focus();
             //Label translations
             //configload-save
-            labelSaveAs.Text = gStr.gsSaveAs;
             labelUnits.Text = gStr.gsUnit;
             labelWidth.Text = gStr.gsWidth;
             labelSections.Text = gStr.gsSections;

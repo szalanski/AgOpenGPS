@@ -441,9 +441,6 @@
   <data name="gsSaveAndReturn" xml:space="preserve">
     <value>Uložiť a vrátiť</value>
   </data>
-  <data name="gsSaveAs" xml:space="preserve">
-    <value>Uložiť ako</value>
-  </data>
   <data name="gsSentToMachineModule" xml:space="preserve">
     <value>Poslať do Modulu stroja</value>
   </data>

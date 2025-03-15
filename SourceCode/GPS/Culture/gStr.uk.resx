@@ -444,9 +444,6 @@
   <data name="gsSaveAndReturn" xml:space="preserve">
     <value>Зберег. і повернутись</value>
   </data>
-  <data name="gsSaveAs" xml:space="preserve">
-    <value>Зберегти як</value>
-  </data>
   <data name="gsSentToMachineModule" xml:space="preserve">
     <value>Відправлено в Машинний модуль</value>
   </data>

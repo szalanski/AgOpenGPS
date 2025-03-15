@@ -929,9 +929,6 @@ The order you push them will be the order they appear on the menu from bottom up
   <data name="gsSaveAndReturn" xml:space="preserve">
     <value>Save and Return</value>
   </data>
-  <data name="gsSaveAs" xml:space="preserve">
-    <value>Save As</value>
-  </data>
   <data name="gsScreenButtons" xml:space="preserve">
     <value>Screen Buttons</value>
   </data>

@@ -453,9 +453,6 @@
   <data name="gsSaveAndReturn" xml:space="preserve">
     <value>zSave and Return</value>
   </data>
-  <data name="gsSaveAs" xml:space="preserve">
-    <value>zSave As</value>
-  </data>
   <data name="gsSentToMachineModule" xml:space="preserve">
     <value>zSent To Machine Module</value>
   </data>

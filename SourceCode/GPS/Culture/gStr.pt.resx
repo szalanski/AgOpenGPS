@@ -453,9 +453,6 @@
   <data name="gsSaveAndReturn" xml:space="preserve">
     <value>Salvar e retornar</value>
   </data>
-  <data name="gsSaveAs" xml:space="preserve">
-    <value>Salvar como</value>
-  </data>
   <data name="gsSentToMachineModule" xml:space="preserve">
     <value>Enviado para o módulo da máquina</value>
   </data>
