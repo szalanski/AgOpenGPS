@@ -38,6 +38,7 @@ namespace AgOpenGPS
             this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
             this.profileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newProfileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadProfileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menustripLanguage = new System.Windows.Forms.ToolStripMenuItem();
             this.menuLanguageDanish = new System.Windows.Forms.ToolStripMenuItem();
             this.menuLanguageDeutsch = new System.Windows.Forms.ToolStripMenuItem();
@@ -304,7 +305,8 @@ namespace AgOpenGPS
             // profileToolStripMenuItem
             // 
             this.profileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.newProfileToolStripMenuItem});
+            this.newProfileToolStripMenuItem,
+            this.loadProfileToolStripMenuItem});
             this.profileToolStripMenuItem.Name = "profileToolStripMenuItem";
             this.profileToolStripMenuItem.Size = new System.Drawing.Size(382, 50);
             this.profileToolStripMenuItem.Text = "Profile";
@@ -315,6 +317,13 @@ namespace AgOpenGPS
             this.newProfileToolStripMenuItem.Size = new System.Drawing.Size(210, 50);
             this.newProfileToolStripMenuItem.Text = "New...";
             this.newProfileToolStripMenuItem.Click += new System.EventHandler(this.newProfileToolStripMenuItem_Click);
+            // 
+            // loadProfileToolStripMenuItem
+            // 
+            this.loadProfileToolStripMenuItem.Name = "loadProfileToolStripMenuItem";
+            this.loadProfileToolStripMenuItem.Size = new System.Drawing.Size(210, 50);
+            this.loadProfileToolStripMenuItem.Text = "Load...";
+            this.loadProfileToolStripMenuItem.Click += new System.EventHandler(this.loadProfileToolStripMenuItem_Click);
             // 
             // menustripLanguage
             // 
@@ -3311,6 +3320,7 @@ namespace AgOpenGPS
         private System.Windows.Forms.ToolStripMenuItem menuLanguageNorsk;
         private System.Windows.Forms.ToolStripMenuItem profileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newProfileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem loadProfileToolStripMenuItem;
     }
 }
 

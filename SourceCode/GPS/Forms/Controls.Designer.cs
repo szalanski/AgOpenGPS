@@ -1454,6 +1454,14 @@ namespace AgOpenGPS
             }
         }
 
+        private void loadProfileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var form = new FormLoadProfile(this))
+            {
+                form.ShowDialog(this);
+            }
+        }
+
         //Languages
         private void menuLanguageEnglish_Click(object sender, EventArgs e)
         {
