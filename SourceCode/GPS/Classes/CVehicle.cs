@@ -241,7 +241,7 @@ namespace AgOpenGPS
                     XyCoord tractorCenter = new XyCoord(0.0, 0.5 * VehicleConfig.Wheelbase);
                     mf.VehicleTextures.Tractor.DrawCentered(
                         tractorCenter,
-                        new XyDelta(VehicleConfig.TrackWidth, -1.5 * VehicleConfig.Wheelbase));
+                        new XyDelta(VehicleConfig.TrackWidth, -1.0 * VehicleConfig.Wheelbase));
 
                     //right wheel
                     GL.PushMatrix();
