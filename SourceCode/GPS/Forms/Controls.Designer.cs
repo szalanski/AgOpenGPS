@@ -13,6 +13,7 @@ using AgOpenGPS.Core.Models;
 using AgOpenGPS.Culture;
 using AgOpenGPS.Forms;
 using AgOpenGPS.Forms.Pickers;
+using AgOpenGPS.Forms.Profiles;
 using AgOpenGPS.Properties;
 
 namespace AgOpenGPS
@@ -1441,6 +1442,15 @@ namespace AgOpenGPS
             else
             {
                 TimedMessageBox(2000, "Cannot use with zones", "Only for Sections");
+            }
+        }
+
+        //Profiles
+        private void newProfileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var form = new FormNewProfile(this))
+            {
+                form.ShowDialog(this);
             }
         }
 
