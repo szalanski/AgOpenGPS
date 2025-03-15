@@ -62,8 +62,6 @@ namespace AgOpenGPS
             this.btnVehicle = new System.Windows.Forms.Button();
             this.tab1 = new System.Windows.Forms.TabControl();
             this.tabSummary = new System.Windows.Forms.TabPage();
-            this.lvVehicles = new System.Windows.Forms.ListView();
-            this.chVehicle = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.labelWidth = new System.Windows.Forms.Label();
             this.labelOverlap = new System.Windows.Forms.Label();
             this.lblOverlap = new System.Windows.Forms.Label();
@@ -81,10 +79,6 @@ namespace AgOpenGPS
             this.labelNudge = new System.Windows.Forms.Label();
             this.labelSections = new System.Windows.Forms.Label();
             this.lblSummaryVehicleName = new System.Windows.Forms.Label();
-            this.labelDelete = new System.Windows.Forms.Label();
-            this.labelOpen = new System.Windows.Forms.Label();
-            this.btnVehicleLoad = new System.Windows.Forms.Button();
-            this.btnVehicleDelete = new System.Windows.Forms.Button();
             this.lblSummaryWidth = new System.Windows.Forms.Label();
             this.lblSumWheelbase = new System.Windows.Forms.Label();
             this.tabVConfig = new System.Windows.Forms.TabPage();
@@ -547,7 +541,6 @@ namespace AgOpenGPS
             this.lblFeetMeters = new System.Windows.Forms.Label();
             this.btnOK = new System.Windows.Forms.Button();
             this.labelUnitsBottom = new System.Windows.Forms.Label();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.panelLeftSideMenu.SuspendLayout();
             this.panelArduinoSubMenu.SuspendLayout();
             this.panelDataSourcesSubMenu.SuspendLayout();
@@ -1239,7 +1232,6 @@ namespace AgOpenGPS
             // tabSummary
             // 
             this.tabSummary.BackColor = System.Drawing.Color.Gainsboro;
-            this.tabSummary.Controls.Add(this.lvVehicles);
             this.tabSummary.Controls.Add(this.labelWidth);
             this.tabSummary.Controls.Add(this.labelOverlap);
             this.tabSummary.Controls.Add(this.lblOverlap);
@@ -1257,10 +1249,6 @@ namespace AgOpenGPS
             this.tabSummary.Controls.Add(this.labelNudge);
             this.tabSummary.Controls.Add(this.labelSections);
             this.tabSummary.Controls.Add(this.lblSummaryVehicleName);
-            this.tabSummary.Controls.Add(this.labelDelete);
-            this.tabSummary.Controls.Add(this.labelOpen);
-            this.tabSummary.Controls.Add(this.btnVehicleLoad);
-            this.tabSummary.Controls.Add(this.btnVehicleDelete);
             this.tabSummary.Controls.Add(this.lblSummaryWidth);
             this.tabSummary.Controls.Add(this.lblSumWheelbase);
             this.tabSummary.ForeColor = System.Drawing.Color.WhiteSmoke;
@@ -1272,35 +1260,6 @@ namespace AgOpenGPS
             this.tabSummary.Text = "tSum";
             this.tabSummary.Enter += new System.EventHandler(this.tabSummary_Enter);
             this.tabSummary.Leave += new System.EventHandler(this.tabSummary_Leave);
-            // 
-            // lvVehicles
-            // 
-            this.lvVehicles.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lvVehicles.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lvVehicles.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.chVehicle});
-            this.lvVehicles.Font = new System.Drawing.Font("Tahoma", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lvVehicles.FullRowSelect = true;
-            this.lvVehicles.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
-            this.lvVehicles.HideSelection = false;
-            this.lvVehicles.ImeMode = System.Windows.Forms.ImeMode.Off;
-            this.lvVehicles.LabelWrap = false;
-            this.lvVehicles.Location = new System.Drawing.Point(240, 146);
-            this.lvVehicles.Margin = new System.Windows.Forms.Padding(0);
-            this.lvVehicles.MultiSelect = false;
-            this.lvVehicles.Name = "lvVehicles";
-            this.lvVehicles.Size = new System.Drawing.Size(510, 438);
-            this.lvVehicles.TabIndex = 454;
-            this.lvVehicles.TileSize = new System.Drawing.Size(490, 35);
-            this.lvVehicles.UseCompatibleStateImageBehavior = false;
-            this.lvVehicles.View = System.Windows.Forms.View.Tile;
-            // 
-            // chVehicle
-            // 
-            this.chVehicle.Text = "Vehicles";
-            this.chVehicle.Width = 490;
             // 
             // labelWidth
             // 
@@ -1538,69 +1497,6 @@ namespace AgOpenGPS
             this.lblSummaryVehicleName.TabIndex = 503;
             this.lblSummaryVehicleName.Text = "Vehicle Name";
             this.lblSummaryVehicleName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // labelDelete
-            // 
-            this.labelDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.labelDelete.AutoSize = true;
-            this.labelDelete.BackColor = System.Drawing.Color.Transparent;
-            this.labelDelete.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelDelete.ForeColor = System.Drawing.Color.Black;
-            this.labelDelete.Location = new System.Drawing.Point(777, 377);
-            this.labelDelete.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
-            this.labelDelete.Name = "labelDelete";
-            this.labelDelete.Size = new System.Drawing.Size(57, 18);
-            this.labelDelete.TabIndex = 488;
-            this.labelDelete.Text = "Delete";
-            this.labelDelete.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // labelOpen
-            // 
-            this.labelOpen.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.labelOpen.AutoSize = true;
-            this.labelOpen.BackColor = System.Drawing.Color.Transparent;
-            this.labelOpen.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelOpen.ForeColor = System.Drawing.Color.Black;
-            this.labelOpen.Location = new System.Drawing.Point(783, 275);
-            this.labelOpen.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
-            this.labelOpen.Name = "labelOpen";
-            this.labelOpen.Size = new System.Drawing.Size(47, 18);
-            this.labelOpen.TabIndex = 486;
-            this.labelOpen.Text = "Open";
-            this.labelOpen.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // btnVehicleLoad
-            // 
-            this.btnVehicleLoad.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnVehicleLoad.BackColor = System.Drawing.Color.Transparent;
-            this.btnVehicleLoad.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
-            this.btnVehicleLoad.FlatAppearance.BorderSize = 0;
-            this.btnVehicleLoad.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Turquoise;
-            this.btnVehicleLoad.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnVehicleLoad.Font = new System.Drawing.Font("Tahoma", 15.75F);
-            this.btnVehicleLoad.Image = global::AgOpenGPS.Properties.Resources.FileOpen;
-            this.btnVehicleLoad.Location = new System.Drawing.Point(764, 222);
-            this.btnVehicleLoad.Name = "btnVehicleLoad";
-            this.btnVehicleLoad.Size = new System.Drawing.Size(81, 49);
-            this.btnVehicleLoad.TabIndex = 456;
-            this.btnVehicleLoad.UseVisualStyleBackColor = false;
-            this.btnVehicleLoad.Click += new System.EventHandler(this.btnVehicleLoad_Click);
-            // 
-            // btnVehicleDelete
-            // 
-            this.btnVehicleDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnVehicleDelete.BackColor = System.Drawing.Color.Transparent;
-            this.btnVehicleDelete.FlatAppearance.BorderSize = 0;
-            this.btnVehicleDelete.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Turquoise;
-            this.btnVehicleDelete.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnVehicleDelete.Font = new System.Drawing.Font("Tahoma", 15.75F);
-            this.btnVehicleDelete.Image = global::AgOpenGPS.Properties.Resources.Trash;
-            this.btnVehicleDelete.Location = new System.Drawing.Point(764, 325);
-            this.btnVehicleDelete.Name = "btnVehicleDelete";
-            this.btnVehicleDelete.Size = new System.Drawing.Size(81, 49);
-            this.btnVehicleDelete.TabIndex = 455;
-            this.btnVehicleDelete.UseVisualStyleBackColor = false;
-            this.btnVehicleDelete.Click += new System.EventHandler(this.btnVehicleDelete_Click);
             // 
             // lblSummaryWidth
             // 
@@ -9692,12 +9588,6 @@ namespace AgOpenGPS
             this.labelUnitsBottom.Text = "Units:";
             this.labelUnitsBottom.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // timer1
-            // 
-            this.timer1.Enabled = true;
-            this.timer1.Interval = 1000;
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
             // FormConfig
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -9727,7 +9617,6 @@ namespace AgOpenGPS
             this.panelVehicleSubMenu.ResumeLayout(false);
             this.tab1.ResumeLayout(false);
             this.tabSummary.ResumeLayout(false);
-            this.tabSummary.PerformLayout();
             this.tabVConfig.ResumeLayout(false);
             this.tabVConfig.PerformLayout();
             this.labelVehicleGroupBox.ResumeLayout(false);
@@ -9921,10 +9810,6 @@ namespace AgOpenGPS
         private NudlessNumericUpDown nudLookAheadOff;
         private NudlessNumericUpDown nudTurnOffDelay;
         private NudlessNumericUpDown nudLookAhead;
-        private System.Windows.Forms.Button btnVehicleLoad;
-        private System.Windows.Forms.Button btnVehicleDelete;
-        private System.Windows.Forms.ListView lvVehicles;
-        private System.Windows.Forms.ColumnHeader chVehicle;
         private System.Windows.Forms.Label labelCurrentVehicle;
         private System.Windows.Forms.GroupBox labelBoxAttachmentStyle;
         private System.Windows.Forms.PictureBox pictureBox3;
@@ -10032,8 +9917,6 @@ namespace AgOpenGPS
         private System.Windows.Forms.Label labelEnable;
         private System.Windows.Forms.GroupBox labelGboxSingle;
         private System.Windows.Forms.CheckBox cboxIsRTK;
-        private System.Windows.Forms.Label labelDelete;
-        private System.Windows.Forms.Label labelOpen;
         private System.Windows.Forms.PictureBox pboxSendMachine;
         private System.Windows.Forms.GroupBox labelGroupHyd;
         private System.Windows.Forms.Button btnFeatureHides;
@@ -10225,7 +10108,6 @@ namespace AgOpenGPS
         private System.Windows.Forms.Label lblZoneStart7;
         private System.Windows.Forms.Label labelZone7;
         private System.Windows.Forms.Label label155;
-        private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.CheckBox cboxSectionBoundaryControl;
         private System.Windows.Forms.Label labelBoundary;
         private System.Windows.Forms.Label labelGpsStep;
