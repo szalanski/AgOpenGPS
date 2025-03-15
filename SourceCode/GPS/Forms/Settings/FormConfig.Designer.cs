@@ -1267,7 +1267,7 @@ namespace AgOpenGPS
             this.labelWidth.BackColor = System.Drawing.Color.Transparent;
             this.labelWidth.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelWidth.ForeColor = System.Drawing.Color.DimGray;
-            this.labelWidth.Location = new System.Drawing.Point(0, 233);
+            this.labelWidth.Location = new System.Drawing.Point(304, 163);
             this.labelWidth.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.labelWidth.Name = "labelWidth";
             this.labelWidth.Size = new System.Drawing.Size(111, 23);
@@ -1281,7 +1281,7 @@ namespace AgOpenGPS
             this.labelOverlap.BackColor = System.Drawing.Color.Transparent;
             this.labelOverlap.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelOverlap.ForeColor = System.Drawing.Color.DimGray;
-            this.labelOverlap.Location = new System.Drawing.Point(-9, 335);
+            this.labelOverlap.Location = new System.Drawing.Point(295, 265);
             this.labelOverlap.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.labelOverlap.Name = "labelOverlap";
             this.labelOverlap.Size = new System.Drawing.Size(120, 32);
@@ -1295,7 +1295,7 @@ namespace AgOpenGPS
             this.lblOverlap.BackColor = System.Drawing.Color.Transparent;
             this.lblOverlap.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblOverlap.ForeColor = System.Drawing.Color.Black;
-            this.lblOverlap.Location = new System.Drawing.Point(128, 341);
+            this.lblOverlap.Location = new System.Drawing.Point(432, 271);
             this.lblOverlap.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.lblOverlap.Name = "lblOverlap";
             this.lblOverlap.Size = new System.Drawing.Size(91, 23);
@@ -1309,7 +1309,7 @@ namespace AgOpenGPS
             this.labelLookAhead.BackColor = System.Drawing.Color.Transparent;
             this.labelLookAhead.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelLookAhead.ForeColor = System.Drawing.Color.DimGray;
-            this.labelLookAhead.Location = new System.Drawing.Point(-9, 375);
+            this.labelLookAhead.Location = new System.Drawing.Point(295, 305);
             this.labelLookAhead.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.labelLookAhead.Name = "labelLookAhead";
             this.labelLookAhead.Size = new System.Drawing.Size(120, 32);
@@ -1323,7 +1323,7 @@ namespace AgOpenGPS
             this.lblLookahead.BackColor = System.Drawing.Color.Transparent;
             this.lblLookahead.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblLookahead.ForeColor = System.Drawing.Color.Black;
-            this.lblLookahead.Location = new System.Drawing.Point(128, 380);
+            this.lblLookahead.Location = new System.Drawing.Point(432, 310);
             this.lblLookahead.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.lblLookahead.Name = "lblLookahead";
             this.lblLookahead.Size = new System.Drawing.Size(91, 23);
@@ -1337,7 +1337,7 @@ namespace AgOpenGPS
             this.labelOffset.BackColor = System.Drawing.Color.Transparent;
             this.labelOffset.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelOffset.ForeColor = System.Drawing.Color.DimGray;
-            this.labelOffset.Location = new System.Drawing.Point(-9, 297);
+            this.labelOffset.Location = new System.Drawing.Point(295, 227);
             this.labelOffset.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.labelOffset.Name = "labelOffset";
             this.labelOffset.Size = new System.Drawing.Size(120, 32);
@@ -1351,7 +1351,7 @@ namespace AgOpenGPS
             this.lblToolOffset.BackColor = System.Drawing.Color.Transparent;
             this.lblToolOffset.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblToolOffset.ForeColor = System.Drawing.Color.Black;
-            this.lblToolOffset.Location = new System.Drawing.Point(128, 303);
+            this.lblToolOffset.Location = new System.Drawing.Point(432, 233);
             this.lblToolOffset.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.lblToolOffset.Name = "lblToolOffset";
             this.lblToolOffset.Size = new System.Drawing.Size(91, 23);
@@ -1365,7 +1365,7 @@ namespace AgOpenGPS
             this.labelWheelBase.BackColor = System.Drawing.Color.Transparent;
             this.labelWheelBase.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelWheelBase.ForeColor = System.Drawing.Color.DimGray;
-            this.labelWheelBase.Location = new System.Drawing.Point(-9, 484);
+            this.labelWheelBase.Location = new System.Drawing.Point(295, 414);
             this.labelWheelBase.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.labelWheelBase.Name = "labelWheelBase";
             this.labelWheelBase.Size = new System.Drawing.Size(120, 32);
@@ -1379,7 +1379,7 @@ namespace AgOpenGPS
             this.labelTramW.BackColor = System.Drawing.Color.Transparent;
             this.labelTramW.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelTramW.ForeColor = System.Drawing.Color.DimGray;
-            this.labelTramW.Location = new System.Drawing.Point(-9, 446);
+            this.labelTramW.Location = new System.Drawing.Point(295, 376);
             this.labelTramW.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.labelTramW.Name = "labelTramW";
             this.labelTramW.Size = new System.Drawing.Size(120, 32);
@@ -1393,7 +1393,7 @@ namespace AgOpenGPS
             this.lblUnits.BackColor = System.Drawing.Color.Transparent;
             this.lblUnits.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblUnits.ForeColor = System.Drawing.Color.Black;
-            this.lblUnits.Location = new System.Drawing.Point(128, 189);
+            this.lblUnits.Location = new System.Drawing.Point(432, 119);
             this.lblUnits.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.lblUnits.Name = "lblUnits";
             this.lblUnits.Size = new System.Drawing.Size(91, 23);
@@ -1407,7 +1407,7 @@ namespace AgOpenGPS
             this.lblTramWidth.BackColor = System.Drawing.Color.Transparent;
             this.lblTramWidth.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTramWidth.ForeColor = System.Drawing.Color.Black;
-            this.lblTramWidth.Location = new System.Drawing.Point(128, 452);
+            this.lblTramWidth.Location = new System.Drawing.Point(432, 382);
             this.lblTramWidth.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.lblTramWidth.Name = "lblTramWidth";
             this.lblTramWidth.Size = new System.Drawing.Size(99, 23);
@@ -1421,7 +1421,7 @@ namespace AgOpenGPS
             this.lblNudgeDistance.BackColor = System.Drawing.Color.Transparent;
             this.lblNudgeDistance.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblNudgeDistance.ForeColor = System.Drawing.Color.Black;
-            this.lblNudgeDistance.Location = new System.Drawing.Point(128, 416);
+            this.lblNudgeDistance.Location = new System.Drawing.Point(432, 346);
             this.lblNudgeDistance.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.lblNudgeDistance.Name = "lblNudgeDistance";
             this.lblNudgeDistance.Size = new System.Drawing.Size(91, 23);
@@ -1435,7 +1435,7 @@ namespace AgOpenGPS
             this.lblSumNumSections.BackColor = System.Drawing.Color.Transparent;
             this.lblSumNumSections.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSumNumSections.ForeColor = System.Drawing.Color.Black;
-            this.lblSumNumSections.Location = new System.Drawing.Point(128, 267);
+            this.lblSumNumSections.Location = new System.Drawing.Point(432, 197);
             this.lblSumNumSections.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.lblSumNumSections.Name = "lblSumNumSections";
             this.lblSumNumSections.Size = new System.Drawing.Size(91, 23);
@@ -1449,7 +1449,7 @@ namespace AgOpenGPS
             this.labelUnits.BackColor = System.Drawing.Color.Transparent;
             this.labelUnits.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelUnits.ForeColor = System.Drawing.Color.DimGray;
-            this.labelUnits.Location = new System.Drawing.Point(0, 188);
+            this.labelUnits.Location = new System.Drawing.Point(304, 118);
             this.labelUnits.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.labelUnits.Name = "labelUnits";
             this.labelUnits.Size = new System.Drawing.Size(114, 23);
@@ -1463,7 +1463,7 @@ namespace AgOpenGPS
             this.labelNudge.BackColor = System.Drawing.Color.Transparent;
             this.labelNudge.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelNudge.ForeColor = System.Drawing.Color.DimGray;
-            this.labelNudge.Location = new System.Drawing.Point(0, 415);
+            this.labelNudge.Location = new System.Drawing.Point(304, 345);
             this.labelNudge.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.labelNudge.Name = "labelNudge";
             this.labelNudge.Size = new System.Drawing.Size(111, 23);
@@ -1477,7 +1477,7 @@ namespace AgOpenGPS
             this.labelSections.BackColor = System.Drawing.Color.Transparent;
             this.labelSections.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelSections.ForeColor = System.Drawing.Color.DimGray;
-            this.labelSections.Location = new System.Drawing.Point(0, 266);
+            this.labelSections.Location = new System.Drawing.Point(304, 196);
             this.labelSections.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.labelSections.Name = "labelSections";
             this.labelSections.Size = new System.Drawing.Size(111, 23);
@@ -1490,13 +1490,13 @@ namespace AgOpenGPS
             this.lblSummaryVehicleName.BackColor = System.Drawing.Color.Transparent;
             this.lblSummaryVehicleName.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSummaryVehicleName.ForeColor = System.Drawing.Color.Black;
-            this.lblSummaryVehicleName.Location = new System.Drawing.Point(243, 3);
+            this.lblSummaryVehicleName.Location = new System.Drawing.Point(174, 36);
             this.lblSummaryVehicleName.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.lblSummaryVehicleName.Name = "lblSummaryVehicleName";
             this.lblSummaryVehicleName.Size = new System.Drawing.Size(507, 23);
             this.lblSummaryVehicleName.TabIndex = 503;
             this.lblSummaryVehicleName.Text = "Vehicle Name";
-            this.lblSummaryVehicleName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblSummaryVehicleName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblSummaryWidth
             // 
@@ -1504,7 +1504,7 @@ namespace AgOpenGPS
             this.lblSummaryWidth.BackColor = System.Drawing.Color.Transparent;
             this.lblSummaryWidth.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSummaryWidth.ForeColor = System.Drawing.Color.Black;
-            this.lblSummaryWidth.Location = new System.Drawing.Point(128, 234);
+            this.lblSummaryWidth.Location = new System.Drawing.Point(432, 164);
             this.lblSummaryWidth.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.lblSummaryWidth.Name = "lblSummaryWidth";
             this.lblSummaryWidth.Size = new System.Drawing.Size(99, 23);
@@ -1518,7 +1518,7 @@ namespace AgOpenGPS
             this.lblSumWheelbase.BackColor = System.Drawing.Color.Transparent;
             this.lblSumWheelbase.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSumWheelbase.ForeColor = System.Drawing.Color.Black;
-            this.lblSumWheelbase.Location = new System.Drawing.Point(128, 490);
+            this.lblSumWheelbase.Location = new System.Drawing.Point(432, 420);
             this.lblSumWheelbase.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.lblSumWheelbase.Name = "lblSumWheelbase";
             this.lblSumWheelbase.Size = new System.Drawing.Size(106, 23);
