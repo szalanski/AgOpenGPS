@@ -1,118 +1,92 @@
 ﻿using System;
 using System.Drawing;
-using System.Net.Sockets;
 using System.Windows.Forms;
+using AgDiag.Protocol;
 
 namespace AgDiag
 {
     public partial class FormLoop : Form
     {
+        private Pgns _pgns;
+        private UdpCommunication _udpCommunication;
+
         public FormLoop()
         {
-            InitializeComponent();
-        }
+            _pgns = new Pgns();
+            _udpCommunication = new UdpCommunication(_pgns);
 
-        private static string ByteArrayToHex(byte[] barray)
-        {
-            char[] c = new char[barray.Length * 3];
-            byte b;
-            for (int i = 0; i < barray.Length; ++i)
-            {
-                b = ((byte)(barray[i] >> 4));
-                c[i * 3] = (char)(b > 9 ? b + 0x37 : b + 0x30);
-                b = ((byte)(barray[i] & 0xF));
-                c[i * 3 + 1] = (char)(b > 9 ? b + 0x37 : b + 0x30);
-                c[i * 3 + 2] = (char)0x2D;
-            }
-            return new string(c);
+            _udpCommunication.DefaultSendsUpdated += (s, e) => BeginInvoke((MethodInvoker)(() => UpdateDefaultSends(e)));
+
+            InitializeComponent();
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if ((asData.pgn[asData.sc1to8] & 1) == 1) lblSection1.BackColor = Color.Green;
-            else lblSection1.BackColor = Color.Red;
-            if ((asData.pgn[asData.sc1to8] & 2) == 2) lblSection2.BackColor = Color.Green;
-            else lblSection2.BackColor = Color.Red;
-            if ((asData.pgn[asData.sc1to8] & 4) == 4) lblSection3.BackColor = Color.Green;
-            else lblSection3.BackColor = Color.Red;
-            if ((asData.pgn[asData.sc1to8] & 8) == 8) lblSection4.BackColor = Color.Green;
-            else lblSection4.BackColor = Color.Red;
+            lblSection1.BackColor = _pgns.asData.IsSectionOn(1) ? Color.Green : Color.Red;
+            lblSection2.BackColor = _pgns.asData.IsSectionOn(2) ? Color.Green : Color.Red;
+            lblSection3.BackColor = _pgns.asData.IsSectionOn(3) ? Color.Green : Color.Red;
+            lblSection4.BackColor = _pgns.asData.IsSectionOn(4) ? Color.Green : Color.Red;
 
-            if ((asData.pgn[asData.sc1to8] & 16) == 16) lblSection5.BackColor = Color.Green;
-            else lblSection5.BackColor = Color.Red;
-            if ((asData.pgn[asData.sc1to8] & 32) == 32) lblSection6.BackColor = Color.Green;
-            else lblSection6.BackColor = Color.Red;
-            if ((asData.pgn[asData.sc1to8] & 64) == 64) lblSection7.BackColor = Color.Green;
-            else lblSection7.BackColor = Color.Red;
-            if ((asData.pgn[asData.sc1to8] & 128) == 128) lblSection8.BackColor = Color.Green;
-            else lblSection8.BackColor = Color.Red;
+            lblSection5.BackColor = _pgns.asData.IsSectionOn(5) ? Color.Green : Color.Red;
+            lblSection6.BackColor = _pgns.asData.IsSectionOn(6) ? Color.Green : Color.Red;
+            lblSection7.BackColor = _pgns.asData.IsSectionOn(7) ? Color.Green : Color.Red;
+            lblSection8.BackColor = _pgns.asData.IsSectionOn(8) ? Color.Green : Color.Red;
 
-            lblSpeed.Text = (asData.pgn[asData.speedHi] << 8 | asData.pgn[asData.speedLo]).ToString();
-            lblSetSteerAngle.Text = (asData.pgn[asData.steerAngleHi] << 8 | asData.pgn[asData.steerAngleLo]).ToString();
-            lblStatus.Text = asData.pgn[asData.status].ToString();
+            lblSpeed.Text = _pgns.asData.Speed.ToString();
+            lblSetSteerAngle.Text = _pgns.asData.SteerAngle.ToString();
+            lblStatus.Text = _pgns.asData.Status.ToString();
 
-            lblSteerDataPGN.Text = ByteArrayToHex(asData.pgn);
+            lblSteerDataPGN.Text = _pgns.asData.ToHexString();
 
-            //from autosteer  module
-            lblSteerAngleActual.Text = ((Int16)((asModule.pgn[asModule.actualHi] << 8)
-                + asModule.pgn[asModule.actualLo])).ToString();
+            //from autosteer module
+            lblSteerAngleActual.Text = _pgns.asModule.ActualSteerAngle.ToString();
+            lblHeading.Text = _pgns.asModule.Heading.ToString();
+            lblRoll.Text = _pgns.asModule.Roll.ToString();
+            lblPWM.Text = _pgns.asModule.PWM.ToString();
 
-            lblHeading.Text = ((Int16)((asModule.pgn[asModule.headHi] << 8)
-                + asModule.pgn[asModule.headLo])).ToString();
+            lblWorkSwitch.BackColor = _pgns.asModule.IsWorkSwitchOn ? Color.Red : Color.Green;
+            lblSteerSwitch.BackColor = _pgns.asModule.IsSteerSwitchOn ? Color.Red : Color.Green;
 
-            lblRoll.Text = ((Int16)((asModule.pgn[asModule.rollHi] << 8)
-                + asModule.pgn[asModule.rollLo])).ToString();
-
-            lblPWM.Text = (asModule.pgn[asModule.pwm]).ToString();
-
-            if ((asModule.pgn[asModule.switchStatus] & 1) == 1)
-                lblWorkSwitch.BackColor = Color.Red;
-            else lblWorkSwitch.BackColor = Color.Green;
-
-            if ((asModule.pgn[asModule.switchStatus] & 2) == 2)
-                lblSteerSwitch.BackColor = Color.Red;
-            else lblSteerSwitch.BackColor = Color.Green;
-
-            lblPGNFromAutosteerModule.Text = ByteArrayToHex(asModule.pgn);
+            lblPGNFromAutosteerModule.Text = _pgns.asModule.ToHexString();
 
             //Autosteer settings
-            lblPGNSteerSettings.Text = ByteArrayToHex(asSet.pgn);
-            lblP.Text = asSet.pgn[asSet.gainProportional].ToString();
-            lblHiPWM.Text = asSet.pgn[asSet.highPWM].ToString();
-            lblLoPWM.Text = asSet.pgn[asSet.lowPWM].ToString();
-            lblMinPWM.Text = asSet.pgn[asSet.minPWM].ToString();
-            lblCPD.Text = asSet.pgn[asSet.countsPerDegree].ToString();
-            lblAckerman.Text = asSet.pgn[asSet.ackerman].ToString();
-            lblOffset.Text = (asSet.pgn[asSet.wasOffsetHi] << 8 | asSet.pgn[asSet.wasOffsetLo]).ToString();
+            lblPGNSteerSettings.Text = _pgns.asSet.ToHexString();
 
+            lblP.Text = _pgns.asSet.GainProportional.ToString();
+            lblHiPWM.Text = _pgns.asSet.HighPWM.ToString();
+            lblLoPWM.Text = _pgns.asSet.LowPWM.ToString();
+            lblMinPWM.Text = _pgns.asSet.MinPWM.ToString();
+            lblCPD.Text = _pgns.asSet.CountsPerDegree.ToString();
+            lblAckerman.Text = _pgns.asSet.Ackerman.ToString();
+            lblOffset.Text = _pgns.asSet.SteerOffset.ToString();
 
             //autosteer config bytes
-            lblPGNAutoSteerConfig.Text = ByteArrayToHex(asConfig.pgn);
-            lblSet0.Text = asConfig.pgn[asConfig.set0].ToString();
-            lblPulseCount.Text = asConfig.pgn[asConfig.maxPulse].ToString();
-            lblMinSpeed.Text = asConfig.pgn[asConfig.minSpeed].ToString();
+            lblPGNAutoSteerConfig.Text = _pgns.asConfig.ToHexString();
+
+            lblSet0.Text = _pgns.asConfig.Set0.ToString();
+            lblPulseCount.Text = _pgns.asConfig.MaxPulse.ToString();
+            lblMinSpeed.Text = _pgns.asConfig.MinSpeed.ToString();
 
             //machine bytes
-            lblPNGMachine.Text = ByteArrayToHex(maData.pgn);
-            TreeLbl.Text = maData.pgn[maData.tree].ToString();
+            lblPNGMachine.Text = _pgns.maData.ToHexString();
+
+            TreeLbl.Text = _pgns.maData.Speed.ToString();
+        }
+
+        private void UpdateDefaultSends(int defaultSends)
+        {
+            lblDefaultSends.Text = defaultSends.ToString();
         }
 
         private void FormLoop_Load(object sender, EventArgs e)
         {
             timer1.Enabled = true;
-            LoadLoopback();
+            _udpCommunication.LoadLoopback();
         }
 
         private void FormLoop_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (recvFromLoopBackSocket != null)
-            {
-                try
-                {
-                    recvFromLoopBackSocket.Shutdown(SocketShutdown.Both);
-                }
-                finally { recvFromLoopBackSocket.Close(); }
-            }
+            _udpCommunication.CloseLoopback();
         }
     }
 }
