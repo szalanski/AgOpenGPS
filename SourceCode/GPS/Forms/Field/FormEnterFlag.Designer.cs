@@ -39,6 +39,7 @@
             this.btnYellow = new System.Windows.Forms.Button();
             this.btnRed = new System.Windows.Forms.Button();
             this.btnGreen = new System.Windows.Forms.Button();
+            this.btnLoadFlags = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.nudLatitude)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudLongitude)).BeginInit();
             this.SuspendLayout();
@@ -220,6 +221,17 @@
             this.btnGreen.UseVisualStyleBackColor = false;
             this.btnGreen.Click += new System.EventHandler(this.btnRed_Click);
             // 
+            // btnLoadFlags
+            // 
+            this.btnLoadFlags.Font = new System.Drawing.Font("Tahoma", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnLoadFlags.Location = new System.Drawing.Point(44, 168);
+            this.btnLoadFlags.Name = "btnLoadFlags";
+            this.btnLoadFlags.Size = new System.Drawing.Size(196, 71);
+            this.btnLoadFlags.TabIndex = 434;
+            this.btnLoadFlags.Text = "Load Flags";
+            this.btnLoadFlags.UseVisualStyleBackColor = true;
+            this.btnLoadFlags.Click += new System.EventHandler(this.btnLoadFlags_Click);
+            // 
             // FormEnterFlag
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -227,6 +239,7 @@
             this.BackColor = System.Drawing.Color.WhiteSmoke;
             this.ClientSize = new System.Drawing.Size(771, 266);
             this.ControlBox = false;
+            this.Controls.Add(this.btnLoadFlags);
             this.Controls.Add(this.btnGreen);
             this.Controls.Add(this.btnRed);
             this.Controls.Add(this.btnYellow);
@@ -263,5 +276,6 @@
         private System.Windows.Forms.Button btnYellow;
         private System.Windows.Forms.Button btnRed;
         private System.Windows.Forms.Button btnGreen;
+        private System.Windows.Forms.Button btnLoadFlags;
     }
 }

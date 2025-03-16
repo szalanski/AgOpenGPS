@@ -103,5 +103,54 @@ namespace AgOpenGPS
             Close();
 
         }
+
+        private void btnLoadFlags_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog fileDialog = new OpenFileDialog();
+
+            fileDialog.Filter = "Text Document | *.txt| CSV Document | *.csv";
+            fileDialog.Title = "Please select points file";
+            fileDialog.Multiselect = false;
+
+            if (fileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string filePath = fileDialog.FileName;
+                try
+                {
+                    string[] lines = System.IO.File.ReadAllLines(filePath);
+
+                    for (int i = 1; i < lines.Length; i++)
+                    {
+                        string line = lines[i];
+                        string[] parts = line.Split(',');
+                        if (parts.Length == 4 &&
+                            double.TryParse(parts[0], NumberStyles.Float, CultureInfo.InvariantCulture, out double latitude) &&
+                            double.TryParse(parts[1], NumberStyles.Float, CultureInfo.InvariantCulture, out double longitude) &&
+                            int.TryParse(parts[2], out int flagColor))
+                        {
+                            string flagName = (!string.IsNullOrWhiteSpace(parts[3])) ? parts[3].Trim() : $"{mf.flagPts.Count + 1}";
+                            GeoCoord geoCoord = mf.AppModel.LocalPlane.ConvertWgs84ToGeoCoord(new Wgs84(latitude, longitude));
+                            int nextflag = mf.flagPts.Count + 1;
+                            CFlag flagPt = new CFlag(
+                               latitude, longitude,
+                               geoCoord.Easting, geoCoord.Northing,
+                               0, flagColor, nextflag, flagName);
+                            mf.flagPts.Add(flagPt);
+                            mf.FileSaveFlags();
+                        }
+                        else
+                        {
+                            MessageBox.Show($"Invalid line in file: {line}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        }
+                    }
+                    MessageBox.Show("Flags successfully added!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error reading file: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
     }
 }
