@@ -31,7 +31,6 @@ namespace AgOpenGPS
         public bool isToolRearFixed, isToolFrontFixed;
 
         public bool isMultiColoredSections, isSectionOffWhenOut;
-        public string toolAttachType;
 
         public double hitchLength;
 
@@ -40,8 +39,6 @@ namespace AgOpenGPS
 
         //used for super section off on
         public int minCoverage;
-
-        public bool areAllSectionBtnsOn = true;
 
         public bool isLeftSideInHeadland = true, isRightSideInHeadland = true, isSectionsNotZones;
 

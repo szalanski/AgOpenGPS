@@ -706,8 +706,6 @@ namespace AgOpenGPS
         // Returns 1 if the lines intersect, otherwis
         public double iE = 0, iN = 0;
 
-        public List<int> crossings = new List<int>(1);
-
         private void btnBndLoop_Click(object sender, EventArgs e)
         {
             int ptCount = mf.bnd.bndList[0].fenceLine.Count;

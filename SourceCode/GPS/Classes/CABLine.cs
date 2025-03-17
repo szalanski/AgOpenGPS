@@ -20,9 +20,6 @@ namespace AgOpenGPS
         //pure pursuit values
         public vec2 goalPointAB = new vec2(0, 0);
 
-        //List of all available ABLines
-        public CTrk refLine = new CTrk();
-
         public int howManyPathsAway, lastHowManyPathsAway;
         public bool isMakingABLine;
         public bool isHeadingSameWay = true, lastIsHeadingSameWay;
@@ -50,17 +47,15 @@ namespace AgOpenGPS
         public string desName = "";
 
         //autosteer errors
-        public double pivotDistanceError, pivotDistanceErrorLast, pivotDerivative, pivotDerivativeSmoothed;
+        public double pivotDistanceError, pivotDistanceErrorLast, pivotDerivative;
 
         //derivative counters
         private int counter2;
 
         public double inty;
-        public double steerAngleSmoothed, pivotErrorTotal;
-        public double distSteerError, lastDistSteerError, derivativeDistError;
+        public double pivotErrorTotal;
 
         //Color tramColor = Color.YellowGreen;
-        public int tramPassEvery;
 
         //pointers to mainform controls
         private readonly FormGPS mf;

@@ -26,35 +26,6 @@ namespace AgOpenGPS
 
         public vec2[] polygonPts;
 
-        // Triangulate the polygon. http://www-cgrl.cs.mcgill.ca/~godfried/teaching/cg-projects/97/Ian/cutting_ears.html
-        public List<Triangle> Triangulate()
-        {
-            // Copy the _points into a scratch array.
-            vec2[] pts = new vec2[polygonPts.Length];
-            Array.Copy(polygonPts, pts, polygonPts.Length);
-
-            // Make a scratch polygon.
-            CPolygon pgon = new CPolygon(pts);
-
-            // Orient the polygon clockwise.
-            pgon.OrientPolygonClockwise();
-
-            // Make room for the triangles.
-            List<Triangle> triangles = new List<Triangle>();
-
-            // While the the polygon has more than three _points, remove an ear.
-            while (pgon.polygonPts.Length > 3)
-            {
-                // Remove an ear from the polygon.
-                pgon.RemoveEar(triangles);
-            }
-
-            // Copy the last three _points into their own triangle.
-            triangles.Add(new Triangle(pgon.polygonPts[0], pgon.polygonPts[1], pgon.polygonPts[2]));
-
-            return triangles;
-        }
-        
         //Find the indexes of three _points that form an "ear."
         private void FindEar(ref int A, ref int B, ref int C)
         {
@@ -215,13 +186,6 @@ namespace AgOpenGPS
         }
 
         // Area Routines ----------------------------------------
-        public double PolygonArea()
-        {
-            // Return the absolute value of the signed area.
-            // The signed area is negative if the polygon is
-            // oriented clockwise.
-            return Math.Abs(SignedPolygonArea());
-        }
 
         // The value will be negative if the polygon is oriented clockwise.
         private double SignedPolygonArea()
@@ -244,44 +208,5 @@ namespace AgOpenGPS
             // Return the result.
             return area;
         }
-
-        // Return true if the polygon is convex.
-        public bool PolygonIsConvex()
-        {
-            // For each set of three adjacent _points A, B, C,
-            // find the dot product AB · BC. If the sign of
-            // all the dot products is the same, the angles
-            // are all positive or negative (depending on the
-            // order in which we visit them) so the polygon
-            // is convex.
-            bool got_negative = false;
-            bool got_positive = false;
-            int num_points = polygonPts.Length;
-            int B, C;
-            for (int A = 0; A < num_points; A++)
-            {
-                B = (A + 1) % num_points;
-                C = (B + 1) % num_points;
-
-                double cross_product =
-                    CrossProductLength(
-                        polygonPts[A].easting, polygonPts[A].northing,
-                        polygonPts[B].easting, polygonPts[B].northing,
-                        polygonPts[C].easting, polygonPts[C].northing);
-                if (cross_product < 0)
-                {
-                    got_negative = true;
-                }
-                else if (cross_product > 0)
-                {
-                    got_positive = true;
-                }
-                if (got_negative && got_positive) return false;
-            }
-
-            // If we got this far, the polygon is convex.
-            return true;
-        }
-
     }
 }

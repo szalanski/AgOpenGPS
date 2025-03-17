@@ -9,8 +9,6 @@ namespace AgOpenGPS
 
         #region properties sim
 
-        public double altitude = 300;
-
         public Wgs84 CurrentLatLon { get; set; }
 
         public double headingTrue, stepDistance = 0.0, steerAngle, steerangleAve = 0.0;

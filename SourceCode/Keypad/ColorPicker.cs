@@ -10,7 +10,6 @@ namespace Keypad
     public class ColorPickerControl : Control
     {
         private readonly Panel _selectedColorBox = new Panel();
-        private readonly Panel _hoverColorBox = new Panel();
         private Bitmap _canvas;
         private Graphics _graphicsBuffer;
         private LinearGradientBrush _spectrumGradient, _blackBottomGradient, _whiteTopGradient;
@@ -80,18 +79,6 @@ namespace Keypad
             base.OnSizeChanged(e);
             UpdateLinearGradientBrushes();
             UpdateGraphicsBuffer();
-        }
-
-
-        [Description("The current selected color of the color picker control")]
-        public Color SelectedColor
-        {
-            get { return _selectedColorBox.BackColor; }
-            set
-            {
-                _selectedColorBox.BackColor = value;
-                _selectedColorBox.Visible = true;
-            }
         }
     }
 }

@@ -36,9 +36,6 @@ namespace AgOpenGPS
         //guidance values
         public double distanceFromCurrentLine, uturnDistanceFromBoundary;
 
-        public double distanceFromCurrentLineSteer, distanceFromCurrentLinePivot;
-        public double steerAngleGu, rEastSteer, rNorthSteer, rEastPivot, rNorthPivot;
-
         private int A, B;
         private bool isHeadingSameWay = true;
         public bool isTurnCreationTooClose = false, isTurnCreationNotCrossingError = false, turnTooCloseTrigger = false;

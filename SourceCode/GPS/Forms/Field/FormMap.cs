@@ -109,12 +109,6 @@ namespace AgOpenGPS
             UpdateWindowTitle();
         }
 
-        private void btnClearCache_Click(object sender, EventArgs e)
-        {
-            mapControl.ClearCache(true);
-            ActiveControl = mapControl;
-        }
-
         private void cmbTileServers_SelectedIndexChanged(object sender, EventArgs e)
         {
             mapControl.TileServer = cmbTileServers.SelectedItem as ITileServer;
@@ -130,14 +124,6 @@ namespace AgOpenGPS
         //        e.Graphics.DrawString(e.Marker.Label, SystemFonts.DefaultFont, Brushes.Red, new PointF(e.Point.X, e.Point.Y + 5), new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Near });
         //    }
         //}
-
-        private void mapControl_DoubleClick(object sender, EventArgs e)
-        {
-            //var coord = mapControl.Mouse;
-            //StringBuilder sb = new StringBuilder();
-            //sb.AppendLine($"Location: {coord}");
-            //MessageBox.Show(sb.ToString(), "Info");
-        }
 
         private void btnGo_Click(object sender, EventArgs e)
         {
@@ -411,16 +397,6 @@ namespace AgOpenGPS
             }
         }
 
-        private void btnBuildFieldBackground_Click(object sender, EventArgs e)
-        {
-            if (mf.worldGrid.isGeoMap)
-            {
-                mf.worldGrid.isGeoMap = false;
-                ResetMapGrid();
-            }
-            SaveBackgroundImage();
-        }
-
         private void cboxDrawMap_Click(object sender, EventArgs e)
         {
             if (bingLine.Count > 0)
@@ -460,19 +436,6 @@ namespace AgOpenGPS
             bingLine.Clear();
             mapControl.Markers.Clear();
             mapControl.Invalidate();
-        }
-
-        private void btnGray_Click(object sender, EventArgs e)
-        {
-            isColorMap = !isColorMap;
-            //if (isColorMap)
-            //{
-            //    btnGray.Image = Properties.Resources.MapColor;
-            //}
-            //else
-            //{
-            //    btnGray.Image = Properties.Resources.MapGray;
-            //}
         }
 
         private void btnZoomOut_Click(object sender, EventArgs e)

@@ -23,7 +23,6 @@ namespace AgOpenGPS
         public double goalPointLookAheadHold, goalPointLookAheadMult, goalPointAcquireFactor, uturnCompensation;
 
         public double stanleyDistanceErrorGain, stanleyHeadingErrorGain;
-        public double minLookAheadDistance = 2.0;
         public double maxSteerAngle, maxSteerSpeed, minSteerSpeed;
         public double maxAngularVelocity;
         public double hydLiftLookAheadTime;

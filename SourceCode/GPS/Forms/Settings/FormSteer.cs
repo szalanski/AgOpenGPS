@@ -887,11 +887,6 @@ namespace AgOpenGPS
             }
         }
 
-        private void btnWASZeroReset_Click(object sender, EventArgs e)
-        {
-            hsbarWasOffset.Value = 0;
-        }
-
         private void btnStartSA_Click(object sender, EventArgs e)
         {
             if (!isSA)
