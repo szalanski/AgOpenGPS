@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="gsABCurve" xml:space="preserve">
-    <value>AB kreivė</value>
-  </data>
   <data name="gsABDraw" xml:space="preserve">
     <value>Nubrėžti AB. Pažymėkite 2 taškus ant ribos, kad pradėti</value>
   </data>
@@ -180,9 +177,6 @@
   <data name="gsAquireFactor" xml:space="preserve">
     <value>Pasiekimo faktorius</value>
   </data>
-  <data name="gsAreYouSure" xml:space="preserve">
-    <value>Ar tikrai?</value>
-  </data>
   <data name="gsArea" xml:space="preserve">
     <value>Plotas</value>
   </data>
@@ -230,9 +224,6 @@
   </data>
   <data name="gsBoundaryLineFilesAreCorrupt" xml:space="preserve">
     <value>Ribinių linijų failas sugadintas</value>
-  </data>
-  <data name="gsBoundaryMenu" xml:space="preserve">
-    <value>Ribinis kontūras</value>
   </data>
   <data name="gsBrightness" xml:space="preserve">
     <value>Švesumas</value>
@@ -422,9 +413,6 @@
   </data>
   <data name="gsEast" xml:space="preserve">
     <value>Į rytus</value>
-  </data>
-  <data name="gsEditABCurve" xml:space="preserve">
-    <value>Redaguoti AB kreivę</value>
   </data>
   <data name="gsEditABLine" xml:space="preserve">
     <value>Redaguoti AB liniją</value>
@@ -627,9 +615,6 @@
   <data name="gsLatLon" xml:space="preserve">
     <value>Platuma + Ilguma</value>
   </data>
-  <data name="gsLatLonPlus" xml:space="preserve">
-    <value>Platuma + Ilguma + Kryptis</value>
-  </data>
   <data name="gsLateral" xml:space="preserve">
     <value>Šoninis</value>
   </data>
@@ -666,14 +651,8 @@
   <data name="gsMPH" xml:space="preserve">
     <value>Mph</value>
   </data>
-  <data name="gsMachineModule" xml:space="preserve">
-    <value>Padargų modulis</value>
-  </data>
   <data name="gsMachinePort" xml:space="preserve">
     <value>Mašinos prievadas</value>
-  </data>
-  <data name="gsMakeBoundaryContours" xml:space="preserve">
-    <value>Padarykite ribos kontūrus</value>
   </data>
   <data name="gsManual" xml:space="preserve">
     <value>Rankinis</value>
@@ -756,14 +735,8 @@
   <data name="gsNoGuidanceLines" xml:space="preserve">
     <value>Nėra navigacinės linijos</value>
   </data>
-  <data name="gsNoSettingsWithIMU" xml:space="preserve">
-    <value>Nėra nustatymų su IMU</value>
-  </data>
   <data name="gsNone" xml:space="preserve">
     <value>Joks</value>
-  </data>
-  <data name="gsNoneUsed" xml:space="preserve">
-    <value>Nenaudota</value>
   </data>
   <data name="gsNorth" xml:space="preserve">
     <value>Šiaurė</value>
@@ -816,9 +789,6 @@
   <data name="gsOvershootReduction" xml:space="preserve">
     <value>Vairo persukimo sumažinimas</value>
   </data>
-  <data name="gsPass" xml:space="preserve">
-    <value>Praleisti</value>
-  </data>
   <data name="gsPasses" xml:space="preserve">
     <value>Praleidimai</value>
   </data>
@@ -860,9 +830,6 @@
   </data>
   <data name="gsPresetColor" xml:space="preserve">
     <value>Pasirinkite spalvą</value>
-  </data>
-  <data name="gsPressureSensorValueLabel" xml:space="preserve">
-    <value>Slėgis (barais)</value>
   </data>
   <data name="gsPressureTurnSensor" xml:space="preserve">
     <value>Pasukimo jėgos daviklis</value>
@@ -1107,9 +1074,6 @@ NAUDOJIMAS SAVO RIZIKA."</value>
   <data name="gsToolsMenu" xml:space="preserve">
     <value>Padargų menu</value>
   </data>
-  <data name="gsTopFieldView" xml:space="preserve">
-    <value>Lauko apžvalga</value>
-  </data>
   <data name="gsTotal" xml:space="preserve">
     <value>Viso</value>
   </data>
@@ -1226,11 +1190,5 @@ NAUDOJIMAS SAVO RIZIKA."</value>
   </data>
   <data name="v_AboutIntro" xml:space="preserve">
     <value>https://www.youtube.com/watch?v=iN2cZ8avHag</value>
-  </data>
-  <data name="v_RecordedPathForm" xml:space="preserve">
-    <value>https://www.youtube.com/watch?v=fE3TPRIRSFg</value>
-  </data>
-  <data name="v_SteerSettingsForm" xml:space="preserve">
-    <value>https://www.youtube.com/watch?v=3SdvYgx8HHc</value>
   </data>
 </root>

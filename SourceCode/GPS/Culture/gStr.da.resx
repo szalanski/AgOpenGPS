@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="gsABCurve" xml:space="preserve">
-    <value>AB Kurve</value>
-  </data>
   <data name="gsABDraw" xml:space="preserve">
     <value>Tegn AB - Klik 2 punkter på grænsen for at begynde</value>
   </data>
@@ -168,9 +165,6 @@
   <data name="gsAquireFactor" xml:space="preserve">
     <value>Erhverve Faktor</value>
   </data>
-  <data name="gsAreYouSure" xml:space="preserve">
-    <value>Er Du Sikker ?</value>
-  </data>
   <data name="gsArea" xml:space="preserve">
     <value>Areal</value>
   </data>
@@ -208,9 +202,6 @@ Rækkefølgen du klikker på dem, angiver placeringen nedefra og op</value>
   </data>
   <data name="gsBoundaryLineFilesAreCorrupt" xml:space="preserve">
     <value>Fejl I KantlInjens Fil</value>
-  </data>
-  <data name="gsBoundaryMenu" xml:space="preserve">
-    <value>Menu Markgrænse</value>
   </data>
   <data name="gsBrightness" xml:space="preserve">
     <value>Lysstyrke</value>
@@ -392,9 +383,6 @@ Rækkefølgen du klikker på dem, angiver placeringen nedefra og op</value>
   <data name="gsEast" xml:space="preserve">
     <value>Øst</value>
   </data>
-  <data name="gsEditABCurve" xml:space="preserve">
-    <value>Ændre AB Kurve</value>
-  </data>
   <data name="gsEditABLine" xml:space="preserve">
     <value>Ændre AB Linje</value>
   </data>
@@ -572,14 +560,8 @@ Rækkefølgen du klikker på dem, angiver placeringen nedefra og op</value>
   <data name="gsMPH" xml:space="preserve">
     <value>mph</value>
   </data>
-  <data name="gsMachineModule" xml:space="preserve">
-    <value>Maskin modul</value>
-  </data>
   <data name="gsMachinePort" xml:space="preserve">
     <value>Maskin Port</value>
-  </data>
-  <data name="gsMakeBoundaryContours" xml:space="preserve">
-    <value>Lav kant kontur</value>
   </data>
   <data name="gsManual" xml:space="preserve">
     <value>Manuel</value>
@@ -644,9 +626,6 @@ Rækkefølgen du klikker på dem, angiver placeringen nedefra og op</value>
   <data name="gsNone" xml:space="preserve">
     <value>Ingen</value>
   </data>
-  <data name="gsNoneUsed" xml:space="preserve">
-    <value>Ingen Brugt</value>
-  </data>
   <data name="gsNorth" xml:space="preserve">
     <value>Nord</value>
   </data>
@@ -677,9 +656,6 @@ Rækkefølgen du klikker på dem, angiver placeringen nedefra og op</value>
   <data name="gsOvershootReduction" xml:space="preserve">
     <value>Overstyrings Reduction</value>
   </data>
-  <data name="gsPass" xml:space="preserve">
-    <value>Træk #</value>
-  </data>
   <data name="gsPasses" xml:space="preserve">
     <value>Træk</value>
   </data>
@@ -700,9 +676,6 @@ Rækkefølgen du klikker på dem, angiver placeringen nedefra og op</value>
   </data>
   <data name="gsPointsToProcess" xml:space="preserve">
     <value>Punkter at bearbejde</value>
-  </data>
-  <data name="gsPressureSensorValueLabel" xml:space="preserve">
-    <value>Tryk (bar)</value>
   </data>
   <data name="gsProblemMakingPath" xml:space="preserve">
     <value>Kan Ikke Oprette Sti</value>
@@ -880,9 +853,6 @@ ANVENDELSE PÅ EGET RISIKO</value>
   </data>
   <data name="gsToolsMenu" xml:space="preserve">
     <value>Værktøj Menu</value>
-  </data>
-  <data name="gsTopFieldView" xml:space="preserve">
-    <value>Mark Oversigt</value>
   </data>
   <data name="gsTrack" xml:space="preserve">
     <value>Sporbredde</value>

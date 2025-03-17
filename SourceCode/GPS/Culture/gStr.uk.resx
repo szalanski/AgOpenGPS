@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="gsABCurve" xml:space="preserve">
-    <value>АВ крива</value>
-  </data>
   <data name="gsABline" xml:space="preserve">
     <value>АВ лінії</value>
   </data>
@@ -134,9 +131,6 @@
   </data>
   <data name="gsAgressiveness" xml:space="preserve">
     <value>Агресивн.</value>
-  </data>
-  <data name="gsAreYouSure" xml:space="preserve">
-    <value>Ви впевнені?</value>
   </data>
   <data name="gsArea" xml:space="preserve">
     <value>Площа</value>
@@ -158,9 +152,6 @@
   </data>
   <data name="gsBoundaryLineFilesAreCorrupt" xml:space="preserve">
     <value>Файл межових ліній пошкоджено</value>
-  </data>
-  <data name="gsBoundaryMenu" xml:space="preserve">
-    <value>Контур границь</value>
   </data>
   <data name="gsButFieldIsLoaded" xml:space="preserve">
     <value>Поле завантажено</value>
@@ -255,9 +246,6 @@
   <data name="gsEast" xml:space="preserve">
     <value>Схід</value>
   </data>
-  <data name="gsEditABCurve" xml:space="preserve">
-    <value>Редагув. криву АВ</value>
-  </data>
   <data name="gsEditABLine" xml:space="preserve">
     <value>Редагув. лінію АВ</value>
   </data>
@@ -345,9 +333,6 @@
   <data name="gsMachinePort" xml:space="preserve">
     <value>Порт керування машиною</value>
   </data>
-  <data name="gsMakeBoundaryContours" xml:space="preserve">
-    <value>Зробити контури меж</value>
-  </data>
   <data name="gsManual" xml:space="preserve">
     <value>Інструкція</value>
   </data>
@@ -390,14 +375,8 @@
   <data name="gsNoGuidanceLines" xml:space="preserve">
     <value>Немає Направляючих Ліній</value>
   </data>
-  <data name="gsNoSettingsWithIMU" xml:space="preserve">
-    <value>Немає налаштувань з IMU</value>
-  </data>
   <data name="gsNone" xml:space="preserve">
     <value>Немає</value>
-  </data>
-  <data name="gsNoneUsed" xml:space="preserve">
-    <value>Нічого не використ.</value>
   </data>
   <data name="gsNorth" xml:space="preserve">
     <value>Північ</value>
@@ -420,9 +399,6 @@
   <data name="gsOvershootReduction" xml:space="preserve">
     <value>Зменш. переобсяг </value>
   </data>
-  <data name="gsPass" xml:space="preserve">
-    <value>Прохід #</value>
-  </data>
   <data name="gsPasses" xml:space="preserve">
     <value>Проходи</value>
   </data>
@@ -431,9 +407,6 @@
   </data>
   <data name="gsPleaseEnterABLine" xml:space="preserve">
     <value>Будь ласка, Введіть (AB) лінію</value>
-  </data>
-  <data name="gsPressureSensorValueLabel" xml:space="preserve">
-    <value>Тиск (бар)</value>
   </data>
   <data name="gsProblemMakingPath" xml:space="preserve">
     <value>Проблема створення шляху</value>
@@ -519,9 +492,6 @@
   <data name="gsTooFast" xml:space="preserve">
     <value>Занадто швидко.</value>
   </data>
-  <data name="gsTopFieldView" xml:space="preserve">
-    <value>Польовий вигляд зверху</value>
-  </data>
   <data name="gsTramLines" xml:space="preserve">
     <value>Трамв. колії</value>
   </data>
@@ -551,11 +521,5 @@
   </data>
   <data name="v_AboutIntro" xml:space="preserve">
     <value>https://www.youtube.com/watch?v=iN2cZ8avHag</value>
-  </data>
-  <data name="v_RecordedPathForm" xml:space="preserve">
-    <value>https://www.youtube.com/watch?v=fE3TPRIRSFg</value>
-  </data>
-  <data name="v_SteerSettingsForm" xml:space="preserve">
-    <value>https://www.youtube.com/watch?v=3SdvYgx8HHc</value>
   </data>
 </root>

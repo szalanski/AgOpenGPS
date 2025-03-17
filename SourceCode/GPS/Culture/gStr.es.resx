@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="gsABCurve" xml:space="preserve">
-    <value>Curva AB</value>
-  </data>
   <data name="gsABDraw" xml:space="preserve">
     <value>Dibujar AB - Seleccione 2 puntos en el Lindero para empezar</value>
   </data>
@@ -180,9 +177,6 @@
   <data name="gsAquireFactor" xml:space="preserve">
     <value>Factor de adquirir</value>
   </data>
-  <data name="gsAreYouSure" xml:space="preserve">
-    <value>¿Está seguro?</value>
-  </data>
   <data name="gsArea" xml:space="preserve">
     <value>Área</value>
   </data>
@@ -220,9 +214,6 @@ El orden en que los presiones será el orden en que aparecerán en el menú de a
   </data>
   <data name="gsBoundaryLineFilesAreCorrupt" xml:space="preserve">
     <value>Fichero de lindero corrupto</value>
-  </data>
-  <data name="gsBoundaryMenu" xml:space="preserve">
-    <value>Contorno del lindero</value>
   </data>
   <data name="gsBrightness" xml:space="preserve">
     <value>Brillo</value>
@@ -365,9 +356,6 @@ El orden en que los presiones será el orden en que aparecerán en el menú de a
   <data name="gsEast" xml:space="preserve">
     <value>Este</value>
   </data>
-  <data name="gsEditABCurve" xml:space="preserve">
-    <value>Editar curva AB</value>
-  </data>
   <data name="gsEditABLine" xml:space="preserve">
     <value>Editar linea AB</value>
   </data>
@@ -455,9 +443,6 @@ El orden en que los presiones será el orden en que aparecerán en el menú de a
   <data name="gsMachinePort" xml:space="preserve">
     <value>Puerto del PCB</value>
   </data>
-  <data name="gsMakeBoundaryContours" xml:space="preserve">
-    <value>Crear contorno de parcela</value>
-  </data>
   <data name="gsManual" xml:space="preserve">
     <value>Manual</value>
   </data>
@@ -500,14 +485,8 @@ El orden en que los presiones será el orden en que aparecerán en el menú de a
   <data name="gsNoGuidanceLines" xml:space="preserve">
     <value>Ninguna línea de guía encontrada</value>
   </data>
-  <data name="gsNoSettingsWithIMU" xml:space="preserve">
-    <value>Sin ajustes con IMU</value>
-  </data>
   <data name="gsNone" xml:space="preserve">
     <value>Ninguno/a</value>
-  </data>
-  <data name="gsNoneUsed" xml:space="preserve">
-    <value>Ninguno en uso</value>
   </data>
   <data name="gsNorth" xml:space="preserve">
     <value>Norte</value>
@@ -530,9 +509,6 @@ El orden en que los presiones será el orden en que aparecerán en el menú de a
   <data name="gsOvershootReduction" xml:space="preserve">
     <value>Reducción de sobreimpulso</value>
   </data>
-  <data name="gsPass" xml:space="preserve">
-    <value>Nº de Pasadas</value>
-  </data>
   <data name="gsPasses" xml:space="preserve">
     <value>Pasadas</value>
   </data>
@@ -541,9 +517,6 @@ El orden en que los presiones será el orden en que aparecerán en el menú de a
   </data>
   <data name="gsPleaseEnterABLine" xml:space="preserve">
     <value>Introducir una línea AB</value>
-  </data>
-  <data name="gsPressureSensorValueLabel" xml:space="preserve">
-    <value>Presión (bar)</value>
   </data>
   <data name="gsProblemMakingPath" xml:space="preserve">
     <value>Problemas al crear una ruta</value>
@@ -629,9 +602,6 @@ El orden en que los presiones será el orden en que aparecerán en el menú de a
   <data name="gsTooFast" xml:space="preserve">
     <value>Demasiado rápida</value>
   </data>
-  <data name="gsTopFieldView" xml:space="preserve">
-    <value>Vista Aérea</value>
-  </data>
   <data name="gsTramLines" xml:space="preserve">
     <value>Lineas Paralelas</value>
   </data>
@@ -697,11 +667,5 @@ El orden en que los presiones será el orden en que aparecerán en el menú de a
   </data>
   <data name="v_AboutIntro" xml:space="preserve">
     <value>https://www.youtube.com/watch?v=iN2cZ8avHag</value>
-  </data>
-  <data name="v_RecordedPathForm" xml:space="preserve">
-    <value>https://www.youtube.com/watch?v=fE3TPRIRSFg</value>
-  </data>
-  <data name="v_SteerSettingsForm" xml:space="preserve">
-    <value>https://www.youtube.com/watch?v=3SdvYgx8HHc</value>
   </data>
 </root>

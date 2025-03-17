@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="gsABCurve" xml:space="preserve">
-    <value>AB Izliekta</value>
-  </data>
   <data name="gsABDraw" xml:space="preserve">
     <value>Zīmējiet AB. Lai sāktu, atzīmējiet 2 punktus uz lauka robežas</value>
   </data>
@@ -180,9 +177,6 @@
   <data name="gsAquireFactor" xml:space="preserve">
     <value>Sasniedzamības faktors</value>
   </data>
-  <data name="gsAreYouSure" xml:space="preserve">
-    <value>Vai tu esi pārliecināts ?</value>
-  </data>
   <data name="gsArea" xml:space="preserve">
     <value>Platība</value>
   </data>
@@ -230,9 +224,6 @@
   </data>
   <data name="gsBoundaryLineFilesAreCorrupt" xml:space="preserve">
     <value>Robežlīniju fails ir bojāts</value>
-  </data>
-  <data name="gsBoundaryMenu" xml:space="preserve">
-    <value>Robežas kontūra</value>
   </data>
   <data name="gsBrightness" xml:space="preserve">
     <value>Spilgtums</value>
@@ -425,9 +416,6 @@
   </data>
   <data name="gsEast" xml:space="preserve">
     <value>Austrumi</value>
-  </data>
-  <data name="gsEditABCurve" xml:space="preserve">
-    <value>Rediģēt AB līkni</value>
   </data>
   <data name="gsEditABLine" xml:space="preserve">
     <value>Rediģēt AB līniju</value>
@@ -633,9 +621,6 @@
   <data name="gsLatLon" xml:space="preserve">
     <value>Platums+garums</value>
   </data>
-  <data name="gsLatLonPlus" xml:space="preserve">
-    <value>Platums + garums + virziens</value>
-  </data>
   <data name="gsLateral" xml:space="preserve">
     <value>Sānu</value>
   </data>
@@ -672,14 +657,8 @@
   <data name="gsMPH" xml:space="preserve">
     <value>mph</value>
   </data>
-  <data name="gsMachineModule" xml:space="preserve">
-    <value>Iekārtu vadība</value>
-  </data>
   <data name="gsMachinePort" xml:space="preserve">
     <value>Mašīnas ports</value>
-  </data>
-  <data name="gsMakeBoundaryContours" xml:space="preserve">
-    <value>Izveidojiet robežu kontūras</value>
   </data>
   <data name="gsManual" xml:space="preserve">
     <value>Manuāli</value>
@@ -762,14 +741,8 @@
   <data name="gsNoGuidanceLines" xml:space="preserve">
     <value>Nav navigācija līniju</value>
   </data>
-  <data name="gsNoSettingsWithIMU" xml:space="preserve">
-    <value>Nav iestatījumu ar IMU</value>
-  </data>
   <data name="gsNone" xml:space="preserve">
     <value>Nav</value>
-  </data>
-  <data name="gsNoneUsed" xml:space="preserve">
-    <value>Nav lietots</value>
   </data>
   <data name="gsNorth" xml:space="preserve">
     <value>Ziemeļi</value>
@@ -825,9 +798,6 @@
   <data name="gsOvershootReduction" xml:space="preserve">
     <value>Pārbrauciena samazināšana</value>
   </data>
-  <data name="gsPass" xml:space="preserve">
-    <value>Gājiens #</value>
-  </data>
   <data name="gsPasses" xml:space="preserve">
     <value>Gājieni</value>
   </data>
@@ -866,9 +836,6 @@
   </data>
   <data name="gsPresetColor" xml:space="preserve">
     <value>Atlasiet iepriekš iestatīto krāsu</value>
-  </data>
-  <data name="gsPressureSensorValueLabel" xml:space="preserve">
-    <value>Spiediens (bar)</value>
   </data>
   <data name="gsPressureTurnSensor" xml:space="preserve">
     <value>Pagrieziena spēka sensors</value>
@@ -1120,9 +1087,6 @@
   <data name="gsToolsMenu" xml:space="preserve">
     <value>Rīku izvēlne</value>
   </data>
-  <data name="gsTopFieldView" xml:space="preserve">
-    <value>Lauka skats no augšas</value>
-  </data>
   <data name="gsTotal" xml:space="preserve">
     <value>Kopā</value>
   </data>
@@ -1239,11 +1203,5 @@
   </data>
   <data name="v_AboutIntro" xml:space="preserve">
     <value>https://www.youtube.com/watch?v=iN2cZ8avHag</value>
-  </data>
-  <data name="v_RecordedPathForm" xml:space="preserve">
-    <value>https://www.youtube.com/watch?v=fE3TPRIRSFg</value>
-  </data>
-  <data name="v_SteerSettingsForm" xml:space="preserve">
-    <value>https://www.youtube.com/watch?v=3SdvYgx8HHc</value>
   </data>
 </root>

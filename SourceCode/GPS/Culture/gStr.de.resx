@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="gsABCurve" xml:space="preserve">
-    <value>A-B Kurve</value>
-  </data>
   <data name="gsABDraw" xml:space="preserve">
     <value>Erstellen einer AB-Linie - Klicken Sie auf 2 Punkte auf der Grenze, um zu beginnen</value>
   </data>
@@ -162,9 +159,6 @@
   <data name="gsApplied" xml:space="preserve">
     <value>Bearbeitet</value>
   </data>
-  <data name="gsAreYouSure" xml:space="preserve">
-    <value>Sicher?</value>
-  </data>
   <data name="gsArea" xml:space="preserve">
     <value>Fläche</value>
   </data>
@@ -206,9 +200,6 @@
   </data>
   <data name="gsBoundaryLineFilesAreCorrupt" xml:space="preserve">
     <value>Außengrenze datei fehlerhaft</value>
-  </data>
-  <data name="gsBoundaryMenu" xml:space="preserve">
-    <value>Kontur an der Außengrenze</value>
   </data>
   <data name="gsBrightness" xml:space="preserve">
     <value>Helligkeit</value>
@@ -389,9 +380,6 @@
   </data>
   <data name="gsEast" xml:space="preserve">
     <value>Ost</value>
-  </data>
-  <data name="gsEditABCurve" xml:space="preserve">
-    <value>A-B Kurve bearbeiten</value>
   </data>
   <data name="gsEditABLine" xml:space="preserve">
     <value>A-B Linie bearbeiten</value>
@@ -585,9 +573,6 @@
   <data name="gsMPH" xml:space="preserve">
     <value>mp/h</value>
   </data>
-  <data name="gsMakeBoundaryContours" xml:space="preserve">
-    <value>Grenzkonturen erstellen</value>
-  </data>
   <data name="gsManual" xml:space="preserve">
     <value>Manuell</value>
   </data>
@@ -666,14 +651,8 @@
   <data name="gsNoGuidanceLines" xml:space="preserve">
     <value>Keine Führungslinien</value>
   </data>
-  <data name="gsNoSettingsWithIMU" xml:space="preserve">
-    <value>keine Einstellung mit IMU nötig</value>
-  </data>
   <data name="gsNone" xml:space="preserve">
     <value>keine</value>
-  </data>
-  <data name="gsNoneUsed" xml:space="preserve">
-    <value>Keine verwendet</value>
   </data>
   <data name="gsNorth" xml:space="preserve">
     <value>Norden</value>
@@ -720,9 +699,6 @@
   <data name="gsOvershootReduction" xml:space="preserve">
     <value>Überschwingungsreduzierung</value>
   </data>
-  <data name="gsPass" xml:space="preserve">
-    <value>Durchgang #</value>
-  </data>
   <data name="gsPasses" xml:space="preserve">
     <value>Spuranzahl</value>
   </data>
@@ -764,9 +740,6 @@
   </data>
   <data name="gsPresetColor" xml:space="preserve">
     <value>Voreingestellte Farbe auswählen</value>
-  </data>
-  <data name="gsPressureSensorValueLabel" xml:space="preserve">
-    <value>Druck (bar)</value>
   </data>
   <data name="gsPressureTurnSensor" xml:space="preserve">
     <value>Drucksensor</value>
@@ -995,9 +968,6 @@
   </data>
   <data name="gsToolsMenu" xml:space="preserve">
     <value>Maschinen Menu</value>
-  </data>
-  <data name="gsTopFieldView" xml:space="preserve">
-    <value>Feld Übersicht</value>
   </data>
   <data name="gsTrack" xml:space="preserve">
     <value>Spur</value>

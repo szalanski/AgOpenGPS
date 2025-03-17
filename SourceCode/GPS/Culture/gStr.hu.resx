@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="gsABCurve" xml:space="preserve">
-    <value>AB görbe</value>
-  </data>
   <data name="gsABDraw" xml:space="preserve">
     <value>AB rajzolás - Válassz 2 pontot a határon a kezdéshez</value>
   </data>
@@ -180,9 +177,6 @@
   <data name="gsAquireFactor" xml:space="preserve">
     <value>Rátalálási arány</value>
   </data>
-  <data name="gsAreYouSure" xml:space="preserve">
-    <value>Biztosan?</value>
-  </data>
   <data name="gsArea" xml:space="preserve">
     <value>Terület</value>
   </data>
@@ -226,9 +220,6 @@ A választott sorrend alapján fognak megjelenni alulról felfelé.</value>
   </data>
   <data name="gsBoundaryLineFilesAreCorrupt" xml:space="preserve">
     <value>Művelési határvonal fájlja sérült</value>
-  </data>
-  <data name="gsBoundaryMenu" xml:space="preserve">
-    <value>Határgörbe</value>
   </data>
   <data name="gsBrightness" xml:space="preserve">
     <value>Fényerő</value>
@@ -421,9 +412,6 @@ A választott sorrend alapján fognak megjelenni alulról felfelé.</value>
   </data>
   <data name="gsEast" xml:space="preserve">
     <value>Kelet</value>
-  </data>
-  <data name="gsEditABCurve" xml:space="preserve">
-    <value>AB görbe szerkesztése</value>
   </data>
   <data name="gsEditABLine" xml:space="preserve">
     <value>AB vonal szerkesztése</value>
@@ -633,9 +621,6 @@ A választott sorrend alapján fognak megjelenni alulról felfelé.</value>
   <data name="gsLatLon" xml:space="preserve">
     <value>Szél+Hossz</value>
   </data>
-  <data name="gsLatLonPlus" xml:space="preserve">
-    <value>Szél+Hossz+Irány</value>
-  </data>
   <data name="gsLateral" xml:space="preserve">
     <value>Oldalsó</value>
   </data>
@@ -672,14 +657,8 @@ A választott sorrend alapján fognak megjelenni alulról felfelé.</value>
   <data name="gsMPH" xml:space="preserve">
     <value>mph</value>
   </data>
-  <data name="gsMachineModule" xml:space="preserve">
-    <value>Eszközmodul</value>
-  </data>
   <data name="gsMachinePort" xml:space="preserve">
     <value>Eszköz Port</value>
-  </data>
-  <data name="gsMakeBoundaryContours" xml:space="preserve">
-    <value>Határoló kontúrok készítése</value>
   </data>
   <data name="gsManual" xml:space="preserve">
     <value>Kézi</value>
@@ -762,14 +741,8 @@ A választott sorrend alapján fognak megjelenni alulról felfelé.</value>
   <data name="gsNoGuidanceLines" xml:space="preserve">
     <value>Nincs irányvonal</value>
   </data>
-  <data name="gsNoSettingsWithIMU" xml:space="preserve">
-    <value>Nem állítható IMUval</value>
-  </data>
   <data name="gsNone" xml:space="preserve">
     <value>Nincs</value>
-  </data>
-  <data name="gsNoneUsed" xml:space="preserve">
-    <value>Nincs használva</value>
   </data>
   <data name="gsNorth" xml:space="preserve">
     <value>Észak</value>
@@ -822,9 +795,6 @@ A választott sorrend alapján fognak megjelenni alulról felfelé.</value>
   <data name="gsOvershootReduction" xml:space="preserve">
     <value>Kígyózás csökkentése</value>
   </data>
-  <data name="gsPass" xml:space="preserve">
-    <value>Fogás #</value>
-  </data>
   <data name="gsPasses" xml:space="preserve">
     <value>Fogások</value>
   </data>
@@ -866,9 +836,6 @@ A választott sorrend alapján fognak megjelenni alulról felfelé.</value>
   </data>
   <data name="gsPresetColor" xml:space="preserve">
     <value>Válassz egy színt</value>
-  </data>
-  <data name="gsPressureSensorValueLabel" xml:space="preserve">
-    <value>Nyomás (bar)</value>
   </data>
   <data name="gsPressureTurnSensor" xml:space="preserve">
     <value>Nyomás érzékelő</value>
@@ -1120,9 +1087,6 @@ HASZNÁLAT SAJÁT FELELŐSSÉGRE.</value>
   <data name="gsToolsMenu" xml:space="preserve">
     <value>Eszköz menü</value>
   </data>
-  <data name="gsTopFieldView" xml:space="preserve">
-    <value>Terület felülnézete</value>
-  </data>
   <data name="gsTotal" xml:space="preserve">
     <value>Összesen</value>
   </data>
@@ -1239,11 +1203,5 @@ HASZNÁLAT SAJÁT FELELŐSSÉGRE.</value>
   </data>
   <data name="v_AboutIntro" xml:space="preserve">
     <value>https://www.youtube.com/watch?v=iN2cZ8avHag</value>
-  </data>
-  <data name="v_RecordedPathForm" xml:space="preserve">
-    <value>https://www.youtube.com/watch?v=fE3TPRIRSFg</value>
-  </data>
-  <data name="v_SteerSettingsForm" xml:space="preserve">
-    <value>https://www.youtube.com/watch?v=3SdvYgx8HHc</value>
   </data>
 </root>

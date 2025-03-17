@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="gsABCurve" xml:space="preserve">
-    <value>Curva AB</value>
-  </data>
   <data name="gsABline" xml:space="preserve">
     <value>Linha AB</value>
   </data>
@@ -134,9 +131,6 @@
   </data>
   <data name="gsAgressiveness" xml:space="preserve">
     <value>Agressividade</value>
-  </data>
-  <data name="gsAreYouSure" xml:space="preserve">
-    <value>Tem certeza ?</value>
   </data>
   <data name="gsArea" xml:space="preserve">
     <value>Área</value>
@@ -158,9 +152,6 @@
   </data>
   <data name="gsBoundaryLineFilesAreCorrupt" xml:space="preserve">
     <value>Arquivo de linhas de limite corrompido</value>
-  </data>
-  <data name="gsBoundaryMenu" xml:space="preserve">
-    <value>Contorno de limite</value>
   </data>
   <data name="gsButFieldIsLoaded" xml:space="preserve">
     <value>Mas o campo está carregado</value>
@@ -258,9 +249,6 @@
   <data name="gsEast" xml:space="preserve">
     <value>Leste</value>
   </data>
-  <data name="gsEditABCurve" xml:space="preserve">
-    <value>Editar curva AB</value>
-  </data>
   <data name="gsEditABLine" xml:space="preserve">
     <value>Editar linha AB</value>
   </data>
@@ -351,9 +339,6 @@
   <data name="gsMachinePort" xml:space="preserve">
     <value>Porta da máquina</value>
   </data>
-  <data name="gsMakeBoundaryContours" xml:space="preserve">
-    <value>Faça contornos de limite</value>
-  </data>
   <data name="gsManual" xml:space="preserve">
     <value>Manual</value>
   </data>
@@ -396,14 +381,8 @@
   <data name="gsNoGuidanceLines" xml:space="preserve">
     <value>Sem linhas de orientação</value>
   </data>
-  <data name="gsNoSettingsWithIMU" xml:space="preserve">
-    <value>Sem configurações com IMU</value>
-  </data>
   <data name="gsNone" xml:space="preserve">
     <value>Nenhum</value>
-  </data>
-  <data name="gsNoneUsed" xml:space="preserve">
-    <value>Nenhum usado</value>
   </data>
   <data name="gsNorth" xml:space="preserve">
     <value>Norte</value>
@@ -426,9 +405,6 @@
   <data name="gsOvershootReduction" xml:space="preserve">
     <value>Redução de excesso</value>
   </data>
-  <data name="gsPass" xml:space="preserve">
-    <value>Passar #</value>
-  </data>
   <data name="gsPasses" xml:space="preserve">
     <value>Passes</value>
   </data>
@@ -440,9 +416,6 @@
   </data>
   <data name="gsPleaseEnterABLine" xml:space="preserve">
     <value>Por favor insira ABLine</value>
-  </data>
-  <data name="gsPressureSensorValueLabel" xml:space="preserve">
-    <value>Pressão (barra)</value>
   </data>
   <data name="gsProblemMakingPath" xml:space="preserve">
     <value>Caminho para criar problemas</value>
@@ -530,9 +503,6 @@
   </data>
   <data name="gsTooFast" xml:space="preserve">
     <value>Muito rápido</value>
-  </data>
-  <data name="gsTopFieldView" xml:space="preserve">
-    <value>Visualização do campo superior</value>
   </data>
   <data name="gsTramLines" xml:space="preserve">
     <value>Linhas de bonde</value>

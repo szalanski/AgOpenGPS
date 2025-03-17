@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="gsABCurve" xml:space="preserve">
-    <value>Curva AB</value>
-  </data>
   <data name="gsABDraw" xml:space="preserve">
     <value>Traccia AB - clicca 2 punti sul confine per tracciare la linea</value>
   </data>
@@ -180,9 +177,6 @@
   <data name="gsAquireFactor" xml:space="preserve">
     <value>Coefficiente di Acquisizione</value>
   </data>
-  <data name="gsAreYouSure" xml:space="preserve">
-    <value>Ne sei sicuro?</value>
-  </data>
   <data name="gsArea" xml:space="preserve">
     <value>Area</value>
   </data>
@@ -230,9 +224,6 @@
   </data>
   <data name="gsBoundaryLineFilesAreCorrupt" xml:space="preserve">
     <value>Il File Delle Linee Di Confine è Corrotto</value>
-  </data>
-  <data name="gsBoundaryMenu" xml:space="preserve">
-    <value>Menu confine</value>
   </data>
   <data name="gsBrightness" xml:space="preserve">
     <value>Luminosità</value>
@@ -425,9 +416,6 @@
   </data>
   <data name="gsEast" xml:space="preserve">
     <value>Est</value>
-  </data>
-  <data name="gsEditABCurve" xml:space="preserve">
-    <value>Modifica Curva AB</value>
   </data>
   <data name="gsEditABLine" xml:space="preserve">
     <value>Modifica Linea AB</value>
@@ -627,9 +615,6 @@
   <data name="gsLatLon" xml:space="preserve">
     <value>Lat+Long</value>
   </data>
-  <data name="gsLatLonPlus" xml:space="preserve">
-    <value>Lat+Lon+Direzione</value>
-  </data>
   <data name="gsLateral" xml:space="preserve">
     <value>Laterale</value>
   </data>
@@ -666,14 +651,8 @@
   <data name="gsMPH" xml:space="preserve">
     <value>Mph</value>
   </data>
-  <data name="gsMachineModule" xml:space="preserve">
-    <value>Modulo Attrezzo</value>
-  </data>
   <data name="gsMachinePort" xml:space="preserve">
     <value>Porta Attrezzo</value>
-  </data>
-  <data name="gsMakeBoundaryContours" xml:space="preserve">
-    <value>Creare  Perimetri Del Confine</value>
   </data>
   <data name="gsManual" xml:space="preserve">
     <value>Manuale</value>
@@ -756,14 +735,8 @@
   <data name="gsNoGuidanceLines" xml:space="preserve">
     <value>Nessuna Linea Guida</value>
   </data>
-  <data name="gsNoSettingsWithIMU" xml:space="preserve">
-    <value>Nessuna Configurazione con IMU</value>
-  </data>
   <data name="gsNone" xml:space="preserve">
     <value>Nessuna  </value>
-  </data>
-  <data name="gsNoneUsed" xml:space="preserve">
-    <value>Non Usato</value>
   </data>
   <data name="gsNorth" xml:space="preserve">
     <value>Nord   </value>
@@ -819,9 +792,6 @@
   <data name="gsOvershootReduction" xml:space="preserve">
     <value>Riduzione Superamento Linea</value>
   </data>
-  <data name="gsPass" xml:space="preserve">
-    <value>Passata</value>
-  </data>
   <data name="gsPasses" xml:space="preserve">
     <value>Passate</value>
   </data>
@@ -860,9 +830,6 @@
   </data>
   <data name="gsPresetColor" xml:space="preserve">
     <value>Seleziona Colore Preimpostato</value>
-  </data>
-  <data name="gsPressureSensorValueLabel" xml:space="preserve">
-    <value>Pressione (bar)</value>
   </data>
   <data name="gsPressureTurnSensor" xml:space="preserve">
     <value>Sensore di Pressione rotazione volante</value>
@@ -1104,9 +1071,6 @@
   <data name="gsToolsMenu" xml:space="preserve">
     <value>Menu Attrezzi</value>
   </data>
-  <data name="gsTopFieldView" xml:space="preserve">
-    <value>Vista Campo Dall'Alto</value>
-  </data>
   <data name="gsTotal" xml:space="preserve">
     <value>Totale</value>
   </data>
@@ -1223,11 +1187,5 @@
   </data>
   <data name="v_AboutIntro" xml:space="preserve">
     <value>https://www.youtube.com/watch?v=iN2cZ8avHag</value>
-  </data>
-  <data name="v_RecordedPathForm" xml:space="preserve">
-    <value>https://www.youtube.com/watch?v=fE3TPRIRSFg</value>
-  </data>
-  <data name="v_SteerSettingsForm" xml:space="preserve">
-    <value>https://www.youtube.com/watch?v=3SdvYgx8HHc</value>
   </data>
 </root>
