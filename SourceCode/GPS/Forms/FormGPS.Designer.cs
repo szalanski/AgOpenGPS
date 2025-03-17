@@ -1097,7 +1097,6 @@ namespace AgOpenGPS
             this.lblHz.TabIndex = 249;
             this.lblHz.Text = "5 Hz 32\r\nPPS";
             this.lblHz.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lblHz.Click += new System.EventHandler(this.lblHz_Click);
             // 
             // statusStripLeft
             // 
