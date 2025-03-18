@@ -4,6 +4,7 @@ using AgOpenGPS.Culture;
 using AgOpenGPS.Helpers;
 using System;
 using System.Globalization;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace AgOpenGPS
@@ -119,9 +120,8 @@ namespace AgOpenGPS
                 {
                     string[] lines = System.IO.File.ReadAllLines(filePath);
 
-                    for (int i = 1; i < lines.Length; i++)
+                   foreach(string line in lines.Skip(1))
                     {
-                        string line = lines[i];
                         string[] parts = line.Split(',');
                         if (parts.Length == 4 &&
                             double.TryParse(parts[0], NumberStyles.Float, CultureInfo.InvariantCulture, out double latitude) &&
