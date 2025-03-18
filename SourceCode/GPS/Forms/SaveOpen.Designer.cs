@@ -1882,6 +1882,7 @@ namespace AgOpenGPS
 
                     int count2 = flagPts.Count;
                     writer.WriteLine(count2);
+                    writer.WriteLine("Latitude, Longitude, Elevation, Easting, Northing, Heading, Color, ID, Notes");
 
                     for (int i = 0; i < count2; i++)
                     {

@@ -120,15 +120,44 @@ namespace AgOpenGPS
                 {
                     string[] lines = System.IO.File.ReadAllLines(filePath);
 
-                   foreach(string line in lines.Skip(1))
+                        int startIndex;
+                        string[] headers;
+
+                        if (lines[0].StartsWith("$Flags"))
+                        {
+                            startIndex = 3;
+                            headers = lines[2].Split(',');
+                        }
+                        else
+                        {
+                            startIndex = 1;
+                            headers = lines[0].Split(',');
+                        }
+
+                        int latIndex = Array.IndexOf(headers, "Latitude");
+                        int lonIndex = Array.IndexOf(headers, "Longitude");
+                        int colorIndex = Array.IndexOf(headers, "Color");
+                        int notesIndex = Array.IndexOf(headers, "Notes");
+
+                        if (latIndex == -1) latIndex = Array.IndexOf(headers, "latitude"); 
+                        if (lonIndex == -1) lonIndex = Array.IndexOf(headers, "longitude");
+                        if (colorIndex == -1) colorIndex = Array.IndexOf(headers, "color"); 
+                        if (notesIndex == -1) notesIndex = Array.IndexOf(headers, "notes");
+
+                        if (latIndex == -1 || lonIndex == -1 || colorIndex == -1 || notesIndex == -1)
+                        {
+                            MessageBox.Show("Required columns (Latitude, Longitude, Color, Notes) not found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+                    foreach (string line in lines.Skip(startIndex))
                     {
                         string[] parts = line.Split(',');
-                        if (parts.Length == 4 &&
-                            double.TryParse(parts[0], NumberStyles.Float, CultureInfo.InvariantCulture, out double latitude) &&
-                            double.TryParse(parts[1], NumberStyles.Float, CultureInfo.InvariantCulture, out double longitude) &&
-                            int.TryParse(parts[2], out int flagColor))
+                        if (parts.Length >= headers.Length &&
+                            double.TryParse(parts[latIndex], NumberStyles.Float, CultureInfo.InvariantCulture, out double latitude) &&
+                            double.TryParse(parts[lonIndex], NumberStyles.Float, CultureInfo.InvariantCulture, out double longitude) &&
+                            int.TryParse(parts[colorIndex], out int flagColor))
                         {
-                            string flagName = (!string.IsNullOrWhiteSpace(parts[3])) ? parts[3].Trim() : $"{mf.flagPts.Count + 1}";
+                            string flagName = (!string.IsNullOrWhiteSpace(parts[notesIndex])) ? parts[notesIndex].Trim() : $"{mf.flagPts.Count + 1}";
                             GeoCoord geoCoord = mf.AppModel.LocalPlane.ConvertWgs84ToGeoCoord(new Wgs84(latitude, longitude));
                             int nextflag = mf.flagPts.Count + 1;
                             CFlag flagPt = new CFlag(
