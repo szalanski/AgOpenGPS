@@ -719,7 +719,7 @@ namespace AgOpenGPS
 
                 Properties.Settings.Default.setVehicle_toolWidth = mf.tool.width;
 
-                SendRelaySettingsToMachineModule();
+                mf.SendRelaySettingsToMachineModule();
             }
             else
             {
