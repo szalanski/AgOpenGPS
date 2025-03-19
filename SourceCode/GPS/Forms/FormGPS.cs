@@ -7,6 +7,7 @@ using AgOpenGPS.Core;
 using AgOpenGPS.Core.Models;
 using AgOpenGPS.Core.ViewModels;
 using AgOpenGPS.Culture;
+using AgOpenGPS.Forms.Profiles;
 using AgOpenGPS.Properties;
 using Microsoft.Win32;
 using OpenTK;
@@ -511,12 +512,11 @@ namespace AgOpenGPS
 
             if (RegistrySettings.vehicleFileName == "")
             {
-                Log.EventWriter("Using Default Vehicle At Start Warning");
+                Log.EventWriter("No profile selected, prompt to create a new one");
 
-                YesMessageBox("Using Default Vehicle" + "\r\n\r\n" + "Load Existing Vehicle or Save As a New One !!!"
-                    + "\r\n\r\n" + "Changes will NOT be Saved for Default Vehicle");
-            
-                using (FormConfig form = new FormConfig(this))
+                YesMessageBox("No profile selected\n\nCreate a new profile to save your configuration\n\nIf no profile is created, NO changes will be saved!");
+
+                using (FormNewProfile form = new FormNewProfile(this))
                 {
                     form.ShowDialog(this);
                 }
