@@ -22,183 +22,58 @@ namespace AgOpenGPS.Protocols.ISOBUS
             if (!Enum.IsDefined(typeof(Version), version))
                 throw new ArgumentOutOfRangeException(nameof(version), version, "Invalid version");
 
+            var isoxml = ISOXML.Create(directoryName);
+
+            SetFileInformation(isoxml, version);
+            AddPartfield(isoxml, designator, area, bndList, localPlane, trk, version);
+
+            isoxml.Save();
+        }
+
+        private static void SetFileInformation(ISOXML isoxml, Version version)
+        {
+            isoxml.DataTransferOrigin = ISO11783TaskDataFileDataTransferOrigin.FMIS;
+            isoxml.ManagementSoftwareManufacturer = "AgOpenGPS";
+            isoxml.ManagementSoftwareVersion = "1.4.0";
+
             switch (version)
             {
                 case Version.V3:
-                    ExportV3(directoryName, designator, area, bndList, localPlane, trk);
+                    isoxml.VersionMajor = ISO11783TaskDataFileVersionMajor.Version3;
+                    isoxml.VersionMinor = ISO11783TaskDataFileVersionMinor.Item3;
                     break;
 
                 case Version.V4:
-                    ExportV4(directoryName, designator, area, bndList, localPlane, trk);
+                    isoxml.VersionMajor = ISO11783TaskDataFileVersionMajor.Version4;
+                    isoxml.VersionMinor = ISO11783TaskDataFileVersionMinor.Item2;
                     break;
             }
         }
 
-        private static void ExportV3(
-            string directoryName,
+        private static void AddPartfield(
+            ISOXML isoxml,
             string designator,
             int area,
             List<CBoundaryList> bndList,
             LocalPlane localPlane,
-            CTrack trk)
+            CTrack trk,
+            Version version)
         {
-            var isoxml = ISOXML.Create(directoryName);
-
-            isoxml.DataTransferOrigin = ISO11783TaskDataFileDataTransferOrigin.FMIS;
-            isoxml.ManagementSoftwareManufacturer = "AgOpenGPS";
-            isoxml.ManagementSoftwareVersion = "1.4.0";
-            isoxml.VersionMajor = ISO11783TaskDataFileVersionMajor.Version3;
-            isoxml.VersionMinor = ISO11783TaskDataFileVersionMinor.Item3;
-
             var partfield = new ISOPartfield();
             isoxml.IdTable.AddObjectAndAssignIdIfNone(partfield);
             partfield.PartfieldDesignator = designator;
             partfield.PartfieldArea = (ulong)area;
 
-            for (int i = 0; i < bndList.Count; i++)
-            {
-                var polygon = new ISOPolygon
-                {
-                    PolygonType = i == 0 ? ISOPolygonType.PartfieldBoundary : ISOPolygonType.Obstacle
-                };
-
-                var lineString = new ISOLineString
-                {
-                    LineStringType = ISOLineStringType.PolygonExterior
-                };
-
-                foreach (vec2 v2 in bndList[i].fenceLineEar)
-                {
-                    Wgs84 latLon = localPlane.ConvertGeoCoordToWgs84(v2.ToGeoCoord());
-                    lineString.Point.Add(new ISOPoint
-                    {
-                        PointType = ISOPointType.other,
-                        PointNorth = (decimal)latLon.Latitude,
-                        PointEast = (decimal)latLon.Longitude
-                    });
-                }
-
-                polygon.LineString.Add(lineString);
-
-                partfield.PolygonnonTreatmentZoneonly.Add(polygon);
-            }
-
-            foreach (CBoundaryList boudaryList in bndList)
-            {
-                if (boudaryList.hdLine.Count < 1) continue;
-
-                var polygon = new ISOPolygon
-                {
-                    PolygonType = ISOPolygonType.Headland
-                };
-
-                var lineString = new ISOLineString
-                {
-                    LineStringType = ISOLineStringType.PolygonExterior
-                };
-
-                foreach (vec3 v3 in boudaryList.hdLine)
-                {
-                    Wgs84 latLon = localPlane.ConvertGeoCoordToWgs84(v3.ToGeoCoord());
-                    lineString.Point.Add(new ISOPoint
-                    {
-                        PointType = ISOPointType.other,
-                        PointNorth = (decimal)latLon.Latitude,
-                        PointEast = (decimal)latLon.Longitude
-                    });
-                }
-
-                polygon.LineString.Add(lineString);
-
-                partfield.PolygonnonTreatmentZoneonly.Add(polygon);
-            }
-
-            if (trk.gArr != null)
-            {
-                foreach (CTrk track in trk.gArr)
-                {
-                    var lineString = new ISOLineString
-                    {
-                        LineStringType = ISOLineStringType.GuidancePattern,
-                        LineStringDesignator = track.name
-                    };
-
-                    GeoCoord pointA = track.ptA.ToGeoCoord();
-                    GeoDir heading = new GeoDir(track.heading);
-                    Wgs84 latLon = localPlane.ConvertGeoCoordToWgs84(pointA - 1000.0 * heading);
-
-                    lineString.Point.Add(new ISOPoint
-                    {
-                        PointType = ISOPointType.other,
-                        PointNorth = (decimal)latLon.Latitude,
-                        PointEast = (decimal)latLon.Longitude
-                    });
-
-                    latLon = localPlane.ConvertGeoCoordToWgs84(pointA + 1000.0 * heading);
-
-                    lineString.Point.Add(new ISOPoint
-                    {
-                        PointType = ISOPointType.other,
-                        PointNorth = (decimal)latLon.Latitude,
-                        PointEast = (decimal)latLon.Longitude
-                    });
-
-                    partfield.LineString.Add(lineString);
-                }
-            }
-
-            if (trk.gArr != null)
-            {
-                foreach (CTrk track in trk.gArr)
-                {
-                    var lineString = new ISOLineString
-                    {
-                        LineStringType = ISOLineStringType.GuidancePattern,
-                        LineStringDesignator = track.name
-                    };
-
-                    foreach (vec3 v3 in track.curvePts)
-                    {
-                        Wgs84 latLon = localPlane.ConvertGeoCoordToWgs84(v3.ToGeoCoord());
-
-                        lineString.Point.Add(new ISOPoint
-                        {
-                            PointType = ISOPointType.other,
-                            PointNorth = (decimal)latLon.Latitude,
-                            PointEast = (decimal)latLon.Longitude
-                        });
-                    }
-
-                    partfield.LineString.Add(lineString);
-                }
-            }
+            AddBoundary(partfield, bndList, localPlane, version);
+            AddHeadland(partfield, bndList, localPlane, version);
+            AddABLines(isoxml, partfield, trk, localPlane, version);
+            AddCurves(isoxml, partfield, trk, localPlane, version);
 
             isoxml.Data.Partfield.Add(partfield);
-
-            isoxml.Save();
         }
 
-        private static void ExportV4(
-            string directoryName,
-            string designator,
-            int area,
-            List<CBoundaryList> bndList,
-            LocalPlane localPlane,
-            CTrack trk)
+        private static void AddBoundary(ISOPartfield partfield, List<CBoundaryList> bndList, LocalPlane localPlane, Version version)
         {
-            var isoxml = ISOXML.Create(directoryName);
-
-            isoxml.DataTransferOrigin = ISO11783TaskDataFileDataTransferOrigin.FMIS;
-            isoxml.ManagementSoftwareManufacturer = "AgOpenGPS";
-            isoxml.ManagementSoftwareVersion = "1.4.0";
-            isoxml.VersionMajor = ISO11783TaskDataFileVersionMajor.Version4;
-            isoxml.VersionMinor = ISO11783TaskDataFileVersionMinor.Item2;
-
-            var partfield = new ISOPartfield();
-            isoxml.IdTable.AddObjectAndAssignIdIfNone(partfield);
-            partfield.PartfieldDesignator = designator;
-            partfield.PartfieldArea = (ulong)area;
-
             for (int i = 0; i < bndList.Count; i++)
             {
                 var polygon = new ISOPolygon
@@ -216,7 +91,7 @@ namespace AgOpenGPS.Protocols.ISOBUS
                     Wgs84 latLon = localPlane.ConvertGeoCoordToWgs84(v2.ToGeoCoord());
                     lineString.Point.Add(new ISOPoint
                     {
-                        PointType = ISOPointType.PartfieldReferencePoint,
+                        PointType = version == Version.V4 ? ISOPointType.PartfieldReferencePoint : ISOPointType.other,
                         PointNorth = (decimal)latLon.Latitude,
                         PointEast = (decimal)latLon.Longitude
                     });
@@ -226,10 +101,13 @@ namespace AgOpenGPS.Protocols.ISOBUS
 
                 partfield.PolygonnonTreatmentZoneonly.Add(polygon);
             }
+        }
 
-            foreach (CBoundaryList boundarList in bndList)
+        private static void AddHeadland(ISOPartfield partfield, List<CBoundaryList> bndList, LocalPlane localPlane, Version version)
+        {
+            foreach (CBoundaryList boundaryList in bndList)
             {
-                if (boundarList.hdLine.Count < 1) continue;
+                if (boundaryList.hdLine.Count < 1) continue;
 
                 var polygon = new ISOPolygon
                 {
@@ -241,12 +119,12 @@ namespace AgOpenGPS.Protocols.ISOBUS
                     LineStringType = ISOLineStringType.PolygonExterior
                 };
 
-                foreach (vec3 v3 in boundarList.hdLine)
+                foreach (vec3 v3 in boundaryList.hdLine)
                 {
                     Wgs84 latLon = localPlane.ConvertGeoCoordToWgs84(v3.ToGeoCoord());
                     lineString.Point.Add(new ISOPoint
                     {
-                        PointType = ISOPointType.PartfieldReferencePoint,
+                        PointType = version == Version.V4 ? ISOPointType.PartfieldReferencePoint : ISOPointType.other,
                         PointNorth = (decimal)latLon.Latitude,
                         PointEast = (decimal)latLon.Longitude
                     });
@@ -256,124 +134,173 @@ namespace AgOpenGPS.Protocols.ISOBUS
 
                 partfield.PolygonnonTreatmentZoneonly.Add(polygon);
             }
+        }
 
-            if (trk.gArr != null)
+        private static void AddABLines(ISOXML isoxml, ISOPartfield partfield, CTrack trk, LocalPlane localPlane, Version version)
+        {
+            if (trk.gArr == null) return;
+
+            foreach (CTrk track in trk.gArr)
             {
-                foreach (CTrk track in trk.gArr)
+                switch (version)
                 {
-                    var guidanceGroup = new ISOGuidanceGroup
-                    {
-                        GuidanceGroupDesignator = track.name
-                    };
+                    case Version.V3:
+                        {
+                            var lineString = CreateABLineString(track, localPlane, version);
+                            lineString.LineStringDesignator = track.name;
+                            partfield.LineString.Add(lineString);
+                        }
+                        break;
 
-                    isoxml.IdTable.AddObjectAndAssignIdIfNone(guidanceGroup);
+                    case Version.V4:
+                        {
+                            var guidanceGroup = new ISOGuidanceGroup
+                            {
+                                GuidanceGroupDesignator = track.name
+                            };
 
-                    var guidancePattern = new ISOGuidancePattern
-                    {
-                        GuidancePatternId = guidanceGroup.GuidanceGroupId,
-                        GuidancePatternDesignator = track.name,
-                        GuidancePatternType = ISOGuidancePatternType.AB,
-                        GuidancePatternPropagationDirection = ISOGuidancePatternPropagationDirection.Bothdirections,
-                        GuidancePatternExtension = ISOGuidancePatternExtension.Frombothfirstandlastpoint,
-                        GuidancePatternGNSSMethod = ISOGuidancePatternGNSSMethod.Desktopgenerateddata
-                    };
+                            isoxml.IdTable.AddObjectAndAssignIdIfNone(guidanceGroup);
 
-                    var lineString = new ISOLineString
-                    {
-                        LineStringType = ISOLineStringType.GuidancePattern
-                    };
+                            var guidancePattern = new ISOGuidancePattern
+                            {
+                                GuidancePatternId = guidanceGroup.GuidanceGroupId,
+                                GuidancePatternDesignator = track.name,
+                                GuidancePatternType = ISOGuidancePatternType.AB,
+                                GuidancePatternPropagationDirection = ISOGuidancePatternPropagationDirection.Bothdirections,
+                                GuidancePatternExtension = ISOGuidancePatternExtension.Frombothfirstandlastpoint,
+                                GuidancePatternGNSSMethod = ISOGuidancePatternGNSSMethod.Desktopgenerateddata
+                            };
 
-                    GeoCoord pointA = track.ptA.ToGeoCoord();
-                    GeoDir heading = new GeoDir(track.heading);
-                    Wgs84 latLon = localPlane.ConvertGeoCoordToWgs84(pointA - 1000.0 * heading);
+                            var lineString = CreateABLineString(track, localPlane, version);
+                            guidancePattern.LineString.Add(lineString);
 
-                    lineString.Point.Add(new ISOPoint
-                    {
-                        PointType = ISOPointType.GuidanceReferenceA,
-                        PointNorth = (decimal)latLon.Latitude,
-                        PointEast = (decimal)latLon.Longitude
-                    });
+                            guidanceGroup.GuidancePattern.Add(guidancePattern);
 
-                    latLon = localPlane.ConvertGeoCoordToWgs84(pointA + 1000.0 * heading);
-
-                    lineString.Point.Add(new ISOPoint
-                    {
-                        PointType = ISOPointType.GuidanceReferenceB,
-                        PointNorth = (decimal)latLon.Latitude,
-                        PointEast = (decimal)latLon.Longitude
-                    });
-
-                    guidancePattern.LineString.Add(lineString);
-
-                    guidanceGroup.GuidancePattern.Add(guidancePattern);
-
-                    partfield.GuidanceGroup.Add(guidanceGroup);
+                            partfield.GuidanceGroup.Add(guidanceGroup);
+                        }
+                        break;
                 }
             }
+        }
 
-            if (trk.gArr != null)
+        private static ISOLineString CreateABLineString(CTrk track, LocalPlane localPlane, Version version)
+        {
+            var lineString = new ISOLineString
             {
-                foreach (CTrk track in trk.gArr)
+                LineStringType = ISOLineStringType.GuidancePattern
+            };
+
+            GeoCoord pointA = track.ptA.ToGeoCoord();
+            GeoDir heading = new GeoDir(track.heading);
+            Wgs84 latLon = localPlane.ConvertGeoCoordToWgs84(pointA - 1000.0 * heading);
+
+            lineString.Point.Add(new ISOPoint
+            {
+                PointType = version == Version.V4 ? ISOPointType.GuidanceReferenceA : ISOPointType.other,
+                PointNorth = (decimal)latLon.Latitude,
+                PointEast = (decimal)latLon.Longitude
+            });
+
+            latLon = localPlane.ConvertGeoCoordToWgs84(pointA + 1000.0 * heading);
+
+            lineString.Point.Add(new ISOPoint
+            {
+                PointType = version == Version.V4 ? ISOPointType.GuidanceReferenceB : ISOPointType.other,
+                PointNorth = (decimal)latLon.Latitude,
+                PointEast = (decimal)latLon.Longitude
+            });
+
+            return lineString;
+        }
+
+        private static void AddCurves(ISOXML isoxml, ISOPartfield partfield, CTrack trk, LocalPlane localPlane, Version version)
+        {
+            if (trk.gArr == null) return;
+
+            foreach (CTrk track in trk.gArr)
+            {
+                switch (version)
                 {
-                    var guidanceGroup = new ISOGuidanceGroup
-                    {
-                        GuidanceGroupDesignator = track.name
-                    };
-
-                    isoxml.IdTable.AddObjectAndAssignIdIfNone(guidanceGroup);
-
-                    var guidancePattern = new ISOGuidancePattern
-                    {
-                        GuidancePatternId = guidanceGroup.GuidanceGroupId,
-                        GuidancePatternDesignator = track.name,
-                        GuidancePatternType = ISOGuidancePatternType.Curve,
-                        GuidancePatternPropagationDirection = ISOGuidancePatternPropagationDirection.Bothdirections,
-                        GuidancePatternExtension = ISOGuidancePatternExtension.Frombothfirstandlastpoint,
-                        GuidancePatternGNSSMethod = ISOGuidancePatternGNSSMethod.Desktopgenerateddata
-                    };
-
-                    var lineString = new ISOLineString
-                    {
-                        LineStringType = ISOLineStringType.GuidancePattern
-                    };
-
-                    for (int j = 0; j < track.curvePts.Count; j++)
-                    {
-                        Wgs84 latLon = localPlane.ConvertGeoCoordToWgs84(track.curvePts[j].ToGeoCoord());
-
-                        var point = new ISOPoint
+                    case Version.V3:
                         {
-                            PointNorth = (decimal)latLon.Latitude,
-                            PointEast = (decimal)latLon.Longitude
-                        };
-
-                        if (j == 0)
-                        {
-                            point.PointType = ISOPointType.GuidanceReferenceA;
+                            var lineString = CreateCurveLineString(track, localPlane, version);
+                            lineString.LineStringDesignator = track.name;
+                            partfield.LineString.Add(lineString);
                         }
-                        else if (j == track.curvePts.Count - 1)
-                        {
-                            point.PointType = ISOPointType.GuidanceReferenceB;
-                        }
-                        else
-                        {
-                            point.PointType = ISOPointType.GuidancePoint;
-                        }
+                        break;
 
-                        lineString.Point.Add(point);
+                    case Version.V4:
+                        {
+                            var guidanceGroup = new ISOGuidanceGroup
+                            {
+                                GuidanceGroupDesignator = track.name
+                            };
+
+                            isoxml.IdTable.AddObjectAndAssignIdIfNone(guidanceGroup);
+
+                            var guidancePattern = new ISOGuidancePattern
+                            {
+                                GuidancePatternId = guidanceGroup.GuidanceGroupId,
+                                GuidancePatternDesignator = track.name,
+                                GuidancePatternType = ISOGuidancePatternType.Curve,
+                                GuidancePatternPropagationDirection = ISOGuidancePatternPropagationDirection.Bothdirections,
+                                GuidancePatternExtension = ISOGuidancePatternExtension.Frombothfirstandlastpoint,
+                                GuidancePatternGNSSMethod = ISOGuidancePatternGNSSMethod.Desktopgenerateddata
+                            };
+
+                            var lineString = CreateCurveLineString(track, localPlane, version);
+                            guidancePattern.LineString.Add(lineString);
+
+                            guidanceGroup.GuidancePattern.Add(guidancePattern);
+
+                            partfield.GuidanceGroup.Add(guidanceGroup);
+                        }
+                        break;
+                }
+            }
+        }
+
+        private static ISOLineString CreateCurveLineString(CTrk track, LocalPlane localPlane, Version version)
+        {
+            var lineString = new ISOLineString
+            {
+                LineStringType = ISOLineStringType.GuidancePattern
+            };
+
+            for (int j = 0; j < track.curvePts.Count; j++)
+            {
+                Wgs84 latLon = localPlane.ConvertGeoCoordToWgs84(track.curvePts[j].ToGeoCoord());
+
+                var point = new ISOPoint
+                {
+                    PointNorth = (decimal)latLon.Latitude,
+                    PointEast = (decimal)latLon.Longitude
+                };
+
+                if (version == Version.V4)
+                {
+                    if (j == 0)
+                    {
+                        point.PointType = ISOPointType.GuidanceReferenceA;
                     }
-
-                    guidancePattern.LineString.Add(lineString);
-
-                    guidanceGroup.GuidancePattern.Add(guidancePattern);
-
-                    partfield.GuidanceGroup.Add(guidanceGroup);
+                    else if (j == track.curvePts.Count - 1)
+                    {
+                        point.PointType = ISOPointType.GuidanceReferenceB;
+                    }
+                    else
+                    {
+                        point.PointType = ISOPointType.GuidancePoint;
+                    }
                 }
+                else
+                {
+                    point.PointType = ISOPointType.other;
+                }
+
+                lineString.Point.Add(point);
             }
 
-            isoxml.Data.Partfield.Add(partfield);
-
-            isoxml.Save();
+            return lineString;
         }
     }
 }
