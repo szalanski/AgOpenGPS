@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="gsABCurve" xml:space="preserve">
-    <value>AB-Curve</value>
-  </data>
   <data name="gsABDraw" xml:space="preserve">
     <value>Maak AB - Klik 2 punten om te beginnen</value>
   </data>
@@ -168,9 +165,6 @@
   <data name="gsAquireFactor" xml:space="preserve">
     <value>Lijn Aquisitie</value>
   </data>
-  <data name="gsAreYouSure" xml:space="preserve">
-    <value>Weet u het zeker?</value>
-  </data>
   <data name="gsArea" xml:space="preserve">
     <value>Areaal</value>
   </data>
@@ -214,9 +208,6 @@ De volgorde waarin u ze indrukt, is de volgorde waarin ze van onder naar boven i
   </data>
   <data name="gsBoundaryLineFilesAreCorrupt" xml:space="preserve">
     <value>Perceelgrens lijn is corrupt</value>
-  </data>
-  <data name="gsBoundaryMenu" xml:space="preserve">
-    <value>Perceelgrens Menu</value>
   </data>
   <data name="gsBrightness" xml:space="preserve">
     <value>Helderheid</value>
@@ -394,9 +385,6 @@ De volgorde waarin u ze indrukt, is de volgorde waarin ze van onder naar boven i
   </data>
   <data name="gsEast" xml:space="preserve">
     <value>Oost</value>
-  </data>
-  <data name="gsEditABCurve" xml:space="preserve">
-    <value>Aanpassen AB-curve</value>
   </data>
   <data name="gsEditABLine" xml:space="preserve">
     <value>Aanpassen AB-lijn</value>
@@ -617,14 +605,8 @@ De volgorde waarin u ze indrukt, is de volgorde waarin ze van onder naar boven i
   <data name="gsMPH" xml:space="preserve">
     <value>mijl/u</value>
   </data>
-  <data name="gsMachineModule" xml:space="preserve">
-    <value>Hef-module</value>
-  </data>
   <data name="gsMachinePort" xml:space="preserve">
     <value>Machine besturing poort</value>
-  </data>
-  <data name="gsMakeBoundaryContours" xml:space="preserve">
-    <value>Maak perceelgrens contour</value>
   </data>
   <data name="gsManual" xml:space="preserve">
     <value>Manueel</value>
@@ -707,14 +689,8 @@ De volgorde waarin u ze indrukt, is de volgorde waarin ze van onder naar boven i
   <data name="gsNoGuidanceLines" xml:space="preserve">
     <value>Geen geleidingslijnen</value>
   </data>
-  <data name="gsNoSettingsWithIMU" xml:space="preserve">
-    <value>Geen instellingen met IMU</value>
-  </data>
   <data name="gsNone" xml:space="preserve">
     <value>NA</value>
-  </data>
-  <data name="gsNoneUsed" xml:space="preserve">
-    <value>Niet gebruikt</value>
   </data>
   <data name="gsNorth" xml:space="preserve">
     <value>Noord</value>
@@ -770,9 +746,6 @@ De volgorde waarin u ze indrukt, is de volgorde waarin ze van onder naar boven i
   <data name="gsOvershootReduction" xml:space="preserve">
     <value>Reduceer over-de-lijn reactie</value>
   </data>
-  <data name="gsPass" xml:space="preserve">
-    <value>Werkgang #</value>
-  </data>
   <data name="gsPasses" xml:space="preserve">
     <value>Werkgangen</value>
   </data>
@@ -811,9 +784,6 @@ De volgorde waarin u ze indrukt, is de volgorde waarin ze van onder naar boven i
   </data>
   <data name="gsPresetColor" xml:space="preserve">
     <value>Selecteer Preset Kleur</value>
-  </data>
-  <data name="gsPressureSensorValueLabel" xml:space="preserve">
-    <value>Bar</value>
   </data>
   <data name="gsPressureTurnSensor" xml:space="preserve">
     <value>Druk-sensor</value>
@@ -1051,9 +1021,6 @@ GEBRUIK OP EIGEN RISICO.</value>
   </data>
   <data name="gsToolsMenu" xml:space="preserve">
     <value>Overig Menu</value>
-  </data>
-  <data name="gsTopFieldView" xml:space="preserve">
-    <value>Bovenaanzicht Perceel</value>
   </data>
   <data name="gsTotal" xml:space="preserve">
     <value>Totaal</value>

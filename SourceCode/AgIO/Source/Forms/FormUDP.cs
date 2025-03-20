@@ -317,11 +317,6 @@ namespace AgIO
             Process.Start("ncpa.cpl");
         }
 
-        private void btnHelp_Click(object sender, EventArgs e)
-        {
-            //System.Diagnostics.Process.Start(gStr.gsEthernetHelp);
-        }
-
         private void btnSerialCancel_Click(object sender, EventArgs e)
         {
             Close();

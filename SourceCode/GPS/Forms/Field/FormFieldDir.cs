@@ -140,23 +140,5 @@ namespace AgOpenGPS
                 btnSerialCancel.Focus();
             }
         }
-
-        private void tboxTask_Click(object sender, EventArgs e)
-        {
-            if (mf.isKeyboardOn)
-            {
-                ((TextBox)sender).ShowKeyboard(this);
-                btnSerialCancel.Focus();
-            }
-        }
-
-        private void tboxVehicle_Click(object sender, EventArgs e)
-        {
-            if (mf.isKeyboardOn)
-            {
-                ((TextBox)sender).ShowKeyboard(this);
-                btnSerialCancel.Focus();
-            }
-        }
     }
 }

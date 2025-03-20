@@ -55,8 +55,6 @@ namespace AgIO
         //timer variables
         public double secondsSinceStart, twoSecondTimer, tenSecondTimer, threeMinuteTimer, pingSecondsStart;
 
-        public string lastSentence;
-
         public bool isNTRIPToggle;
 
         //usually 256 - send ntrip to serial in chunks

@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="gsABCurve" xml:space="preserve">
-    <value>AB kriva</value>
-  </data>
   <data name="gsABDraw" xml:space="preserve">
     <value>Generiši AB - Klikni 2 tačke za početak</value>
   </data>
@@ -153,9 +150,6 @@
   <data name="gsApplied" xml:space="preserve">
     <value>Obrađeno</value>
   </data>
-  <data name="gsAreYouSure" xml:space="preserve">
-    <value>Da li ste sigurni?</value>
-  </data>
   <data name="gsArea" xml:space="preserve">
     <value>Površina</value>
   </data>
@@ -185,9 +179,6 @@
   </data>
   <data name="gsBoundaryLineFilesAreCorrupt" xml:space="preserve">
     <value>Fajl granične linije neispravan</value>
-  </data>
-  <data name="gsBoundaryMenu" xml:space="preserve">
-    <value>Meni granice</value>
   </data>
   <data name="gsBrightness" xml:space="preserve">
     <value>Osvetljenje</value>
@@ -353,9 +344,6 @@
   </data>
   <data name="gsEast" xml:space="preserve">
     <value>Istok</value>
-  </data>
-  <data name="gsEditABCurve" xml:space="preserve">
-    <value>Uredi AB krivu</value>
   </data>
   <data name="gsEditABLine" xml:space="preserve">
     <value>Uredi AB liniju</value>
@@ -543,9 +531,6 @@
   <data name="gsMachinePort" xml:space="preserve">
     <value>Port mašine</value>
   </data>
-  <data name="gsMakeBoundaryContours" xml:space="preserve">
-    <value>Kreiraj konture granice</value>
-  </data>
   <data name="gsManual" xml:space="preserve">
     <value>Ručni</value>
   </data>
@@ -618,13 +603,7 @@
   <data name="gsNoGuidanceLines" xml:space="preserve">
     <value>Nema linija za navođenje</value>
   </data>
-  <data name="gsNoSettingsWithIMU" xml:space="preserve">
-    <value>Nema IMU podešavanja</value>
-  </data>
   <data name="gsNone" xml:space="preserve">
-    <value>Nijedna</value>
-  </data>
-  <data name="gsNoneUsed" xml:space="preserve">
     <value>Nijedna</value>
   </data>
   <data name="gsNorth" xml:space="preserve">
@@ -678,9 +657,6 @@
   <data name="gsOvershootReduction" xml:space="preserve">
     <value>Smanjite reakciju preko linije</value>
   </data>
-  <data name="gsPass" xml:space="preserve">
-    <value>Prohod br</value>
-  </data>
   <data name="gsPasses" xml:space="preserve">
     <value>Prohodi</value>
   </data>
@@ -707,9 +683,6 @@
   </data>
   <data name="gsPolygons" xml:space="preserve">
     <value>Poligoni</value>
-  </data>
-  <data name="gsPressureSensorValueLabel" xml:space="preserve">
-    <value>Pritisak (bar)</value>
   </data>
   <data name="gsPreview" xml:space="preserve">
     <value>Pregled</value>
@@ -891,9 +864,6 @@ Prekidač - Uključi/isključi</value>
   </data>
   <data name="gsToolsMenu" xml:space="preserve">
     <value>Meni mašine</value>
-  </data>
-  <data name="gsTopFieldView" xml:space="preserve">
-    <value>Pogled odozgo</value>
   </data>
   <data name="gsTotal" xml:space="preserve">
     <value>Ukupno</value>

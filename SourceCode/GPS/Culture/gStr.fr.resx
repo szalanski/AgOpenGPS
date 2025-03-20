@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="gsABCurve" xml:space="preserve">
-    <value>Courbe AB</value>
-  </data>
   <data name="gsABDraw" xml:space="preserve">
     <value>Tracer AB - Cliquez sur deux points pour commencer</value>
   </data>
@@ -177,9 +174,6 @@
   <data name="gsAquireFactor" xml:space="preserve">
     <value>Facteur d'acquisition</value>
   </data>
-  <data name="gsAreYouSure" xml:space="preserve">
-    <value>Êtes-vous sûr ?</value>
-  </data>
   <data name="gsArea" xml:space="preserve">
     <value>Zone</value>
   </data>
@@ -223,9 +217,6 @@ L'ordre dans lequel vous cliquez, sera l'ordre dans lequel ils apparaîtrons dan
   </data>
   <data name="gsBoundaryLineFilesAreCorrupt" xml:space="preserve">
     <value>Fichier bordures corrompu</value>
-  </data>
-  <data name="gsBoundaryMenu" xml:space="preserve">
-    <value>Menu bordures</value>
   </data>
   <data name="gsBrightness" xml:space="preserve">
     <value>Luminosité</value>
@@ -418,9 +409,6 @@ L'ordre dans lequel vous cliquez, sera l'ordre dans lequel ils apparaîtrons dan
   </data>
   <data name="gsEast" xml:space="preserve">
     <value>Est</value>
-  </data>
-  <data name="gsEditABCurve" xml:space="preserve">
-    <value>Modifier courbe AB</value>
   </data>
   <data name="gsEditABLine" xml:space="preserve">
     <value>Modifier ligne AB</value>
@@ -617,9 +605,6 @@ L'ordre dans lequel vous cliquez, sera l'ordre dans lequel ils apparaîtrons dan
   <data name="gsLatLon" xml:space="preserve">
     <value>Lat+Lon</value>
   </data>
-  <data name="gsLatLonPlus" xml:space="preserve">
-    <value>Lat+Long+Cap</value>
-  </data>
   <data name="gsLateral" xml:space="preserve">
     <value>Latéral</value>
   </data>
@@ -656,14 +641,8 @@ L'ordre dans lequel vous cliquez, sera l'ordre dans lequel ils apparaîtrons dan
   <data name="gsMPH" xml:space="preserve">
     <value>mph</value>
   </data>
-  <data name="gsMachineModule" xml:space="preserve">
-    <value>Module machine</value>
-  </data>
   <data name="gsMachinePort" xml:space="preserve">
     <value>Port Machine</value>
-  </data>
-  <data name="gsMakeBoundaryContours" xml:space="preserve">
-    <value>Faire les tournières du champ</value>
   </data>
   <data name="gsManual" xml:space="preserve">
     <value>Manuel</value>
@@ -746,14 +725,8 @@ L'ordre dans lequel vous cliquez, sera l'ordre dans lequel ils apparaîtrons dan
   <data name="gsNoGuidanceLines" xml:space="preserve">
     <value>Aucune ligne de guidage</value>
   </data>
-  <data name="gsNoSettingsWithIMU" xml:space="preserve">
-    <value>Aucun paramètres  IMU</value>
-  </data>
   <data name="gsNone" xml:space="preserve">
     <value>Aucun</value>
-  </data>
-  <data name="gsNoneUsed" xml:space="preserve">
-    <value>Pas utilisé</value>
   </data>
   <data name="gsNorth" xml:space="preserve">
     <value>Nord</value>
@@ -809,9 +782,6 @@ L'ordre dans lequel vous cliquez, sera l'ordre dans lequel ils apparaîtrons dan
   <data name="gsOvershootReduction" xml:space="preserve">
     <value>Réduction de dépassement</value>
   </data>
-  <data name="gsPass" xml:space="preserve">
-    <value>Passage #</value>
-  </data>
   <data name="gsPasses" xml:space="preserve">
     <value>Passages</value>
   </data>
@@ -847,9 +817,6 @@ L'ordre dans lequel vous cliquez, sera l'ordre dans lequel ils apparaîtrons dan
   </data>
   <data name="gsPresetColor" xml:space="preserve">
     <value>Sélect. couleur prédéfinie</value>
-  </data>
-  <data name="gsPressureSensorValueLabel" xml:space="preserve">
-    <value>Pression (bar)</value>
   </data>
   <data name="gsPressureTurnSensor" xml:space="preserve">
     <value>Capteur pression</value>
@@ -1087,9 +1054,6 @@ UTILISER À VOS PROPRES RISQUES.</value>
   <data name="gsToolsMenu" xml:space="preserve">
     <value>Menu outils</value>
   </data>
-  <data name="gsTopFieldView" xml:space="preserve">
-    <value>Vue du champ</value>
-  </data>
   <data name="gsTotal" xml:space="preserve">
     <value>Total</value>
   </data>
@@ -1203,11 +1167,5 @@ UTILISER À VOS PROPRES RISQUES.</value>
   </data>
   <data name="v_AboutIntro" xml:space="preserve">
     <value>https://www.youtube.com/watch?v=iN2cZ8avHag</value>
-  </data>
-  <data name="v_RecordedPathForm" xml:space="preserve">
-    <value>https://www.youtube.com/watch?v=fE3TPRIRSFg</value>
-  </data>
-  <data name="v_SteerSettingsForm" xml:space="preserve">
-    <value>https://www.youtube.com/watch?v=3SdvYgx8HHc</value>
   </data>
 </root>

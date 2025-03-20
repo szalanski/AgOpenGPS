@@ -50,9 +50,7 @@ namespace AgOpenGPS
         public List<vec3> shortestDubinsList = new List<vec3>();
 
         //generated reference line
-        public vec2 refPoint1 = new vec2(1, 1), refPoint2 = new vec2(2, 2);
-
-        public double distanceFromRefLine, distanceFromCurrentLinePivot;
+        public double distanceFromCurrentLinePivot;
         private int A, B, C;
 
         public int currentPositonIndex;
@@ -65,17 +63,16 @@ namespace AgOpenGPS
         public double steerAngleRP, rEastRP, rNorthRP, ppRadiusRP;
         public vec2 radiusPointRP = new vec2(0, 0);
 
-        public bool isBtnFollowOn, isEndOfTheRecLine, isRecordOn;
+        public bool isEndOfTheRecLine, isRecordOn;
         public bool isDrivingRecordedPath, isFollowingDubinsToPath, isFollowingRecPath, isFollowingDubinsHome;
 
-        public double pivotDistanceError, pivotDistanceErrorLast, pivotDerivative, pivotDerivativeSmoothed;
+        public double pivotDistanceError, pivotDistanceErrorLast, pivotDerivative;
 
         //derivative counters
         private int counter2;
 
         public double inty;
-        public double steerAngleSmoothed, pivotErrorTotal;
-        public double distSteerError, lastDistSteerError, derivativeDistError;
+        public double pivotErrorTotal;
 
         public int resumeState;
 

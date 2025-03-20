@@ -75,11 +75,6 @@ namespace Keypad
             changeCase();
         }
 
-        private void Chk_capslock_CheckedChanged(object sender, EventArgs e)
-        {
-            changeCase();
-        }
-
         private void SendChar(Button senderb)
         {
             Button btn = (Button)senderb;

@@ -12,10 +12,8 @@ namespace AgOpenGPS
         //our current fix
         public vec2 fix = new vec2(0, 0);
 
-        public vec2 prevSpeedFix = new vec2(0, 0);
-
         //other GIS Info
-        public double altitude, speed, newSpeed, vtgSpeed = float.MaxValue;
+        public double altitude, speed, vtgSpeed = float.MaxValue;
 
         public double headingTrueDual, headingTrue, hdop, age, headingTrueDualOffset;
 

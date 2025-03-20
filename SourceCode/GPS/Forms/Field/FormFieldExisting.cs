@@ -485,24 +485,6 @@ namespace AgOpenGPS
             }
         }
 
-        private void tboxTask_Click(object sender, EventArgs e)
-        {
-            if (mf.isKeyboardOn)
-            {
-                ((TextBox)sender).ShowKeyboard(this);
-                btnSerialCancel.Focus();
-            }
-        }
-
-        private void tboxVehicle_Click(object sender, EventArgs e)
-        {
-            if (mf.isKeyboardOn)
-            {
-                ((TextBox)sender).ShowKeyboard(this);
-                btnSerialCancel.Focus();
-            }
-        }
-
         private void btnAddDate_Click(object sender, EventArgs e)
         {
             tboxFieldName.Text += " " + DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);

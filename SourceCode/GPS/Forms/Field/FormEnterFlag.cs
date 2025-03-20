@@ -48,11 +48,6 @@ namespace AgOpenGPS
             ((NudlessNumericUpDown)sender).ShowKeypad(this);
         }
 
-        public void CalcHeading()
-        {
-
-        }
-
         private void btnCancel_Click(object sender, EventArgs e)
         {
             Close();

@@ -14,7 +14,6 @@ namespace AgOpenGPS
         private readonly FormGPS mf;
 
         private double aveLineHeading;
-        public List<CTrk> gTemp = new List<CTrk>();
 
         private vec2 ptAa = new vec2();
         private vec2 ptBb = new vec2();

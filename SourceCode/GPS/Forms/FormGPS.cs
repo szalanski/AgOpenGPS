@@ -49,12 +49,6 @@ namespace AgOpenGPS
         //maximum sections available
         public const int MAXSECTIONS = 64;
 
-        //How many boundaries allowed
-        public const int MAXBOUNDARIES = 6;
-
-        //How many headlands allowed
-        public const int MAXHEADS = 6;
-
         //current fields
         public string currentFieldDirectory, displayFieldName;
 
@@ -62,13 +56,12 @@ namespace AgOpenGPS
         public int flagNumberPicked = 0;
 
         //bool for whether or not a job is active
-        public bool isJobStarted = false, isBtnAutoSteerOn, isLidarBtnOn = true;
+        public bool isJobStarted = false, isBtnAutoSteerOn;
 
         //if we are saving a file
         public bool isSavingFile = false;
 
         //texture holders
-        public uint[] texture;
         public ScreenTextures ScreenTextures = new ScreenTextures();
         public VehicleTextures VehicleTextures = new VehicleTextures();
 
@@ -96,10 +89,6 @@ namespace AgOpenGPS
         //whether or not to use Stanley control
         public bool isStanleyUsed = true;
 
-        public int pbarSteer, pbarMachine, pbarUDP;
-
-        public double nudNumber = 0;
-
         public double m2InchOrCm, inchOrCm2m, m2FtOrM, ftOrMtoM, cm2CmOrIn, inOrCm2Cm;
         public string unitsFtM, unitsInCm, unitsInCmNS;
 
@@ -110,9 +99,6 @@ namespace AgOpenGPS
 
         //the position of the GPS Data window within the FormGPS window
         public int GPSDataWindowLeft = 80, GPSDataWindowTopOffset = 220;
-
-        //the autoManual drive button. Assume in Auto
-        public bool isInAutoDrive = true;
 
         //isGPSData form up
         public bool isGPSSentencesOn = false, isKeepOffsetsOn = false;
@@ -1054,15 +1040,6 @@ namespace AgOpenGPS
             var form = new FormYes(s1);
             form.ShowDialog(this);
         }
-
-        // Generates a random number within a range.
-        public double RandomNumber(double min, double max)
-        {
-            return min + _random.NextDouble() * (max - min);
-        }
-
-        private readonly Random _random = new Random();
-
     }//class FormGPS
 }//namespace AgOpenGPS
 
