@@ -34,7 +34,7 @@ namespace AgOpenGPS.Protocols.ISOBUS
         {
             isoxml.DataTransferOrigin = ISO11783TaskDataFileDataTransferOrigin.FMIS;
             isoxml.ManagementSoftwareManufacturer = "AgOpenGPS";
-            isoxml.ManagementSoftwareVersion = "1.4.0";
+            isoxml.ManagementSoftwareVersion = Program.Version;
 
             switch (version)
             {
