@@ -142,6 +142,8 @@ namespace AgOpenGPS.Protocols.ISOBUS
 
             foreach (CTrk track in trk.gArr)
             {
+                if (track.mode != TrackMode.AB) continue;
+
                 switch (version)
                 {
                     case Version.V3:
@@ -219,6 +221,8 @@ namespace AgOpenGPS.Protocols.ISOBUS
 
             foreach (CTrk track in trk.gArr)
             {
+                if (track.mode != TrackMode.Curve) continue;
+
                 switch (version)
                 {
                     case Version.V3:
