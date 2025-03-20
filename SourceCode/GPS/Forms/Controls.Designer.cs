@@ -2135,22 +2135,6 @@ namespace AgOpenGPS
             }
             navPanelCounter = 3;
         }
-        private void lblHz_Click(object sender, EventArgs e)
-        {
-            string strPath = Path.Combine(Application.StartupPath, "OGL.exe");
-
-            try
-            {
-                ProcessStartInfo processInfo = new ProcessStartInfo();
-                processInfo.FileName = strPath;
-                processInfo.WorkingDirectory = Path.GetDirectoryName(strPath);
-                Process proc = Process.Start(processInfo);
-            }
-            catch
-            {
-                TimedMessageBox(2000, "No File Found", "Can't Find OGL");
-            }
-        }
         private void btnDayNightMode_Click(object sender, EventArgs e)
         {
             SwapDayNightMode();
