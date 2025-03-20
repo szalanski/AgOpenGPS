@@ -66,8 +66,7 @@ namespace AgOpenGPS.Protocols.ISOBUS
 
             AddBoundary(partfield, bndList, localPlane, version);
             AddHeadland(partfield, bndList, localPlane, version);
-            AddABLines(isoxml, partfield, trk, localPlane, version);
-            AddCurves(isoxml, partfield, trk, localPlane, version);
+            AddTracks(isoxml, partfield, trk, localPlane, version);
 
             isoxml.Data.Partfield.Add(partfield);
         }
@@ -136,19 +135,19 @@ namespace AgOpenGPS.Protocols.ISOBUS
             }
         }
 
-        private static void AddABLines(ISOXML isoxml, ISOPartfield partfield, CTrack trk, LocalPlane localPlane, Version version)
+        private static void AddTracks(ISOXML isoxml, ISOPartfield partfield, CTrack trk, LocalPlane localPlane, Version version)
         {
             if (trk.gArr == null) return;
 
             foreach (CTrk track in trk.gArr)
             {
-                if (track.mode != TrackMode.AB) continue;
+                if (track.mode != TrackMode.AB && track.mode != TrackMode.Curve) continue;
 
                 switch (version)
                 {
                     case Version.V3:
                         {
-                            var lineString = CreateABLineString(track, localPlane, version);
+                            ISOLineString lineString = CreateLineString(track, localPlane, version);
                             lineString.LineStringDesignator = track.name;
                             partfield.LineString.Add(lineString);
                         }
@@ -160,20 +159,33 @@ namespace AgOpenGPS.Protocols.ISOBUS
                             {
                                 GuidanceGroupDesignator = track.name
                             };
-
                             isoxml.IdTable.AddObjectAndAssignIdIfNone(guidanceGroup);
 
                             var guidancePattern = new ISOGuidancePattern
                             {
                                 GuidancePatternId = guidanceGroup.GuidanceGroupId,
                                 GuidancePatternDesignator = track.name,
-                                GuidancePatternType = ISOGuidancePatternType.AB,
                                 GuidancePatternPropagationDirection = ISOGuidancePatternPropagationDirection.Bothdirections,
                                 GuidancePatternExtension = ISOGuidancePatternExtension.Frombothfirstandlastpoint,
                                 GuidancePatternGNSSMethod = ISOGuidancePatternGNSSMethod.Desktopgenerateddata
                             };
 
-                            var lineString = CreateABLineString(track, localPlane, version);
+                            ISOLineString lineString = CreateLineString(track, localPlane, version);
+
+                            switch (track.mode)
+                            {
+                                case TrackMode.AB:
+                                    guidancePattern.GuidancePatternType = ISOGuidancePatternType.AB;
+                                    break;
+
+                                case TrackMode.Curve:
+                                    guidancePattern.GuidancePatternType = ISOGuidancePatternType.Curve;
+                                    break;
+
+                                default:
+                                    throw new InvalidOperationException("Track mode is invalid");
+                            }
+
                             guidancePattern.LineString.Add(lineString);
 
                             guidanceGroup.GuidancePattern.Add(guidancePattern);
@@ -184,6 +196,22 @@ namespace AgOpenGPS.Protocols.ISOBUS
                 }
             }
         }
+
+        private static ISOLineString CreateLineString(CTrk track, LocalPlane localPlane, Version version)
+        {
+            switch (track.mode)
+            {
+                case TrackMode.AB:
+                    return CreateABLineString(track, localPlane, version);
+
+                case TrackMode.Curve:
+                    return CreateCurveLineString(track, localPlane, version);
+
+                default:
+                    throw new InvalidOperationException("Track mode is invalid");
+            }
+        }
+
 
         private static ISOLineString CreateABLineString(CTrk track, LocalPlane localPlane, Version version)
         {
@@ -213,55 +241,6 @@ namespace AgOpenGPS.Protocols.ISOBUS
             });
 
             return lineString;
-        }
-
-        private static void AddCurves(ISOXML isoxml, ISOPartfield partfield, CTrack trk, LocalPlane localPlane, Version version)
-        {
-            if (trk.gArr == null) return;
-
-            foreach (CTrk track in trk.gArr)
-            {
-                if (track.mode != TrackMode.Curve) continue;
-
-                switch (version)
-                {
-                    case Version.V3:
-                        {
-                            var lineString = CreateCurveLineString(track, localPlane, version);
-                            lineString.LineStringDesignator = track.name;
-                            partfield.LineString.Add(lineString);
-                        }
-                        break;
-
-                    case Version.V4:
-                        {
-                            var guidanceGroup = new ISOGuidanceGroup
-                            {
-                                GuidanceGroupDesignator = track.name
-                            };
-
-                            isoxml.IdTable.AddObjectAndAssignIdIfNone(guidanceGroup);
-
-                            var guidancePattern = new ISOGuidancePattern
-                            {
-                                GuidancePatternId = guidanceGroup.GuidanceGroupId,
-                                GuidancePatternDesignator = track.name,
-                                GuidancePatternType = ISOGuidancePatternType.Curve,
-                                GuidancePatternPropagationDirection = ISOGuidancePatternPropagationDirection.Bothdirections,
-                                GuidancePatternExtension = ISOGuidancePatternExtension.Frombothfirstandlastpoint,
-                                GuidancePatternGNSSMethod = ISOGuidancePatternGNSSMethod.Desktopgenerateddata
-                            };
-
-                            var lineString = CreateCurveLineString(track, localPlane, version);
-                            guidancePattern.LineString.Add(lineString);
-
-                            guidanceGroup.GuidancePattern.Add(guidancePattern);
-
-                            partfield.GuidanceGroup.Add(guidanceGroup);
-                        }
-                        break;
-                }
-            }
         }
 
         private static ISOLineString CreateCurveLineString(CTrk track, LocalPlane localPlane, Version version)
