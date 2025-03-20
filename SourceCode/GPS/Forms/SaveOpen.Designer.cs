@@ -37,13 +37,14 @@ namespace AgOpenGPS
 
             try
             {
-                ISO11783_TaskFile_V3.Export(
+                ISO11783_TaskFile.Export(
                     directoryName,
                     currentFieldDirectory,
                     (int)(fd.areaOuterBoundary),
                     bnd.bndList,
                     AppModel.LocalPlane,
-                    trk);
+                    trk,
+                    ISO11783_TaskFile.Version.V3);
             }
             catch (Exception e)
             {
@@ -62,12 +63,14 @@ namespace AgOpenGPS
 
             try
             {
-                ISO11783_TaskFile_V4.Export(
+                ISO11783_TaskFile.Export(
                     directoryName,
                     currentFieldDirectory,
                     (int)(fd.areaOuterBoundary),
                     bnd.bndList,
-                    AppModel.LocalPlane, trk);
+                    AppModel.LocalPlane,
+                    trk,
+                    ISO11783_TaskFile.Version.V4);
             }
             catch (Exception e)
             {
