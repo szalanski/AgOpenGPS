@@ -64,14 +64,14 @@ namespace AgOpenGPS.Protocols.ISOBUS
             partfield.PartfieldDesignator = designator;
             partfield.PartfieldArea = (ulong)area;
 
-            AddBoundary(partfield, bndList, localPlane, version);
-            AddHeadland(partfield, bndList, localPlane, version);
+            AddBoundary(partfield, bndList, localPlane);
+            AddHeadland(partfield, bndList, localPlane);
             AddTracks(isoxml, partfield, trk, localPlane, version);
 
             isoxml.Data.Partfield.Add(partfield);
         }
 
-        private static void AddBoundary(ISOPartfield partfield, List<CBoundaryList> bndList, LocalPlane localPlane, Version version)
+        private static void AddBoundary(ISOPartfield partfield, List<CBoundaryList> bndList, LocalPlane localPlane)
         {
             for (int i = 0; i < bndList.Count; i++)
             {
@@ -90,7 +90,7 @@ namespace AgOpenGPS.Protocols.ISOBUS
                     Wgs84 latLon = localPlane.ConvertGeoCoordToWgs84(v2.ToGeoCoord());
                     lineString.Point.Add(new ISOPoint
                     {
-                        PointType = version == Version.V4 ? ISOPointType.PartfieldReferencePoint : ISOPointType.other,
+                        PointType = ISOPointType.other,
                         PointNorth = (decimal)latLon.Latitude,
                         PointEast = (decimal)latLon.Longitude
                     });
@@ -102,7 +102,7 @@ namespace AgOpenGPS.Protocols.ISOBUS
             }
         }
 
-        private static void AddHeadland(ISOPartfield partfield, List<CBoundaryList> bndList, LocalPlane localPlane, Version version)
+        private static void AddHeadland(ISOPartfield partfield, List<CBoundaryList> bndList, LocalPlane localPlane)
         {
             foreach (CBoundaryList boundaryList in bndList)
             {
@@ -123,7 +123,7 @@ namespace AgOpenGPS.Protocols.ISOBUS
                     Wgs84 latLon = localPlane.ConvertGeoCoordToWgs84(v3.ToGeoCoord());
                     lineString.Point.Add(new ISOPoint
                     {
-                        PointType = version == Version.V4 ? ISOPointType.PartfieldReferencePoint : ISOPointType.other,
+                        PointType = ISOPointType.other,
                         PointNorth = (decimal)latLon.Latitude,
                         PointEast = (decimal)latLon.Longitude
                     });
