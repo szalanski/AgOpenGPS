@@ -164,7 +164,6 @@ namespace AgOpenGPS.Protocols.ISOBUS
                             var guidancePattern = new ISOGuidancePattern
                             {
                                 GuidancePatternId = guidanceGroup.GuidanceGroupId,
-                                GuidancePatternDesignator = track.name,
                                 GuidancePatternPropagationDirection = ISOGuidancePatternPropagationDirection.Bothdirections,
                                 GuidancePatternExtension = ISOGuidancePatternExtension.Frombothfirstandlastpoint,
                                 GuidancePatternGNSSMethod = ISOGuidancePatternGNSSMethod.Desktopgenerateddata
