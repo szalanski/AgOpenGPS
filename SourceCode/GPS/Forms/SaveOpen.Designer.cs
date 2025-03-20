@@ -35,12 +35,10 @@ namespace AgOpenGPS
             if ((directoryName.Length > 0) && (!Directory.Exists(directoryName)))
             { Directory.CreateDirectory(directoryName); }
 
-            string outputFileName = Path.Combine(directoryName, "TASKDATA.xml");
-
             try
             {
                 ISO11783_TaskFile_V3.Export(
-                    outputFileName,
+                    directoryName,
                     currentFieldDirectory,
                     (int)(fd.areaOuterBoundary),
                     bnd.bndList,
@@ -62,12 +60,10 @@ namespace AgOpenGPS
             if ((directoryName.Length > 0) && (!Directory.Exists(directoryName)))
             { Directory.CreateDirectory(directoryName); }
 
-            string outputFileName = Path.Combine(directoryName, "TASKDATA.xml");
-
             try
             {
                 ISO11783_TaskFile_V4.Export(
-                    outputFileName,
+                    directoryName,
                     currentFieldDirectory,
                     (int)(fd.areaOuterBoundary),
                     bnd.bndList,
