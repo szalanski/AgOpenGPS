@@ -2,7 +2,7 @@
 
 namespace AgOpenGPS.Core.ViewModels
 {
-    public class FieldDescriptionViewModel
+    public class FieldDescriptionViewModel : DayNightAndUnitsViewModel
     {
         public FieldDescriptionViewModel(
             DirectoryInfo directoryInfo,

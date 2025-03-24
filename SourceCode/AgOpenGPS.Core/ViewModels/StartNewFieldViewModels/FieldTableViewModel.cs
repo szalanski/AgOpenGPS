@@ -8,7 +8,7 @@ namespace AgOpenGPS.Core.ViewModels
 {
     public enum FieldSortMode { ByName, ByDistance, ByArea };
 
-    public class FieldTableViewModel : ViewModel
+    public class FieldTableViewModel : DayNightAndUnitsViewModel
     {
         protected readonly ApplicationModel _appModel;
         protected FieldDescriptionViewModel _localSelectedField;
