@@ -152,11 +152,32 @@ namespace AgLibrary.Settings
             }
             else if (fieldType.IsClass)
             {
-                // Deserialize XML into the custom object
-                var serializer = new XmlSerializer(fieldType);
-                var nestedObj = serializer.Deserialize(reader);
-                pinfo.SetValue(obj, nestedObj);
+                try
+                {
+                    
+                    if (reader.NodeType == XmlNodeType.Element && !reader.IsEmptyElement)
+                    {
+                        string innerXml = reader.ReadOuterXml().Trim();
+                        innerXml = innerXml.Replace(">True<", ">true<").Replace(">False<", ">false<");
+
+                        if (!string.IsNullOrEmpty(innerXml))
+                        {
+                            using (StringReader stringReader = new StringReader(innerXml))
+                            {
+                                var serializer = new XmlSerializer(fieldType);
+                                object nestedObj = serializer.Deserialize(stringReader);
+                                pinfo.SetValue(obj, nestedObj);
+                               
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"❌ Fout bij deserialisatie van veld {pinfo.Name}: {ex.Message}");
+                }
             }
+
             else
             {
                 if (Debugger.IsAttached)
