@@ -1,25 +1,45 @@
 ﻿using AgLibrary.ViewModels;
 using AgOpenGPS.Core.Models;
 using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Input;
 
 namespace AgOpenGPS.Core.ViewModels
 {
+    public enum FieldSortMode { ByName, ByDistance, ByArea };
+
     public class FieldTableViewModel : ViewModel
     {
         protected readonly ApplicationModel _appModel;
-        private Collection<FieldDescriptionViewModel> _fieldDescriptions;
         protected FieldDescriptionViewModel _localSelectedField;
+        private Collection<FieldDescriptionViewModel> _fieldDescriptions;
+        private FieldSortMode _fieldSortMode;
 
         public FieldTableViewModel(ApplicationModel appModel)
         {
             _appModel = appModel;
             SelectFieldCommand = new RelayCommand(SelectField);
-            SortCommand = new RelayCommand(Sort);
+            NextSortModeCommand = new RelayCommand(NextSortMode);
+            SortMode = FieldSortMode.ByName;
         }
-
+        public Visibility ByNameVisibility => (SortMode == FieldSortMode.ByName) ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility ByDistanceVisibility => (SortMode == FieldSortMode.ByDistance) ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility ByAreaVisibility => (SortMode == FieldSortMode.ByArea) ? Visibility.Visible : Visibility.Collapsed;
         public ICommand SelectFieldCommand { get; }
-        public ICommand SortCommand { get; }
+        public ICommand NextSortModeCommand { get; }
+
+        public FieldSortMode SortMode
+        {
+            get { return _fieldSortMode; }
+            set
+            {
+                if (value != _fieldSortMode)
+                {
+                    _fieldSortMode = value;
+                    NotifyAllPropertiesChanged();
+                }
+            }
+        }
 
         public Collection<FieldDescriptionViewModel> FieldDescriptionViewModels
         {
@@ -74,9 +94,20 @@ namespace AgOpenGPS.Core.ViewModels
             }
         }
 
-        private void Sort()
+        private void NextSortMode()
         {
-            // TODO implement sorting
+            switch (SortMode)
+            {
+                case FieldSortMode.ByName:
+                    SortMode = FieldSortMode.ByDistance;
+                    break;
+                case FieldSortMode.ByDistance:
+                    SortMode = FieldSortMode.ByArea;
+                    break;
+                case FieldSortMode.ByArea:
+                    SortMode = FieldSortMode.ByName;
+                    break;
+            }
         }
     }
 
