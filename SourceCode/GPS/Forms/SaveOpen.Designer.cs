@@ -35,17 +35,16 @@ namespace AgOpenGPS
             if ((directoryName.Length > 0) && (!Directory.Exists(directoryName)))
             { Directory.CreateDirectory(directoryName); }
 
-            string outputFileName = Path.Combine(directoryName, "TASKDATA.xml");
-
             try
             {
-                ISO11783_TaskFile_V3.Export(
-                    outputFileName,
+                ISO11783_TaskFile.Export(
+                    directoryName,
                     currentFieldDirectory,
                     (int)(fd.areaOuterBoundary),
                     bnd.bndList,
                     AppModel.LocalPlane,
-                    trk);
+                    trk,
+                    ISO11783_TaskFile.Version.V3);
             }
             catch (Exception e)
             {
@@ -62,16 +61,16 @@ namespace AgOpenGPS
             if ((directoryName.Length > 0) && (!Directory.Exists(directoryName)))
             { Directory.CreateDirectory(directoryName); }
 
-            string outputFileName = Path.Combine(directoryName, "TASKDATA.xml");
-
             try
             {
-                ISO11783_TaskFile_V4.Export(
-                    outputFileName,
+                ISO11783_TaskFile.Export(
+                    directoryName,
                     currentFieldDirectory,
                     (int)(fd.areaOuterBoundary),
                     bnd.bndList,
-                    AppModel.LocalPlane, trk);
+                    AppModel.LocalPlane,
+                    trk,
+                    ISO11783_TaskFile.Version.V4);
             }
             catch (Exception e)
             {
