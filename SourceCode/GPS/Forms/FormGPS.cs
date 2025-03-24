@@ -37,6 +37,26 @@ namespace AgOpenGPS
         public ApplicationModel AppModel => AppCore.AppModel;
         public ApplicationViewModel AppViewModel => AppCore.AppViewModel;
 
+        // Deprecated. Only here to avoid numerous changes to existing code that not has been refactored.
+        // Please use AppViewModel.IsMetric directly
+        public bool isMetric {
+            get { return AppViewModel.IsMetric; }
+            set {
+                AppViewModel.IsMetric = value;
+            }
+        }
+
+        // Deprecated. Only here to avoid numerous changes to existing code that not has been refactored.
+        // Please use AppViewModel.IsDay directly
+        public bool isDay
+        {
+            get { return AppViewModel.IsDay; }
+            set
+            {
+                AppViewModel.IsDay = value;
+            }
+        }
+
         //To bring forward AgIO if running
         [System.Runtime.InteropServices.DllImport("User32.dll")]
         private static extern bool SetForegroundWindow(IntPtr handle);

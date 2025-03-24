@@ -10,6 +10,8 @@ namespace AgOpenGPS.Core.ViewModels
     public class ApplicationViewModel : ViewModel
     {
         private readonly ApplicationModel _appModel;
+        private bool _isMetric;
+        private bool _isDay;
         private ApplicationPresenter _applicationPresenter;
         private StartNewFieldViewModel _startNewFieldViewModel;
 
@@ -17,6 +19,32 @@ namespace AgOpenGPS.Core.ViewModels
         {
             _appModel = appModel;
             StartNewFieldCommand = new RelayCommand(StartNewField);
+        }
+
+        public bool IsMetric
+        {
+            get { return _isMetric; }
+            set
+            {
+                if (value != _isMetric)
+                {
+                    _isMetric = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public bool IsDay
+        {
+            get { return _isMetric; }
+            set
+            {
+                if (value != _isMetric)
+                {
+                    _isMetric = value;
+                    NotifyPropertyChanged();
+                }
+            }
         }
 
         public void SetPresenter(ApplicationPresenter appPresenter)
