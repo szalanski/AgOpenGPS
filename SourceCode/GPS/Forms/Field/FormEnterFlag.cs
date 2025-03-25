@@ -178,9 +178,7 @@ namespace AgOpenGPS
                     {
                         writer.WriteLine("Latitude,Longitude,Color,Notes");
 
-                        int count = mf.flagPts.Count;
-                        
-                        for (int i = 0; i < count; i++)
+                        foreach (CFlag flag in mf.flagPts)
                         {
                             writer.WriteLine(
                              mf.flagPts[i].latitude.ToString(CultureInfo.InvariantCulture) + "," +
