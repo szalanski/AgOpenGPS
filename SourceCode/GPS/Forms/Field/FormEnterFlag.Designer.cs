@@ -38,9 +38,9 @@
             this.btnRed = new System.Windows.Forms.Button();
             this.btnGreen = new System.Windows.Forms.Button();
             this.btnLoadFlags = new System.Windows.Forms.Button();
+            this.btnSaveFlags = new System.Windows.Forms.Button();
             this.nudLatitude = new AgOpenGPS.NudlessNumericUpDown();
             this.nudLongitude = new AgOpenGPS.NudlessNumericUpDown();
-            this.btnSaveFlags = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.nudLatitude)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudLongitude)).BeginInit();
             this.SuspendLayout();
@@ -115,7 +115,7 @@
             this.btnCancel.Font = new System.Drawing.Font("Tahoma", 14.25F);
             this.btnCancel.Image = global::AgOpenGPS.Properties.Resources.Cancel64;
             this.btnCancel.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.btnCancel.Location = new System.Drawing.Point(422, 238);
+            this.btnCancel.Location = new System.Drawing.Point(464, 236);
             this.btnCancel.Margin = new System.Windows.Forms.Padding(4);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(116, 71);
@@ -180,14 +180,26 @@
             // btnLoadFlags
             // 
             this.btnLoadFlags.Font = new System.Drawing.Font("Tahoma", 18F, System.Drawing.FontStyle.Bold);
-            this.btnLoadFlags.Location = new System.Drawing.Point(8, 209);
+            this.btnLoadFlags.Location = new System.Drawing.Point(22, 225);
             this.btnLoadFlags.Margin = new System.Windows.Forms.Padding(4);
             this.btnLoadFlags.Name = "btnLoadFlags";
-            this.btnLoadFlags.Size = new System.Drawing.Size(211, 87);
+            this.btnLoadFlags.Size = new System.Drawing.Size(200, 90);
             this.btnLoadFlags.TabIndex = 434;
             this.btnLoadFlags.Text = "Load Flags";
             this.btnLoadFlags.UseVisualStyleBackColor = true;
             this.btnLoadFlags.Click += new System.EventHandler(this.btnLoadFlags_Click);
+            // 
+            // btnSaveFlags
+            // 
+            this.btnSaveFlags.Font = new System.Drawing.Font("Tahoma", 18F, System.Drawing.FontStyle.Bold);
+            this.btnSaveFlags.Location = new System.Drawing.Point(245, 226);
+            this.btnSaveFlags.Margin = new System.Windows.Forms.Padding(4);
+            this.btnSaveFlags.Name = "btnSaveFlags";
+            this.btnSaveFlags.Size = new System.Drawing.Size(200, 90);
+            this.btnSaveFlags.TabIndex = 435;
+            this.btnSaveFlags.Text = "Save Flags";
+            this.btnSaveFlags.UseVisualStyleBackColor = true;
+            this.btnSaveFlags.Click += new System.EventHandler(this.btnSaveFlags_Click);
             // 
             // nudLatitude
             // 
@@ -244,18 +256,6 @@
             0,
             0});
             this.nudLongitude.Click += new System.EventHandler(this.nudLongitude_Click);
-            // 
-            // btnSaveFlags
-            // 
-            this.btnSaveFlags.Font = new System.Drawing.Font("Tahoma", 18F, System.Drawing.FontStyle.Bold);
-            this.btnSaveFlags.Location = new System.Drawing.Point(227, 209);
-            this.btnSaveFlags.Margin = new System.Windows.Forms.Padding(4);
-            this.btnSaveFlags.Name = "btnSaveFlags";
-            this.btnSaveFlags.Size = new System.Drawing.Size(211, 87);
-            this.btnSaveFlags.TabIndex = 435;
-            this.btnSaveFlags.Text = "Save Flags";
-            this.btnSaveFlags.UseVisualStyleBackColor = true;
-            this.btnSaveFlags.Click += new System.EventHandler(this.btnSaveFlags_Click);
             // 
             // FormEnterFlag
             // 

@@ -16,8 +16,6 @@ namespace AgOpenGPS
     {
         private readonly FormGPS mf = null;
 
-        //individual points for the flags in a list
-        public List<CFlag> flagPts = new List<CFlag>();
         public FormEnterFlag(Form callingForm)
         {
             //get copy of the calling main form
@@ -109,7 +107,7 @@ namespace AgOpenGPS
             Close();
 
         }
-
+        // load flags from a text file with latitude,longitude,color, notes
         private void btnLoadFlags_Click(object sender, EventArgs e)
         {
             OpenFileDialog fileDialog = new OpenFileDialog();
@@ -125,13 +123,13 @@ namespace AgOpenGPS
                 try
                 {
                     string[] lines = System.IO.File.ReadAllLines(filePath);
-
+                   
                     foreach (string line in lines.Skip(1))
                     {
                         double latitude, longitude;
                         int flagColor;
                         string[] parts = line.Split(',');
-                         if(
+                         if( 
                             double.TryParse(parts[0], NumberStyles.Float, CultureInfo.InvariantCulture, out latitude) &&
                             double.TryParse(parts[1], NumberStyles.Float, CultureInfo.InvariantCulture, out longitude) &&
                             int.TryParse(parts[2], out flagColor))
@@ -153,7 +151,6 @@ namespace AgOpenGPS
                     }
                     MessageBox.Show("Flags successfully added!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-
                 catch (Exception ex)
                 {
                     MessageBox.Show($"Error reading file: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -162,33 +159,28 @@ namespace AgOpenGPS
                 }
             }
         }
-
+        // save a text file using flags info with latitude,longitude,color, notes
         private void btnSaveFlags_Click(object sender, EventArgs e)
         {
             SaveFileDialog fileDialog = new SaveFileDialog();
 
-            // falta metodo para guardar campo, se debe sacar datos del flags.txt
-            // y guardar en el mismo formato que se pide el archivo de texto
             fileDialog.DefaultExt = "txt";
             fileDialog.Filter = "Text Document | *.txt| CSV Document | *.csv| All files| *.*";
             fileDialog.Title = "Save flags information";
             fileDialog.CheckFileExists = false;
             fileDialog.RestoreDirectory = true;
 
-
             if (fileDialog.ShowDialog() == DialogResult.OK)
             {
-                //use Streamwriter to create file
                 using (StreamWriter writer = new StreamWriter(fileDialog.FileName))
                 {
                     try
                     {
                         writer.WriteLine("Latitude,Longitude,Color,Notes");
 
-                        int count2 = Convert.ToInt32(mf.flagPts.Count);
-                        writer.WriteLine(count2);
-
-                        for (int i = 0; i < count2; i++)
+                        int count = mf.flagPts.Count;
+                        
+                        for (int i = 0; i < count; i++)
                         {
                             writer.WriteLine(
                              mf.flagPts[i].latitude.ToString(CultureInfo.InvariantCulture) + "," +
@@ -197,9 +189,7 @@ namespace AgOpenGPS
                              mf.flagPts[i].notes);
                         }
                         MessageBox.Show("Flags successfully saved!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
                     }
-
                     catch (Exception ex)
                     {
                         MessageBox.Show("Error", ex.Message + "\n Cannot write to file.");
