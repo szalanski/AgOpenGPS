@@ -181,10 +181,10 @@ namespace AgOpenGPS
                         foreach (CFlag flag in mf.flagPts)
                         {
                             writer.WriteLine(
-                             mf.flagPts[i].latitude.ToString(CultureInfo.InvariantCulture) + "," +
-                             mf.flagPts[i].longitude.ToString(CultureInfo.InvariantCulture) + "," +
-                             mf.flagPts[i].color.ToString(CultureInfo.InvariantCulture) + "," +
-                             mf.flagPts[i].notes);
+                            flag.latitude.ToString(CultureInfo.InvariantCulture) + "," +
+                            flag.longitude.ToString(CultureInfo.InvariantCulture) + "," +
+                            flag.color.ToString(CultureInfo.InvariantCulture) + "," +
+                            flag.notes);
                         }
                         MessageBox.Show("Flags successfully saved!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
