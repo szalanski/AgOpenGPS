@@ -31,12 +31,12 @@ namespace AgOpenGPS.Core.ViewModels
 
         public bool IsDay
         {
-            get { return _isMetric; }
+            get { return _isDay; }
             set
             {
-                if (value != _isMetric)
+                if (value != _isDay)
                 {
-                    _isMetric = value;
+                    _isDay = value;
                     NotifyAllPropertiesChanged();
                 }
             }

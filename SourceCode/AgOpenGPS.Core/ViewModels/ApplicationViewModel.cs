@@ -4,7 +4,7 @@ using System.Windows.Input;
 
 namespace AgOpenGPS.Core.ViewModels
 {
-    public class ApplicationViewModel : ViewModel
+    public class ApplicationViewModel : DayNightAndUnitsViewModel
     {
         private readonly ApplicationModel _appModel;
         private ApplicationPresenter _applicationPresenter;

@@ -7,7 +7,9 @@
     xmlns:componentmodel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
 
     xmlns:corevm="clr-namespace:AgOpenGPS.Core.ViewModels;assembly=AgOpenGPS.Core"
-    xmlns:local="clr-namespace:AgOpenGPS.WpfApp.Field" 
+    xmlns:base="clr-namespace:AgOpenGPS.WpfApp.Base"
+    xmlns:local="clr-namespace:AgOpenGPS.WpfApp.Field"
+
     d:DataContext="{d:DesignInstance Type=corevm:FieldTableViewModel, IsDesignTimeCreatable=False}"
     d:DesignHeight="450" d:DesignWidth="800">
 
@@ -20,13 +22,13 @@
 
         <CollectionViewSource x:Key="SourceByDistance" Source="{Binding FieldDescriptionViewModels}">
             <CollectionViewSource.SortDescriptions>
-                <componentmodel:SortDescription PropertyName="FieldDistance"/>
+                <componentmodel:SortDescription PropertyName="DistanceViewModel.DistanceInMeters"/>
             </CollectionViewSource.SortDescriptions>
         </CollectionViewSource>
 
         <CollectionViewSource x:Key="SourceByArea" Source="{Binding FieldDescriptionViewModels}">
             <CollectionViewSource.SortDescriptions>
-                <componentmodel:SortDescription PropertyName="FieldArea"/>
+                <componentmodel:SortDescription PropertyName="AreaViewModel.AreaInSquareMeters"/>
             </CollectionViewSource.SortDescriptions>
         </CollectionViewSource>
 
@@ -39,12 +41,20 @@
                 <DataGridTextColumn x:Name="nameColumn"
                     Header="Name"
                     Width="175" Binding="{Binding FieldName, Mode=OneWay}"/>
-                <DataGridTextColumn 
-                    Header="Distance"
-                    Width="175" Binding="{Binding FieldDistance}" />
-                <DataGridTextColumn
-                    Header="Area"
-                    Width="175" Binding="{Binding FieldArea}" />
+                <DataGridTemplateColumn Header="Distance" Width="100" IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <base:LongDistanceView x:Name="distanceView" DataContext="{Binding DistanceViewModel}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Area" Width="100" IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <base:AreaView x:Name="areaView" DataContext="{Binding AreaViewModel}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
 
@@ -54,15 +64,23 @@
             AutoGenerateColumns="False"
             CanUserSortColumns="False">
             <DataGrid.Columns>
-                <DataGridTextColumn x:Name="distanceColumn"
-                    Header="Distance"
-                    Width="175" Binding="{Binding FieldDistance}"/>
+                <DataGridTemplateColumn Header="Distance" Width="100" IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <base:LongDistanceView x:Name="distanceView" DataContext="{Binding DistanceViewModel}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTextColumn 
                     Header="Name"
                     Width="175" Binding="{Binding FieldName, Mode=OneWay}"/>
-                <DataGridTextColumn 
-                    Header="Area"
-                    Width="175" Binding="{Binding FieldArea}" />
+                <DataGridTemplateColumn Header="Area" Width="100" IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <base:AreaView x:Name="areaView" DataContext="{Binding AreaViewModel}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
 
@@ -72,15 +90,23 @@
             AutoGenerateColumns="False"
             CanUserSortColumns="False">
             <DataGrid.Columns>
-                <DataGridTextColumn x:Name="areaColumn"
-                    Header="Area"
-                    Width="175" Binding="{Binding FieldArea}" />
+                <DataGridTemplateColumn Header="Area" Width="100" IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <base:AreaView x:Name="areaView" DataContext="{Binding AreaViewModel}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTextColumn 
                     Header="Name"
                     Width="175" Binding="{Binding FieldName, Mode=OneWay}"/>
-                <DataGridTextColumn 
-                    Header="Distance"
-                    Width="175" Binding="{Binding FieldDistance}"/>
+                <DataGridTemplateColumn Header="Distance" Width="100" IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <base:LongDistanceView x:Name="distanceView" DataContext="{Binding DistanceViewModel}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
 
