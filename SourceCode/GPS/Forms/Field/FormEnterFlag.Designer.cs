@@ -32,13 +32,15 @@
             this.label8 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
-            this.nudLatitude = new AgOpenGPS.NudlessNumericUpDown();
-            this.nudLongitude = new AgOpenGPS.NudlessNumericUpDown();
             this.labelPoint = new System.Windows.Forms.Label();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnYellow = new System.Windows.Forms.Button();
             this.btnRed = new System.Windows.Forms.Button();
             this.btnGreen = new System.Windows.Forms.Button();
+            this.btnLoadFlags = new System.Windows.Forms.Button();
+            this.btnSaveFlags = new System.Windows.Forms.Button();
+            this.nudLatitude = new AgOpenGPS.NudlessNumericUpDown();
+            this.nudLongitude = new AgOpenGPS.NudlessNumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.nudLatitude)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudLongitude)).BeginInit();
             this.SuspendLayout();
@@ -87,60 +89,6 @@
             this.label18.Text = "Latitude";
             this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // nudLatitude
-            // 
-            this.nudLatitude.BackColor = System.Drawing.Color.AliceBlue;
-            this.nudLatitude.DecimalPlaces = 7;
-            this.nudLatitude.Font = new System.Drawing.Font("Tahoma", 27.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nudLatitude.Location = new System.Drawing.Point(152, 68);
-            this.nudLatitude.Maximum = new decimal(new int[] {
-            90,
-            0,
-            0,
-            0});
-            this.nudLatitude.Minimum = new decimal(new int[] {
-            90,
-            0,
-            0,
-            -2147483648});
-            this.nudLatitude.Name = "nudLatitude";
-            this.nudLatitude.Size = new System.Drawing.Size(274, 52);
-            this.nudLatitude.TabIndex = 198;
-            this.nudLatitude.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.nudLatitude.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudLatitude.Click += new System.EventHandler(this.nudLatitude_Click);
-            // 
-            // nudLongitude
-            // 
-            this.nudLongitude.BackColor = System.Drawing.Color.AliceBlue;
-            this.nudLongitude.DecimalPlaces = 7;
-            this.nudLongitude.Font = new System.Drawing.Font("Tahoma", 27.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nudLongitude.Location = new System.Drawing.Point(448, 68);
-            this.nudLongitude.Maximum = new decimal(new int[] {
-            180,
-            0,
-            0,
-            0});
-            this.nudLongitude.Minimum = new decimal(new int[] {
-            180,
-            0,
-            0,
-            -2147483648});
-            this.nudLongitude.Name = "nudLongitude";
-            this.nudLongitude.Size = new System.Drawing.Size(298, 52);
-            this.nudLongitude.TabIndex = 197;
-            this.nudLongitude.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.nudLongitude.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudLongitude.Click += new System.EventHandler(this.nudLongitude_Click);
-            // 
             // labelPoint
             // 
             this.labelPoint.Font = new System.Drawing.Font("Tahoma", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -162,7 +110,7 @@
             this.btnCancel.Font = new System.Drawing.Font("Tahoma", 14.25F);
             this.btnCancel.Image = global::AgOpenGPS.Properties.Resources.Cancel64;
             this.btnCancel.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.btnCancel.Location = new System.Drawing.Point(275, 193);
+            this.btnCancel.Location = new System.Drawing.Point(348, 192);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(87, 58);
             this.btnCancel.TabIndex = 430;
@@ -220,6 +168,82 @@
             this.btnGreen.UseVisualStyleBackColor = false;
             this.btnGreen.Click += new System.EventHandler(this.btnRed_Click);
             // 
+            // btnLoadFlags
+            // 
+            this.btnLoadFlags.Font = new System.Drawing.Font("Tahoma", 18F, System.Drawing.FontStyle.Bold);
+            this.btnLoadFlags.Location = new System.Drawing.Point(16, 183);
+            this.btnLoadFlags.Name = "btnLoadFlags";
+            this.btnLoadFlags.Size = new System.Drawing.Size(150, 73);
+            this.btnLoadFlags.TabIndex = 434;
+            this.btnLoadFlags.Text = "Load Flags";
+            this.btnLoadFlags.UseVisualStyleBackColor = true;
+            this.btnLoadFlags.Click += new System.EventHandler(this.btnLoadFlags_Click);
+            // 
+            // btnSaveFlags
+            // 
+            this.btnSaveFlags.Font = new System.Drawing.Font("Tahoma", 18F, System.Drawing.FontStyle.Bold);
+            this.btnSaveFlags.Location = new System.Drawing.Point(184, 184);
+            this.btnSaveFlags.Name = "btnSaveFlags";
+            this.btnSaveFlags.Size = new System.Drawing.Size(150, 73);
+            this.btnSaveFlags.TabIndex = 435;
+            this.btnSaveFlags.Text = "Save Flags";
+            this.btnSaveFlags.UseVisualStyleBackColor = true;
+            this.btnSaveFlags.Click += new System.EventHandler(this.btnSaveFlags_Click);
+            // 
+            // nudLatitude
+            // 
+            this.nudLatitude.BackColor = System.Drawing.Color.AliceBlue;
+            this.nudLatitude.DecimalPlaces = 7;
+            this.nudLatitude.Font = new System.Drawing.Font("Tahoma", 27.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nudLatitude.Location = new System.Drawing.Point(152, 68);
+            this.nudLatitude.Maximum = new decimal(new int[] {
+            90,
+            0,
+            0,
+            0});
+            this.nudLatitude.Minimum = new decimal(new int[] {
+            90,
+            0,
+            0,
+            -2147483648});
+            this.nudLatitude.Name = "nudLatitude";
+            this.nudLatitude.Size = new System.Drawing.Size(274, 52);
+            this.nudLatitude.TabIndex = 198;
+            this.nudLatitude.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.nudLatitude.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudLatitude.Click += new System.EventHandler(this.nudLatitude_Click);
+            // 
+            // nudLongitude
+            // 
+            this.nudLongitude.BackColor = System.Drawing.Color.AliceBlue;
+            this.nudLongitude.DecimalPlaces = 7;
+            this.nudLongitude.Font = new System.Drawing.Font("Tahoma", 27.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nudLongitude.Location = new System.Drawing.Point(448, 68);
+            this.nudLongitude.Maximum = new decimal(new int[] {
+            180,
+            0,
+            0,
+            0});
+            this.nudLongitude.Minimum = new decimal(new int[] {
+            180,
+            0,
+            0,
+            -2147483648});
+            this.nudLongitude.Name = "nudLongitude";
+            this.nudLongitude.Size = new System.Drawing.Size(298, 52);
+            this.nudLongitude.TabIndex = 197;
+            this.nudLongitude.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.nudLongitude.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudLongitude.Click += new System.EventHandler(this.nudLongitude_Click);
+            // 
             // FormEnterFlag
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -227,6 +251,8 @@
             this.BackColor = System.Drawing.Color.WhiteSmoke;
             this.ClientSize = new System.Drawing.Size(771, 266);
             this.ControlBox = false;
+            this.Controls.Add(this.btnSaveFlags);
+            this.Controls.Add(this.btnLoadFlags);
             this.Controls.Add(this.btnGreen);
             this.Controls.Add(this.btnRed);
             this.Controls.Add(this.btnYellow);
@@ -263,5 +289,7 @@
         private System.Windows.Forms.Button btnYellow;
         private System.Windows.Forms.Button btnRed;
         private System.Windows.Forms.Button btnGreen;
+        private System.Windows.Forms.Button btnLoadFlags;
+        private System.Windows.Forms.Button btnSaveFlags;
     }
 }
