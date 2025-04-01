@@ -1,13 +1,10 @@
 ﻿using AgLibrary.ViewModels;
 using AgOpenGPS.Core.Presenters;
-using AgOpenGPS.Core.ViewModels;
 using System.Windows.Input;
 
 namespace AgOpenGPS.Core.ViewModels
 {
-    // TODO implement Day and Night mode
-    // TODO implement Metric and Imperial mode
-    public class ApplicationViewModel : ViewModel
+    public class ApplicationViewModel : DayNightAndUnitsViewModel
     {
         private readonly ApplicationModel _appModel;
         private ApplicationPresenter _applicationPresenter;

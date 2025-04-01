@@ -8,7 +8,7 @@ namespace AgOpenGPS.Core.ViewModels
 {
     public enum FieldSortMode { ByName, ByDistance, ByArea };
 
-    public class FieldTableViewModel : ViewModel
+    public class FieldTableViewModel : DayNightAndUnitsViewModel
     {
         protected readonly ApplicationModel _appModel;
         protected FieldDescriptionViewModel _localSelectedField;
@@ -25,6 +25,7 @@ namespace AgOpenGPS.Core.ViewModels
         public Visibility ByNameVisibility => (SortMode == FieldSortMode.ByName) ? Visibility.Visible : Visibility.Collapsed;
         public Visibility ByDistanceVisibility => (SortMode == FieldSortMode.ByDistance) ? Visibility.Visible : Visibility.Collapsed;
         public Visibility ByAreaVisibility => (SortMode == FieldSortMode.ByArea) ? Visibility.Visible : Visibility.Collapsed;
+
         public ICommand SelectFieldCommand { get; }
         public ICommand NextSortModeCommand { get; }
 
@@ -74,9 +75,8 @@ namespace AgOpenGPS.Core.ViewModels
             foreach (FieldDescription description in descriptions)
             {
                 FieldDescriptionViewModel viewModel = new FieldDescriptionViewModel(
-                    description.FieldDirectory,
-                    description.Area.HasValue ? description.Area.Value.ToString() : "Error",
-                    description.Wgs84Start.HasValue ? _appModel.CurrentLatLon.DistanceInKiloMeters(description.Wgs84Start.Value).ToString() : "Error");
+                    description,
+                    _appModel.CurrentLatLon);
                 viewModels.Add(viewModel);
             }
             // The Winforms views do not update when elements inside the ObservableCollection are changed.

@@ -8,7 +8,7 @@ using System.Windows.Input;
 
 namespace AgOpenGPS.Core.ViewModels
 {
-    public class StartNewFieldViewModel
+    public class StartNewFieldViewModel : DayNightAndUnitsViewModel
     {
         private readonly ApplicationModel _appModel;
         private SelectNearFieldViewModel _selectNearFieldViewModel;
@@ -34,6 +34,7 @@ namespace AgOpenGPS.Core.ViewModels
                 {
                     _selectNearFieldViewModel =
                         new SelectNearFieldViewModel(_appModel, PanelPresenter);
+                    AddChild(_selectNearFieldViewModel);
                 }
                 return _selectNearFieldViewModel;
             }
@@ -47,6 +48,7 @@ namespace AgOpenGPS.Core.ViewModels
                 {
                     _createFromExistingFieldViewModel =
                         new CreateFromExistingFieldViewModel(_appModel, PanelPresenter);
+                    AddChild(_createFromExistingFieldViewModel);
                 }
                 return _createFromExistingFieldViewModel;
             }
@@ -59,6 +61,7 @@ namespace AgOpenGPS.Core.ViewModels
                 if (_selectFieldViewModel == null)
                 {
                     _selectFieldViewModel = new SelectFieldViewModel(_appModel, PanelPresenter);
+                    AddChild(_selectFieldViewModel);
                 }
                 return _selectFieldViewModel;
             }
