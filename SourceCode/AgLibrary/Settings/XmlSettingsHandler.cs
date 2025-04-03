@@ -1,4 +1,4 @@
-﻿using AgLibrary.Logging;
+using AgLibrary.Logging;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -174,7 +174,7 @@ namespace AgLibrary.Settings
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine($"❌ Fout bij deserialisatie van veld {pinfo.Name}: {ex.Message}");
+                    
                 }
             }
 
