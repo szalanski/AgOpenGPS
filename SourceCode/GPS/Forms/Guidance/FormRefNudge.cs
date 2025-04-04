@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using AgOpenGPS.Controls;
+using AgOpenGPS.Culture;
+using AgOpenGPS.Helpers;
 
 namespace AgOpenGPS
 {
@@ -19,7 +22,7 @@ namespace AgOpenGPS
 
             InitializeComponent();
 
-            this.Text = "Ref Adjust";
+            this.Text = Culture.gStr.gsNudgeRefTrack;
         }
 
         private void FormEditTrack_Load(object sender, EventArgs e)
@@ -47,7 +50,7 @@ namespace AgOpenGPS
             //Location = Properties.Settings.Default.setWindow_formNudgeLocation;
             //Size = Properties.Settings.Default.setWindow_formNudgeSize;
 
-            if (!mf.IsOnScreen(Location, Size, 1))
+            if (!ScreenHelper.IsOnScreen(Bounds))
             {
                 Top = 0;
                 Left = 0;
@@ -61,7 +64,7 @@ namespace AgOpenGPS
 
         private void nudSnapDistance_Click(object sender, EventArgs e)
         {
-            mf.KeypadToNUD((NudlessNumericUpDown)sender, this);
+            ((NudlessNumericUpDown)sender).ShowKeypad(this);
             snapAdj = (double)nudSnapDistance.Value * mf.inchOrCm2m;
             Properties.Settings.Default.setAS_snapDistanceRef = snapAdj*100;
             Properties.Settings.Default.Save();

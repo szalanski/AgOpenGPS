@@ -3,19 +3,16 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.Eventing.Reader;
-using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
+using AgLibrary.Logging;
 using AgOpenGPS.Culture;
 using AgOpenGPS.Forms;
 using AgOpenGPS.Forms.Pickers;
 using AgOpenGPS.Properties;
-using Microsoft.Win32;
-using OpenTK.Input;
 
 namespace AgOpenGPS
 {
@@ -600,8 +597,11 @@ namespace AgOpenGPS
                         Log.EventWriter("High Field Start Distance Warning");
                     }
 
-                    Log.EventWriter("** Opened **  " + currentFieldDirectory + "   " 
-                        + (DateTime.Now.ToString("f", CultureInfo.CreateSpecificCulture(RegistrySettings.culture))));
+                    Log.EventWriter("** Opened **  " + currentFieldDirectory + "   "
+                        + (DateTime.Now.ToString("f", CultureInfo.InvariantCulture)));
+                    
+                    Settings.Default.setF_CurrentDir = currentFieldDirectory;
+                    Settings.Default.Save();
                 }
             }
 
@@ -615,6 +615,7 @@ namespace AgOpenGPS
 
             PanelUpdateRightAndBottom();
         }
+
         public void FileSaveEverythingBeforeClosingField()
         {
             //turn off contour line if on
@@ -650,10 +651,8 @@ namespace AgOpenGPS
             ExportFieldAs_ISOXMLv4();
 
             Log.EventWriter("** Closed **   " + currentFieldDirectory + "   "
-                + DateTime.Now.ToString("f", CultureInfo.CreateSpecificCulture(RegistrySettings.culture)));
+                + DateTime.Now.ToString("f", CultureInfo.InvariantCulture));
 
-            Settings.Default.setF_CurrentDir = currentFieldDirectory;
-            Settings.Default.Save();
 
             panelRight.Enabled = false;
             FieldMenuButtonEnableDisable(false);
@@ -973,7 +972,6 @@ namespace AgOpenGPS
         private void toolStripDropDownButtonDistance_Click(object sender, EventArgs e)
         {
             fd.distanceUser = 0;
-            fd.workedAreaTotalUser = 0;
         }          
         private void btnNavigationSettings_Click(object sender, EventArgs e)
         {
@@ -1314,31 +1312,12 @@ namespace AgOpenGPS
             fbd.ShowNewFolderButton = true;
             fbd.Description = "Currently: " + RegistrySettings.workingDirectory;
 
-            if (RegistrySettings.workingDirectory == "Default") fbd.SelectedPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            if (RegistrySettings.workingDirectory == RegistrySettings.defaultString) fbd.SelectedPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             else fbd.SelectedPath = RegistrySettings.workingDirectory;
 
             if (fbd.ShowDialog(this) == DialogResult.OK)
             {
-                if (fbd.SelectedPath != Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))
-                {
-                    RegistrySettings.workingDirectory = fbd.SelectedPath;
-                    RegistrySettings.baseDirectory = Path.Combine(RegistrySettings.workingDirectory, "AgOpenGPS");
-                    RegistrySettings.fieldsDirectory = Path.Combine(RegistrySettings.workingDirectory, "AgOpenGPS", "Fields");
-                    RegistrySettings.CreateDirectories();
-                    RegistrySettings.vehicleFileName = "Default Vehicle";
-                }
-                else
-                {
-                    RegistrySettings.workingDirectory = "Default";
-                    RegistrySettings.vehicleFileName = "Default Vehicle";
-                    RegistrySettings.CreateDirectories();
-                }
-
-                //reset to default Vehicle and save
-                Settings.Default.Reset();
-                Settings.Default.Save();
-
-                RegistrySettings.Save();
+                RegistrySettings.Save(RegKeys.workingDirectory, fbd.SelectedPath);
 
                 //restart program
                 MessageBox.Show(gStr.gsProgramWillExitPleaseRestart);
@@ -1402,20 +1381,7 @@ namespace AgOpenGPS
 
                 if (result2 == DialogResult.Yes)
                 {
-                    FileSaveSystemEvents();
-                    Log.sbEvents.Clear();
-
-                    //save event
-                    Log.EventWriter("*****");
-                    Log.EventWriter("Registry set to default - Reset ALL event occured");
-                    Log.EventWriter("*****");
-                    FileSaveSystemEvents();
-
                     RegistrySettings.Reset();
-
-                    Settings.Default.Reset();
-                    Settings.Default.Save();
-
                     MessageBox.Show(gStr.gsProgramWillExitPleaseRestart);
                     Close();
                 }
@@ -1443,39 +1409,13 @@ namespace AgOpenGPS
                     simulatorOnToolStripMenuItem.Checked = false;
                     return;
                 }
-
-                simulatorOnToolStripMenuItem.Checked = true;
-                panelSim.Visible = true;
-                timerSim.Enabled = true;
-                //DialogResult result3 = MessageBox.Show(gStr.gsAgOpenGPSWillExitPlzRestart, gStr.gsTurningOnSimulator, MessageBoxButtons.OK);
-                Settings.Default.setMenu_isSimulatorOn = simulatorOnToolStripMenuItem.Checked;
-                Settings.Default.Save();
-
-                isFirstFixPositionSet = false;
-                isFirstHeadingSet = false;
-                isGPSPositionInitialized = false;
-                startCounter = 0;
-
-                //System.Environment.Exit(1);
             }
-            else
-            {
-                panelSim.Visible = false;
-                timerSim.Enabled = false;
-                simulatorOnToolStripMenuItem.Checked = false;
-                //TimedMessageBox(3000, "Simulator Turning Off", "Application will Exit");
-                //DialogResult result3 = MessageBox.Show(gStr.gsAgOpenGPSWillExitPlzRestart, gStr.gsTurningOffSimulator, MessageBoxButtons.OK);
-                Settings.Default.setMenu_isSimulatorOn = simulatorOnToolStripMenuItem.Checked;
-                Settings.Default.Save();
 
-                //worldGrid.CreateWorldGrid(0, 0);
-                isFirstFixPositionSet = false;
-                isGPSPositionInitialized = false;
-                isFirstHeadingSet = false;
-                startCounter = 0;
-
-                //System.Environment.Exit(1);
-            }
+            timerSim.Enabled = panelSim.Visible = simulatorOnToolStripMenuItem.Checked;
+            isFirstFixPositionSet = false;
+            isGPSPositionInitialized = false;
+            isFirstHeadingSet = false;
+            startCounter = 0;
 
             Settings.Default.setMenu_isSimulatorOn = simulatorOnToolStripMenuItem.Checked;
             Settings.Default.Save();
@@ -1486,7 +1426,7 @@ namespace AgOpenGPS
             {
                 form.ShowDialog(this);
             }
-            RegistrySettings.Save();
+            Settings.Default.Save();
         }
         private void colorsSectionToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1496,7 +1436,7 @@ namespace AgOpenGPS
                 {
                     form.ShowDialog(this);
                 }
-                RegistrySettings.Save();
+                Settings.Default.Save();
             }
             else
             {
@@ -1581,7 +1521,14 @@ namespace AgOpenGPS
         {
             SetLanguage("zh-CHS");
         }
-
+        private void menuLanguageSerbie_Click(object sender, EventArgs e)
+        {
+            SetLanguage("sr");
+        }
+        private void menuLanguageNorsk_Click(object sender, EventArgs e)
+        {
+            SetLanguage("no");
+        }
         private void SetLanguage(string lang)
         {
             //reset them all to false
@@ -1603,6 +1550,8 @@ namespace AgOpenGPS
             menuLanguageLatvian.Checked = false;
             menuLanguageChinese.Checked = false;
             menuLanguagePortugese.Checked = false;
+            menuLanguageSerbie.Checked = false;
+            menuLanguageNorsk.Checked = false;
 
             menuLanguageTest.Checked = false;
 
@@ -1684,20 +1633,25 @@ namespace AgOpenGPS
                     menuLanguageChinese.Checked = true;
                     break;
 
+                case "sr":
+                    menuLanguageSerbie.Checked = true;
+                    break;  
+
+                case "no":
+                    menuLanguageNorsk.Checked = true;
+                    break;  
+
                 default:
                     menuLanguageEnglish.Checked = true;
                     lang = "en";
                     break;
             }
+            RegistrySettings.Save(RegKeys.language, lang);
 
-            RegistrySettings.culture = lang;
+            Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo(lang);
+            Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo(lang);
 
-            RegistrySettings.Save();
-
-            Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo(RegistrySettings.culture);
-            Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo(RegistrySettings.culture);
-
-            LoadSettings(); 
+            LoadText();
         }
 
         #endregion
@@ -1973,6 +1927,8 @@ namespace AgOpenGPS
                         ct.StopContourLine();
                         ct.ResetContour();
                         fd.workedAreaTotal = 0;
+                        fd.workedAreaTotalUser = 0;
+                        fd.distanceUser = 0;
 
                         //clear the section lists
                         for (int j = 0; j < triStrip.Count; j++)

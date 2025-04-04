@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Windows.Forms;
+using AgOpenGPS.Controls;
+using AgOpenGPS.Helpers;
+using AgOpenGPS.Culture;
 
 namespace AgOpenGPS
 {
@@ -13,6 +16,9 @@ namespace AgOpenGPS
             //get copy of the calling main form
             mf = callingForm as FormGPS;
             InitializeComponent();
+            this.Text = gStr.gsFlags;
+            labelDistanceToFlag.Text = gStr.gsDistanceToFlag;
+
         }
 
         private void UpdateLabels()
@@ -34,7 +40,7 @@ namespace AgOpenGPS
         {
             UpdateLabels();
 
-            if (!mf.IsOnScreen(Location, Size, 1))
+            if (!ScreenHelper.IsOnScreen(Bounds))
             {
                 Top = 0;
                 Left = 0;
@@ -112,7 +118,7 @@ namespace AgOpenGPS
         {
             if (mf.isKeyboardOn)
             {
-                mf.KeyboardToText((TextBox)sender, this);
+                ((TextBox)sender).ShowKeyboard(this);
                 btnExit.Focus();
             }
         }

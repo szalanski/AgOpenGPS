@@ -1,4 +1,6 @@
-﻿using AgOpenGPS.Culture;
+﻿using AgLibrary.Logging;
+using AgOpenGPS.Culture;
+using AgOpenGPS.Helpers;
 using OpenTK.Graphics.OpenGL;
 using System;
 using System.Drawing;
@@ -24,6 +26,13 @@ namespace AgOpenGPS
             mf = callingForm as FormGPS;
 
             InitializeComponent();
+            //translate all the controls
+            this.Text = gStr.gsMapForBackground;
+            labelNewBoundary.Text = gStr.gsNew + " " + gStr.gsBoundary; 
+            labelBoundary.Text = gStr.gsBoundary;
+            lblPoints.Text = gStr.gsPoints + ":";
+            labelBackground.Text = gStr.gsBackground;
+
 
             mapControl.CacheFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "MapControl");
 
@@ -62,14 +71,13 @@ namespace AgOpenGPS
             if (mf.worldGrid.isGeoMap) cboxDrawMap.Image = Properties.Resources.MappingOn;
             else cboxDrawMap.Image = Properties.Resources.MappingOff;
 
-            if (!mf.IsOnScreen(Location, Size, 1))
+            if (!ScreenHelper.IsOnScreen(Bounds))
             {
                 Top = 0;
                 Left = 0;
             }
 
             btnDeleteAll.Enabled = true;
-            label3.Text = gStr.gsBoundary;
         }
 
         private void FormMap_FormClosing(object sender, FormClosingEventArgs e)
@@ -344,13 +352,13 @@ namespace AgOpenGPS
 
             mf.worldGrid.isGeoMap = true;
 
-            CornerPoint geoRef = mapControl.TopLeftCorner;
+            GeoPoint geoRef = mapControl.TopLeft;
             mf.pn.ConvertWGS84ToLocal(geoRef.Latitude, geoRef.Longitude, out double nor, out double eas);
             if (Math.Abs(nor) > 4000 || Math.Abs(eas) > 4000) mf.worldGrid.isGeoMap = false;
             mf.worldGrid.northingMaxGeo = nor;
             mf.worldGrid.eastingMinGeo = eas;
 
-            geoRef = mapControl.BottomRightCorner;
+            geoRef = mapControl.BottomRight;
             mf.pn.ConvertWGS84ToLocal(geoRef.Latitude, geoRef.Longitude, out nor, out eas);
             if (Math.Abs(nor) > 4000 || Math.Abs(eas) > 4000) mf.worldGrid.isGeoMap = false;
             mf.worldGrid.northingMinGeo = nor;

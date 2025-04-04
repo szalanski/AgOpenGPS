@@ -1,4 +1,6 @@
+using AgLibrary.Logging;
 using AgOpenGPS.Culture;
+using AgOpenGPS.Helpers;
 using System;
 using System.Drawing;
 using System.Globalization;
@@ -26,7 +28,7 @@ namespace AgOpenGPS
             this.Text = gStr.gsStartDeleteABoundary;
 
             //Column Header
-            Boundary.Text = "Bounds";
+            labelBounds.Text = gStr.gsBoundary;
             Thru.Text = gStr.gsDriveThru;
             Area.Text = gStr.gsArea;
             btnDelete.Enabled = false;
@@ -48,7 +50,7 @@ namespace AgOpenGPS
             panelKML.Visible = false;
             mf.CloseTopMosts();
 
-            if (!mf.IsOnScreen(Location, Size, 1))
+            if (!ScreenHelper.IsOnScreen(Bounds))
             {
                 Top = 0;
                 Left = 0;

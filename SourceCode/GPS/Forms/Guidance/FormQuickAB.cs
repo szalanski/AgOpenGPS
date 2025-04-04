@@ -1,4 +1,6 @@
-﻿using AgOpenGPS.Culture;
+﻿using AgOpenGPS.Controls;
+using AgOpenGPS.Culture;
+using AgOpenGPS.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -27,8 +29,14 @@ namespace AgOpenGPS
             mf = _mf as FormGPS;
             InitializeComponent();
 
-            //btnPausePlay.Text = gStr.gsPause;
-            this.Text = "Tracks";
+            //translate all the controls
+            this.Text = gStr.gsQuickAB;
+            labelABLine.Text = gStr.gsABline;
+            labelCurve.Text = gStr.gsCurve;
+            labelAPlus.Text = gStr.gsAPlus;
+            labelStatus.Text = gStr.gsStatus;
+
+
         }
 
         private void FormQuickAB_Load(object sender, EventArgs e)
@@ -52,7 +60,7 @@ namespace AgOpenGPS
             nudHeading.Controls[0].Enabled = false;
             nudHeading.Value = 0;
 
-            if (!mf.IsOnScreen(Location, Size, 1))
+            if (!ScreenHelper.IsOnScreen(Bounds))
             {
                 Top = 0;
                 Left = 0;
@@ -398,7 +406,7 @@ namespace AgOpenGPS
         {
             timer1.Enabled = false;
 
-            if (mf.KeypadToNUD((NudlessNumericUpDown)sender, this))
+            if (((NudlessNumericUpDown)sender).ShowKeypad(this))
             {
                 //original A pt. 
                 mf.ABLine.desHeading = glm.toRadians((double)nudHeading.Value);
@@ -480,7 +488,7 @@ namespace AgOpenGPS
         private void textBox_Click(object sender, EventArgs e)
         {
             if (mf.isKeyboardOn)
-                mf.KeyboardToText((TextBox)sender, this);
+                ((TextBox)sender).ShowKeyboard(this);
         }
 
         private void btnAdd_Click(object sender, EventArgs e)

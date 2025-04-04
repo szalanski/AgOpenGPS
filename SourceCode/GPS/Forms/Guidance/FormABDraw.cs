@@ -1,4 +1,6 @@
-﻿using AgOpenGPS.Culture;
+﻿using AgOpenGPS.Controls;
+using AgOpenGPS.Culture;
+using AgOpenGPS.Helpers;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using System;
@@ -47,6 +49,9 @@ namespace AgOpenGPS
 
         private void FormABDraw_Load(object sender, EventArgs e)
         {
+            //translate
+            this.Text = gStr.gsABDraw;
+
             originalLine = mf.trk.idx;
 
             gTemp.Clear();
@@ -93,7 +98,7 @@ namespace AgOpenGPS
             this.Left = (area.Width - this.Width) / 2;
             FormABDraw_ResizeEnd(this, e);
 
-            if (!mf.IsOnScreen(Location, Size, 1))
+            if (!ScreenHelper.IsOnScreen(Bounds))
             {
                 Top = 0;
                 Left = 0;
@@ -315,7 +320,7 @@ namespace AgOpenGPS
 
         private void nudDistance_Click(object sender, EventArgs e)
         {
-            mf.KeypadToNUD((NudlessNumericUpDown)sender, this);
+            ((NudlessNumericUpDown)sender).ShowKeypad(this);
             btnSelectCurve.Focus();
         }
 
@@ -362,7 +367,7 @@ namespace AgOpenGPS
 
             if (mf.isKeyboardOn)
             {
-                mf.KeyboardToText((System.Windows.Forms.TextBox)sender, this);
+                ((System.Windows.Forms.TextBox)sender).ShowKeyboard(this);
                 
                 if (indx > -1)
                     gTemp[indx].name = tboxNameCurve.Text.Trim();

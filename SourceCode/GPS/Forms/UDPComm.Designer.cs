@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Xml.Linq;
 using AgOpenGPS.Culture;
 using System.Text;
+using AgLibrary.Logging;
 
 namespace AgOpenGPS
 {
@@ -84,6 +85,8 @@ namespace AgOpenGPS
                                     pn.headingTrueDual = temp + pn.headingTrueDualOffset;
                                     if (pn.headingTrueDual >= 360) pn.headingTrueDual -= 360;
                                     else if (pn.headingTrueDual < 0) pn.headingTrueDual += 360;
+
+                                    if (ahrs.isDualAsIMU) ahrs.imuHeading = pn.headingTrueDual;
                                 }
 
                                 //from single antenna sentences (VTG,RMC)
@@ -259,16 +262,8 @@ namespace AgOpenGPS
                                 Log.EventWriter(lblHardwareMessage.Text);
 
                                 //color based on byte 6
-                                if (data[6] == 0)
-                                {
-                                    lblHardwareMessage.BackColor = Color.Salmon;
-                                    lblHardwareMessage.ForeColor = Color.Black;
-                                }
-                                else
-                                {
-                                    lblHardwareMessage.BackColor = Color.Bisque;
-                                    lblHardwareMessage.ForeColor = Color.Black;
-                                }
+                                lblHardwareMessage.BackColor = data[6] == 0 ? Color.Salmon : Color.Bisque;
+                                lblHardwareMessage.ForeColor = Color.Black;
                             }
                             else
                             {
@@ -277,6 +272,25 @@ namespace AgOpenGPS
                             }
                             break;
                         }
+                    case 222: // 0xDE
+                        {
+                            //{ 0x80, 0x81, 0x7f, 222, number bytes, mask, command CRC };
+                            if (data.Length < 6) break;
+                            if (((data[5] & 1) == 1)) //mask bit #0 set and command bit #0 nudge line to the 0 = left 1 = right
+                            {
+                                double dist = Properties.Settings.Default.setAS_snapDistance * 0.01;
+                                if ((data[6] & 1) != 1) { trk.NudgeTrack(-dist); }
+                                if ((data[6] & 1) == 1) { trk.NudgeTrack(dist); }
+                            }
+                            if (((data[5] & 2) == 2)) //mask bit #1 set and command bit #0 cycle line to the 0 = left 1 = right
+                            {
+                                if ((data[6] & 1) != 1) {  btnCycleLines.PerformClick(); }
+                                if ((data[6] & 1) == 1) { btnCycleLinesBk.PerformClick(); }
+                            }
+                           
+                            break;
+                        }
+
 
                     #region Remote Switches
                     case 234://MTZ8302 Feb 2020

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO.Ports;
 using System.Windows.Forms;
+using AgLibrary.Logging;
 
 namespace AgIO
 {
@@ -76,9 +77,7 @@ namespace AgIO
 
             Log.EventWriter("Program Reset: Button OK on Serial Pass Form");
 
-            RegistrySettings.Save();
-            Application.Restart();
-            Environment.Exit(0);
+            Program.Restart();
             Close();
         }
 

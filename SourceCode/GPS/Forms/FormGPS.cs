@@ -1,5 +1,6 @@
 ﻿//Please, if you use this, share the improvements
 
+using AgLibrary.Logging;
 using AgOpenGPS;
 using AgOpenGPS.Culture;
 using AgOpenGPS.Properties;
@@ -108,7 +109,7 @@ namespace AgOpenGPS
         /// <summary>
         /// create the scene camera
         /// </summary>
-        public CCamera camera = new CCamera();
+        public CCamera camera;
 
         /// <summary>
         /// create world grid
@@ -192,11 +193,6 @@ namespace AgOpenGPS
         public CSim sim;
 
         /// <summary>
-        /// Resource manager for gloabal strings
-        /// </summary>
-        public ResourceManager _rm;
-
-        /// <summary>
         /// Heading, Roll, Pitch, GPS, Properties
         /// </summary>
         public CAHRS ahrs;
@@ -273,10 +269,10 @@ namespace AgOpenGPS
             //winform initialization
             InitializeComponent();
 
-            CheckSettingsNotNull();
-
             //time keeper
             secondsSinceStart = (DateTime.Now - Process.GetCurrentProcess().StartTime).TotalSeconds;
+
+            camera = new CCamera();
 
             //create the world grid
             worldGrid = new CWorldGrid(this);
@@ -342,9 +338,6 @@ namespace AgOpenGPS
             //instance of tram
             tram = new CTram(this);
 
-            //resource for gloabal language strings
-            _rm = new ResourceManager("AgOpenGPS.gStr", Assembly.GetExecutingAssembly());
-
             //access to font class
             font = new CFont(this);
 
@@ -360,30 +353,29 @@ namespace AgOpenGPS
 
         private void FormGPS_Load(object sender, EventArgs e)
         {
-            if (!isTermsAccepted)
+            Log.EventWriter("Program Started: "
+                + DateTime.Now.ToString("f", CultureInfo.InvariantCulture));
+            Log.EventWriter("AOG Version: " + Application.ProductVersion.ToString(CultureInfo.InvariantCulture));
+
+            if (!Properties.Settings.Default.setDisplay_isTermsAccepted)
             {
-                if (!Properties.Settings.Default.setDisplay_isTermsAccepted)
+                using (var form = new Form_First(this))
                 {
-                    using (var form = new Form_First(this))
+                    if (form.ShowDialog(this) != DialogResult.OK)
                     {
-                        if (form.ShowDialog(this) != DialogResult.OK)
-                        {
-                            Log.EventWriter("Terms Not Accepted");
-                            Close();
-                        }
-                        else
-                        {
-                            Log.EventWriter("Terms Accepted");
-                        }
+                        Log.EventWriter("Terms Not Accepted");
+                        Log.FileSaveSystemEvents();
+                        Environment.Exit(0);
+                    }
+                    else
+                    {
+                        Log.EventWriter("Terms Accepted");
                     }
                 }
             }
+            else Log.EventWriter("Terms Already Accepted");
 
             this.MouseWheel += ZoomByMouseWheel;
-
-            Log.EventWriter("Program Started: " 
-                + DateTime.Now.ToString("f", CultureInfo.CreateSpecificCulture(RegistrySettings.culture)));
-            Log.EventWriter("AOG Version: " + Application.ProductVersion.ToString(CultureInfo.InvariantCulture));
 
             //The way we subscribe to the System Event to check when Power Mode has changed.
             Microsoft.Win32.SystemEvents.PowerModeChanged += SystemEvents_PowerModeChanged;
@@ -408,18 +400,6 @@ namespace AgOpenGPS
 
             //make sure current field directory exists, null if not
             currentFieldDirectory = Settings.Default.setF_CurrentDir;
-
-            if (currentFieldDirectory != "")
-            {
-                string dir = Path.Combine(RegistrySettings.fieldsDirectory, currentFieldDirectory);
-                if (!string.IsNullOrEmpty(dir) && !Directory.Exists(dir))
-                {
-                    currentFieldDirectory = "";
-                    Settings.Default.setF_CurrentDir = "";
-                    Settings.Default.Save();
-                    Log.EventWriter("Field Directory is Empty or Missing");
-                }
-            }
 
             Log.EventWriter("Program Directory: " + Application.StartupPath);
             Log.EventWriter("Fields Directory: " + (RegistrySettings.fieldsDirectory));
@@ -464,7 +444,7 @@ namespace AgOpenGPS
             oglZoom.Left = 100;
             oglZoom.Top = 100;
 
-            if (RegistrySettings.vehicleFileName != "Default Vehicle" && Properties.Settings.Default.setDisplay_isAutoStartAgIO)
+            if (RegistrySettings.vehicleFileName != "" && Properties.Settings.Default.setDisplay_isAutoStartAgIO)
             {
                 //Start AgIO process
                 Process[] processName = Process.GetProcessesByName("AgIO");
@@ -499,16 +479,13 @@ namespace AgOpenGPS
 
             hotkeys = Properties.Settings.Default.setKey_hotkeys.ToCharArray();
 
-            if (RegistrySettings.vehicleFileName == "Default Vehicle")
+            if (RegistrySettings.vehicleFileName == "")
             {
                 Log.EventWriter("Using Default Vehicle At Start Warning");
 
                 YesMessageBox("Using Default Vehicle" + "\r\n\r\n" + "Load Existing Vehicle or Save As a New One !!!"
                     + "\r\n\r\n" + "Changes will NOT be Saved for Default Vehicle");
             
-                //Doesn't save Default Vehicle
-                RegistrySettings.Save();
-
                 using (FormConfig form = new FormConfig(this))
                 {
                     form.ShowDialog(this);
@@ -581,22 +558,22 @@ namespace AgOpenGPS
 
             SaveFormGPSWindowSettings();
 
-            double minutesSinceStart = ((DateTime.Now - Process.GetCurrentProcess().StartTime).TotalSeconds)/60;
+            double minutesSinceStart = ((DateTime.Now - Process.GetCurrentProcess().StartTime).TotalSeconds) / 60;
             if (minutesSinceStart < 1)
             {
                 minutesSinceStart = 1;
             }
 
             Log.EventWriter("Missed Sentence Counter Total: " + missedSentenceCount.ToString()
-                + "   Missed Per Minute: " + ((double)missedSentenceCount/minutesSinceStart).ToString("N4"));
+                + "   Missed Per Minute: " + ((double)missedSentenceCount / minutesSinceStart).ToString("N4"));
 
-            Log.EventWriter("Program Exit: " + DateTime.Now.ToString("f", CultureInfo.CreateSpecificCulture(RegistrySettings.culture)) + "\r");
-
-            //write the log file
-            FileSaveSystemEvents();
+            Log.EventWriter("Program Exit: " + DateTime.Now.ToString("f", CultureInfo.InvariantCulture) + "\r");
 
             //save current vehicle
-            RegistrySettings.Save();
+            Settings.Default.Save();
+
+            //write the log file
+            Log.FileSaveSystemEvents();
 
             if (displayBrightness.isWmiMonitor)
                 displayBrightness.SetBrightness(Settings.Default.setDisplay_brightnessSystem);
@@ -676,25 +653,6 @@ namespace AgOpenGPS
             }
         }
 
-        // Return True if a certain percent of a rectangle is shown across the total screen area of all monitors, otherwise return False.
-        public bool IsOnScreen(System.Drawing.Point RecLocation, System.Drawing.Size RecSize, double MinPercentOnScreen = 0.8)
-        {
-            double PixelsVisible = 0;
-            Rectangle Rec = new System.Drawing.Rectangle(RecLocation, RecSize);
-
-            foreach (Screen Scrn in Screen.AllScreens)
-            {
-                var r = System.Drawing.Rectangle.Intersect(Rec, Scrn.WorkingArea);
-                // intersect rectangle with screen
-                if (r.Width != 0 & r.Height != 0)
-                {
-                    PixelsVisible += (r.Width * r.Height);
-                    // tally visible pixels
-                }
-            }
-            return PixelsVisible >= (Rec.Width * Rec.Height) * MinPercentOnScreen;
-        }
-
         private void FormGPS_Move(object sender, EventArgs e)
         {
             Form f = Application.OpenForms["FormGPSData"];
@@ -719,14 +677,6 @@ namespace AgOpenGPS
             }
         }
 
-        public void CheckSettingsNotNull()
-        {
-            if (Settings.Default.setFeatures == null)
-            {
-                Settings.Default.setFeatures = new CFeatureSettings();
-            }
-        }
-
         public enum textures : uint
         {
             Floor, Font,
@@ -734,7 +684,7 @@ namespace AgOpenGPS
             Compass, Speedo, SpeedoNeedle,
             Lift, SteerPointer,
             SteerDot, Tractor, QuestionMark,
-            FrontWheels, FourWDFront, FourWDRear,
+            FrontWheels, ArticulatedFront, ArticulatedRear,
             Harvester,
             Lateral, bingGrid,
             NoGPS, ZoomIn48, ZoomOut48,
@@ -754,8 +704,8 @@ namespace AgOpenGPS
                 Resources.z_Compass,Resources.z_Speedo,Resources.z_SpeedoNeedle,
                 Resources.z_Lift,Resources.z_SteerPointer,
                 Resources.z_SteerDot,GetTractorBrand(Settings.Default.setBrand_TBrand),Resources.z_QuestionMark,
-                Resources.z_FrontWheels,Get4WDBrandFront(Settings.Default.setBrand_WDBrand),
-                Get4WDBrandRear(Settings.Default.setBrand_WDBrand),
+                Resources.z_FrontWheels,GetArticulatedBrandFront(Settings.Default.setBrand_WDBrand),
+                GetArticulatedBrandRear(Settings.Default.setBrand_WDBrand),
                 GetHarvesterBrand(Settings.Default.setBrand_HBrand),
                 Resources.z_LateralManual, Resources.z_bingMap,
                 Resources.z_NoGPS, Resources.ZoomIn48, Resources.ZoomOut48,
@@ -779,43 +729,6 @@ namespace AgOpenGPS
                     GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, 9729);
                 }
             }
-        }
-
-        public bool KeypadToNUD(NudlessNumericUpDown sender, Form owner)
-        {
-            var colour = sender.BackColor;
-            sender.BackColor = Color.Red;
-            sender.Value = Math.Round(sender.Value, sender.DecimalPlaces);
-
-            using (FormNumeric form = new FormNumeric((double)sender.Minimum, (double)sender.Maximum, (double)sender.Value))
-            {
-                DialogResult result = form.ShowDialog(owner);
-                if (result == DialogResult.OK)
-                {
-                    sender.Value = (decimal)form.ReturnValue;
-                    sender.BackColor = colour;
-                    return true;
-                }
-                else if (result == DialogResult.Cancel)
-                {
-                    sender.BackColor = colour;
-                }
-                return false;
-            }
-        }
-
-        public void KeyboardToText(TextBox sender, Form owner)
-        {
-            var colour = sender.BackColor;
-            sender.BackColor = Color.Red;
-            using (FormKeyboard form = new FormKeyboard(sender.Text))
-            {
-                if (form.ShowDialog(owner) == DialogResult.OK)
-                {
-                    sender.Text = form.ReturnString;
-                }
-            }
-            sender.BackColor = colour;
         }
 
         //request a new job

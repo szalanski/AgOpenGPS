@@ -1,4 +1,6 @@
-﻿using AgOpenGPS.Culture;
+﻿using AgOpenGPS.Controls;
+using AgOpenGPS.Culture;
+using AgOpenGPS.Helpers;
 using System;
 using System.Globalization;
 using System.Windows.Forms;
@@ -16,7 +18,8 @@ namespace AgOpenGPS
 
             InitializeComponent();
 
-            this.Text = gStr.gsEditABLine;
+            this.Text = gStr.gsFormFlag;
+            labelPoint.Text = gStr.gsPoint;
             nudLatitude.Controls[0].Enabled = false;
             nudLongitude.Controls[0].Enabled = false;
 
@@ -26,7 +29,7 @@ namespace AgOpenGPS
 
         private void FormEnterAB_Load(object sender, EventArgs e)
         {
-            if (!mf.IsOnScreen(Location, Size, 1))
+            if (!ScreenHelper.IsOnScreen(Bounds))
             {
                 Top = 0;
                 Left = 0;
@@ -36,12 +39,12 @@ namespace AgOpenGPS
 
         private void nudLatitude_Click(object sender, EventArgs e)
         {
-            mf.KeypadToNUD((NudlessNumericUpDown)sender, this);
+            ((NudlessNumericUpDown)sender).ShowKeypad(this);
         }
 
         private void nudLongitude_Click(object sender, EventArgs e)
         {
-            mf.KeypadToNUD((NudlessNumericUpDown)sender, this);
+            ((NudlessNumericUpDown)sender).ShowKeypad(this);
         }
 
         public void CalcHeading()

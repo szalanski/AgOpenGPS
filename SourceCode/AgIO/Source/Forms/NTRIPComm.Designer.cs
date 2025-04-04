@@ -7,6 +7,7 @@ using System.Globalization;
 using System.IO.Ports;
 using System.Collections.Generic;
 using System.Linq;
+using AgLibrary.Logging;
 
 // Declare the delegate prototype to send data back to the form
 delegate void UpdateRTCM_Data(byte[] data);
@@ -794,7 +795,7 @@ namespace AgIO
 
             else sbGGA.Append("1,");
 
-            sbGGA.Append(altitudeData.ToString("#.###", CultureInfo.InvariantCulture)).Append(',');
+            sbGGA.Append(altitudeData.ToString("0.###", CultureInfo.InvariantCulture)).Append(',');
             sbGGA.Append("M,");
             sbGGA.Append("46.4,M,");  //udulation
             sbGGA.Append(ageData.ToString("0.#", CultureInfo.InvariantCulture)).Append(','); //age

@@ -1,4 +1,7 @@
-﻿using AgOpenGPS.Culture;
+﻿using AgLibrary.Logging;
+using AgOpenGPS.Controls;
+using AgOpenGPS.Culture;
+using AgOpenGPS.Helpers;
 using System;
 using System.Globalization;
 using System.IO;
@@ -19,7 +22,7 @@ namespace AgOpenGPS
 
             InitializeComponent();
 
-            label1.Text = gStr.gsEnterFieldName;
+            labelEnterFieldName.Text = gStr.gsEnterFieldName;
             this.Text = gStr.gsCreateNewField;
         }
 
@@ -27,7 +30,7 @@ namespace AgOpenGPS
         {
             btnSave.Enabled = false;
 
-            if (!mf.IsOnScreen(Location, Size, 1))
+            if (!ScreenHelper.IsOnScreen(Bounds))
             {
                 Top = 0;
                 Left = 0;
@@ -98,9 +101,10 @@ namespace AgOpenGPS
                 }
                 else
                 {
-                    mf.pn.latStart = mf.pn.latitude; mf.pn.lonStart = mf.pn.longitude;
+                    mf.pn.latStart = mf.pn.latitude;
+                    mf.pn.lonStart = mf.pn.longitude;
 
-                    mf.pn.SetLocalMetersPerDegree();
+                    mf.pn.SetLocalMetersPerDegree(false);
 
                     dirNewField.Create();
 
@@ -135,7 +139,7 @@ namespace AgOpenGPS
         {
             if (mf.isKeyboardOn)
             {
-                mf.KeyboardToText((TextBox)sender, this);
+                ((TextBox)sender).ShowKeyboard(this);
                 btnSerialCancel.Focus();
             }
         }
@@ -144,7 +148,7 @@ namespace AgOpenGPS
         {
             if (mf.isKeyboardOn)
             {
-                mf.KeyboardToText((TextBox)sender, this);
+                ((TextBox)sender).ShowKeyboard(this);
                 btnSerialCancel.Focus();
             }
         }
@@ -153,7 +157,7 @@ namespace AgOpenGPS
         {
             if (mf.isKeyboardOn)
             {
-                mf.KeyboardToText((TextBox)sender, this);
+                ((TextBox)sender).ShowKeyboard(this);
                 btnSerialCancel.Focus();
             }
         }

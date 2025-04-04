@@ -1,4 +1,7 @@
-﻿using AgOpenGPS.Culture;
+﻿using AgLibrary.Logging;
+using AgOpenGPS.Controls;
+using AgOpenGPS.Culture;
+using AgOpenGPS.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -21,7 +24,7 @@ namespace AgOpenGPS
         public List<CTrk> gTemp = new List<CTrk>();
 
         private bool isRefRightSide = true; //left side 0 middle 1 right 2
-
+        TrackMode mode = TrackMode.None;
         private vec2 ptAa = new vec2();
         private vec2 ptBb = new vec2();
 
@@ -36,7 +39,28 @@ namespace AgOpenGPS
             InitializeComponent();
 
             //btnPausePlay.Text = gStr.gsPause;
-            this.Text = "Tracks";
+            this.Text = gStr.gsTracks;
+            labelABLine.Text = gStr.gsABline;
+            labelCurve.Text = gStr.gsCurve;
+            labelAPlus.Text = gStr.gsAPlus;
+            labelABLine.Text = gStr.gsABline; 
+            labelABLine2.Text = gStr.gsABline;
+            labelABCurve.Text = gStr.gsCurve;
+            labelCurve2.Text = gStr.gsCurve;  
+            labelEditName.Text = gStr.gsEnterName;
+            labelEnterName.Text = gStr.gsEnterName;
+            labelLatLon.Text = gStr.gsLatLon;
+            labelLatLonHeading.Text = gStr.gsLatLon + " " + gStr.gsHeading;
+            labelLatitude.Text = gStr.gsLatitude;
+            labelLongtitude.Text = gStr.gsLongtitude;
+            labelPivot.Text = gStr.gsPivot;
+            labelHeading.Text = gStr.gsHeading;
+            labelLatitudeA.Text = gStr.gsLatitude + " A";
+            labelLongtitudeA.Text = gStr.gsLongtitude + " A";  
+            labelLatitudeB.Text = gStr.gsLatitude + " B";
+            labelLongtitudeB.Text = gStr.gsLongtitude + "B";
+            labelStatus.Text = gStr.gsStatus + ":";
+
         }
 
         private void FormBuildTracks_Load(object sender, EventArgs e)
@@ -101,7 +125,7 @@ namespace AgOpenGPS
 
             UpdateTable();
 
-            if (!mf.IsOnScreen(Location, Size, 1))
+            if (!ScreenHelper.IsOnScreen(Bounds))
             {
                 Top = 0;
                 Left = 0;
@@ -537,12 +561,15 @@ namespace AgOpenGPS
         #region Pick
         private void btnzABCurve_Click(object sender, EventArgs e)
         {
+            mode = TrackMode.Curve;
             panelChoose.Visible = false;
             panelCurve.Visible = true;
 
             btnACurve.Enabled = true;
+            btnACurve.Image = Properties.Resources.LetterABlue;
             btnBCurve.Enabled = false;
             btnPausePlay.Enabled = false;
+            btnPausePlay.Image = Properties.Resources.boundaryPause;
             mf.curve.desList?.Clear();
 
             this.Size = new System.Drawing.Size(270, 360);
@@ -569,7 +596,6 @@ namespace AgOpenGPS
 
             btnALine.Enabled = true;
             btnBLine.Enabled = false;
-            btnPausePlay.Enabled = false;
             mf.curve.desList?.Clear();
 
             this.Size = new System.Drawing.Size(270, 360);
@@ -606,6 +632,29 @@ namespace AgOpenGPS
             mf.Activate();
         }
 
+        private void btnLatLonPivot2_Click(object sender, EventArgs e)
+        {
+            panelChoose.Visible = false;
+            panelCurve.Visible = true;
+
+            mf.curve.isMakingCurve = true;
+            mf.curve.isRecordingCurve = false;
+
+            btnRefSideCurve.Visible = false;
+            btnPausePlay.Enabled = false;
+            btnPausePlay.Image = Properties.Resources.PointDelete;
+            mode = TrackMode.waterPivot;
+            btnACurve.Image = Properties.Resources.PointAdd;
+            btnACurve.Enabled = true;
+            btnBCurve.Enabled = false;
+
+
+            mf.curve.desList?.Clear();
+
+            this.Size = new System.Drawing.Size(270, 360);
+            mf.Activate();
+        }
+
         #endregion
 
         #region Curve
@@ -622,7 +671,12 @@ namespace AgOpenGPS
             if (mf.curve.isMakingCurve)
             {
                 mf.curve.desList.Add(new vec3(mf.pivotAxlePos.easting, mf.pivotAxlePos.northing, mf.pivotAxlePos.heading));
-                btnBCurve.Enabled = mf.curve.desList.Count > 3;
+                btnBCurve.Enabled = mf.curve.desList.Count > 2;
+                if (mode == TrackMode.waterPivot)
+                {
+                    btnPausePlay.Enabled = mf.curve.desList.Count > 0;
+                    btnACurve.Enabled = mf.curve.desList.Count < 3;
+                }
             }
             else
             {
@@ -633,9 +687,7 @@ namespace AgOpenGPS
                 btnBCurve.Enabled = true;
                 btnACurve.Enabled = false;
                 btnACurve.Image = Properties.Resources.PointAdd;
-
                 btnPausePlay.Enabled = true;
-                btnPausePlay.Visible = true;
 
                 mf.curve.isMakingCurve = true;
                 mf.curve.isRecordingCurve = true;
@@ -655,7 +707,21 @@ namespace AgOpenGPS
             ptBb.northing = mf.pivotAxlePos.northing;
 
             int cnt = mf.curve.desList.Count;
-            if (cnt > 3)
+            if (mode == TrackMode.waterPivot && cnt > 2)
+            {
+                mf.trk.gArr.Add(new CTrk());
+                //array number is 1 less since it starts at zero
+                idx = mf.trk.gArr.Count - 1;
+
+                mf.trk.gArr[idx].ptA = FindCircleCenter(mf.curve.desList[0], mf.curve.desList[1], mf.curve.desList[2]);
+                mf.trk.gArr[idx].mode = TrackMode.waterPivot;
+                mf.ABLine.desName = "Piv";
+                textBox1.Text = mf.ABLine.desName;
+
+                panelPivot.Visible = false;
+                panelName.Visible = true;
+            }
+            else if (cnt > 2)
             {
                 //make sure point distance isn't too big 
                 mf.curve.MakePointMinimumSpacing(ref mf.curve.desList, 1.6);
@@ -734,7 +800,13 @@ namespace AgOpenGPS
 
         private void btnPausePlayCurve_Click(object sender, EventArgs e)
         {
-            if (mf.curve.isRecordingCurve)
+            if (mode == TrackMode.waterPivot)
+            {
+                if (mf.curve.desList.Count > 0) mf.curve.desList.RemoveAt(mf.curve.desList.Count - 1);
+                btnPausePlay.Enabled = mf.curve.desList.Count > 0;
+                btnACurve.Enabled = mf.curve.desList.Count < 3;
+            }
+            else if (mf.curve.isRecordingCurve)
             {
                 mf.curve.isRecordingCurve = false;
                 btnPausePlay.Image = Properties.Resources.BoundaryRecord;
@@ -748,7 +820,7 @@ namespace AgOpenGPS
                 //btnPausePlay.Text = gStr.gsPause;
                 btnACurve.Enabled = false;
             }
-            btnBCurve.Enabled = mf.curve.desList.Count > 3;
+            btnBCurve.Enabled = mf.curve.desList.Count > 2;
             mf.Activate();
         }
 
@@ -890,7 +962,7 @@ namespace AgOpenGPS
         {
             timer1.Enabled = false;
 
-            if (mf.KeypadToNUD((NudlessNumericUpDown)sender, this))
+            if (((NudlessNumericUpDown)sender).ShowKeypad(this))
             {
                 //original A pt. 
                 mf.ABLine.desHeading = glm.toRadians((double)nudHeading.Value);
@@ -1161,22 +1233,22 @@ namespace AgOpenGPS
 
         private void nudLatitudeA_Click(object sender, EventArgs e)
         {
-            mf.KeypadToNUD((NudlessNumericUpDown)sender, this);
+            ((NudlessNumericUpDown)sender).ShowKeypad(this);
         }
 
         private void nudLongitudeA_Click(object sender, EventArgs e)
         {
-            mf.KeypadToNUD((NudlessNumericUpDown)sender, this);
+            ((NudlessNumericUpDown)sender).ShowKeypad(this);
         }
 
         private void nudLatitudeB_Click(object sender, EventArgs e)
         {
-            mf.KeypadToNUD((NudlessNumericUpDown)sender, this);
+            ((NudlessNumericUpDown)sender).ShowKeypad(this);
         }
 
         private void nudLongitudeB_Click(object sender, EventArgs e)
         {
-            mf.KeypadToNUD((NudlessNumericUpDown)sender, this);
+            ((NudlessNumericUpDown)sender).ShowKeypad(this);
         }
 
         private void btnEnter_LatLonLatLon_Click(object sender, EventArgs e)
@@ -1240,17 +1312,17 @@ namespace AgOpenGPS
 
         private void nudLatitudePlus_Click(object sender, EventArgs e)
         {
-            mf.KeypadToNUD((NudlessNumericUpDown)sender, this);
+            ((NudlessNumericUpDown)sender).ShowKeypad(this);
         }
 
         private void nudLongitudePlus_Click(object sender, EventArgs e)
         {
-            mf.KeypadToNUD((NudlessNumericUpDown)sender, this);
+            ((NudlessNumericUpDown)sender).ShowKeypad(this);
         }
 
         private void nudHeadingLatLonPlus_Click(object sender, EventArgs e)
         {
-            mf.KeypadToNUD((NudlessNumericUpDown)sender, this);
+            ((NudlessNumericUpDown)sender).ShowKeypad(this);
         }
 
         private void btnEnter_LatLonPlus_Click(object sender, EventArgs e)
@@ -1304,12 +1376,12 @@ namespace AgOpenGPS
 
         private void nudLatitudePivot_Click(object sender, EventArgs e)
         {
-            mf.KeypadToNUD((NudlessNumericUpDown)sender, this);
+            ((NudlessNumericUpDown)sender).ShowKeypad(this);
         }
 
         private void nudLongitudePivot_Click(object sender, EventArgs e)
         {
-            mf.KeypadToNUD((NudlessNumericUpDown)sender, this);
+            ((NudlessNumericUpDown)sender).ShowKeypad(this);
         }
 
         private void btnEnter_Pivot_Click(object sender, EventArgs e)
@@ -1332,6 +1404,20 @@ namespace AgOpenGPS
 
             this.Size = new System.Drawing.Size(270, 360);
             mf.Activate();
+        }
+
+        private vec2 FindCircleCenter(vec3 p1, vec3 p2, vec3 p3)
+        {
+            var d2 = p2.northing * p2.northing + p2.easting * p2.easting;
+            var bc = (p1.northing * p1.northing + p1.easting * p1.easting - d2) / 2;
+            var cd = (d2 - p3.northing * p3.northing - p3.easting * p3.easting) / 2;
+            var det = (p1.northing - p2.northing) * (p2.easting - p3.easting) - (p2.northing - p3.northing) * (p1.easting - p2.easting);
+            if (Math.Abs(det) > 1e-10)
+                return new vec2(
+              ((p1.northing - p2.northing) * cd - (p2.northing - p3.northing) * bc) / det,
+              (bc * (p2.easting - p3.easting) - cd * (p1.easting - p2.easting)) / det
+            );
+            else return new vec2();
         }
 
         private void btnFillLAtLonPivot_Click(object sender, EventArgs e)
@@ -1368,7 +1454,7 @@ namespace AgOpenGPS
         private void textBox_Click(object sender, EventArgs e)
         {
             if (mf.isKeyboardOn)
-                mf.KeyboardToText((TextBox)sender, this);
+                ((TextBox)sender).ShowKeyboard(this);
         }
 
         private void btnAdd_Click(object sender, EventArgs e)

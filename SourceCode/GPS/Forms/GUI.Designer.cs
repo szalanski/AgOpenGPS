@@ -1,23 +1,23 @@
 ﻿//Please, if you use this, share the improvements
 
+using AgLibrary.Logging;
+using AgOpenGPS.Culture;
+using AgOpenGPS.Helpers;
+using AgOpenGPS.Properties;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.Windows.Forms;
-using AgOpenGPS.Properties;
 using System.Globalization;
 using System.IO;
-using System.Media;
-using System.Reflection;
-using System.Collections.Generic;
-using AgOpenGPS.Culture;
-using System.Text;
+using System.Windows.Forms;
+using AgOpenGPS.Core.Models;
 
 namespace AgOpenGPS
 {
-    public enum TBrand { AGOpenGPS, Case, Claas, Deutz, Fendt, JDeere, Kubota, Massey, NewHolland, Same, Steyr, Ursus, Valtra }
-    public enum HBrand { AgOpenGPS, Case, Claas, JDeere, NewHolland }
-    public enum WDBrand { AgOpenGPS, Case, Challenger, JDeere, NewHolland, Holder }
+    public enum TractorBrand { AGOpenGPS, Case, Claas, Deutz, Fendt, JDeere, Kubota, Massey, NewHolland, Same, Steyr, Ursus, Valtra, JCB }
+    public enum HarvesterBrand { AgOpenGPS, Case, Claas, JDeere, NewHolland }
+    public enum ArticulatedBrand { AgOpenGPS, Case, Challenger, JDeere, NewHolland, Holder }
 
     public partial class FormGPS
     {
@@ -45,9 +45,6 @@ namespace AgOpenGPS
         public Color textColorDay;
         public Color textColorNight;
 
-        public Color vehicleColor;
-        public double vehicleOpacity;
-        public byte vehicleOpacityByte;
         public bool isVehicleImage;
 
         //Is it in 2D or 3D, metric or imperial, display lightbar, display grid etc
@@ -56,7 +53,7 @@ namespace AgOpenGPS
         public bool isPureDisplayOn = true, isSkyOn = true, isRollMeterOn = false, isTextureOn = true;
         public bool isDay = true, isDayTime = true, isBrightnessOn = true;
         public bool isLogElevation = false, isDirectionMarkers;
-        public bool isKeyboardOn = true, isAutoStartAgIO = true, isSvennArrowOn = true, isTermsAccepted = false;
+        public bool isKeyboardOn = true, isAutoStartAgIO = true, isSvennArrowOn = true;
         public bool isSectionlinesOn = true, isLineSmooth = true;
 
         public bool isLightBarNotSteerBar = false;
@@ -107,7 +104,18 @@ namespace AgOpenGPS
             if (++sentenceCounter > 20)
             {
                 ShowNoGPSWarning();
+                //make sure settings and others can't be openend, the program is in standby
+                toolStripDropDownButton1.Enabled = false;
+                toolStripDropDownButton4.Enabled = false;
+                btnJobMenu.Enabled = false;
                 return;
+            }
+            else
+            {
+                //turn on buttons when GPS is active again (or SIM is enabled)
+                toolStripDropDownButton1.Enabled = true;
+                toolStripDropDownButton4.Enabled = true;
+                btnJobMenu.Enabled = true;
             }
 
             ////////////////////////////////////////////// 10 second ///////////////////////////////////////////////////////
@@ -324,19 +332,7 @@ namespace AgOpenGPS
 
                 isFlashOnOff = !isFlashOnOff;
 
-                //the main formgps window
-                if (isMetric)  //metric or imperial
-                {
-                    //status strip values
-                    distanceToolBtn.Text = fd.DistanceUserMeters + "\r\n" + fd.WorkedUserHectares;
-
-                }
-                else  //Imperial Measurements
-                {
-                    //acres on the master section soft control and sections
-                    //status strip values
-                    distanceToolBtn.Text = fd.DistanceUserFeet + "\r\n" + fd.WorkedUserAcres;
-                }
+                //the main formgps windows
 
                 //Make sure it is off when it should
                 if (!ct.isContourBtnOn && trk.idx == -1 && isBtnAutoSteerOn) 
@@ -375,10 +371,8 @@ namespace AgOpenGPS
 
         }//wait till timer fires again.         
 
-        public void LoadSettings()
-        {            
-            CheckSettingsNotNull();
-
+        public void LoadText()
+        {
             enterSimCoordsToolStripMenuItem.Text = gStr.gsEnterSimCoords;
             aboutToolStripMenuItem.Text = gStr.gsAbout;
             menustripLanguage.Text = gStr.gsLanguage;
@@ -391,12 +385,14 @@ namespace AgOpenGPS
             toolStripConfig.Text = gStr.gsConfiguration;
             toolStripSteerSettings.Text = gStr.gsAutoSteer;
             toolStripWorkingDirectories.Text = gStr.gsDirectories;
+            toolStripAllSettings.Text = gStr.gsAllSettings;
 
             resetEverythingToolStripMenuItem.Text = gStr.gsResetAllForSure;
             steerChartStripMenu.Text = gStr.gsCharts;
 
             //Tools Menu
             SmoothABtoolStripMenu.Text = gStr.gsSmoothABCurve;
+            guidelinesToolStripMenuItem.Text = gStr.gsExtraGuideLines;
             boundariesToolStripMenuItem.Text = gStr.gsBoundary;
             headlandToolStripMenuItem.Text = gStr.gsHeadland;
             headlandBuildToolStripMenuItem.Text = gStr.gsHeadland + " Builder";
@@ -415,8 +411,11 @@ namespace AgOpenGPS
             steerChartToolStripMenuItem.Text = gStr.gsSteerChart;
             headingChartToolStripMenuItem.Text = gStr.gsHeadingChart;
             xTEChartToolStripMenuItem.Text = gStr.gsXTEChart;
+        }
 
-            btnChangeMappingColor.Text = GitVersionInformation.MajorMinorPatch;
+        public void LoadSettings()
+        {
+            btnChangeMappingColor.Text = Program.Version;
 
             //metric settings
             isMetric = Settings.Default.setMenu_isMetric;
@@ -496,13 +495,6 @@ namespace AgOpenGPS
             fieldColorDay = Properties.Settings.Default.setDisplay_colorFieldDay.CheckColorFor255();
             fieldColorNight = Properties.Settings.Default.setDisplay_colorFieldNight.CheckColorFor255();
 
-            Properties.Settings.Default.setDisplay_colorDayFrame = frameDayColor;
-            Properties.Settings.Default.setDisplay_colorNightFrame = frameNightColor;
-            Properties.Settings.Default.setDisplay_colorSectionsDay = sectionColorDay;
-            Properties.Settings.Default.setDisplay_colorFieldDay = fieldColorDay;
-            Properties.Settings.Default.setDisplay_colorFieldNight = fieldColorNight;
-            Properties.Settings.Default.Save();
-
             //load up colors
             textColorDay = Settings.Default.setDisplay_colorTextDay.CheckColorFor255();
             textColorNight = Settings.Default.setDisplay_colorTextNight.CheckColorFor255();
@@ -517,14 +509,6 @@ namespace AgOpenGPS
                 int iCol = (test.A << 24) | (test.R << 16) | (test.G << 8) | test.B;
                 customColorsList[i] = iCol;
             }
-
-            Properties.Settings.Default.setDisplay_customColors = "";
-            for (int i = 0; i < 15; i++)
-                Properties.Settings.Default.setDisplay_customColors += customColorsList[i].ToString() + ",";
-            Properties.Settings.Default.setDisplay_customColors += customColorsList[15].ToString();
-
-            Properties.Settings.Default.Save();
-
 
             isTextureOn = Settings.Default.setDisplay_isTextureOn;
             isLogElevation = Settings.Default.setDisplay_isLogElevation;
@@ -547,8 +531,7 @@ namespace AgOpenGPS
             panelNavigation.Location = new System.Drawing.Point(90, 100);
             panelDrag.Location = new System.Drawing.Point(87, 268);
 
-            vehicleOpacity = ((double)(Properties.Settings.Default.setDisplay_vehicleOpacity) * 0.01);
-            vehicleOpacityByte = (byte)(255 * ((double)(Properties.Settings.Default.setDisplay_vehicleOpacity) * 0.01));
+            vehicle.VehicleConfig.Opacity = ((double)(Properties.Settings.Default.setDisplay_vehicleOpacity) * 0.01);
             isVehicleImage = Properties.Settings.Default.setDisplay_isVehicleImage;
 
             string directoryName = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
@@ -570,7 +553,7 @@ namespace AgOpenGPS
             //set the flag mark button to red dot
             btnFlag.Image = Properties.Resources.FlagRed;
 
-            vehicleColor = Settings.Default.setDisplay_colorVehicle.CheckColorFor255();
+            vehicle.VehicleConfig.Color = (ColorRgb)Settings.Default.setDisplay_colorVehicle.CheckColorFor255();
 
             isLightbarOn = Settings.Default.setMenu_isLightbarOn;
             isLightBarNotSteerBar = Settings.Default.setMenu_isLightbarNotSteerBar;
@@ -585,7 +568,7 @@ namespace AgOpenGPS
             else btnHeadlandOnOff.Image = Properties.Resources.HeadlandOff;
 
             //btnChangeMappingColor.BackColor = sectionColorDay;
-            btnChangeMappingColor.Text = GitVersionInformation.MajorMinorPatch;
+            btnChangeMappingColor.Text = Program.Version;
 
             if (Properties.Settings.Default.setDisplay_isStartFullScreen)
             {
@@ -721,7 +704,7 @@ namespace AgOpenGPS
                 }
             }
 
-            if (!IsOnScreen(Location, Size, 1))
+            if (!ScreenHelper.IsOnScreen(Bounds))
             {
                 Top = 0;
                 Left = 0;
@@ -1594,92 +1577,94 @@ namespace AgOpenGPS
         #endregion properties 
 
         //Load Bitmaps brand
-        public Bitmap GetTractorBrand(TBrand brand)
+        public Bitmap GetTractorBrand(TractorBrand brand)
         {
-            Bitmap bitmap;
-            if (brand == TBrand.Case)
-                bitmap = Resources.z_TractorCase;
-            else if (brand == TBrand.Claas)
-                bitmap = Resources.z_TractorClaas;
-            else if (brand == TBrand.Deutz)
-                bitmap = Resources.z_TractorDeutz;
-            else if (brand == TBrand.Fendt)
-                bitmap = Resources.z_TractorFendt;
-            else if (brand == TBrand.JDeere)
-                bitmap = Resources.z_TractorJDeere;
-            else if (brand == TBrand.Kubota)
-                bitmap = Resources.z_TractorKubota;
-            else if (brand == TBrand.Massey)
-                bitmap = Resources.z_TractorMassey;
-            else if (brand == TBrand.NewHolland)
-                bitmap = Resources.z_TractorNH;
-            else if (brand == TBrand.Same)
-                bitmap = Resources.z_TractorSame;
-            else if (brand == TBrand.Steyr)
-                bitmap = Resources.z_TractorSteyr;
-            else if (brand == TBrand.Ursus)
-                bitmap = Resources.z_TractorUrsus;
-            else if (brand == TBrand.Valtra)
-                bitmap = Resources.z_TractorValtra;
-            else
-                bitmap = Resources.z_TractorAoG;
-
-            return bitmap;
+            switch (brand)
+            {
+                case TractorBrand.Case:
+                    return Resources.z_TractorCase;
+                case TractorBrand.Claas:
+                    return Resources.z_TractorClaas;
+                case TractorBrand.Deutz:
+                    return Resources.z_TractorDeutz;
+                case TractorBrand.Fendt:
+                    return Resources.z_TractorFendt;
+                case TractorBrand.JDeere:
+                    return Resources.z_TractorJDeere;
+                case TractorBrand.Kubota:
+                    return Resources.z_TractorKubota;
+                case TractorBrand.Massey:
+                    return Resources.z_TractorMassey;
+                case TractorBrand.NewHolland:
+                    return Resources.z_TractorNH;
+                case TractorBrand.Same:
+                    return Resources.z_TractorSame;
+                case TractorBrand.Steyr:
+                    return Resources.z_TractorSteyr;
+                case TractorBrand.Ursus:
+                    return Resources.z_TractorUrsus;
+                case TractorBrand.Valtra:
+                    return Resources.z_TractorValtra;
+                case TractorBrand.JCB:
+                    return Resources.z_TractorJCB;
+                default:
+                    return Resources.z_TractorAoG;
+            }
         }
 
-        public Bitmap GetHarvesterBrand(HBrand brandH)
+        public Bitmap GetHarvesterBrand(HarvesterBrand brand)
         {
-            Bitmap harvesterbitmap;
-            if (brandH == HBrand.Case)
-                harvesterbitmap = Resources.z_HarvesterCase;
-            else if (brandH == HBrand.Claas)
-                harvesterbitmap = Resources.z_HarvesterClaas;
-            else if (brandH == HBrand.JDeere)
-                harvesterbitmap = Resources.z_HarvesterJD;
-            else if (brandH == HBrand.NewHolland)
-                harvesterbitmap = Resources.z_HarvesterNH;
-            else
-                harvesterbitmap = Resources.z_HarvesterAoG;
-
-            return harvesterbitmap;
+            switch (brand)
+            {
+                case HarvesterBrand.Case:
+                    return Resources.z_HarvesterCase;
+                case HarvesterBrand.Claas:
+                    return Resources.z_HarvesterClaas;
+                case HarvesterBrand.JDeere:
+                    return Resources.z_HarvesterJD;
+                case HarvesterBrand.NewHolland:
+                    return Resources.z_HarvesterNH;
+                default:
+                    return Resources.z_HarvesterAoG;
+            }
         }
 
-        public Bitmap Get4WDBrandFront(WDBrand brandWDF)
+        public Bitmap GetArticulatedBrandFront(ArticulatedBrand brand)
         {
-            Bitmap bitmap4WDFront;
-            if (brandWDF == WDBrand.Case)
-                bitmap4WDFront = Resources.z_4WDFrontCase;
-            else if (brandWDF == WDBrand.Challenger)
-                bitmap4WDFront = Resources.z_4WDFrontChallenger;
-            else if (brandWDF == WDBrand.JDeere)
-                bitmap4WDFront = Resources.z_4WDFrontJDeere;
-            else if (brandWDF == WDBrand.NewHolland)
-                bitmap4WDFront = Resources.z_4WDFrontNH;
-            else if (brandWDF == WDBrand.Holder)
-                bitmap4WDFront = Resources.z_4WDFrontHolder;
-            else
-                bitmap4WDFront = Resources.z_4WDFrontAoG;
-
-            return bitmap4WDFront;
+            switch (brand)
+            {
+                case ArticulatedBrand.Case:
+                    return Resources.z_ArticulatedFrontCase;
+                case ArticulatedBrand.Challenger:
+                    return Resources.z_ArticulatedFrontChallenger;
+                case ArticulatedBrand.JDeere:
+                    return Resources.z_ArticulatedFrontJDeere;
+                case ArticulatedBrand.NewHolland:
+                    return Resources.z_ArticulatedFrontNH;
+                case ArticulatedBrand.Holder:
+                    return Resources.z_ArticulatedFrontHolder;
+                default:
+                    return Resources.z_ArticulatedFrontAoG;
+            }
         }
         
-        public Bitmap Get4WDBrandRear(WDBrand brandWDR)
+        public Bitmap GetArticulatedBrandRear(ArticulatedBrand brand)
         {
-            Bitmap bitmap4WDRear;
-            if (brandWDR == WDBrand.Case)
-                bitmap4WDRear = Resources.z_4WDRearCase;
-            else if (brandWDR == WDBrand.Challenger)
-                bitmap4WDRear = Resources.z_4WDRearChallenger;
-            else if (brandWDR == WDBrand.JDeere)
-                bitmap4WDRear = Resources.z_4WDRearJDeere;
-            else if (brandWDR == WDBrand.NewHolland)
-                bitmap4WDRear = Resources.z_4WDRearNH;
-            else if (brandWDR == WDBrand.Holder)
-                bitmap4WDRear = Resources.z_4WDRearHolder;
-            else
-                bitmap4WDRear = Resources.z_4WDRearAoG;
-
-            return bitmap4WDRear;
+            switch (brand)
+            {
+                case ArticulatedBrand.Case:
+                    return Resources.z_ArticulatedRearCase;
+                case ArticulatedBrand.Challenger:
+                    return Resources.z_ArticulatedRearChallenger;
+                case ArticulatedBrand.JDeere:
+                    return Resources.z_ArticulatedRearJDeere;
+                case ArticulatedBrand.NewHolland:
+                    return Resources.z_ArticulatedRearNH;
+                case ArticulatedBrand.Holder:
+                    return Resources.z_ArticulatedRearHolder;
+                default:
+                    return Resources.z_ArticulatedRearAoG;
+            }
         }
 
     }//end class

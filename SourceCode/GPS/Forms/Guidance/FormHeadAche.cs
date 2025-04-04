@@ -1,4 +1,8 @@
-﻿using OpenTK;
+﻿using AgLibrary.Logging;
+using AgOpenGPS.Controls;
+using AgOpenGPS.Culture;
+using AgOpenGPS.Helpers;
+using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using System;
 using System.Collections.Generic;
@@ -62,11 +66,16 @@ namespace AgOpenGPS
             this.Left = (area.Width - this.Width) / 2;
             FormHeadAche_ResizeEnd(this, e);
 
-            if (!mf.IsOnScreen(Location, Size, 1))
+            if (!ScreenHelper.IsOnScreen(Bounds))
             {
                 Top = 0;
                 Left = 0;
             }
+            //translate
+            this.Text = gStr.gsHeadlandForm;
+            btnBndLoop.Text = gStr.gsBuild;
+            btnDeleteHeadland.Text = gStr.gsReset;
+
         }
 
         private void FormHeadLine_FormClosing(object sender, FormClosingEventArgs e)
@@ -693,7 +702,7 @@ namespace AgOpenGPS
 
         private void nudSetDistance_Click(object sender, EventArgs e)
         {
-            mf.KeypadToNUD((NudlessNumericUpDown)sender, this);
+            ((NudlessNumericUpDown)sender).ShowKeypad(this);
             btnExit.Focus();
         }
 
@@ -990,7 +999,7 @@ namespace AgOpenGPS
             GL.Enable(EnableCap.CullFace);
             GL.CullFace(CullFaceMode.Back);
             GL.ClearColor(0.22f, 0.22f, 0.22f, 1.0f);
-            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
         }
     }
 }

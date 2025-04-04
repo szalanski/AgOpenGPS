@@ -1,4 +1,7 @@
-﻿using AgOpenGPS.Culture;
+﻿using AgLibrary.Logging;
+using AgOpenGPS.Controls;
+using AgOpenGPS.Culture;
+using AgOpenGPS.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -36,11 +39,11 @@ namespace AgOpenGPS
             tboxFieldName.Text = "";
             btnBuildFields.Enabled = false;
 
-            label1.Text = gStr.gsEditFieldName;
+            labelFieldname.Text = gStr.gsEditFieldName;
 
-            this.Text = gStr.gsCreateNewField;
+            this.Text = gStr.gsCreateNewFromIsoXML;
 
-            lblField.Text = gStr.gsBasedOnField;
+            labelField.Text = gStr.gsBasedOnField;
 
             tree.Nodes?.Clear();
 
@@ -116,7 +119,7 @@ namespace AgOpenGPS
                         //First kind of Gudance  GGP\GPN\LSG\PNT
                         foreach (XmlNode nodePart in fieldParts)
                         {
-                            if (nodePart.Name == "GGP")
+                            if (nodePart.Name == "GGP" && nodePart.ChildNodes[0].Attributes.GetNamedItem("B") != null && nodePart.ChildNodes[0].Attributes.GetNamedItem("C") != null)
                             {
                                 //in GPN "B" is the name and "C" is the type
                                 if (nodePart.ChildNodes[0].Attributes["C"].Value == "1")
@@ -136,12 +139,15 @@ namespace AgOpenGPS
                         foreach (XmlNode nodePart in fieldParts)
                         {
                             //LSG with a "5" in [A] means Guidance line [B] is the name of line
-                            if (nodePart.Name == "LSG" && nodePart.Attributes["A"].Value == "5")
+                            if (nodePart.Name == "LSG" && nodePart.ChildNodes[0].Attributes.GetNamedItem("A") != null && nodePart.Attributes["A"].Value == "5")
                             {
-                                if (nodePart.ChildNodes.Count < 3)
-                                    tree.Nodes[tree.Nodes.Count - 1].Nodes.Add("ABLine: " + nodePart.Attributes["B"].Value);
-                                else
-                                    tree.Nodes[tree.Nodes.Count - 1].Nodes.Add("Curve: " + nodePart.Attributes["B"].Value);
+                                if (nodePart.ChildNodes[0].Attributes.GetNamedItem("B") != null)
+                                {
+                                    if (nodePart.ChildNodes.Count < 3)
+                                        tree.Nodes[tree.Nodes.Count - 1].Nodes.Add("ABLine: " + nodePart.Attributes["B"].Value);
+                                    else
+                                        tree.Nodes[tree.Nodes.Count - 1].Nodes.Add("Curve: " + nodePart.Attributes["B"].Value);
+                                }
                             }
                         }
                     }
@@ -160,7 +166,7 @@ namespace AgOpenGPS
                 Close();
             }
 
-            if (!mf.IsOnScreen(Location, Size, 1))
+            if (!ScreenHelper.IsOnScreen(Bounds))
             {
                 Top = 0;
                 Left = 0;
@@ -173,7 +179,7 @@ namespace AgOpenGPS
             if (tree.SelectedNode.Parent == null)
             {
                 idxFieldSelected = tree.SelectedNode.Index;
-                lblField.Text = idxFieldSelected.ToString() + " " + pfd[idxFieldSelected].Attributes["C"].Value;
+                labelField.Text = idxFieldSelected.ToString() + " " + pfd[idxFieldSelected].Attributes["C"].Value;
                 tboxFieldName.Text = pfd[idxFieldSelected].Attributes["C"].Value;
             }
 
@@ -181,7 +187,7 @@ namespace AgOpenGPS
             else
             {
                 idxFieldSelected = tree.SelectedNode.Parent.Index;
-                lblField.Text = idxFieldSelected.ToString() + " " + pfd[idxFieldSelected].Attributes["C"].Value;
+                labelField.Text = idxFieldSelected.ToString() + " " + pfd[idxFieldSelected].Attributes["C"].Value;
                 tboxFieldName.Text = pfd[idxFieldSelected].Attributes["C"].Value;
             }
 
@@ -291,18 +297,7 @@ namespace AgOpenGPS
                     mf.pn.latStart = latK;
                     mf.pn.lonStart = lonK;
 
-                    if (mf.timerSim.Enabled)
-                    {
-                        mf.sim.latitude = Properties.Settings.Default.setGPS_SimLatitude = latK;
-                        mf.sim.longitude = Properties.Settings.Default.setGPS_SimLongitude = lonK;
-
-                        mf.pn.latitude = latK;
-                        mf.pn.longitude = lonK;
-
-                        Properties.Settings.Default.Save();
-                    }
-
-                    mf.pn.SetLocalMetersPerDegree();
+                    mf.pn.SetLocalMetersPerDegree(true);
 
                     //make sure directory exists, or create it
                     if ((!string.IsNullOrEmpty(directoryName)) && (!Directory.Exists(directoryName)))
@@ -546,8 +541,10 @@ namespace AgOpenGPS
                                 if (nodePart.ChildNodes[0].ChildNodes[0].Attributes["A"].Value == "5") //Guidance Pattern
                                 {
                                     //get the name
-                                    mf.ABLine.desName = nodePart.ChildNodes[0].Attributes["B"].Value;
-
+                                    if (nodePart.ChildNodes[0].Attributes.GetNamedItem("B") != null)
+                                        mf.ABLine.desName = nodePart.ChildNodes[0].Attributes["B"].Value;
+                                    else if (nodePart.ChildNodes[0].Attributes.GetNamedItem("A") != null)
+                                        mf.ABLine.desName = nodePart.Attributes["B"].Value; // fallback, if ChildNodes[0].Attributes["B"] is null
                                     double.TryParse(nodePart.ChildNodes[0].ChildNodes[0].ChildNodes[0].Attributes["C"].Value, NumberStyles.Float, CultureInfo.InvariantCulture, out latK);
                                     double.TryParse(nodePart.ChildNodes[0].ChildNodes[0].ChildNodes[0].Attributes["D"].Value, NumberStyles.Float, CultureInfo.InvariantCulture, out lonK);
 
@@ -595,7 +592,10 @@ namespace AgOpenGPS
                                 if (nodePart.ChildNodes[0].ChildNodes[0].Attributes["A"].Value == "5") //Guidance Pattern
                                 {
                                     //get the name
-                                    mf.curve.desName = nodePart.ChildNodes[0].Attributes["B"].Value;
+                                    if (nodePart.ChildNodes[0].Attributes.GetNamedItem("B") != null)
+                                        mf.curve.desName = nodePart.ChildNodes[0].Attributes["B"].Value;
+                                    else if (nodePart.ChildNodes[0].Attributes.GetNamedItem("A") != null)
+                                        mf.curve.desName = nodePart.Attributes["B"].Value;  // fallback, if ChildNodes[0].Attributes["B"] is null
 
                                     double.TryParse(nodePart.ChildNodes[0].ChildNodes[0].ChildNodes[0].Attributes["C"].Value, NumberStyles.Float, CultureInfo.InvariantCulture, out latK);
                                     double.TryParse(nodePart.ChildNodes[0].ChildNodes[0].ChildNodes[0].Attributes["D"].Value, NumberStyles.Float, CultureInfo.InvariantCulture, out lonK);
@@ -858,7 +858,7 @@ namespace AgOpenGPS
         {
             if (mf.isKeyboardOn)
             {
-                mf.KeyboardToText((System.Windows.Forms.TextBox)sender, this);
+                ((TextBox)sender).ShowKeyboard(this);
                 btnSerialCancel.Focus();
             }
         }
