@@ -1881,7 +1881,7 @@ namespace AgOpenGPS.Culture {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to New.
+        ///   Looks up a localized string similar to New From Default.
         /// </summary>
         public static string gsNew {
             get {

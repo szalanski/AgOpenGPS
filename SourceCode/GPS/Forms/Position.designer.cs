@@ -983,9 +983,10 @@ namespace AgOpenGPS
 
                 //setAngVel = glm.toDegrees(setAngVel);
 
-                if (isChangingDirection && ahrs.imuHeading == 99999)
+                if (!Properties.Settings.Default.setAutoSwitchDualFixOn && isChangingDirection && ahrs.imuHeading == 99999)
+                {
                     p_254.pgn[p_254.status] = 0;
-
+                }
                 //for now if backing up, turn off autosteer
                 if (!isSteerInReverse)
                 {

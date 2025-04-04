@@ -6,32 +6,27 @@
         { }
 
         //public bool ;
-        public bool isHeadlandOn = true;
-
-        public bool isTramOn = false;
-        public bool isBoundaryOn = true;
-        public bool isBndContourOn = false;
-        public bool isRecPathOn = false;
-        public bool isABSmoothOn = false;
-
-        public bool isHideContourOn = false;
-        public bool isWebCamOn = false;
-        public bool isOffsetFixOn = false;
-        public bool isAgIOOn = true;
-
-        public bool isContourOn = true;
-        public bool isYouTurnOn = true;
-        public bool isSteerModeOn = true;
-
-        public bool isManualSectionOn = true;
-        public bool isAutoSectionOn = true;
-        public bool isCycleLinesOn = true;
-        public bool isABLineOn = true;
-        public bool isCurveOn = true;
-        public bool isAutoSteerOn = true;
-
-        public bool isUTurnOn = true;
-        public bool isLateralOn = true;
+        public bool isHeadlandOn { get; set; } = true;
+        public bool isTramOn { get; set; } = false;
+        public bool isBoundaryOn { get; set; } = true;
+        public bool isBndContourOn { get; set; } = false;
+        public bool isRecPathOn { get; set; } = false;
+        public bool isABSmoothOn { get; set; } = false;
+        public bool isHideContourOn { get; set; } = false;
+        public bool isWebCamOn { get; set; } = false;
+        public bool isOffsetFixOn { get; set; } = false;
+        public bool isAgIOOn { get; set; } = true;
+        public bool isContourOn { get; set; } = true;
+        public bool isYouTurnOn { get; set; } = true;
+        public bool isSteerModeOn { get; set; } = true;
+        public bool isManualSectionOn { get; set; } = true;
+        public bool isAutoSectionOn { get; set; } = true;
+        public bool isCycleLinesOn { get; set; } = true;
+        public bool isABLineOn { get; set; } = true;
+        public bool isCurveOn { get; set; } = true;
+        public bool isAutoSteerOn { get; set; } = true;
+        public bool isUTurnOn { get; set; } = true;
+        public bool isLateralOn { get; set; } = true;
 
         public CFeatureSettings(CFeatureSettings _feature)
         {
