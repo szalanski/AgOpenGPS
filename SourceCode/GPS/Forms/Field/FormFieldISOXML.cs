@@ -84,7 +84,7 @@ namespace AgOpenGPS
 
                         // PFD - A=ID, C=FieldName, D = Area in sq m
                         tree.Nodes.Add(nodePFD.Attributes["C"].Value + " Area: " + area + " Ha  " + nodePFD.Attributes["A"].Value);
-                        tree.Nodes[tree.Nodes.Count - 1].Nodes.Add("" + index++);
+                        tree.Nodes[tree.Nodes.Count - 1].Tag = index++;
 
                         //nodes in current Partial Field like PLN, GGP, LSG etc
                         XmlNodeList fieldParts = nodePFD.ChildNodes;
@@ -181,7 +181,7 @@ namespace AgOpenGPS
             //top node selected (ie the field)
             if (tree.SelectedNode.Parent == null)
             {
-                idxFieldSelected = Int32.Parse(tree.SelectedNode.FirstNode.Text );
+                idxFieldSelected = (int)tree.SelectedNode.Tag;
                 labelField.Text = idxFieldSelected.ToString() + " " + pfd[idxFieldSelected].Attributes["C"].Value;
                 tboxFieldName.Text = pfd[idxFieldSelected].Attributes["C"].Value;
             }
@@ -189,7 +189,7 @@ namespace AgOpenGPS
             //one of the lines or bnds selected - so set the field selected
             else
             {
-                idxFieldSelected = Int32.Parse(tree.SelectedNode.Parent.FirstNode.Text);
+                idxFieldSelected = (int)tree.SelectedNode.Parent.Tag;
                 labelField.Text = idxFieldSelected.ToString() + " " + pfd[idxFieldSelected].Attributes["C"].Value;
                 tboxFieldName.Text = pfd[idxFieldSelected].Attributes["C"].Value;
             }
