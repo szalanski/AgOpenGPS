@@ -756,9 +756,6 @@
   <data name="gsSaveAndReturn" xml:space="preserve">
     <value>Сохранить и вернуться</value>
   </data>
-  <data name="gsSaveAs" xml:space="preserve">
-    <value>Сохранить как</value>
-  </data>
   <data name="gsScreenButtons" xml:space="preserve">
     <value>Кнопки на экране</value>
   </data>

@@ -921,9 +921,6 @@ A választott sorrend alapján fognak megjelenni alulról felfelé.</value>
   <data name="gsSaveAndReturn" xml:space="preserve">
     <value>Mentés és visszatérés</value>
   </data>
-  <data name="gsSaveAs" xml:space="preserve">
-    <value>Mentés másként</value>
-  </data>
   <data name="gsScreenButtons" xml:space="preserve">
     <value>Kijelző gombok</value>
   </data>

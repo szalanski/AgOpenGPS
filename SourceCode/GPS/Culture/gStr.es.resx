@@ -554,9 +554,6 @@ El orden en que los presiones será el orden en que aparecerán en el menú de a
   <data name="gsSaveAndReturn" xml:space="preserve">
     <value>Guardar y Volver</value>
   </data>
-  <data name="gsSaveAs" xml:space="preserve">
-    <value>Guardar como</value>
-  </data>
   <data name="gsSentToMachineModule" xml:space="preserve">
     <value>Enviar al módulo PCB</value>
   </data>

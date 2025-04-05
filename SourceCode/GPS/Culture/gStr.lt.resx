@@ -912,9 +912,6 @@
   <data name="gsSaveAndReturn" xml:space="preserve">
     <value>Išsaugoti ir grįžti</value>
   </data>
-  <data name="gsSaveAs" xml:space="preserve">
-    <value>Įrašyti kaip</value>
-  </data>
   <data name="gsScreenButtons" xml:space="preserve">
     <value>Ekrano mygtukai</value>
   </data>

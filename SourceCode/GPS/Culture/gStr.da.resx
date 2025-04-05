@@ -731,9 +731,6 @@ Rækkefølgen du klikker på dem, angiver placeringen nedefra og op</value>
   <data name="gsSaveAndReturn" xml:space="preserve">
     <value>Gem Og Vend Tilbage</value>
   </data>
-  <data name="gsSaveAs" xml:space="preserve">
-    <value>Gem Som</value>
-  </data>
   <data name="gsScreenButtons" xml:space="preserve">
     <value>Skærm knapper</value>
   </data>

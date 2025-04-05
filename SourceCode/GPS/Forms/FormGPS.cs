@@ -7,6 +7,7 @@ using AgOpenGPS.Core;
 using AgOpenGPS.Core.Models;
 using AgOpenGPS.Core.ViewModels;
 using AgOpenGPS.Culture;
+using AgOpenGPS.Forms.Profiles;
 using AgOpenGPS.Properties;
 using Microsoft.Win32;
 using OpenTK;
@@ -511,12 +512,11 @@ namespace AgOpenGPS
 
             if (RegistrySettings.vehicleFileName == "")
             {
-                Log.EventWriter("Using Default Vehicle At Start Warning");
+                Log.EventWriter("No profile selected, prompt to create a new one");
 
-                YesMessageBox("Using Default Vehicle" + "\r\n\r\n" + "Load Existing Vehicle or Save As a New One !!!"
-                    + "\r\n\r\n" + "Changes will NOT be Saved for Default Vehicle");
-            
-                using (FormConfig form = new FormConfig(this))
+                YesMessageBox("No profile selected\n\nCreate a new profile to save your configuration\n\nIf no profile is created, NO changes will be saved!");
+
+                using (FormNewProfile form = new FormNewProfile(this))
                 {
                     form.ShowDialog(this);
                 }
@@ -1051,6 +1051,119 @@ namespace AgOpenGPS
             Matrix4 mat = Matrix4.CreatePerspectiveFieldOfView((float)fovy, oglMain.AspectRatio, 1f, (float)(camDistanceFactor * camera.camSetDistance));
             GL.LoadMatrix(ref mat);
             GL.MatrixMode(MatrixMode.Modelview);
+        }
+
+        public void SendSettings()
+        {
+            //Form Steer Settings
+            p_252.pgn[p_252.countsPerDegree] = unchecked((byte)Properties.Settings.Default.setAS_countsPerDegree);
+            p_252.pgn[p_252.ackerman] = unchecked((byte)Properties.Settings.Default.setAS_ackerman);
+
+            p_252.pgn[p_252.wasOffsetHi] = unchecked((byte)(Properties.Settings.Default.setAS_wasOffset >> 8));
+            p_252.pgn[p_252.wasOffsetLo] = unchecked((byte)(Properties.Settings.Default.setAS_wasOffset));
+
+            p_252.pgn[p_252.highPWM] = unchecked((byte)Properties.Settings.Default.setAS_highSteerPWM);
+            p_252.pgn[p_252.lowPWM] = unchecked((byte)Properties.Settings.Default.setAS_lowSteerPWM);
+            p_252.pgn[p_252.gainProportional] = unchecked((byte)Properties.Settings.Default.setAS_Kp);
+            p_252.pgn[p_252.minPWM] = unchecked((byte)Properties.Settings.Default.setAS_minSteerPWM);
+
+            SendPgnToLoop(p_252.pgn);
+
+            //steer config
+            p_251.pgn[p_251.set0] = Properties.Settings.Default.setArdSteer_setting0;
+            p_251.pgn[p_251.set1] = Properties.Settings.Default.setArdSteer_setting1;
+            p_251.pgn[p_251.maxPulse] = Properties.Settings.Default.setArdSteer_maxPulseCounts;
+            p_251.pgn[p_251.minSpeed] = unchecked((byte)(Properties.Settings.Default.setAS_minSteerSpeed * 10));
+
+            if (Properties.Settings.Default.setAS_isConstantContourOn)
+                p_251.pgn[p_251.angVel] = 1;
+            else p_251.pgn[p_251.angVel] = 0;
+
+            SendPgnToLoop(p_251.pgn);
+
+            //machine settings    
+            p_238.pgn[p_238.set0] = Properties.Settings.Default.setArdMac_setting0;
+            p_238.pgn[p_238.raiseTime] = Properties.Settings.Default.setArdMac_hydRaiseTime;
+            p_238.pgn[p_238.lowerTime] = Properties.Settings.Default.setArdMac_hydLowerTime;
+
+            p_238.pgn[p_238.user1] = Properties.Settings.Default.setArdMac_user1;
+            p_238.pgn[p_238.user2] = Properties.Settings.Default.setArdMac_user2;
+            p_238.pgn[p_238.user3] = Properties.Settings.Default.setArdMac_user3;
+            p_238.pgn[p_238.user4] = Properties.Settings.Default.setArdMac_user4;
+
+            SendPgnToLoop(p_238.pgn);
+        }
+
+        public void SendRelaySettingsToMachineModule()
+        {
+            string[] words = Properties.Settings.Default.setRelay_pinConfig.Split(',');
+
+            //load the pgn
+            p_236.pgn[p_236.pin0] = (byte)int.Parse(words[0]);
+            p_236.pgn[p_236.pin1] = (byte)int.Parse(words[1]);
+            p_236.pgn[p_236.pin2] = (byte)int.Parse(words[2]);
+            p_236.pgn[p_236.pin3] = (byte)int.Parse(words[3]);
+            p_236.pgn[p_236.pin4] = (byte)int.Parse(words[4]);
+            p_236.pgn[p_236.pin5] = (byte)int.Parse(words[5]);
+            p_236.pgn[p_236.pin6] = (byte)int.Parse(words[6]);
+            p_236.pgn[p_236.pin7] = (byte)int.Parse(words[7]);
+            p_236.pgn[p_236.pin8] = (byte)int.Parse(words[8]);
+            p_236.pgn[p_236.pin9] = (byte)int.Parse(words[9]);
+
+            p_236.pgn[p_236.pin10] = (byte)int.Parse(words[10]);
+            p_236.pgn[p_236.pin11] = (byte)int.Parse(words[11]);
+            p_236.pgn[p_236.pin12] = (byte)int.Parse(words[12]);
+            p_236.pgn[p_236.pin13] = (byte)int.Parse(words[13]);
+            p_236.pgn[p_236.pin14] = (byte)int.Parse(words[14]);
+            p_236.pgn[p_236.pin15] = (byte)int.Parse(words[15]);
+            p_236.pgn[p_236.pin16] = (byte)int.Parse(words[16]);
+            p_236.pgn[p_236.pin17] = (byte)int.Parse(words[17]);
+            p_236.pgn[p_236.pin18] = (byte)int.Parse(words[18]);
+            p_236.pgn[p_236.pin19] = (byte)int.Parse(words[19]);
+
+            p_236.pgn[p_236.pin20] = (byte)int.Parse(words[20]);
+            p_236.pgn[p_236.pin21] = (byte)int.Parse(words[21]);
+            p_236.pgn[p_236.pin22] = (byte)int.Parse(words[22]);
+            p_236.pgn[p_236.pin23] = (byte)int.Parse(words[23]);
+            SendPgnToLoop(p_236.pgn);
+
+
+            p_235.pgn[p_235.sec0Lo] = unchecked((byte)(section[0].sectionWidth * 100));
+            p_235.pgn[p_235.sec0Hi] = unchecked((byte)((int)((section[0].sectionWidth * 100)) >> 8));
+            p_235.pgn[p_235.sec1Lo] = unchecked((byte)(section[1].sectionWidth * 100));
+            p_235.pgn[p_235.sec1Hi] = unchecked((byte)((int)((section[1].sectionWidth * 100)) >> 8));
+            p_235.pgn[p_235.sec2Lo] = unchecked((byte)(section[2].sectionWidth * 100));
+            p_235.pgn[p_235.sec2Hi] = unchecked((byte)((int)((section[2].sectionWidth * 100)) >> 8));
+            p_235.pgn[p_235.sec3Lo] = unchecked((byte)(section[3].sectionWidth * 100));
+            p_235.pgn[p_235.sec3Hi] = unchecked((byte)((int)((section[3].sectionWidth * 100)) >> 8));
+            p_235.pgn[p_235.sec4Lo] = unchecked((byte)(section[4].sectionWidth * 100));
+            p_235.pgn[p_235.sec4Hi] = unchecked((byte)((int)((section[4].sectionWidth * 100)) >> 8));
+            p_235.pgn[p_235.sec5Lo] = unchecked((byte)(section[5].sectionWidth * 100));
+            p_235.pgn[p_235.sec5Hi] = unchecked((byte)((int)((section[5].sectionWidth * 100)) >> 8));
+            p_235.pgn[p_235.sec6Lo] = unchecked((byte)(section[6].sectionWidth * 100));
+            p_235.pgn[p_235.sec6Hi] = unchecked((byte)((int)((section[6].sectionWidth * 100)) >> 8));
+            p_235.pgn[p_235.sec7Lo] = unchecked((byte)(section[7].sectionWidth * 100));
+            p_235.pgn[p_235.sec7Hi] = unchecked((byte)((int)((section[7].sectionWidth * 100)) >> 8));
+            p_235.pgn[p_235.sec8Lo] = unchecked((byte)(section[8].sectionWidth * 100));
+            p_235.pgn[p_235.sec8Hi] = unchecked((byte)((int)((section[8].sectionWidth * 100)) >> 8));
+            p_235.pgn[p_235.sec9Lo] = unchecked((byte)(section[9].sectionWidth * 100));
+            p_235.pgn[p_235.sec9Hi] = unchecked((byte)((int)((section[9].sectionWidth * 100)) >> 8));
+            p_235.pgn[p_235.sec10Lo] = unchecked((byte)(section[10].sectionWidth * 100));
+            p_235.pgn[p_235.sec10Hi] = unchecked((byte)((int)((section[10].sectionWidth * 100)) >> 8));
+            p_235.pgn[p_235.sec11Lo] = unchecked((byte)(section[11].sectionWidth * 100));
+            p_235.pgn[p_235.sec11Hi] = unchecked((byte)((int)((section[11].sectionWidth * 100)) >> 8));
+            p_235.pgn[p_235.sec12Lo] = unchecked((byte)(section[12].sectionWidth * 100));
+            p_235.pgn[p_235.sec12Hi] = unchecked((byte)((int)((section[12].sectionWidth * 100)) >> 8));
+            p_235.pgn[p_235.sec13Lo] = unchecked((byte)(section[13].sectionWidth * 100));
+            p_235.pgn[p_235.sec13Hi] = unchecked((byte)((int)((section[13].sectionWidth * 100)) >> 8));
+            p_235.pgn[p_235.sec14Lo] = unchecked((byte)(section[14].sectionWidth * 100));
+            p_235.pgn[p_235.sec14Hi] = unchecked((byte)((int)((section[14].sectionWidth * 100)) >> 8));
+            p_235.pgn[p_235.sec15Lo] = unchecked((byte)(section[15].sectionWidth * 100));
+            p_235.pgn[p_235.sec15Hi] = unchecked((byte)((int)((section[15].sectionWidth * 100)) >> 8));
+
+            p_235.pgn[p_235.numSections] = (byte)tool.numOfSections;
+
+            SendPgnToLoop(p_235.pgn);
         }
 
         //message box pops up with info then goes away

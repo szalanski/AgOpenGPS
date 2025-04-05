@@ -741,9 +741,6 @@
   <data name="gsSaveAndReturn" xml:space="preserve">
     <value>Sačuvaj</value>
   </data>
-  <data name="gsSaveAs" xml:space="preserve">
-    <value>Sačuvaj kao</value>
-  </data>
   <data name="gsScreenButtons" xml:space="preserve">
     <value>Dugmad ekrana</value>
   </data>

@@ -838,9 +838,6 @@ Kolejność, w jakiej je naciśniesz, będzie kolejnością, w jakiej pojawią s
   <data name="gsSaveAndReturn" xml:space="preserve">
     <value>Zapisz i powróć</value>
   </data>
-  <data name="gsSaveAs" xml:space="preserve">
-    <value>Zapisz jako</value>
-  </data>
   <data name="gsScreenButtons" xml:space="preserve">
     <value>Przyciski ekranowe</value>
   </data>

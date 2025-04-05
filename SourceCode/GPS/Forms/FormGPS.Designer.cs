@@ -36,6 +36,9 @@ namespace AgOpenGPS
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
+            this.profileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.newProfileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadProfileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menustripLanguage = new System.Windows.Forms.ToolStripMenuItem();
             this.menuLanguageDanish = new System.Windows.Forms.ToolStripMenuItem();
             this.menuLanguageDeutsch = new System.Windows.Forms.ToolStripMenuItem();
@@ -276,6 +279,7 @@ namespace AgOpenGPS
             this.fileToolStripMenuItem.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripSeparator9,
+            this.profileToolStripMenuItem,
             this.menustripLanguage,
             this.toolStripSeparator11,
             this.simulatorOnToolStripMenuItem,
@@ -297,6 +301,29 @@ namespace AgOpenGPS
             // 
             this.toolStripSeparator9.Name = "toolStripSeparator9";
             this.toolStripSeparator9.Size = new System.Drawing.Size(379, 6);
+            // 
+            // profileToolStripMenuItem
+            // 
+            this.profileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.newProfileToolStripMenuItem,
+            this.loadProfileToolStripMenuItem});
+            this.profileToolStripMenuItem.Name = "profileToolStripMenuItem";
+            this.profileToolStripMenuItem.Size = new System.Drawing.Size(382, 50);
+            this.profileToolStripMenuItem.Text = "Profile";
+            // 
+            // newProfileToolStripMenuItem
+            // 
+            this.newProfileToolStripMenuItem.Name = "newProfileToolStripMenuItem";
+            this.newProfileToolStripMenuItem.Size = new System.Drawing.Size(210, 50);
+            this.newProfileToolStripMenuItem.Text = "New...";
+            this.newProfileToolStripMenuItem.Click += new System.EventHandler(this.newProfileToolStripMenuItem_Click);
+            // 
+            // loadProfileToolStripMenuItem
+            // 
+            this.loadProfileToolStripMenuItem.Name = "loadProfileToolStripMenuItem";
+            this.loadProfileToolStripMenuItem.Size = new System.Drawing.Size(210, 50);
+            this.loadProfileToolStripMenuItem.Text = "Load...";
+            this.loadProfileToolStripMenuItem.Click += new System.EventHandler(this.loadProfileToolStripMenuItem_Click);
             // 
             // menustripLanguage
             // 
@@ -3291,6 +3318,9 @@ namespace AgOpenGPS
         private System.Windows.Forms.ToolStripMenuItem tramsMultiMenuField;
         private System.Windows.Forms.ToolStripMenuItem menuLanguageSerbie;
         private System.Windows.Forms.ToolStripMenuItem menuLanguageNorsk;
+        private System.Windows.Forms.ToolStripMenuItem profileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem newProfileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem loadProfileToolStripMenuItem;
     }
 }
 

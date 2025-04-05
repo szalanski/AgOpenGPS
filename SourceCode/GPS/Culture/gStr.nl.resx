@@ -869,9 +869,6 @@ De volgorde waarin u ze indrukt, is de volgorde waarin ze van onder naar boven i
   <data name="gsSaveAndReturn" xml:space="preserve">
     <value>Opslaan en terug</value>
   </data>
-  <data name="gsSaveAs" xml:space="preserve">
-    <value>Opslaan als</value>
-  </data>
   <data name="gsScreenButtons" xml:space="preserve">
     <value>Scherm Knoppen</value>
   </data>

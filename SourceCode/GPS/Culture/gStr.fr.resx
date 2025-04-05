@@ -899,9 +899,6 @@ L'ordre dans lequel vous cliquez, sera l'ordre dans lequel ils apparaîtrons dan
   <data name="gsSaveAndReturn" xml:space="preserve">
     <value>Sauver et retour</value>
   </data>
-  <data name="gsSaveAs" xml:space="preserve">
-    <value>Enregistrer sous</value>
-  </data>
   <data name="gsScreenButtons" xml:space="preserve">
     <value>Ecran bouttons</value>
   </data>
