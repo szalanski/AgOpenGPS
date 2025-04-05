@@ -172,9 +172,8 @@ namespace AgLibrary.Settings
                         }
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    
                 }
             }
 
