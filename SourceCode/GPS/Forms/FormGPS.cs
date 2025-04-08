@@ -1041,11 +1041,11 @@ namespace AgOpenGPS
         public void SetZoom()
         {
             //match grid to cam distance and redo perspective
-            camera.gridZoom = camera.camSetDistance / -15;
+            double gridStep = camera.camSetDistance / -15;
 
-            gridToolSpacing = (int)(camera.gridZoom / tool.width + 0.5);
+            gridToolSpacing = (int)(gridStep / tool.width + 0.5);
             if (gridToolSpacing < 1) gridToolSpacing = 1;
-            camera.gridZoom = gridToolSpacing * tool.width;
+            worldGrid.GridStep = gridToolSpacing * tool.width;
 
             oglMain.MakeCurrent();
             GL.MatrixMode(MatrixMode.Projection);

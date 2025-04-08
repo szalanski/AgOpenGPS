@@ -15,8 +15,6 @@ namespace AgOpenGPS
         public double panX = 0, panY = 0;
         public double camSetDistance = -75;
 
-        public double gridZoom;
-
         public double zoomValue = 15;
 
         public bool camFollowing;

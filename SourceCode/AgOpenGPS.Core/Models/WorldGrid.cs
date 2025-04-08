@@ -53,6 +53,8 @@ namespace AgOpenGPS.Core
             eastingMinGeo = -300;
         }
 
+        public double GridStep { private get; set; }
+
         public Bitmap BingBitmap {
             set
             {
@@ -104,20 +106,20 @@ namespace AgOpenGPS.Core
             }
         }
 
-        public void DrawWorldGrid(double gridStep, ColorRgb worldGridColor)
+        public void DrawWorldGrid(ColorRgb worldGridColor)
         {
             GLW.RotateZ(-gridRotation);
 
             LineStyle worldGridLineStyle = new LineStyle(1.0f, worldGridColor);
             GLW.SetLineStyle(worldGridLineStyle);
             List<XyCoord> vertices = new List<XyCoord>();
-            for (double num = Math.Round(eastingMin / gridStep, MidpointRounding.AwayFromZero) * gridStep; num < eastingMax; num += gridStep)
+            for (double num = Math.Round(eastingMin / GridStep, MidpointRounding.AwayFromZero) * GridStep; num < eastingMax; num += GridStep)
             {
                 if (num < eastingMin) continue;
                 vertices.Add(new XyCoord(num, northingMax));
                 vertices.Add(new XyCoord(num, northingMin));
             }
-            for (double num2 = Math.Round(northingMin / gridStep, MidpointRounding.AwayFromZero) * gridStep; num2 < northingMax; num2 += gridStep)
+            for (double num2 = Math.Round(northingMin / GridStep, MidpointRounding.AwayFromZero) * GridStep; num2 < northingMax; num2 += GridStep)
             {
                 if (num2 < northingMin) continue;
                 vertices.Add(new XyCoord(eastingMax, num2));

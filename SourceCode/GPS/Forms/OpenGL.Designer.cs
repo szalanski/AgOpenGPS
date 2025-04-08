@@ -112,7 +112,7 @@ namespace AgOpenGPS
 
                     worldGrid.DrawFieldSurface(fieldColor, camera.zoomValue, isTextureOn);
 
-                    if (isGridOn) worldGrid.DrawWorldGrid(camera.gridZoom, worldGridColor);
+                    if (isGridOn) worldGrid.DrawWorldGrid(worldGridColor);
 
                     if (isDrawPolygons) GL.PolygonMode(MaterialFace.Front, PolygonMode.Line);
 
