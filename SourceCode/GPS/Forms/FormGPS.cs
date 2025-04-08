@@ -141,7 +141,7 @@ namespace AgOpenGPS
         /// <summary>
         /// create world grid
         /// </summary>
-        public CWorldGrid worldGrid;
+        public WorldGrid worldGrid;
 
         /// <summary>
         /// The NMEA class that decodes it
@@ -306,7 +306,7 @@ namespace AgOpenGPS
 
             camera = new CCamera();
 
-            worldGrid = new CWorldGrid(Resources.z_Floor, Resources.z_bingMap);
+            worldGrid = new WorldGrid(Resources.z_Floor, Resources.z_bingMap);
 
             //our vehicle made with gl object and pointer of mainform
             vehicle = new CVehicle(this);
@@ -1018,7 +1018,7 @@ namespace AgOpenGPS
 
             btnSection1Man.Text = "1";
 
-            worldGrid.SetBingBitmap(Properties.Resources.z_bingMap);
+            worldGrid.BingBitmap = Properties.Resources.z_bingMap;
         }
 
         public void FieldMenuButtonEnableDisable(bool isOn)

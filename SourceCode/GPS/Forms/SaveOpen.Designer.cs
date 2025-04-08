@@ -1373,7 +1373,7 @@ namespace AgOpenGPS
                         if (File.Exists(fileAndDirectory))
                         {
                             var bitmap = new Bitmap(Image.FromFile(fileAndDirectory));
-                            worldGrid.SetBingBitmap(bitmap);
+                            worldGrid.BingBitmap = bitmap;
                         }
                         else
                         {

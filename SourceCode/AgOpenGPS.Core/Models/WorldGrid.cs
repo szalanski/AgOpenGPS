@@ -8,12 +8,14 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 
-namespace AgOpenGPS
+namespace AgOpenGPS.Core
 {
-    public class CWorldGrid
+    public class WorldGrid
     {
-        private readonly GeoTexture2D _floorTexture;
-        private readonly GeoTexture2D _bingTexture;
+        private Bitmap _floorBitmap;
+        private Bitmap _bingBitmap;
+        private GeoTexture2D _floorTexture;
+        private GeoTexture2D _bingTexture;
 
         //Y
         public double northingMax;
@@ -35,26 +37,46 @@ namespace AgOpenGPS
 
         public double eastingMinGeo;
 
-
         public double GridSize = 6000;
         public double Count = 40;
         public bool isGeoMap = false;
 
         public double gridRotation = 0.0;
 
-        public CWorldGrid(Bitmap floorBitmap, Bitmap bingBitmap)
+        public WorldGrid(Bitmap floorBitmap, Bitmap bingBitmap)
         {
-            _floorTexture = new GeoTexture2D(floorBitmap);
-            _bingTexture = new GeoTexture2D(bingBitmap);
+            _floorBitmap = floorBitmap;
+            _bingBitmap = bingBitmap;
             northingMaxGeo = 300;
             northingMinGeo = -300;
             eastingMaxGeo = 300;
             eastingMinGeo = -300;
         }
 
-        public void SetBingBitmap(Bitmap bitmap)
+        public Bitmap BingBitmap {
+            set
+            {
+                _bingBitmap = value;
+                _bingTexture?.SetBitmap(_bingBitmap);
+            }
+        }
+
+        private GeoTexture2D FloorTexture
         {
-            _bingTexture.SetBitmap(bitmap);
+            get
+            {
+                if (null == _floorTexture) _floorTexture = new GeoTexture2D(_floorBitmap);
+                return _floorTexture;
+            }
+        }
+
+        private GeoTexture2D BingTexture
+        {
+            get
+            {
+                if (null == _bingTexture) _bingTexture = new GeoTexture2D(_bingBitmap);
+                return _bingTexture;
+            }
         }
 
         public void DrawFieldSurface(ColorRgb fieldColor, double cameraZoom, bool mustDrawFieldTexture)
@@ -72,12 +94,12 @@ namespace AgOpenGPS
             {
                 GeoCoord u0v0 = new GeoCoord(eastingMin, northingMax);
                 GeoCoord uCountvCount = new GeoCoord(eastingMax, northingMin);
-                _floorTexture.DrawRepeatedZ(u0v0, uCountvCount, -0.10, Count);
+                FloorTexture.DrawRepeatedZ(u0v0, uCountvCount, -0.10, Count);
                 if (isGeoMap)
                 {
                     GeoCoord u0v0Map = new GeoCoord(eastingMinGeo, northingMaxGeo);
                     GeoCoord u1v1Map = new GeoCoord(eastingMaxGeo, northingMinGeo);
-                    _bingTexture.DrawZ(u0v0Map, u1v1Map, -0.05);
+                    BingTexture.DrawZ(u0v0Map, u1v1Map, -0.05);
                 }
             }
         }
