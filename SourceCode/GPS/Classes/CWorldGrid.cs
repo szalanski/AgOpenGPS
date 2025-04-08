@@ -82,20 +82,20 @@ namespace AgOpenGPS
             }
         }
 
-        public void DrawWorldGrid(double _gridZoom, ColorRgb worldGridColor)
+        public void DrawWorldGrid(double gridStep, ColorRgb worldGridColor)
         {
             GL.Rotate(-gridRotation, 0, 0, 1.0);
 
             LineStyle worldGridLineStyle = new LineStyle(1.0f, worldGridColor);
             GLW.SetLineStyle(worldGridLineStyle);
             List<XyCoord> vertices = new List<XyCoord>();
-            for (double num = Math.Round(eastingMin / _gridZoom, MidpointRounding.AwayFromZero) * _gridZoom; num < eastingMax; num += _gridZoom)
+            for (double num = Math.Round(eastingMin / gridStep, MidpointRounding.AwayFromZero) * gridStep; num < eastingMax; num += gridStep)
             {
                 if (num < eastingMin) continue;
                 vertices.Add(new XyCoord(num, northingMax));
                 vertices.Add(new XyCoord(num, northingMin));
             }
-            for (double num2 = Math.Round(northingMin / _gridZoom, MidpointRounding.AwayFromZero) * _gridZoom; num2 < northingMax; num2 += _gridZoom)
+            for (double num2 = Math.Round(northingMin / gridStep, MidpointRounding.AwayFromZero) * gridStep; num2 < northingMax; num2 += gridStep)
             {
                 if (num2 < northingMin) continue;
                 vertices.Add(new XyCoord(eastingMax, num2));
