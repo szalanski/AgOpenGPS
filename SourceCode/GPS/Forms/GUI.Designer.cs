@@ -12,6 +12,7 @@ using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
 using AgOpenGPS.Core.Models;
+using AgOpenGPS.Core.Drawing;
 
 namespace AgOpenGPS
 {
@@ -38,6 +39,8 @@ namespace AgOpenGPS
         public Color sectionColorDay;
         public Color fieldColorDay;
         public Color fieldColorNight;
+        public ColorRgb fieldColor => (ColorRgb)(isDay ? fieldColorDay : fieldColorNight);
+        public ColorRgb worldGridColor => (ColorRgb)(isDay ? Colors.WorldGridDayColor : Colors.WorldGridNightColor);
 
         public Color textColorDay;
         public Color textColorNight;

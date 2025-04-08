@@ -110,10 +110,9 @@ namespace AgOpenGPS
                     CalcFrustum();
                     GL.Disable(EnableCap.Blend);
 
-                    worldGrid.DrawFieldSurface();
+                    worldGrid.DrawFieldSurface(fieldColor, camera.zoomValue, isTextureOn);
 
-                    ////if grid is on draw it
-                    if (isGridOn) worldGrid.DrawWorldGrid(camera.gridZoom);
+                    if (isGridOn) worldGrid.DrawWorldGrid(camera.gridZoom, worldGridColor);
 
                     if (isDrawPolygons) GL.PolygonMode(MaterialFace.Front, PolygonMode.Line);
 

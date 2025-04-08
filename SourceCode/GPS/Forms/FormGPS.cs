@@ -306,8 +306,7 @@ namespace AgOpenGPS
 
             camera = new CCamera();
 
-            //create the world grid
-            worldGrid = new CWorldGrid(this);
+            worldGrid = new CWorldGrid();
 
             //our vehicle made with gl object and pointer of mainform
             vehicle = new CVehicle(this);

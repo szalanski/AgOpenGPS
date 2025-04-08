@@ -13,8 +13,6 @@ namespace AgOpenGPS
 {
     public class CWorldGrid
     {
-        private readonly FormGPS mf;
-
         //Y
         public double northingMax;
 
@@ -45,10 +43,8 @@ namespace AgOpenGPS
         private GeoTexture2D _floorTexture;
         private GeoTexture2D _bingGridTexture;
 
-        public CWorldGrid(FormGPS _f)
+        public CWorldGrid()
         {
-            mf = _f;
-
             northingMaxGeo = 300;
             northingMinGeo = -300;
             eastingMaxGeo = 300;
@@ -79,20 +75,18 @@ namespace AgOpenGPS
             BingGridTexture.SetBitmap(bitmap);
         }
 
-        public void DrawFieldSurface()
+        public void DrawFieldSurface(ColorRgb fieldColor, double cameraZoom, bool mustDrawFieldTexture)
         {
-            Color field = mf.isDay ? mf.fieldColorDay : mf.fieldColorNight;
-
             //adjust bitmap zoom based on cam zoom
-            if (mf.camera.zoomValue > 100) Count = 4;
-            else if (mf.camera.zoomValue > 80) Count = 8;
-            else if (mf.camera.zoomValue > 50) Count = 16;
-            else if (mf.camera.zoomValue > 20) Count = 32;
-            else if (mf.camera.zoomValue > 10) Count = 64;
+            if (cameraZoom > 100) Count = 4;
+            else if (cameraZoom > 80) Count = 8;
+            else if (cameraZoom > 50) Count = 16;
+            else if (cameraZoom > 20) Count = 32;
+            else if (cameraZoom > 10) Count = 64;
             else Count = 80;
 
-            GL.Color3(field.R, field.G, field.B);
-            if (mf.isTextureOn)
+            GLW.SetColor(fieldColor);
+            if (mustDrawFieldTexture)
             {
                 GeoCoord u0v0 = new GeoCoord(eastingMin, northingMax);
                 GeoCoord uCountvCount = new GeoCoord(eastingMax, northingMin);
@@ -106,10 +100,9 @@ namespace AgOpenGPS
             }
         }
 
-        public void DrawWorldGrid(double _gridZoom)
+        public void DrawWorldGrid(double _gridZoom, ColorRgb worldGridColor)
         {
             GL.Rotate(-gridRotation, 0, 0, 1.0);
-            ColorRgb worldGridColor = mf.isDay ? Colors.WorldGridDayColor : Colors.WorldGridNightColor; 
 
             LineStyle worldGridLineStyle = new LineStyle(1.0f, worldGridColor);
             GLW.SetLineStyle(worldGridLineStyle);
