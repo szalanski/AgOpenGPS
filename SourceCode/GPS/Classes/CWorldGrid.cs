@@ -35,15 +35,6 @@ namespace AgOpenGPS
 
         public double eastingMinGeo;
 
-        //Y
-        public double northingMaxRate;
-
-        public double northingMinRate;
-
-        //X
-        public double eastingMaxRate;
-
-        public double eastingMinRate;
 
         public double GridSize = 6000;
         public double Count = 40;
@@ -62,10 +53,6 @@ namespace AgOpenGPS
             northingMinGeo = -300;
             eastingMaxGeo = 300;
             eastingMinGeo = -300;
-            northingMaxRate = 300;
-            northingMinRate = -300;
-            eastingMaxRate = 300;
-            eastingMinRate = -300;
         }
 
         public GeoTexture2D FloorTexture
