@@ -306,7 +306,7 @@ namespace AgOpenGPS
 
             camera = new CCamera();
 
-            worldGrid = new CWorldGrid();
+            worldGrid = new CWorldGrid(Resources.z_Floor, Resources.z_bingMap);
 
             //our vehicle made with gl object and pointer of mainform
             vehicle = new CVehicle(this);
@@ -1018,7 +1018,7 @@ namespace AgOpenGPS
 
             btnSection1Man.Text = "1";
 
-            worldGrid.ResetBingGridTexture();
+            worldGrid.SetBingBitmap(Properties.Resources.z_bingMap);
         }
 
         public void FieldMenuButtonEnableDisable(bool isOn)
