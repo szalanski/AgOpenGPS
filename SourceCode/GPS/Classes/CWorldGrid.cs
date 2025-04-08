@@ -84,7 +84,7 @@ namespace AgOpenGPS
 
         public void DrawWorldGrid(double gridStep, ColorRgb worldGridColor)
         {
-            GL.Rotate(-gridRotation, 0, 0, 1.0);
+            GLW.RotateZ(-gridRotation);
 
             LineStyle worldGridLineStyle = new LineStyle(1.0f, worldGridColor);
             GLW.SetLineStyle(worldGridLineStyle);
@@ -102,7 +102,7 @@ namespace AgOpenGPS
                 vertices.Add(new XyCoord(eastingMin, num2));
             }
             GLW.DrawPrimitive(PrimitiveType.Lines, vertices.ToArray());
-            GL.Rotate(gridRotation, 0, 0, 1.0);
+            GLW.RotateZ(gridRotation);
         }
 
         public void checkZoomWorldGrid(GeoCoord geoCoord)
