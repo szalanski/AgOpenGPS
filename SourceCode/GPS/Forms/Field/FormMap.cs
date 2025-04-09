@@ -354,7 +354,7 @@ namespace AgOpenGPS
                 if (File.Exists(fileAndDirectory))
                     File.Delete(fileAndDirectory);
                 bitmap.Save(fileAndDirectory, ImageFormat.Png);
-                mf.worldGrid.BingGridTexture.SetBitmap(bitmap);
+                mf.worldGrid.BingBitmap = bitmap;
             }
             catch
             {
@@ -423,7 +423,7 @@ namespace AgOpenGPS
 
         private void ResetMapGrid()
         {
-            mf.worldGrid.ResetBingGridTexture();
+            mf.worldGrid.BingBitmap = Properties.Resources.z_bingMap;
             string fileAndDirectory = Path.Combine(RegistrySettings.fieldsDirectory, mf.currentFieldDirectory, "BackPic.png");
             try
             {

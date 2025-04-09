@@ -141,7 +141,7 @@ namespace AgOpenGPS
         /// <summary>
         /// create world grid
         /// </summary>
-        public CWorldGrid worldGrid;
+        public WorldGrid worldGrid;
 
         /// <summary>
         /// The NMEA class that decodes it
@@ -306,8 +306,7 @@ namespace AgOpenGPS
 
             camera = new CCamera();
 
-            //create the world grid
-            worldGrid = new CWorldGrid(this);
+            worldGrid = new WorldGrid(Resources.z_Floor, Resources.z_bingMap);
 
             //our vehicle made with gl object and pointer of mainform
             vehicle = new CVehicle(this);
@@ -1019,7 +1018,7 @@ namespace AgOpenGPS
 
             btnSection1Man.Text = "1";
 
-            worldGrid.ResetBingGridTexture();
+            worldGrid.BingBitmap = Properties.Resources.z_bingMap;
         }
 
         public void FieldMenuButtonEnableDisable(bool isOn)
@@ -1042,11 +1041,11 @@ namespace AgOpenGPS
         public void SetZoom()
         {
             //match grid to cam distance and redo perspective
-            camera.gridZoom = camera.camSetDistance / -15;
+            double gridStep = camera.camSetDistance / -15;
 
-            gridToolSpacing = (int)(camera.gridZoom / tool.width + 0.5);
+            gridToolSpacing = (int)(gridStep / tool.width + 0.5);
             if (gridToolSpacing < 1) gridToolSpacing = 1;
-            camera.gridZoom = gridToolSpacing * tool.width;
+            worldGrid.GridStep = gridToolSpacing * tool.width;
 
             oglMain.MakeCurrent();
             GL.MatrixMode(MatrixMode.Projection);
