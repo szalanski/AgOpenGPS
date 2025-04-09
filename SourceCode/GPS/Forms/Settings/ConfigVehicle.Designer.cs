@@ -7,11 +7,11 @@ using System.Windows.Forms;
 using AgLibrary.Settings;
 using AgLibrary.Logging;
 using AgOpenGPS.Controls;
-using AgOpenGPS.Culture;
-using AgOpenGPS.Properties;
-using OpenTK.Graphics.OpenGL;
 using AgOpenGPS.Core.Models;
+using AgOpenGPS.Core.Translations;
+using AgOpenGPS.Properties;
 using AgOpenGPS.ResourcesBrands;
+using OpenTK.Graphics.OpenGL;
 
 namespace AgOpenGPS
 {

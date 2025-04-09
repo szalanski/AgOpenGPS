@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
-using AgOpenGPS.Culture;    
+using AgOpenGPS.Core.Translations;
 
 namespace AgOpenGPS
 {

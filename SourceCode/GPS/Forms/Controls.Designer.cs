@@ -10,7 +10,7 @@ using System.Threading;
 using System.Windows.Forms;
 using AgLibrary.Logging;
 using AgOpenGPS.Core.Models;
-using AgOpenGPS.Culture;
+using AgOpenGPS.Core.Translations;
 using AgOpenGPS.Forms;
 using AgOpenGPS.Forms.Pickers;
 using AgOpenGPS.Forms.Profiles;

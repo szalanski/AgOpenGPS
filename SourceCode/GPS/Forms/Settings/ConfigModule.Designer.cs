@@ -1,5 +1,5 @@
 ﻿using AgOpenGPS.Controls;
-using AgOpenGPS.Culture;
+using AgOpenGPS.Core.Translations;
 using System;
 using System.Linq;
 using System.Text;

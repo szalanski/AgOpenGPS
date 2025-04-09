@@ -1,5 +1,5 @@
 ﻿using AgLibrary.Logging;
-using AgOpenGPS.Culture;
+using AgOpenGPS.Core.Translations;
 using OpenTK.Graphics.OpenGL;
 using System;
 using System.Collections.Generic;

@@ -2,7 +2,7 @@
 using System.Windows.Forms;
 using AgOpenGPS.Controls;
 using AgOpenGPS.Helpers;
-using AgOpenGPS.Culture;
+using AgOpenGPS.Core.Translations;
 
 namespace AgOpenGPS
 {

@@ -6,7 +6,7 @@ using AgOpenGPS.Classes;
 using AgOpenGPS.Core;
 using AgOpenGPS.Core.Models;
 using AgOpenGPS.Core.ViewModels;
-using AgOpenGPS.Culture;
+using AgOpenGPS.Core.Translations;
 using AgOpenGPS.Forms.Profiles;
 using AgOpenGPS.Properties;
 using Microsoft.Win32;
