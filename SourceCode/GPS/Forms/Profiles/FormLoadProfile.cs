@@ -5,7 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using AgLibrary.Logging;
 using AgLibrary.Settings;
-using AgOpenGPS.Culture;
+using AgOpenGPS.Core.Translations;
 using AgOpenGPS.Properties;
 
 namespace AgOpenGPS.Forms.Profiles

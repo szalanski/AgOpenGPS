@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using AgOpenGPS.Controls;
-using AgOpenGPS.Culture;
+using AgOpenGPS.Core.Translations;
 using AgOpenGPS.Helpers;
 
 namespace AgOpenGPS
@@ -22,7 +22,7 @@ namespace AgOpenGPS
 
             InitializeComponent();
 
-            this.Text = Culture.gStr.gsNudgeRefTrack;
+            this.Text = gStr.gsNudgeRefTrack;
         }
 
         private void FormEditTrack_Load(object sender, EventArgs e)

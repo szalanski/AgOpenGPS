@@ -1,7 +1,7 @@
 ﻿using AgLibrary.Logging;
 using AgOpenGPS.Controls;
 using AgOpenGPS.Core.Models;
-using AgOpenGPS.Culture;
+using AgOpenGPS.Core.Translations;
 using AgOpenGPS.Properties;
 using System;
 using System.Collections.Generic;

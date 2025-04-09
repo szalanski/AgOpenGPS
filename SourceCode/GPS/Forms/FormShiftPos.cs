@@ -1,6 +1,6 @@
 ﻿using AgOpenGPS.Controls;
 using AgOpenGPS.Core.Models;
-using AgOpenGPS.Culture;
+using AgOpenGPS.Core.Translations;
 using System;
 using System.Windows.Forms;
 

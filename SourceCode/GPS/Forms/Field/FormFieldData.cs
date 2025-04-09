@@ -1,7 +1,7 @@
 //Please, if you use this give me some credit
 //Copyright BrianTee, copy right out of it.
 
-using AgOpenGPS.Culture;
+using AgOpenGPS.Core.Translations;
 using System;
 using System.Windows.Forms;
 

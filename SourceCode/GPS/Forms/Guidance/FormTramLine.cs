@@ -1,4 +1,4 @@
-﻿using AgOpenGPS.Culture;
+﻿using AgOpenGPS.Core.Translations;
 using AgOpenGPS.Helpers;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;

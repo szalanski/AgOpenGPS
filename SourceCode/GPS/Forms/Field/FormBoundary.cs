@@ -1,6 +1,6 @@
 using AgLibrary.Logging;
 using AgOpenGPS.Core.Models;
-using AgOpenGPS.Culture;
+using AgOpenGPS.Core.Translations;
 using AgOpenGPS.Helpers;
 using System;
 using System.Drawing;

@@ -5,7 +5,7 @@ using System.IO;
 using System.Windows.Forms;
 using AgLibrary.Logging;
 using AgOpenGPS.Helpers;
-using AgOpenGPS.Culture;
+using AgOpenGPS.Core.Translations;
 
 namespace AgOpenGPS
 {

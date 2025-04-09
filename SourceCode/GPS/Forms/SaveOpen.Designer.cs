@@ -9,11 +9,11 @@ using System.IO;
 using System.Globalization;
 using System.Xml;
 using System.Text;
-using AgOpenGPS.Culture;
 using AgLibrary.Logging;
 using AgOpenGPS.Protocols.ISOBUS;
 using AgOpenGPS.Core.Models;
 using AgOpenGPS.Core.Streamers;
+using AgOpenGPS.Core.Translations;
 
 namespace AgOpenGPS
 {
