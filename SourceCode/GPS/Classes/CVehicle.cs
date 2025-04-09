@@ -342,7 +342,7 @@ namespace AgOpenGPS
                     new XyCoord(0, VehicleConfig.Wheelbase + svennWidth + 0.5 + svennDist),
                     new XyCoord(-svennWidth, VehicleConfig.Wheelbase + svennDist)
                 };
-                GLW.DrawPrimitive(PrimitiveType.LineStrip, vertices);
+                GLW.DrawLineStripPrimitive(vertices);
             }
             GL.LineWidth(1);
         }

@@ -269,12 +269,12 @@ namespace AgOpenGPS
                     new XyCoord(mf.section[j].positionRight, trailingTool - hite),
                     new XyCoord(mf.section[j].positionRight, trailingTool),
                 };
-                GLW.DrawPrimitive(PrimitiveType.TriangleFan, vertices);
+                GLW.DrawTriangleFanPrimitive(vertices);
 
                 if (mf.camera.camSetDistance > -width * 200)
                 {
                     GLW.SetColor(Colors.Black);
-                    GLW.DrawPrimitive(PrimitiveType.LineLoop, vertices);
+                    GLW.DrawLineLoopPrimitive(vertices);
                 }
             }
 
