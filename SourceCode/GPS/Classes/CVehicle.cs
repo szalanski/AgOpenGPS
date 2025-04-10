@@ -168,7 +168,7 @@ namespace AgOpenGPS
                 LineStyle backgroundLineStyle = new LineStyle(4, Colors.Black);
                 LineStyle foregroundLineStyle = new LineStyle(1, Colors.HitchRigidColor);
                 LineStyle[] layerStyles = { backgroundLineStyle, foregroundLineStyle };
-                GLW.DrawPrimitiveLayered(PrimitiveType.Lines, layerStyles, vertices);
+                GLW.DrawLinesPrimitiveLayered(layerStyles, vertices);
             }
 
             //draw the vehicle Body

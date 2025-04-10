@@ -132,7 +132,7 @@ namespace AgOpenGPS
             LineStyle backgroundLineStyle = new LineStyle(6.0f, Colors.Black);
             LineStyle foregroundLineStyle = new LineStyle(1.0f, Colors.HitchColor);
             LineStyle[] lineStyles = { backgroundLineStyle, foregroundLineStyle };
-            GLW.DrawPrimitiveLayered(PrimitiveType.LineLoop, lineStyles, vertices);
+            GLW.DrawLineLoopPrimitiveLayered(lineStyles, vertices);
         }
 
         private void DrawTrailingHitch(double trailingTool)
@@ -145,7 +145,7 @@ namespace AgOpenGPS
             LineStyle backgroundLineStyle = new LineStyle(6.0f, Colors.Black);
             LineStyle foregroundLineStyle = new LineStyle(1.0f, Colors.HitchTrailingColor);
             LineStyle[] lineStyles = { backgroundLineStyle, foregroundLineStyle };
-            GLW.DrawPrimitiveLayered(PrimitiveType.LineLoop, lineStyles, vertices);
+            GLW.DrawLineLoopPrimitiveLayered(lineStyles, vertices);
         }
 
         public void DrawTool()
