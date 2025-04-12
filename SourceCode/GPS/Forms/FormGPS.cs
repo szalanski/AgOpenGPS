@@ -985,7 +985,7 @@ namespace AgOpenGPS
             //AutoSteer
             btnAutoSteer.Enabled = false;
             isBtnAutoSteerOn = false;
-            btnAutoSteer.Image = Properties.Resources.AutoSteerOff;
+            btnAutoSteer.Image = trk.isAutoSnapToPivot ? Properties.Resources.AutoSteerOffSnapToPivot : Properties.Resources.AutoSteerOff;
 
             //auto YouTurn shutdown
             yt.isYouTurnBtnOn = false;

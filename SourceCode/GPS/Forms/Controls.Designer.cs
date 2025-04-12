@@ -157,7 +157,7 @@ namespace AgOpenGPS
                     if (isBtnAutoSteerOn)
                     {
                         isBtnAutoSteerOn = false;
-                        btnAutoSteer.Image = Properties.Resources.AutoSteerOff;
+                        btnAutoSteer.Image = trk.isAutoSnapToPivot ? Properties.Resources.AutoSteerOffSnapToPivot : Properties.Resources.AutoSteerOff;
                         //if (yt.isYouTurnBtnOn) btnAutoYouTurn.PerformClick();
                         if (sounds.isSteerSoundOn) sounds.sndAutoSteerOff.Play();
                     }
@@ -176,7 +176,7 @@ namespace AgOpenGPS
             if (isBtnAutoSteerOn)
             {
                 isBtnAutoSteerOn = false;
-                btnAutoSteer.Image = Properties.Resources.AutoSteerOff;
+                btnAutoSteer.Image = trk.isAutoSnapToPivot ? Properties.Resources.AutoSteerOffSnapToPivot : Properties.Resources.AutoSteerOff;
                 //if (yt.isYouTurnBtnOn) btnAutoYouTurn.PerformClick();
                 if (sounds.isSteerSoundOn) sounds.sndAutoSteerOff.Play();
             }
@@ -185,7 +185,7 @@ namespace AgOpenGPS
                 if (ct.isContourBtnOn | trk.idx > -1)
                 {
                     isBtnAutoSteerOn = true;
-                    btnAutoSteer.Image = Properties.Resources.AutoSteerOn;
+                    btnAutoSteer.Image = trk.isAutoSnapToPivot ? Properties.Resources.AutoSteerOnSnapToPivot : Properties.Resources.AutoSteerOn;
                     if (sounds.isSteerSoundOn) sounds.sndAutoSteerOn.Play();
 
                     //redraw uturn if btn enabled.
@@ -467,6 +467,12 @@ namespace AgOpenGPS
         {
             trk.isAutoSnapToPivot = cboxAutoSnapToPivot.Checked;
             trackMethodPanelCounter = 1;
+
+            //show the correct icon variant on the AutoSteer button
+            if (isBtnAutoSteerOn)
+                btnAutoSteer.Image = trk.isAutoSnapToPivot ? Properties.Resources.AutoSteerOnSnapToPivot : Properties.Resources.AutoSteerOn;
+            else
+                btnAutoSteer.Image = trk.isAutoSnapToPivot ? Properties.Resources.AutoSteerOffSnapToPivot : Properties.Resources.AutoSteerOff;
         }
         #endregion
 
