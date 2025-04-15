@@ -341,8 +341,8 @@ namespace AgOpenGPS
                 GL.End();
 
                 GL.Color3(0.2f, 0.950f, 0.20f);
-                mf.font.DrawText3D(desPtA.easting, desPtA.northing, "&A");
-                mf.font.DrawText3D(desPtB.easting, desPtB.northing, "&B");
+                mf.font.DrawText3D(desPtA.easting, desPtA.northing, "&A", mf.camHeading);
+                mf.font.DrawText3D(desPtB.easting, desPtB.northing, "&B", mf.camHeading);
         }
 
         public void DrawABLines()
@@ -361,8 +361,8 @@ namespace AgOpenGPS
 
             if (!isMakingABLine)
             {
-                mf.font.DrawText3D(mf.trk.gArr[mf.trk.idx].ptA.easting, mf.trk.gArr[mf.trk.idx].ptA.northing, "&A");
-                mf.font.DrawText3D(mf.trk.gArr[mf.trk.idx].ptB.easting, mf.trk.gArr[mf.trk.idx].ptB.northing, "&B");
+                mf.font.DrawText3D(mf.trk.gArr[mf.trk.idx].ptA.easting, mf.trk.gArr[mf.trk.idx].ptA.northing, "&A", mf.camHeading);
+                mf.font.DrawText3D(mf.trk.gArr[mf.trk.idx].ptB.easting, mf.trk.gArr[mf.trk.idx].ptB.northing, "&B", mf.camHeading);
             }
 
             GL.PointSize(1.0f);

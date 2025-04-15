@@ -368,8 +368,7 @@ namespace AgOpenGPS
             //instance of tram
             tram = new CTram(this);
 
-            //access to font class
-            font = new CFont(this);
+            font = new CFont(camera, ScreenTextures.Font);
 
             //the new steer algorithms
             gyd = new CGuidance(this);

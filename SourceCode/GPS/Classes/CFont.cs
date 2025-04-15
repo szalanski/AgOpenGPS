@@ -1,12 +1,14 @@
-﻿using OpenTK.Graphics.OpenGL;
+﻿using AgOpenGPS.Core;
+using AgOpenGPS.Core.DrawLib;
+using OpenTK.Graphics.OpenGL;
 using System;
 
 namespace AgOpenGPS
 {
     public class CFont
     {
-        private readonly FormGPS mf;
-
+        private readonly Camera _camera;
+        private readonly Texture2D _fontTexture;
         public const int GlyphsPerLine = 16;
         public const int GlyphWidth = 16;
         public const int GlyphHeight = 32;
@@ -17,13 +19,14 @@ namespace AgOpenGPS
 
         public const int textureHeight = 256;
 
-        public CFont(FormGPS _f)
+        public CFont(Camera camera, Texture2D fontTexture)
         {
-            //constructor
-            mf = _f;
+            _camera = camera;
+            _fontTexture = fontTexture;
         }
 
-        public void DrawText3D(double x1, double y1, string text, double size = 1.0)
+        public void DrawText3D(
+            double x1, double y1, string text, double camHeadingHint, double size = 1.0)
         {
             double x = 0, y = 0;
 
@@ -31,18 +34,18 @@ namespace AgOpenGPS
 
             GL.Translate(x1, y1, 0);
 
-            if (mf.camera.PitchInDegrees < -45)
+            if (_camera.PitchInDegrees < -45)
             {
                 GL.Rotate(90, 1, 0, 0);
-                if (mf.camera.FollowDirectionHint) GL.Rotate(-mf.camHeading, 0, 1, 0);
-                size = -mf.camera.camSetDistance;
+                if (_camera.FollowDirectionHint) GL.Rotate(- camHeadingHint, 0, 1, 0);
+                size = - _camera.camSetDistance;
                 size = Math.Pow(size, 0.8);
                 size /= 800;
             }
             else
             {
-                if (mf.camera.FollowDirectionHint) GL.Rotate(-mf.camHeading, 0, 0, 1);
-                size = -mf.camera.camSetDistance;
+                if (_camera.FollowDirectionHint) GL.Rotate(- camHeadingHint, 0, 0, 1);
+                size = - _camera.camSetDistance;
                 size = Math.Pow(size, 0.85);
                 size /= 1000;
             }
@@ -62,7 +65,7 @@ namespace AgOpenGPS
 
         private void DrawText(double x, double yBottom, double yTop, string text, double size)
         {
-            mf.ScreenTextures.Font.Bind();
+            _fontTexture.Bind();
             GL.Enable(EnableCap.Texture2D);
             GL.Begin(PrimitiveType.Quads);
 
