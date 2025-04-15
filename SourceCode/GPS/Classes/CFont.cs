@@ -17,13 +17,10 @@ namespace AgOpenGPS
 
         public const int textureHeight = 256;
 
-        public bool isFontOn;
-
         public CFont(FormGPS _f)
         {
             //constructor
             mf = _f;
-            isFontOn = true;
         }
 
         public void DrawText3D(double x1, double y1, string text, double size = 1.0)
@@ -49,46 +46,23 @@ namespace AgOpenGPS
                 size = Math.Pow(size, 0.85);
                 size /= 1000;
             }
-
-            mf.ScreenTextures.Font.Bind();
-            GL.Enable(EnableCap.Texture2D);
-            GL.Begin(PrimitiveType.Quads);
-
-            double u_step = GlyphWidth / (double)textureWidth;
-            double v_step = GlyphHeight / (double)textureHeight;
-
-            for (int n = 0; n < text.Length; n++)
-            {
-                char idx = text[n];
-                double u = idx % GlyphsPerLine * u_step;
-                double v = idx / GlyphsPerLine * v_step;
-
-                GL.TexCoord2(u, v + v_step);
-                GL.Vertex2(x, y);
-
-                GL.TexCoord2(u + u_step, v + v_step);
-                GL.Vertex2(x + GlyphWidth * size, y);
-
-                GL.TexCoord2(u + u_step, v);
-                GL.Vertex2(x + GlyphWidth * size, y + GlyphHeight * size);
-
-                GL.TexCoord2(u, v);
-                GL.Vertex2(x, y + GlyphHeight * size);
-
-                x += CharXSpacing * size;
-            }
-
-            GL.End();
-            GL.Disable(EnableCap.Texture2D);
+            double yTop = y + GlyphHeight * size;
+            double yBottom = y;
+            DrawText(x, yBottom, yTop, text, size);
 
             GL.PopMatrix();
         }
 
         public void DrawText(double x, double y, string text, double size = 1.0)
         {
+            double yBottom = y + GlyphHeight * size;
+            double yTop = y;
+            DrawText(x, yBottom, yTop, text, size);
+        }
+
+        private void DrawText(double x, double yBottom, double yTop, string text, double size)
+        {
             mf.ScreenTextures.Font.Bind();
-            // Select Our Texture
-            //GL.Color3(0.95f, 0.95f, 0.40f);
             GL.Enable(EnableCap.Texture2D);
             GL.Begin(PrimitiveType.Quads);
 
@@ -102,13 +76,13 @@ namespace AgOpenGPS
                 double v = idx / GlyphsPerLine * v_step;
 
                 GL.TexCoord2(u, v);
-                GL.Vertex2(x, y);
+                GL.Vertex2(x, yTop);
                 GL.TexCoord2(u + u_step, v);
-                GL.Vertex2(x + GlyphWidth * size, y);
+                GL.Vertex2(x + GlyphWidth * size, yTop);
                 GL.TexCoord2(u + u_step, v + v_step);
-                GL.Vertex2(x + GlyphWidth * size, y + GlyphHeight * size);
+                GL.Vertex2(x + GlyphWidth * size, yBottom);
                 GL.TexCoord2(u, v + v_step);
-                GL.Vertex2(x, y + GlyphHeight * size);
+                GL.Vertex2(x, yBottom);
 
                 x += CharXSpacing * size;
             }
