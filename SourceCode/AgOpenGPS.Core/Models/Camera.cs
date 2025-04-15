@@ -1,19 +1,15 @@
 ﻿using AgOpenGPS.Core.DrawLib;
 
-namespace AgOpenGPS
+namespace AgOpenGPS.Core
 {
-    public class CCamera
+    public class Camera
     {
-        public double camSmoothFactor;
-
-        public CCamera()
+        public Camera(double pitchInDegrees, double zoomValue)
         {
-            //get the pitch of camera from settings
-            PitchInDegrees = Properties.Settings.Default.setDisplay_camPitch;
-            ZoomValue = Properties.Settings.Default.setDisplay_camZoom;
+            PitchInDegrees = pitchInDegrees;
+            ZoomValue = zoomValue;
             DistanceToLookAt = 0.5 * 75.0;
             FollowDirectionHint = true;
-            camSmoothFactor = ((double)(Properties.Settings.Default.setDisplay_camSmooth) * 0.004) + 0.2;
         }
 
         public double PitchInDegrees { get; set; } // 0.0 is vertical downwards -90.0 is horizontal
