@@ -236,10 +236,7 @@ namespace AgOpenGPS
         ///// </summary>
         public CSound sounds;
 
-        /// <summary>
-        /// The font class
-        /// </summary>
-        public CFont font;
+        public AgOpenGPS.Core.DrawLib.Font font;
 
         /// <summary>
         /// The new steer algorithms
@@ -368,7 +365,7 @@ namespace AgOpenGPS
             //instance of tram
             tram = new CTram(this);
 
-            font = new CFont(camera, ScreenTextures.Font);
+            font = new AgOpenGPS.Core.DrawLib.Font(camera, ScreenTextures.Font);
 
             //the new steer algorithms
             gyd = new CGuidance(this);

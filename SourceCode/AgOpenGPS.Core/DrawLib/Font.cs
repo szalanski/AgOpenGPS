@@ -1,25 +1,24 @@
 ﻿using AgOpenGPS.Core;
-using AgOpenGPS.Core.DrawLib;
 using OpenTK.Graphics.OpenGL;
 using System;
 
-namespace AgOpenGPS
+namespace AgOpenGPS.Core.DrawLib
 {
-    public class CFont
+    public class Font
     {
         private readonly Camera _camera;
         private readonly Texture2D _fontTexture;
+
         public const int GlyphsPerLine = 16;
         public const int GlyphWidth = 16;
         public const int GlyphHeight = 32;
         public const int CharXSpacing = 16;
 
-        //int FontTextureID;
         public const int textureWidth = 256;
 
         public const int textureHeight = 256;
 
-        public CFont(Camera camera, Texture2D fontTexture)
+        public Font(Camera camera, Texture2D fontTexture)
         {
             _camera = camera;
             _fontTexture = fontTexture;

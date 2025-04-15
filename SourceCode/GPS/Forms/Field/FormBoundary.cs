@@ -73,7 +73,7 @@ namespace AgOpenGPS
 
             flp1.Controls.Clear();
 
-            Font backupfont = new Font(Font.FontFamily, 18F, FontStyle.Bold);
+            System.Drawing.Font backupfont = new System.Drawing.Font(base.Font.FontFamily, 18F, FontStyle.Bold);
 
             for (int i = 0; i < mf.bnd.bndList.Count; i++)
             {
