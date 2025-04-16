@@ -48,7 +48,8 @@ namespace AgOpenGPS.Core.DrawLib
 
         public void DrawCentered(
             XyCoord center,      // The center of the texture will be mapped to this coord
-            XyDelta centerToU1V1 // Typically 0.5 * the size. Negative values for X and/or Y will flip the corresponding U and/or V axis of the texture.
+            XyDelta centerToU1V1 // Typically 0.5 * the size. Negative values for X and/or Y
+                                 // will flip the corresponding U and/or V axis of the texture.
         )
         {
             Draw(center - centerToU1V1, center + centerToU1V1);
@@ -56,8 +57,7 @@ namespace AgOpenGPS.Core.DrawLib
 
         public void SetBitmap(Bitmap bitmap)
         {
-            if (0 == _textureId) CreateTexture();
-            GL.BindTexture(TextureTarget.Texture2D, _textureId);
+            Bind();
             BitmapData bitmapData = bitmap.LockBits(
                 new Rectangle(0, 0, bitmap.Width, bitmap.Height),
                 ImageLockMode.ReadOnly,
