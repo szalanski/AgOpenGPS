@@ -1913,7 +1913,7 @@ namespace AgOpenGPS
                     GL.Vertex3(flag.easting, flag.northing, 0);
                     GL.End();
 
-                    font.DrawText3D(flag.easting, flag.northing, flagColor + flag.notes);
+                    font.DrawText3D(flag.easting, flag.northing, flagColor + flag.notes, camHeading);
                 }
                 if (flagNumberPicked != 0)
                 {

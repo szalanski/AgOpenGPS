@@ -7,15 +7,18 @@ namespace AgOpenGPS.Core.DrawLib
 {
     public class Texture2D
     {
-        private readonly int _textureId;
+        private readonly Bitmap _bitmap;
+        private int _textureId;
         public Texture2D(Bitmap bitmap)
         {
-            _textureId = GL.GenTexture();
-            if (bitmap != null) SetBitmap(bitmap);
+            _bitmap = bitmap;
+            // To avoid crashes during start-upup (when no OpenGL context has been created yet),
+            // delay creation of texture to the first call to Bind() 
         }
 
         public void Bind()
         {
+            if (0 == _textureId) CreateTexture();
             GL.BindTexture(TextureTarget.Texture2D, _textureId);
         }
 
@@ -45,7 +48,8 @@ namespace AgOpenGPS.Core.DrawLib
 
         public void DrawCentered(
             XyCoord center,      // The center of the texture will be mapped to this coord
-            XyDelta centerToU1V1 // Typically 0.5 * the size. Negative values for X and/or Y will flip the corresponding U and/or V axis of the texture.
+            XyDelta centerToU1V1 // Typically 0.5 * the size. Negative values for X and/or Y
+                                 // will flip the corresponding U and/or V axis of the texture.
         )
         {
             Draw(center - centerToU1V1, center + centerToU1V1);
@@ -53,7 +57,7 @@ namespace AgOpenGPS.Core.DrawLib
 
         public void SetBitmap(Bitmap bitmap)
         {
-            GL.BindTexture(TextureTarget.Texture2D, _textureId);
+            Bind();
             BitmapData bitmapData = bitmap.LockBits(
                 new Rectangle(0, 0, bitmap.Width, bitmap.Height),
                 ImageLockMode.ReadOnly,
@@ -72,6 +76,12 @@ namespace AgOpenGPS.Core.DrawLib
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, 9729);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, 9729);
             GL.BindTexture(TextureTarget.Texture2D, 0);
+        }
+
+        private void CreateTexture()
+        {
+            _textureId = GL.GenTexture();
+            if (_bitmap != null) SetBitmap(_bitmap);
         }
 
     }
