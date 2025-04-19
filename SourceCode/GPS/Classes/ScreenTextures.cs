@@ -44,7 +44,7 @@ namespace AgOpenGPS.Classes
         {
             get
             {
-                if (_crossTrackBackGround == null) _crossTrackBackGround = new Texture2D(Resources.ZoomOut48);
+                if (_crossTrackBackGround == null) _crossTrackBackGround = new Texture2D(Resources.CrossTrackBackground);
                 return _crossTrackBackGround;
             }
         }
