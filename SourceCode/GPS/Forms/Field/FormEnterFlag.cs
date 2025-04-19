@@ -141,7 +141,8 @@ namespace AgOpenGPS
                         }
                         else
                         {
-                            MessageBox.Show($"Invalid line in file: {line}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            MessageBox.Show($"Invalid line: {line}", "Error check format", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
                         }
                     }
                     MessageBox.Show("Flags successfully added!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
