@@ -2057,8 +2057,6 @@ namespace AgOpenGPS
 
                 GL.Color4(red, green, 0.3, 1.0);
 
-                GL.Begin(PrimitiveType.Quads);              // Build Quad From A Triangle Strip
-
                 //int wide = (int)((double)oglMain.Width / 12);
                 //if (wide < 75) wide = 75;
                 int wide = 50;
