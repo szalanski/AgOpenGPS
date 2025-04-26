@@ -26,12 +26,9 @@ namespace AgOpenGPS
         {
             //constructor, grab the main form reference
             mf = f;
-            SharedFieldProperties = new SharedFieldProperties();
-            mf.AppModel.LocalPlane = new LocalPlane(new Wgs84(0, 0), SharedFieldProperties);
+            mf.AppModel.LocalPlane = new LocalPlane(new Wgs84(0, 0), mf.AppModel.SharedFieldProperties);
             ageAlarm = Properties.Settings.Default.setGPS_ageAlarm;
         }
-
-        public SharedFieldProperties SharedFieldProperties { get; }
 
         public void AverageTheSpeed()
         {
@@ -42,7 +39,7 @@ namespace AgOpenGPS
 
         public void DefineLocalPlane(Wgs84 origin, bool setSim)
         {
-            mf.AppModel.LocalPlane = new LocalPlane(origin, SharedFieldProperties);
+            mf.AppModel.LocalPlane = new LocalPlane(origin, mf.AppModel.SharedFieldProperties);
             if (setSim && mf.timerSim.Enabled)
             {
                 mf.AppModel.CurrentLatLon = origin;

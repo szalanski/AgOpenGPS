@@ -14,6 +14,8 @@ namespace AgOpenGPS.Core
         {
             FieldsDirectory = baseDirectory.CreateSubdirectory("Fields");
             VehiclesDirectory = baseDirectory.CreateSubdirectory("Vehicles");
+            SharedFieldProperties = new SharedFieldProperties();
+
             Fields = new Fields(FieldsDirectory);
         }
 
@@ -25,6 +27,7 @@ namespace AgOpenGPS.Core
         public DirectoryInfo FieldsDirectory { get; }
         public DirectoryInfo VehiclesDirectory { get; }
 
+        public SharedFieldProperties SharedFieldProperties { get; }
         public Fields Fields { get; }
 
         public FieldStreamer FieldStreamer => Fields.FieldStreamer;
