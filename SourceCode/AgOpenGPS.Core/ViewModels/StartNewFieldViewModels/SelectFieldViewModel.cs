@@ -1,6 +1,7 @@
 ﻿using AgLibrary.ViewModels;
 using AgOpenGPS.Core.Interfaces;
 using AgOpenGPS.Core.Models;
+using AgOpenGPS.Core.Streamers;
 using System.Windows.Input;
 
 namespace AgOpenGPS.Core.ViewModels
@@ -10,9 +11,11 @@ namespace AgOpenGPS.Core.ViewModels
         private readonly IPanelPresenter _panelPresenter;
         public SelectFieldViewModel(
             ApplicationModel appModel,
+            FieldDescriptionStreamer fieldDescriptionStreamer,
+            FieldStreamer fieldStreamer,
             IPanelPresenter panelPresenter
         )
-            : base(appModel)
+            : base(appModel, fieldDescriptionStreamer, fieldStreamer)
         {
             _panelPresenter = panelPresenter;
             DeleteFieldCommand = new RelayCommand(DeleteField);

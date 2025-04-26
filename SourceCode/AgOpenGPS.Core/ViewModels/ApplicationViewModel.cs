@@ -1,18 +1,27 @@
 ﻿using AgLibrary.ViewModels;
+using AgOpenGPS.Core.Models;
 using AgOpenGPS.Core.Presenters;
+using AgOpenGPS.Core.Streamers;
 using System.Windows.Input;
 
 namespace AgOpenGPS.Core.ViewModels
 {
     public class ApplicationViewModel : DayNightAndUnitsViewModel
     {
-        private readonly ApplicationModel _appModel;
+        private readonly ApplicationModel _applicationModel;
+        private readonly FieldDescriptionStreamer _fieldDescriptionStreamer;
+        private readonly FieldStreamer _fieldStreamer;
         private ApplicationPresenter _applicationPresenter;
         private StartNewFieldViewModel _startNewFieldViewModel;
 
-        public ApplicationViewModel(ApplicationModel appModel)
+        public ApplicationViewModel(
+            ApplicationModel applicationModel,
+            FieldDescriptionStreamer fieldDescriptionStreamer,
+            FieldStreamer fieldStreamer)
         {
-            _appModel = appModel;
+            _applicationModel = applicationModel;
+            _fieldDescriptionStreamer = fieldDescriptionStreamer;
+            _fieldStreamer = fieldStreamer;
             StartNewFieldCommand = new RelayCommand(StartNewField);
         }
 
@@ -22,16 +31,24 @@ namespace AgOpenGPS.Core.ViewModels
             StartNewFieldViewModel.PanelPresenter = appPresenter.PanelPresenter;
         }
 
+        public ICommand StartNewFieldCommand { get; }
+
         public StartNewFieldViewModel StartNewFieldViewModel
         {
             get
             {
-                if (_startNewFieldViewModel == null) _startNewFieldViewModel = new StartNewFieldViewModel(_appModel);
+                if (_startNewFieldViewModel == null)
+                {
+                    _startNewFieldViewModel =
+                        new StartNewFieldViewModel(
+                            _applicationModel,
+                            _fieldDescriptionStreamer,
+                            _fieldStreamer);
+                }
                 return _startNewFieldViewModel;
             }
         }
 
-        public ICommand StartNewFieldCommand { get; }
         private void StartNewField()
         {
             _applicationPresenter.PresentStartNewField(StartNewFieldViewModel);

@@ -11,13 +11,20 @@ namespace AgOpenGPS.Core.ViewModels
     public class StartNewFieldViewModel : DayNightAndUnitsViewModel
     {
         private readonly ApplicationModel _appModel;
+        private readonly FieldDescriptionStreamer _fieldDescriptionStreamer;
+        private readonly FieldStreamer _fieldStreamer;
         private SelectNearFieldViewModel _selectNearFieldViewModel;
         private CreateFromExistingFieldViewModel _createFromExistingFieldViewModel;
         private SelectFieldViewModel _selectFieldViewModel;
 
-        public StartNewFieldViewModel(ApplicationModel appModel)
+        public StartNewFieldViewModel(
+            ApplicationModel appModel,
+            FieldDescriptionStreamer fieldDescriptionStreamer,
+            FieldStreamer fieldStreamer)
         {
             _appModel = appModel;
+            _fieldDescriptionStreamer = fieldDescriptionStreamer;
+            _fieldStreamer = fieldStreamer;
             StartSelectNearFieldCommand = new RelayCommand(StartSelectNearField);
             StartCreateFieldFromExistingCommand = new RelayCommand(StartCreateFieldFromExisting);
             StartSelectFieldCommand = new RelayCommand(StartSelectField);
@@ -33,7 +40,11 @@ namespace AgOpenGPS.Core.ViewModels
                 if (_selectNearFieldViewModel == null)
                 {
                     _selectNearFieldViewModel =
-                        new SelectNearFieldViewModel(_appModel, PanelPresenter);
+                        new SelectNearFieldViewModel(
+                            _appModel,
+                            _fieldDescriptionStreamer,
+                            _fieldStreamer,
+                            PanelPresenter);
                     AddChild(_selectNearFieldViewModel);
                 }
                 return _selectNearFieldViewModel;
@@ -47,7 +58,11 @@ namespace AgOpenGPS.Core.ViewModels
                 if (_createFromExistingFieldViewModel == null)
                 {
                     _createFromExistingFieldViewModel =
-                        new CreateFromExistingFieldViewModel(_appModel, PanelPresenter);
+                        new CreateFromExistingFieldViewModel(
+                            _appModel,
+                            _fieldDescriptionStreamer,
+                            _fieldStreamer,
+                            PanelPresenter);
                     AddChild(_createFromExistingFieldViewModel);
                 }
                 return _createFromExistingFieldViewModel;
@@ -60,7 +75,12 @@ namespace AgOpenGPS.Core.ViewModels
             {
                 if (_selectFieldViewModel == null)
                 {
-                    _selectFieldViewModel = new SelectFieldViewModel(_appModel, PanelPresenter);
+                    _selectFieldViewModel =
+                        new SelectFieldViewModel(
+                            _appModel,
+                            _fieldDescriptionStreamer,
+                            _fieldStreamer,
+                            PanelPresenter);
                     AddChild(_selectFieldViewModel);
                 }
                 return _selectFieldViewModel;

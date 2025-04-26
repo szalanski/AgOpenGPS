@@ -27,8 +27,6 @@ namespace AgOpenGPS.Core
 
         public Fields Fields { get; }
 
-        public FieldStreamer FieldStreamer => Fields.FieldStreamer;
-
         public Wgs84 CurrentLatLon { get; set; }
 
         public LocalPlane LocalPlane { get; set; }
