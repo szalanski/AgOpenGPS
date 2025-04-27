@@ -1,7 +1,7 @@
 ﻿using AgOpenGPS.Core.Interfaces;
 using System;
 
-namespace AgOpenGPS.WpfApp
+namespace AgOpenGPS.WpfApp.Presenters
 {
     public class WpfErrorPresenter : IErrorPresenter
     {
