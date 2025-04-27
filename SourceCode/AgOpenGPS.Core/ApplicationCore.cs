@@ -20,13 +20,13 @@ namespace AgOpenGPS.Core
             AppModel = new ApplicationModel(baseDirectory);
 
             FieldStreamerPresenter fieldStreamerPresenter = new FieldStreamerPresenter(errorPresenter);
-            FieldStreamer _fieldStreamer = new FieldStreamer(fieldStreamerPresenter);
-            FieldDescriptionStreamer _fieldDescriptionStreamer =
+            FieldStreamer fieldStreamer = new FieldStreamer(fieldStreamerPresenter);
+            FieldDescriptionStreamer fieldDescriptionStreamer =
                 new FieldDescriptionStreamer(AppModel.FieldsDirectory, fieldStreamerPresenter);
 
             _panelPresenter = panelPresenter;
             _errorPresenter = errorPresenter;
-            AppViewModel = new ApplicationViewModel(AppModel, _fieldDescriptionStreamer, _fieldStreamer);
+            AppViewModel = new ApplicationViewModel(AppModel, fieldDescriptionStreamer, fieldStreamer);
             AppPresenter = new ApplicationPresenter(
                 AppViewModel,
                 _panelPresenter,
