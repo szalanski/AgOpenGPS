@@ -6,14 +6,14 @@ using System.Windows;
 
 namespace AgOpenGPS.WpfApp
 {
-    public class WpfPanelPresenter : IPanelPresenter
+    public class WpfNewFieldPanelPresenter : INewFieldPanelPresenter
     {
         private StartNewFieldDialog _startNewFieldDialog;
         private SelectNearFieldDialog _selectNearFieldDialog;
         private CreateFromExistingFieldDialog _createFromExistingFieldDialog;
         private SelectFieldDialog _selectFieldDialog;
 
-        public void ShowStartNewFieldDialog(StartNewFieldViewModel viewModel)
+        void INewFieldPanelPresenter.ShowStartNewFieldDialog(StartNewFieldViewModel viewModel)
         {
             _startNewFieldDialog = new StartNewFieldDialog
             {
@@ -22,12 +22,12 @@ namespace AgOpenGPS.WpfApp
             _startNewFieldDialog.ShowDialog();
         }
 
-        public void CloseStartNewFieldDialog()
+        void INewFieldPanelPresenter.CloseStartNewFieldDialog()
         {
             _startNewFieldDialog?.Close();
         }
 
-        void IPanelPresenter.ShowSelectNearFieldDialog(SelectNearFieldViewModel viewModel)
+        void INewFieldPanelPresenter.ShowSelectNearFieldDialog(SelectNearFieldViewModel viewModel)
         {
             viewModel.UpdateFields();
             _selectNearFieldDialog = new SelectNearFieldDialog
@@ -37,12 +37,13 @@ namespace AgOpenGPS.WpfApp
             _selectNearFieldDialog.ShowDialog();
         }
 
-        void IPanelPresenter.CloseSelectNearFieldDialog()
+        void INewFieldPanelPresenter.CloseSelectNearFieldDialog()
         {
             _selectNearFieldDialog?.Close();
         }
 
-        public void ShowCreateFromExistingFieldDialog(CreateFromExistingFieldViewModel viewModel)
+        void INewFieldPanelPresenter.ShowCreateFromExistingFieldDialog(
+            CreateFromExistingFieldViewModel viewModel)
         {
             viewModel.UpdateFields();
             _createFromExistingFieldDialog = new CreateFromExistingFieldDialog
@@ -52,12 +53,12 @@ namespace AgOpenGPS.WpfApp
             _createFromExistingFieldDialog.ShowDialog();
         }
 
-        public void CloseCreateFromExistingFieldDialog()
+        void INewFieldPanelPresenter.CloseCreateFromExistingFieldDialog()
         {
             _createFromExistingFieldDialog?.Close();
         }
 
-        void IPanelPresenter.ShowSelectFieldDialog(SelectFieldViewModel viewModel)
+        void INewFieldPanelPresenter.ShowSelectFieldDialog(SelectFieldViewModel viewModel)
         {
             viewModel.UpdateFields();
             _selectFieldDialog = new SelectFieldDialog
@@ -67,12 +68,12 @@ namespace AgOpenGPS.WpfApp
             _selectFieldDialog.ShowDialog();
         }
 
-        void IPanelPresenter.CloseSelectFieldDialog()
+        void INewFieldPanelPresenter.CloseSelectFieldDialog()
         {
             _selectFieldDialog.Close();
         }
 
-        bool IPanelPresenter.ShowConfirmDeleteMessageBox(string fieldName)
+        bool INewFieldPanelPresenter.ShowConfirmDeleteMessageBox(string fieldName)
         {
             MessageBoxResult result = MessageBox.Show(
                 "Are you sure you want to delete field " + fieldName + "?",

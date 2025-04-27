@@ -19,14 +19,19 @@ namespace AgOpenGPS.Core.ViewModels
         public void SetPresenter(ApplicationPresenter appPresenter)
         {
             _applicationPresenter = appPresenter;
-            StartNewFieldViewModel.PanelPresenter = appPresenter.PanelPresenter;
         }
 
         public StartNewFieldViewModel StartNewFieldViewModel
         {
             get
             {
-                if (_startNewFieldViewModel == null) _startNewFieldViewModel = new StartNewFieldViewModel(_appModel);
+                if (_startNewFieldViewModel == null)
+                {
+                    _startNewFieldViewModel =
+                        new StartNewFieldViewModel(
+                            _appModel,
+                            _applicationPresenter.PanelPresenter.NewFieldPanelPresenter);
+                }
                 return _startNewFieldViewModel;
             }
         }

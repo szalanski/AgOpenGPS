@@ -7,14 +7,14 @@ namespace AgOpenGPS.Core.ViewModels
 {
     public class SelectFieldViewModel : FieldTableViewModel
     {
-        private readonly IPanelPresenter _panelPresenter;
+        private readonly INewFieldPanelPresenter _newFieldPanelPresenter;
         public SelectFieldViewModel(
             ApplicationModel appModel,
-            IPanelPresenter panelPresenter
+            INewFieldPanelPresenter newFieldPanelPresenter
         )
             : base(appModel)
         {
-            _panelPresenter = panelPresenter;
+            _newFieldPanelPresenter = newFieldPanelPresenter;
             DeleteFieldCommand = new RelayCommand(DeleteField);
         }
 
@@ -25,7 +25,7 @@ namespace AgOpenGPS.Core.ViewModels
             var selectedField = LocalSelectedField;
             if (null != selectedField)
             {
-                if (_panelPresenter.ShowConfirmDeleteMessageBox(selectedField.FieldName))
+                if (_newFieldPanelPresenter.ShowConfirmDeleteMessageBox(selectedField.FieldName))
                 {
                     _appModel.Fields.DeleteField(selectedField.DirectoryInfo);
                     LocalSelectedField = null;
@@ -36,7 +36,7 @@ namespace AgOpenGPS.Core.ViewModels
 
         protected override void SelectField()
         {
-            _panelPresenter.CloseSelectFieldDialog();
+            _newFieldPanelPresenter.CloseSelectFieldDialog();
             base.SelectField();
         }
 

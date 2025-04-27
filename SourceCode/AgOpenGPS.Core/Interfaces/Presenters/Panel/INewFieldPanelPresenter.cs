@@ -2,7 +2,7 @@
 
 namespace AgOpenGPS.Core.Interfaces
 {
-    public interface IPanelPresenter
+    public interface INewFieldPanelPresenter
     {
         void ShowStartNewFieldDialog(StartNewFieldViewModel viewModel);
         void CloseStartNewFieldDialog();
