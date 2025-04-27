@@ -13,7 +13,10 @@
         <StackPanel VerticalAlignment="Top">
             <Button Height="80" Width="100" />
             <Button Height="80" Width="100" />
-            <Button Height="80" Width="100" />
+            <Button x:Name="showConfigMenuButton"
+                Content="Configuration"
+                Height="80" Width="100"
+                Command="{Binding ShowConfigMenuCommand}" />
             <Button x:Name="startNewFieldButton"
                 Content="Start New Field"
                 Height="80" Width="100"
