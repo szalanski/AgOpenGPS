@@ -28,7 +28,7 @@ namespace AgOpenGPS
 
         private void FormShiftPos_Load(object sender, EventArgs e)
         {
-            GeoDelta driftCompensation = mf.pn.SharedFieldProperties.DriftCompensation;
+            GeoDelta driftCompensation = mf.AppModel.SharedFieldProperties.DriftCompensation;
             nudNorth.Value = 100 * (decimal)driftCompensation.NorthingDelta;
             nudEast.Value = 100 * (decimal)driftCompensation.EastingDelta;
             chkOffsetsOn.Checked = mf.isKeepOffsetsOn;
@@ -90,7 +90,7 @@ namespace AgOpenGPS
 
         private void SetFixDelta()
         {
-            mf.pn.SharedFieldProperties.DriftCompensation =
+            mf.AppModel.SharedFieldProperties.DriftCompensation =
                 new GeoDelta((double)nudNorth.Value / 100, (double)nudEast.Value / 100);
         }
     }
