@@ -1,4 +1,4 @@
-﻿using AgOpenGPS.Core.Models;
+﻿﻿using AgOpenGPS.Core.Models;
 using System;
 
 namespace AgOpenGPS.Core.Models
@@ -21,18 +21,22 @@ namespace AgOpenGPS.Core.Models
 
     public class Distance
     {
+        private const double metersToKilometers = 0.001;
         private const double milesToKilometers = 1.609344;
         private const double kilometersToMiles = 1 / milesToKilometers;
+        private const double metersToFeet = 3.28;
+        private const double metersToMiles = metersToKilometers * kilometersToMiles;
 
-        private double _inMeters;
-        public Distance(double inMeters)
+        private double _distanceInMeters;
+        public Distance(double distanceInMeters)
         {
-            _inMeters = inMeters;
+            _distanceInMeters = distanceInMeters;
         }
 
-        public double InMeters => _inMeters;
-        public double InKilometers => 0.001 * _inMeters;
-        public double InMiles => InKilometers * kilometersToMiles;
+        public double InMeters => _distanceInMeters;
+        public double InKilometers => _distanceInMeters * metersToKilometers;
+        public double InMiles => _distanceInMeters * metersToMiles;
+        public double InFeet => _distanceInMeters * metersToFeet;
     }
 
     public class Area
