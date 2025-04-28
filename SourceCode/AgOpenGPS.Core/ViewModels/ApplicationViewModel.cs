@@ -1,4 +1,5 @@
 ﻿﻿using AgLibrary.ViewModels;
+using AgOpenGPS.Core.Interfaces;
 using AgOpenGPS.Core.Presenters;
 using System.Windows.Input;
 
@@ -9,14 +10,16 @@ namespace AgOpenGPS.Core.ViewModels
         private readonly ApplicationModel _appModel;
         private ApplicationPresenter _applicationPresenter;
         private ConfigMenuViewModel _configMenuViewModel;
-        private StartNewFieldViewModel _startNewFieldViewModel;
+        private SelectFieldMenuViewModel _selectFieldMenuViewModel;
 
         public ApplicationViewModel(ApplicationModel appModel)
         {
             _appModel = appModel;
             ShowConfigMenuCommand = new RelayCommand(ShowConfigMenu);
-            StartNewFieldCommand = new RelayCommand(StartNewField);
+            ShowSelectFieldMenuCommand = new RelayCommand(ShowSelectFieldMenu);
         }
+
+        public IPanelPresenter PanelPresenter => _applicationPresenter.PanelPresenter;
 
         public void SetPresenter(ApplicationPresenter appPresenter)
         {
@@ -24,7 +27,7 @@ namespace AgOpenGPS.Core.ViewModels
         }
 
         public ICommand ShowConfigMenuCommand { get; }
-        public ICommand StartNewFieldCommand { get; }
+        public ICommand ShowSelectFieldMenuCommand { get; }
 
         public ConfigMenuViewModel ConfigMenuViewModel
         {
@@ -42,29 +45,30 @@ namespace AgOpenGPS.Core.ViewModels
             }
         }
 
-        public StartNewFieldViewModel StartNewFieldViewModel
+        public SelectFieldMenuViewModel SelectFieldMenuViewModel
         {
             get
             {
-                if (_startNewFieldViewModel == null)
+                if (_selectFieldMenuViewModel == null)
                 {
-                    _startNewFieldViewModel =
-                        new StartNewFieldViewModel(
+                    _selectFieldMenuViewModel =
+                        new SelectFieldMenuViewModel(
                             _appModel,
-                            _applicationPresenter.PanelPresenter.NewFieldPanelPresenter);
+                            _applicationPresenter.PanelPresenter.SelectFieldPanelPresenter);
+                    AddChild(_selectFieldMenuViewModel);
                 }
-                return _startNewFieldViewModel;
+                return _selectFieldMenuViewModel;
             }
         }
 
         private void ShowConfigMenu()
         {
-            _applicationPresenter.PanelPresenter.ConfigMenuPanelPresenter.ShowConfigMenuDialog(ConfigMenuViewModel);
+            PanelPresenter.ConfigMenuPanelPresenter.ShowConfigMenuDialog(ConfigMenuViewModel);
         }
 
-        private void StartNewField()
+        private void ShowSelectFieldMenu()
         {
-            _applicationPresenter.PresentStartNewField(StartNewFieldViewModel);
+            PanelPresenter.SelectFieldPanelPresenter.ShowSelectFieldMenuDialog(SelectFieldMenuViewModel);
         }
 
     }

@@ -9,12 +9,12 @@ namespace AgOpenGPS.Core.ViewModels
 {
     public class CreateFromExistingFieldViewModel : FieldTableViewModel
     {
-        private readonly INewFieldPanelPresenter _newFieldPanelPresenter;
+        private readonly ISelectFieldPanelPresenter _newFieldPanelPresenter;
         private string _newFieldName = "";
 
         public CreateFromExistingFieldViewModel(
             ApplicationModel appModel,
-            INewFieldPanelPresenter newFieldPanelPresenter
+            ISelectFieldPanelPresenter newFieldPanelPresenter
         )
             : base(appModel)
         {

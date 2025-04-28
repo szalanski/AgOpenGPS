@@ -22,10 +22,5 @@ namespace AgOpenGPS.Core.Presenters
 
         public IErrorPresenter ErrorPresenter { get; }
 
-        public void PresentStartNewField(StartNewFieldViewModel viewModel)
-        {
-            PanelPresenter.NewFieldPanelPresenter.ShowStartNewFieldDialog(viewModel);
-        }
-
     }
 }
