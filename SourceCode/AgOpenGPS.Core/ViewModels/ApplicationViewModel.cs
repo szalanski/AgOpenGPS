@@ -28,7 +28,6 @@ namespace AgOpenGPS.Core.ViewModels
         public void SetPresenter(ApplicationPresenter appPresenter)
         {
             _applicationPresenter = appPresenter;
-            StartNewFieldViewModel.PanelPresenter = appPresenter.PanelPresenter;
         }
 
         public ICommand StartNewFieldCommand { get; }
@@ -43,7 +42,8 @@ namespace AgOpenGPS.Core.ViewModels
                         new StartNewFieldViewModel(
                             _applicationModel,
                             _fieldDescriptionStreamer,
-                            _fieldStreamer);
+                            _fieldStreamer,
+                            _applicationPresenter.PanelPresenter.NewFieldPanelPresenter);
                 }
                 return _startNewFieldViewModel;
             }

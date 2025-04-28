@@ -1,8 +1,8 @@
-﻿using AgOpenGPS.Core.Models;
+﻿﻿using AgOpenGPS.Core.Models;
 
 namespace AgOpenGPS.Core.ViewModels
 {
-
+    // Dedicated ViewModel to display a distance in kilometers or miles
     public class LongDistanceViewModel : DayNightAndUnitsViewModel
     {
         private readonly Distance _distance;
@@ -11,7 +11,10 @@ namespace AgOpenGPS.Core.ViewModels
             _distance = distance;
         }
 
-        public LongDistanceViewModel(double distance) : this (new Distance(distance))
+        public LongDistanceViewModel(
+            double distanceInMeters
+        ) :
+            this(new Distance(distanceInMeters))
         {
         }
 

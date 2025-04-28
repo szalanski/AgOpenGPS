@@ -10,18 +10,18 @@ namespace AgOpenGPS.Core.ViewModels
 {
     public class CreateFromExistingFieldViewModel : FieldTableViewModel
     {
-        private readonly IPanelPresenter _panelPresenter;
+        private readonly INewFieldPanelPresenter _newFieldPanelPresenter;
         private string _newFieldName = "";
 
         public CreateFromExistingFieldViewModel(
             ApplicationModel appModel,
             FieldDescriptionStreamer fieldDescriptionStreamer,
             FieldStreamer fieldStreamer,
-            IPanelPresenter panelPresenter
+            INewFieldPanelPresenter newFieldPanelPresenter
         )
             : base(appModel, fieldDescriptionStreamer, fieldStreamer)
         {
-            _panelPresenter = panelPresenter;
+            _newFieldPanelPresenter = newFieldPanelPresenter;
             AddVehicleCommand = new RelayCommand(AddVehicle);
             AddDateCommand = new RelayCommand(AddDate);
             AddTimeCommand = new RelayCommand(AddTime);
@@ -87,7 +87,7 @@ namespace AgOpenGPS.Core.ViewModels
 
         protected override void SelectField()
         {
-            _panelPresenter.CloseCreateFromExistingFieldDialog();
+            _newFieldPanelPresenter.CloseCreateFromExistingFieldDialog();
             // TODO finish streamers, finish Copy method in Fields, finish this.
             base.SelectField();
         }
