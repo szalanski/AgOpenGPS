@@ -66,6 +66,14 @@ namespace AgOpenGPS
             set { AppModel.Fields.SetCurrentFieldByName(value); }
         }
 
+        // Deprecated. Only here to avoid numerous changes to existing code that not has been refactored.
+        // Please use AppModel.FixHeading directly
+        public double fixHeading
+        {
+            get { return AppModel.FixHeading.Angle; }
+            set { AppModel.FixHeading = new GeoDir(value); }
+        }
+
         public bool isJobStarted => AppModel.Fields.ActiveField != null;
 
         public string displayFieldName => AppModel.Fields.ActiveField != null ? AppModel.Fields.ActiveField.Name : gStr.gsNone;
