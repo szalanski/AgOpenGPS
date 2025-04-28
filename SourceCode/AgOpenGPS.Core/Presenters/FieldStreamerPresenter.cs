@@ -1,4 +1,5 @@
 ﻿﻿using AgOpenGPS.Core.Interfaces;
+using AgOpenGPS.Core.Translations;
 using System;
 
 namespace AgOpenGPS.Core.Presenters
@@ -14,47 +15,47 @@ namespace AgOpenGPS.Core.Presenters
 
         void IFieldStreamerPresenter.PresentBoundaryFileMissing()
         {
-            ShowStreamingError("gStr.gsMissingBoundaryFile");
+            ShowStreamingError(gStr.gsMissingBoundaryFile);
         }
 
         void IFieldStreamerPresenter.PresentBoundaryFileCorrupt()
         {
-            ShowStreamingError("gStr.gsBoundaryLineFilesAreCorrupt");
+            ShowStreamingError(gStr.gsBoundaryLineFilesAreCorrupt);
         }
 
         void IFieldStreamerPresenter.PresentContourFileMissing()
         {
-            ShowStreamingError("gStr.gsMissingContourFile");
+            ShowStreamingError(gStr.gsMissingContourFile);
         }
 
         void IFieldStreamerPresenter.PresentContourFileCorrupt()
         {
-            ShowStreamingError("gStr.gsContourFileIsCorrupt");
+            ShowStreamingError(gStr.gsContourFileIsCorrupt);
         }
 
         void IFieldStreamerPresenter.PresentCurveLineFileCorrupt()
         {
-            ShowStreamingError("gStr.gsCurveLineFileIsCorrupt");
+            ShowStreamingError(gStr.gsCurveLineFileIsCorrupt);
         }
 
         void IFieldStreamerPresenter.PresentFlagsFileMissing()
         {
-            ShowStreamingError("gStr.gsMissingFlagsFile");
+            ShowStreamingError(gStr.gsMissingFlagsFile);
         }
 
         void IFieldStreamerPresenter.PresentFlagsFileCorrupt()
         {
-            ShowStreamingError("gStr.gsFlagFileIsCorrupt");
+            ShowStreamingError(gStr.gsFlagFileIsCorrupt);
         }
 
         void IFieldStreamerPresenter.PresentRecordedPathFileCorrupt()
         {
-            ShowStreamingError("gStr.gsRecordedPathFileIsCorrupt");
+            ShowStreamingError(gStr.gsRecordedPathFileIsCorrupt);
         }
 
         void IFieldStreamerPresenter.PresentSectionFileMissing()
         {
-            ShowStreamingError("gStr.gsMissingSectionFile");
+            ShowStreamingError(gStr.gsMissingSectionFile);
         }
 
         void IFieldStreamerPresenter.PresentSectionFileCorrupt()
@@ -70,7 +71,7 @@ namespace AgOpenGPS.Core.Presenters
         private void ShowStreamingError(string errorMsg)
         {
             TimeSpan timeSpan = TimeSpan.FromSeconds(2.0);
-            _errorPresenter.PresentTimedMessage(timeSpan, errorMsg, "gStr.gsButFieldIsLoaded");
+            _errorPresenter.PresentTimedMessage(timeSpan, errorMsg, gStr.gsButFieldIsLoaded);
         }
     }
 }
