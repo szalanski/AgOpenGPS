@@ -31,6 +31,7 @@ namespace AgOpenGPS.Core
         public Fields Fields { get; }
 
         public Wgs84 CurrentLatLon { get; set; }
+        public GeoDir FixHeading { get; set; }
 
         public LocalPlane LocalPlane { get; set; }
     }

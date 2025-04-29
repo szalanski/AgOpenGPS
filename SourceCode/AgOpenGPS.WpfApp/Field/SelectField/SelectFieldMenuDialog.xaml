@@ -1,4 +1,4 @@
-﻿<Window x:Class="AgOpenGPS.WpfApp.Field.StartNewFieldDialog"
+﻿<Window x:Class="AgOpenGPS.WpfApp.Field.SelectFieldMenuDialog"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" mc:Ignorable="d"
@@ -7,9 +7,9 @@
     xmlns:corevm="clr-namespace:AgOpenGPS.Core.ViewModels;assembly=AgOpenGPS.Core"
     xmlns:local="clr-namespace:AgOpenGPS.WpfApp.Field"
 
-    d:DataContext="{d:DesignInstance Type=corevm:StartNewFieldViewModel, IsDesignTimeCreatable=False}"
+    d:DataContext="{d:DesignInstance Type=corevm:SelectFieldMenuViewModel, IsDesignTimeCreatable=False}"
 
-    Title="StartNewFieldDialog"
+    Title="SelectFieldMenuDialog"
     SizeToContent="WidthAndHeight">
 
     <StackPanel>

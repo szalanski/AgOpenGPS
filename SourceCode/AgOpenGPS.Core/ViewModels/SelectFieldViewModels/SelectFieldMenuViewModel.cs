@@ -8,21 +8,21 @@ using System.Windows.Input;
 
 namespace AgOpenGPS.Core.ViewModels
 {
-    public class StartNewFieldViewModel : DayNightAndUnitsViewModel
+    public class SelectFieldMenuViewModel : DayNightAndUnitsViewModel
     {
         private readonly ApplicationModel _appModel;
         private readonly FieldDescriptionStreamer _fieldDescriptionStreamer;
         private readonly FieldStreamer _fieldStreamer;
-        private readonly INewFieldPanelPresenter _newFieldPanelPresenter;
+        private readonly ISelectFieldPanelPresenter _newFieldPanelPresenter;
         private SelectNearFieldViewModel _selectNearFieldViewModel;
         private CreateFromExistingFieldViewModel _createFromExistingFieldViewModel;
         private SelectFieldViewModel _selectFieldViewModel;
 
-        public StartNewFieldViewModel(
+        public SelectFieldMenuViewModel(
             ApplicationModel appModel,
             FieldDescriptionStreamer fieldDescriptionStreamer,
             FieldStreamer fieldStreamer,
-            INewFieldPanelPresenter newFieldPanelPresenter)
+            ISelectFieldPanelPresenter newFieldPanelPresenter)
         {
             _appModel = appModel;
             _fieldDescriptionStreamer = fieldDescriptionStreamer;
@@ -32,7 +32,6 @@ namespace AgOpenGPS.Core.ViewModels
             StartCreateFieldFromExistingCommand = new RelayCommand(StartCreateFieldFromExisting);
             StartSelectFieldCommand = new RelayCommand(StartSelectField);
             CancelCommand = new RelayCommand(Cancel);
-            _newFieldPanelPresenter = newFieldPanelPresenter;
         }
 
         public SelectNearFieldViewModel SelectNearFieldViewModel
@@ -99,7 +98,7 @@ namespace AgOpenGPS.Core.ViewModels
         private void StartSelectNearField()
         {
             // TODO implement different behaviour if number of fields is 0 or 1
-            _newFieldPanelPresenter.CloseStartNewFieldDialog();
+            _newFieldPanelPresenter.CloseSelectFieldMenuDialog();
             SelectNearFieldViewModel.UpdateFields();
             _newFieldPanelPresenter.ShowSelectNearFieldDialog(SelectNearFieldViewModel);
         }
@@ -107,7 +106,7 @@ namespace AgOpenGPS.Core.ViewModels
         private void StartCreateFieldFromExisting()
         {
             // TODO implement different behaviour if number of fields is 0 or 1
-            _newFieldPanelPresenter.CloseStartNewFieldDialog();
+            _newFieldPanelPresenter.CloseSelectFieldMenuDialog();
             CreateFromExistingFieldViewModel.UpdateFields();
             _newFieldPanelPresenter.ShowCreateFromExistingFieldDialog(CreateFromExistingFieldViewModel);
         }
@@ -115,14 +114,14 @@ namespace AgOpenGPS.Core.ViewModels
         private void StartSelectField()
         {
             // TODO implement different behaviour if number of fields is 0 or 1
-            _newFieldPanelPresenter.CloseStartNewFieldDialog();
+            _newFieldPanelPresenter.CloseSelectFieldMenuDialog();
             SelectFieldViewModel.UpdateFields();
             _newFieldPanelPresenter.ShowSelectFieldDialog(SelectFieldViewModel);
         }
 
         private void Cancel()
         {
-            _newFieldPanelPresenter.CloseStartNewFieldDialog();
+            _newFieldPanelPresenter.CloseSelectFieldMenuDialog();
         }
 
     }

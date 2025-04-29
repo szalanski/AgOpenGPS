@@ -2,9 +2,9 @@
 
 namespace AgOpenGPS.WpfApp.Field
 {
-    public partial class StartNewFieldDialog : Window
+    public partial class SelectFieldMenuDialog : Window
     {
-        public StartNewFieldDialog()
+        public SelectFieldMenuDialog()
         {
             InitializeComponent();
         }

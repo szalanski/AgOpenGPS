@@ -5,13 +5,13 @@ namespace AgOpenGPS.Core.ViewModels
 {
     public class SelectNearFieldViewModel : NearFieldTableViewModel
     {
-        private readonly INewFieldPanelPresenter _newFieldPanelPresenter;
+        private readonly ISelectFieldPanelPresenter _newFieldPanelPresenter;
 
         public SelectNearFieldViewModel(
             ApplicationModel appModel,
             FieldDescriptionStreamer fieldDescriptionStreamer,
             FieldStreamer fieldStreamer,
-            INewFieldPanelPresenter newFieldPanelPresenter
+            ISelectFieldPanelPresenter newFieldPanelPresenter
         )
             : base(appModel, fieldDescriptionStreamer, fieldStreamer)
         {

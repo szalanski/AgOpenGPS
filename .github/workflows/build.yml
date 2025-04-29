@@ -51,12 +51,8 @@ jobs:
     - name: Test
       run: dotnet test --no-restore ${{env.SOLUTION_FILE_PATH}}
 
-    - name: Create AgOpenGPS.zip
-      shell: powershell
-      run: Compress-Archive -Path "AgOpenGPS" -Destination "AgOpenGPS.zip"
-
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
-        name: AgOpenGPS.zip
-        path: AgOpenGPS.zip
+        name: AgOpenGPS
+        path: AgOpenGPS

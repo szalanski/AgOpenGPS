@@ -4,6 +4,7 @@ namespace AgOpenGPS.Core.Interfaces
 {
     public interface IPanelPresenter
     {
-        INewFieldPanelPresenter NewFieldPanelPresenter { get; }
+        ISelectFieldPanelPresenter SelectFieldPanelPresenter { get; }
+        IConfigMenuPanelPresenter ConfigMenuPanelPresenter { get; }
     }
 }

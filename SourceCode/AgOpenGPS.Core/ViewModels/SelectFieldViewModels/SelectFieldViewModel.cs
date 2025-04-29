@@ -8,12 +8,12 @@ namespace AgOpenGPS.Core.ViewModels
 {
     public class SelectFieldViewModel : FieldTableViewModel
     {
-        private readonly INewFieldPanelPresenter _newFieldPanelPresenter;
+        private readonly ISelectFieldPanelPresenter _newFieldPanelPresenter;
         public SelectFieldViewModel(
             ApplicationModel appModel,
             FieldDescriptionStreamer fieldDescriptionStreamer,
             FieldStreamer fieldStreamer,
-            INewFieldPanelPresenter newFieldPanelPresenter
+            ISelectFieldPanelPresenter newFieldPanelPresenter
         )
             : base(appModel, fieldDescriptionStreamer, fieldStreamer)
         {
