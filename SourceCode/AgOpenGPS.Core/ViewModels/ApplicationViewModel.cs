@@ -1,4 +1,5 @@
-﻿using AgLibrary.ViewModels;
+﻿﻿using AgLibrary.ViewModels;
+using AgOpenGPS.Core.Interfaces;
 using AgOpenGPS.Core.Presenters;
 using System.Windows.Input;
 
@@ -8,38 +9,67 @@ namespace AgOpenGPS.Core.ViewModels
     {
         private readonly ApplicationModel _appModel;
         private ApplicationPresenter _applicationPresenter;
-        private StartNewFieldViewModel _startNewFieldViewModel;
+        private ConfigMenuViewModel _configMenuViewModel;
+        private SelectFieldMenuViewModel _selectFieldMenuViewModel;
 
         public ApplicationViewModel(ApplicationModel appModel)
         {
             _appModel = appModel;
-            StartNewFieldCommand = new RelayCommand(StartNewField);
+            ShowConfigMenuCommand = new RelayCommand(ShowConfigMenu);
+            ShowSelectFieldMenuCommand = new RelayCommand(ShowSelectFieldMenu);
         }
+
+        public IPanelPresenter PanelPresenter => _applicationPresenter.PanelPresenter;
 
         public void SetPresenter(ApplicationPresenter appPresenter)
         {
             _applicationPresenter = appPresenter;
         }
 
-        public StartNewFieldViewModel StartNewFieldViewModel
+        public ICommand ShowConfigMenuCommand { get; }
+        public ICommand ShowSelectFieldMenuCommand { get; }
+
+        public ConfigMenuViewModel ConfigMenuViewModel
         {
             get
             {
-                if (_startNewFieldViewModel == null)
+                if (_configMenuViewModel == null)
                 {
-                    _startNewFieldViewModel =
-                        new StartNewFieldViewModel(
+                    _configMenuViewModel =
+                        new ConfigMenuViewModel(
                             _appModel,
-                            _applicationPresenter.PanelPresenter.NewFieldPanelPresenter);
+                            _applicationPresenter.PanelPresenter.ConfigMenuPanelPresenter);
+                    AddChild(_configMenuViewModel);
                 }
-                return _startNewFieldViewModel;
+                return _configMenuViewModel;
             }
         }
 
-        public ICommand StartNewFieldCommand { get; }
-        private void StartNewField()
+        public SelectFieldMenuViewModel SelectFieldMenuViewModel
         {
-            _applicationPresenter.PresentStartNewField(StartNewFieldViewModel);
+            get
+            {
+                if (_selectFieldMenuViewModel == null)
+                {
+                    _selectFieldMenuViewModel =
+                        new SelectFieldMenuViewModel(
+                            _appModel,
+                            _applicationPresenter.PanelPresenter.SelectFieldPanelPresenter);
+                    AddChild(_selectFieldMenuViewModel);
+                }
+                return _selectFieldMenuViewModel;
+            }
         }
+
+        private void ShowConfigMenu()
+        {
+            PanelPresenter.ConfigMenuPanelPresenter.ShowConfigMenuDialog(ConfigMenuViewModel);
+        }
+
+        private void ShowSelectFieldMenu()
+        {
+            PanelPresenter.SelectFieldPanelPresenter.ShowSelectFieldMenuDialog(SelectFieldMenuViewModel);
+        }
+
     }
 }

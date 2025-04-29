@@ -6,10 +6,12 @@ namespace AgOpenGPS.WpfApp.Presenters
     {
         public WpfPanelPresenter()
         {
-            NewFieldPanelPresenter = new WpfNewFieldPanelPresenter();
+            ConfigMenuPanelPresenter = new WpfConfigMenuPanelPresenter();
+            SelectFieldPanelPresenter = new WpfSelectFieldPanelPresenter();
         }
 
-        public INewFieldPanelPresenter NewFieldPanelPresenter {get;}
+        public IConfigMenuPanelPresenter ConfigMenuPanelPresenter { get; }
+        public ISelectFieldPanelPresenter SelectFieldPanelPresenter { get; }
     }
 
 }
