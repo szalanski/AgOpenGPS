@@ -816,7 +816,7 @@ namespace AgOpenGPS
 
 
                 //draw 250 green for the headland
-                if (bnd.isHeadlandOn && bnd.isSectionControlledByHeadland)
+                if (bnd.isHeadlandOn)
                 {
                     GL.LineWidth(3);
                     GL.Color3((byte)0, (byte)250, (byte)0);
@@ -898,7 +898,7 @@ namespace AgOpenGPS
             //10 % min is required for overlap, otherwise it never would be on.
             int pixLimit = (int)((double)(section[0].rpSectionWidth * rpOnHeight) / (double)(5.0));
 
-            if ((rpOnHeight < rpToolHeight && bnd.isHeadlandOn && bnd.isSectionControlledByHeadland)) rpHeight = rpToolHeight + 2;
+            if ((rpOnHeight < rpToolHeight && bnd.isHeadlandOn)) rpHeight = rpToolHeight + 2;
             else rpHeight = rpOnHeight + 2;
 
             if (rpHeight > 290) rpHeight = 290;
