@@ -4,6 +4,7 @@ using AgOpenGPS.Core.Models;
 using System.Globalization;
 using System;
 using System.Windows.Input;
+using AgOpenGPS.Core.Streamers;
 
 namespace AgOpenGPS.Core.ViewModels
 {
@@ -14,9 +15,11 @@ namespace AgOpenGPS.Core.ViewModels
 
         public CreateFromExistingFieldViewModel(
             ApplicationModel appModel,
+            FieldDescriptionStreamer fieldDescriptionStreamer,
+            FieldStreamer fieldStreamer,
             ISelectFieldPanelPresenter newFieldPanelPresenter
         )
-            : base(appModel)
+            : base(appModel, fieldDescriptionStreamer, fieldStreamer)
         {
             _newFieldPanelPresenter = newFieldPanelPresenter;
             AddVehicleCommand = new RelayCommand(AddVehicle);

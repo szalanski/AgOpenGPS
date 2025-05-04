@@ -11,6 +11,8 @@ namespace AgOpenGPS.Core.ViewModels
     public class SelectFieldMenuViewModel : DayNightAndUnitsViewModel
     {
         private readonly ApplicationModel _appModel;
+        private readonly FieldDescriptionStreamer _fieldDescriptionStreamer;
+        private readonly FieldStreamer _fieldStreamer;
         private readonly ISelectFieldPanelPresenter _newFieldPanelPresenter;
         private SelectNearFieldViewModel _selectNearFieldViewModel;
         private CreateFromExistingFieldViewModel _createFromExistingFieldViewModel;
@@ -18,15 +20,18 @@ namespace AgOpenGPS.Core.ViewModels
 
         public SelectFieldMenuViewModel(
             ApplicationModel appModel,
+            FieldDescriptionStreamer fieldDescriptionStreamer,
+            FieldStreamer fieldStreamer,
             ISelectFieldPanelPresenter newFieldPanelPresenter)
         {
             _appModel = appModel;
+            _fieldDescriptionStreamer = fieldDescriptionStreamer;
+            _fieldStreamer = fieldStreamer;
             _newFieldPanelPresenter = newFieldPanelPresenter;
             StartSelectNearFieldCommand = new RelayCommand(StartSelectNearField);
             StartCreateFieldFromExistingCommand = new RelayCommand(StartCreateFieldFromExisting);
             StartSelectFieldCommand = new RelayCommand(StartSelectField);
             CancelCommand = new RelayCommand(Cancel);
-            _newFieldPanelPresenter = newFieldPanelPresenter;
         }
 
         public SelectNearFieldViewModel SelectNearFieldViewModel
@@ -36,7 +41,11 @@ namespace AgOpenGPS.Core.ViewModels
                 if (_selectNearFieldViewModel == null)
                 {
                     _selectNearFieldViewModel =
-                        new SelectNearFieldViewModel(_appModel, _newFieldPanelPresenter);
+                        new SelectNearFieldViewModel(
+                            _appModel,
+                            _fieldDescriptionStreamer,
+                            _fieldStreamer,
+                            _newFieldPanelPresenter);
                     AddChild(_selectNearFieldViewModel);
                 }
                 return _selectNearFieldViewModel;
@@ -50,7 +59,11 @@ namespace AgOpenGPS.Core.ViewModels
                 if (_createFromExistingFieldViewModel == null)
                 {
                     _createFromExistingFieldViewModel =
-                        new CreateFromExistingFieldViewModel(_appModel, _newFieldPanelPresenter);
+                        new CreateFromExistingFieldViewModel(
+                            _appModel,
+                            _fieldDescriptionStreamer,
+                            _fieldStreamer,
+                            _newFieldPanelPresenter);
                     AddChild(_createFromExistingFieldViewModel);
                 }
                 return _createFromExistingFieldViewModel;
@@ -63,7 +76,12 @@ namespace AgOpenGPS.Core.ViewModels
             {
                 if (_selectFieldViewModel == null)
                 {
-                    _selectFieldViewModel = new SelectFieldViewModel(_appModel, _newFieldPanelPresenter);
+                    _selectFieldViewModel =
+                        new SelectFieldViewModel(
+                            _appModel,
+                            _fieldDescriptionStreamer,
+                            _fieldStreamer,
+                            _newFieldPanelPresenter);
                     AddChild(_selectFieldViewModel);
                 }
                 return _selectFieldViewModel;
