@@ -43,7 +43,7 @@ namespace AgOpenGPS.Core.Streamers
         public string HeadingStringH(GeoDir geoDir, string formatString = "N3")
         {
             return
-                geoDir.Angle.ToString(formatString, CultureInfo.InvariantCulture);
+                geoDir.AngleInRadians.ToString(formatString, CultureInfo.InvariantCulture);
         }
 
         public string GeoCoordDirStringENH(GeoCoord coord, GeoDir heading, string coordFormatString = "N3", string headingFormatString = "N5")
