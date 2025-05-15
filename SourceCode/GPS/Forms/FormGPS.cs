@@ -70,7 +70,7 @@ namespace AgOpenGPS
         // Please use AppModel.FixHeading directly
         public double fixHeading
         {
-            get { return AppModel.FixHeading.Angle; }
+            get { return AppModel.FixHeading.AngleInRadians; }
             set { AppModel.FixHeading = new GeoDir(value); }
         }
 
