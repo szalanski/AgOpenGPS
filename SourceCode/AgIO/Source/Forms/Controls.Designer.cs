@@ -295,6 +295,7 @@ namespace AgIO
                     ////Clicked Save
                     //Application.Restart();
                     //Environment.Exit(0);
+                    Settings.Default.Save();
                 }
             }
         }
@@ -429,6 +430,7 @@ namespace AgIO
                     {
                         SettingsShutDownNTRIP();
                     }
+                    Settings.Default.Save();
                 }
             }
         }
@@ -457,7 +459,9 @@ namespace AgIO
 
             using (var form = new FormRadio(this))
             {
-                form.ShowDialog(this);
+                if (form.ShowDialog(this) == DialogResult.OK) {
+                    Settings.Default.Save();
+               }
             }
         }
 
