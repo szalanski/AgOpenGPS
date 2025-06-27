@@ -251,6 +251,16 @@ namespace AgOpenGPS.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap AgShare {
+            get {
+                object obj = ResourceManager.GetObject("AgShare", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
         /// </summary>
         internal static System.IO.UnmanagedMemoryStream Alarm10 {
@@ -475,6 +485,26 @@ namespace AgOpenGPS.Properties {
         internal static System.Drawing.Bitmap AutoTrackOff {
             get {
                 object obj = ResourceManager.GetObject("AutoTrackOff", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap AutoUploadOff {
+            get {
+                object obj = ResourceManager.GetObject("AutoUploadOff", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap AutoUploadOn {
+            get {
+                object obj = ResourceManager.GetObject("AutoUploadOn", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1642,6 +1672,26 @@ namespace AgOpenGPS.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap DownloadAll {
+            get {
+                object obj = ResourceManager.GetObject("DownloadAll", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap DownloadAndUse {
+            get {
+                object obj = ResourceManager.GetObject("DownloadAndUse", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap FieldStats {
             get {
                 object obj = ResourceManager.GetObject("FieldStats", resourceCulture);
@@ -1815,6 +1865,16 @@ namespace AgOpenGPS.Properties {
         internal static System.Drawing.Bitmap FlagYel {
             get {
                 object obj = ResourceManager.GetObject("FlagYel", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ForceOverwrite {
+            get {
+                object obj = ResourceManager.GetObject("ForceOverwrite", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -3087,6 +3147,26 @@ namespace AgOpenGPS.Properties {
         internal static System.Drawing.Bitmap UpArrow64 {
             get {
                 object obj = ResourceManager.GetObject("UpArrow64", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap UploadOff {
+            get {
+                object obj = ResourceManager.GetObject("UploadOff", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap UploadOn {
+            get {
+                object obj = ResourceManager.GetObject("UploadOn", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

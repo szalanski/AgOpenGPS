@@ -2,10 +2,9 @@
 using AgOpenGPS.Core.Models;
 using AgOpenGPS.Core.Streamers;
 using AgOpenGPS.Core.Translations;
+using AgOpenGPS.Forms.Field;
 using AgOpenGPS.Helpers;
 using System;
-using System.Drawing;
-using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
 
@@ -30,6 +29,7 @@ namespace AgOpenGPS
             btnFromKML.Text = gStr.gsFromKml;
             btnFromExisting.Text = gStr.gsFromExisting;
             btnJobClose.Text = gStr.gsClose;
+            btnJobAgShare.Enabled = Properties.Settings.Default.AgShareEnabled;
 
             this.Text = gStr.gsStartNewField;
         }
@@ -41,6 +41,10 @@ namespace AgOpenGPS
             string directoryName = Path.Combine(RegistrySettings.fieldsDirectory, mf.currentFieldDirectory);
 
             string fileAndDirectory = Path.Combine(directoryName, "Field.txt");
+
+            //Trigger a snapshot to create a temp data file for the AgShare Upload
+            if (mf.isJobStarted && Properties.Settings.Default.AgShareEnabled) mf.AgShareSnapshot();
+
 
             if (!File.Exists(fileAndDirectory))
             {
@@ -241,6 +245,26 @@ namespace AgOpenGPS
         private void btnDeleteAB_Click(object sender, EventArgs e)
         {
             mf.isCancelJobMenu = true;
+        }
+
+        private void btnJobAgShare_Click(object sender, EventArgs e)
+        {
+            if (mf.isJobStarted)
+            {
+                mf.FileSaveEverythingBeforeClosingField();
+            }
+
+            var server = Properties.Settings.Default.AgShareServer;
+            var apiKey = Properties.Settings.Default.AgShareApiKey;
+            var client = new AgShareClient(server, apiKey);
+
+            using (var form = new FormAgShareDownloader(mf))
+            {
+                form.ShowDialog(this);
+            }
+
+            DialogResult = DialogResult.Ignore;
+            Close();
         }
     }
 }
