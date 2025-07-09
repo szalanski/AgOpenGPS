@@ -214,6 +214,7 @@ namespace AgOpenGPS
 
         private void btnFromExisting_Click(object sender, EventArgs e)
         {
+            if (mf.isJobStarted) _ = mf.FileSaveEverythingBeforeClosingField();
             //back to FormGPS
             DialogResult = DialogResult.Retry;
             Close();
