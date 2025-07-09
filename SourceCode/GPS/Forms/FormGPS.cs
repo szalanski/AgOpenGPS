@@ -1,4 +1,4 @@
-﻿//Please, if you use this, share the improvements
+//Please, if you use this, share the improvements
 
 using AgLibrary.Logging;
 using AgOpenGPS;
@@ -544,10 +544,7 @@ namespace AgOpenGPS
 
         private async void FormGPS_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (isShuttingDown)
-            {
-                return;
-            }
+            if (isShuttingDown) return;
             //set the shutdown flag to true to prevent re-entrance
             isShuttingDown = true;
 
@@ -588,21 +585,30 @@ namespace AgOpenGPS
                 if (manualBtnState == btnStates.On)
                     btnSectionMasterManual.PerformClick();
 
-                if (Settings.Default.AgShareEnabled)
+                // Start AgShare upload if enabled and not already started
+                if (Settings.Default.AgShareEnabled && Settings.Default.AgShareUploadActive && !isAgShareUploadStarted)
                 {
                     TimedMessageBox(5000, "AgShare", "Uploading field to AgShare...\nPlease wait and get a beer.");
                     isAgShareUploadStarted = true;
-                    agShareUploadTask = CAgShareUploader.UploadAsync(snapshot, agShareClient, this);
-
-                    e.Cancel = true;
-                    await DelayedShutdownAfterUpload(choice);
-                    return;
+                    try
+                    {
+                        agShareUploadTask = CAgShareUploader.UploadAsync(snapshot, agShareClient, this);
+                        await agShareUploadTask;
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.EventWriter("AgShare upload error during shutdown: " + ex.Message);
+                        TimedMessageBox(4000, "Upload failed", "Uploading to AgShare failed.");
+                    }
                 }
-                FileSaveEverythingBeforeClosingField();
+
+                // Always save field data locally
+                await FileSaveEverythingBeforeClosingField();
             }
-            // No upload required, skip DelayedShutDown and finalize shutdown
+
             FinishShutdown(choice);
         }
+
 
         private async Task DelayedShutdownAfterUpload(int choice)
         {
@@ -1066,6 +1072,11 @@ namespace AgOpenGPS
             btnSection1Man.Text = "1";
 
             worldGrid.BingBitmap = Properties.Resources.z_bingMap;
+
+            // Reset AgShare upload state and clear snapshot after field is closed
+            isAgShareUploadStarted = false;
+            snapshot = null;
+
         }
 
         public void FieldMenuButtonEnableDisable(bool isOn)

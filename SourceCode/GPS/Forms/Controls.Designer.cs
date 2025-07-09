@@ -1,4 +1,4 @@
-﻿//Please, if you use this, share the improvements
+//Please, if you use this, share the improvements
 
 using System;
 using System.Collections.Generic;
@@ -7,6 +7,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using AgLibrary.Logging;
 using AgOpenGPS.Core.Models;
@@ -627,9 +628,9 @@ namespace AgOpenGPS
             PanelUpdateRightAndBottom();
         }
 
-        public async void FileSaveEverythingBeforeClosingField()
+        public async Task FileSaveEverythingBeforeClosingField()
         {
-            //turn off contour line if on
+            // Stop contour mapping
             if (ct.isContourOn) ct.StopContourLine();
 
             if (autoBtnState == btnStates.Auto)
@@ -660,28 +661,37 @@ namespace AgOpenGPS
             ExportFieldAs_KML();
             ExportFieldAs_ISOXMLv3();
             ExportFieldAs_ISOXMLv4();
-            if (Settings.Default.AgShareEnabled && Settings.Default.AgShareUploadActive)
+
+            // Upload to AgShare if not already started
+            if (!isAgShareUploadStarted &&
+                Settings.Default.AgShareEnabled &&
+                Settings.Default.AgShareUploadActive)
             {
-                agShareUploadTask = CAgShareUploader.UploadAsync(snapshot, agShareClient, this);
-                await agShareUploadTask;
+                try
+                {
+                    isAgShareUploadStarted = true;
+                    agShareUploadTask = CAgShareUploader.UploadAsync(snapshot, agShareClient, this);
+                    await agShareUploadTask;
+                }
+                catch (Exception ex)
+                {
+                    Log.EventWriter("AgShare upload error: " + ex.Message);
+                    TimedMessageBox(4000, "AgShare upload failed", "An error occurred during upload to AgShare.");
+                }
             }
 
+            Log.EventWriter("** Field closed **   " + currentFieldDirectory + "   " +
+                DateTime.Now.ToString("f", CultureInfo.InvariantCulture));
 
-
-            Log.EventWriter("** Closed **   " + currentFieldDirectory + "   "
-                + DateTime.Now.ToString("f", CultureInfo.InvariantCulture));
-
-
+            // Finalize field close
             panelRight.Enabled = false;
             FieldMenuButtonEnableDisable(false);
             JobClose();
 
-            //Trigger Upload to AgShare
-            AgShareUpload();
-
             Text = "AgOpenGPS";
         }
-        #region AgShare Upload
+
+        #region AgShare Snapshot
 
         private bool isAgShareUploadStarted = false;
         private FieldSnapshot snapshot;
