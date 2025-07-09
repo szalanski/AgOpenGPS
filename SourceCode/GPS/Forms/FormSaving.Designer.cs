@@ -29,56 +29,44 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
-            this.lblAgShareUpload = new System.Windows.Forms.Label();
+            this.lstSteps = new System.Windows.Forms.ListBox();
             this.progressBar = new System.Windows.Forms.ProgressBar();
-            this.lblStatus = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
-            this.panel1.Controls.Add(this.lblAgShareUpload);
+            this.panel1.Controls.Add(this.lstSteps);
             this.panel1.Controls.Add(this.progressBar);
-            this.panel1.Controls.Add(this.lblStatus);
+            this.panel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panel1.Location = new System.Drawing.Point(12, 12);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(909, 467);
             this.panel1.TabIndex = 0;
             // 
-            // lblAgShareUpload
+            // lstSteps
             // 
-            this.lblAgShareUpload.AutoSize = true;
-            this.lblAgShareUpload.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAgShareUpload.Location = new System.Drawing.Point(278, 179);
-            this.lblAgShareUpload.Name = "lblAgShareUpload";
-            this.lblAgShareUpload.Size = new System.Drawing.Size(382, 37);
-            this.lblAgShareUpload.TabIndex = 2;
-            this.lblAgShareUpload.Text = "Uploading to AgShare...";
-            this.lblAgShareUpload.Visible = false;
+            this.lstSteps.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
+            this.lstSteps.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.lstSteps.Font = new System.Drawing.Font("Atlanta", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lstSteps.FormattingEnabled = true;
+            this.lstSteps.ItemHeight = 43;
+            this.lstSteps.Location = new System.Drawing.Point(182, 22);
+            this.lstSteps.Name = "lstSteps";
+            this.lstSteps.SelectionMode = System.Windows.Forms.SelectionMode.None;
+            this.lstSteps.Size = new System.Drawing.Size(566, 344);
+            this.lstSteps.TabIndex = 2;
             // 
             // progressBar
             // 
-            this.progressBar.Location = new System.Drawing.Point(182, 332);
+            this.progressBar.Location = new System.Drawing.Point(182, 374);
             this.progressBar.MarqueeAnimationSpeed = 40;
             this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(566, 23);
+            this.progressBar.Size = new System.Drawing.Size(566, 28);
             this.progressBar.Step = 20;
             this.progressBar.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
             this.progressBar.TabIndex = 1;
-            // 
-            // lblStatus
-            // 
-            this.lblStatus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblStatus.AutoSize = true;
-            this.lblStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblStatus.Location = new System.Drawing.Point(277, 119);
-            this.lblStatus.Name = "lblStatus";
-            this.lblStatus.Size = new System.Drawing.Size(335, 37);
-            this.lblStatus.TabIndex = 0;
-            this.lblStatus.Text = "Saving Parameters...";
-            this.lblStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // FormSaving
             // 
@@ -95,7 +83,6 @@
             this.Text = "FormSaving";
             this.TopMost = true;
             this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -104,7 +91,6 @@
 
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.ProgressBar progressBar;
-        public System.Windows.Forms.Label lblStatus;
-        public System.Windows.Forms.Label lblAgShareUpload;
+        public System.Windows.Forms.ListBox lstSteps;
     }
 }
