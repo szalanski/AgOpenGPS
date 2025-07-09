@@ -702,7 +702,7 @@ namespace AgOpenGPS
         //function to open a previously saved field, resume, open exisiting, open named field
         public void FileOpenField(string _openType)
         {
-            if (isJobStarted) FileSaveEverythingBeforeClosingField();
+            if (isJobStarted) _ = FileSaveEverythingBeforeClosingField();
 
             string fileAndDirectory = "";
             if (_openType.Contains("Field.txt"))

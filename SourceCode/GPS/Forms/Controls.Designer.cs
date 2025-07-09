@@ -488,13 +488,13 @@ namespace AgOpenGPS
 
         public bool isCancelJobMenu;
 
-        private void btnJobMenu_Click(object sender, EventArgs e)
+        private async void btnJobMenu_Click(object sender, EventArgs e)
         {
             if (!isFirstFixPositionSet || sentenceCounter > 299)
             {
                 if (isJobStarted)
                 {
-                    FileSaveEverythingBeforeClosingField();
+                    await FileSaveEverythingBeforeClosingField();
                     TimedMessageBox(2500, gStr.gsField, "Field is now closed");
                 }
                 else
@@ -630,7 +630,7 @@ namespace AgOpenGPS
 
         public async Task FileSaveEverythingBeforeClosingField()
         {
-            // Stop contour mapping
+            // Stop contour mapping and active sections (safe on UI thread)
             if (ct.isContourOn) ct.StopContourLine();
 
             if (autoBtnState == btnStates.Auto)
@@ -639,30 +639,31 @@ namespace AgOpenGPS
             if (manualBtnState == btnStates.On)
                 btnSectionMasterManual.PerformClick();
 
-            //turn off all the sections
             for (int j = 0; j < tool.numOfSections; j++)
             {
                 section[j].sectionOnOffCycle = false;
                 section[j].sectionOffRequest = false;
             }
 
-            //turn off patching
             for (int j = 0; j < triStrip.Count; j++)
             {
                 if (triStrip[j].isDrawing) triStrip[j].TurnMappingOff();
             }
 
-            //FileSaveHeadland();
-            FileSaveBoundary();
-            FileSaveSections();
-            FileSaveContour();
-            FileSaveTracks();
+            // Heavy lifting happens in background thread
+            await Task.Run(() =>
+            {
+                FileSaveBoundary();
+                FileSaveSections();
+                FileSaveContour();
+                FileSaveTracks();
 
-            ExportFieldAs_KML();
-            ExportFieldAs_ISOXMLv3();
-            ExportFieldAs_ISOXMLv4();
+                ExportFieldAs_KML();
+                ExportFieldAs_ISOXMLv3();
+                ExportFieldAs_ISOXMLv4();
+            });
 
-            // Upload to AgShare if not already started
+            // Upload to AgShare (must stay on UI thread because of 'this')
             if (!isAgShareUploadStarted &&
                 Settings.Default.AgShareEnabled &&
                 Settings.Default.AgShareUploadActive)
@@ -683,13 +684,14 @@ namespace AgOpenGPS
             Log.EventWriter("** Field closed **   " + currentFieldDirectory + "   " +
                 DateTime.Now.ToString("f", CultureInfo.InvariantCulture));
 
-            // Finalize field close
+            // Back to UI updates
             panelRight.Enabled = false;
             FieldMenuButtonEnableDisable(false);
             JobClose();
 
             Text = "AgOpenGPS";
         }
+
 
         #region AgShare Snapshot
 
