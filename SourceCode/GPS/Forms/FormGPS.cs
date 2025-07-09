@@ -542,13 +542,15 @@ namespace AgOpenGPS
         // Centralized shutdown coordinator
         private bool isShuttingDown = false;
 
-        private async void FormGPS_FormClosing(object sender, FormClosingEventArgs e)
+        private void FormGPS_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (isShuttingDown) return;
             //set the shutdown flag to true to prevent re-entrance
             isShuttingDown = true;
 
-            // Attempt to close subforms cleanly
+            e.Cancel = true; // Prevent immediate close
+
+            // Close subforms
             string[] formNames = { "FormGPSData", "FormFieldData", "FormPan", "FormTimedMessage" };
             foreach (string name in formNames)
             {
@@ -581,44 +583,52 @@ namespace AgOpenGPS
             {
                 if (autoBtnState == btnStates.Auto)
                     btnSectionMasterAuto.PerformClick();
-
-                if (manualBtnState == btnStates.On)
-                    btnSectionMasterManual.PerformClick();
-
-                // Start AgShare upload if enabled and not already started
-                if (Settings.Default.AgShareEnabled && Settings.Default.AgShareUploadActive && !isAgShareUploadStarted)
-                {
-                    TimedMessageBox(5000, "AgShare", "Uploading field to AgShare...\nPlease wait and get a beer.");
-                    isAgShareUploadStarted = true;
-                    try
-                    {
-                        agShareUploadTask = CAgShareUploader.UploadAsync(snapshot, agShareClient, this);
-                        await agShareUploadTask;
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.EventWriter("AgShare upload error during shutdown: " + ex.Message);
-                        TimedMessageBox(4000, "Upload failed", "Uploading to AgShare failed.");
-                    }
-                }
-
-                // Always save field data locally
-                await FileSaveEverythingBeforeClosingField();
             }
 
-            FinishShutdown(choice);
+            BeginInvoke(new Func<Task>(async () => await ShowSavingFormAndShutdown(choice)));
+            ShowSavingFormAndShutdown(choice);
         }
 
 
-        private async Task DelayedShutdownAfterUpload(int choice)
+        private async Task ShowSavingFormAndShutdown(int choice)
+
         {
-            try
+            using (var savingForm = new FormSaving())
             {
-                await agShareUploadTask;
-                agShareUploadTask = null;
+                savingForm.Show(); // Non-blocking
+
+                await Task.Delay(500); // Let UI settle
+                if (isJobStarted)
+                {
+
+                    // Upload if needed
+                    if (Settings.Default.AgShareEnabled && Settings.Default.AgShareUploadActive && !isAgShareUploadStarted)
+                    {
+                        isAgShareUploadStarted = true;
+                        savingForm.lblAgShareUpload.Visible = true;
+                        try
+                        {
+                            agShareUploadTask = CAgShareUploader.UploadAsync(snapshot, agShareClient, this);
+                            await agShareUploadTask;
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.EventWriter("AgShare upload error during shutdown: " + ex.Message);
+                        }
+                    }
+
+                    // Always save locally
+                    await FileSaveEverythingBeforeClosingField();
+                    savingForm.lblAgShareUpload.Visible = false;
+                    savingForm.lblStatus.Text = "All Saved. Grab a Beer!";
+                }
+
+                await Task.Delay(2500); // Give user time to see it's finished (optional)
+
+                savingForm.Close();
             }
-            catch (Exception) { }
-            if (!this.IsDisposed && !this.Disposing)
+
+            FinishShutdown(choice);
             {
                 FinishShutdown(choice);
             }

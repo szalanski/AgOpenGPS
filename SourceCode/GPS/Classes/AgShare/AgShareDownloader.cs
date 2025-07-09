@@ -8,6 +8,7 @@ using System.Diagnostics;
 using AgOpenGPS.Properties;
 using AgOpenGPS.Core.Models;
 using AgOpenGPS.Classes.AgShare.Helpers;
+using AgLibrary.Logging;
 
 namespace AgOpenGPS
 {
@@ -38,6 +39,8 @@ namespace AgOpenGPS
             }
             catch (Exception ex)
             {
+                Log.EventWriter($"[AgShare] Download failed for fieldId={fieldId}: {ex.GetType().Name} - {ex.Message}");
+                Log.EventWriter(ex.StackTrace);
                 return false;
             }
         }
