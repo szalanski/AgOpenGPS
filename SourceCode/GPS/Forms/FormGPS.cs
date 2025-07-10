@@ -542,16 +542,15 @@ namespace AgOpenGPS
         // Centralized shutdown coordinator
         private bool isShuttingDown = false;
 
-        private async void FormGPS_FormClosing(object sender, FormClosingEventArgs e)
+        private void FormGPS_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (isShuttingDown)
-            {
-                return;
-            }
+            if (isShuttingDown) return;
             //set the shutdown flag to true to prevent re-entrance
             isShuttingDown = true;
 
-            // Attempt to close subforms cleanly
+            e.Cancel = true; // Prevent immediate close
+
+            // Close subforms
             string[] formNames = { "FormGPSData", "FormFieldData", "FormPan", "FormTimedMessage" };
             foreach (string name in formNames)
             {
@@ -584,39 +583,87 @@ namespace AgOpenGPS
             {
                 if (autoBtnState == btnStates.Auto)
                     btnSectionMasterAuto.PerformClick();
-
-                if (manualBtnState == btnStates.On)
-                    btnSectionMasterManual.PerformClick();
-
-                if (Settings.Default.AgShareEnabled)
-                {
-                    TimedMessageBox(5000, "AgShare", "Uploading field to AgShare...\nPlease wait and get a beer.");
-                    isAgShareUploadStarted = true;
-                    agShareUploadTask = CAgShareUploader.UploadAsync(snapshot, agShareClient, this);
-
-                    e.Cancel = true;
-                    await DelayedShutdownAfterUpload(choice);
-                    return;
-                }
-                FileSaveEverythingBeforeClosingField();
             }
-            // No upload required, skip DelayedShutDown and finalize shutdown
+
+            BeginInvoke(new Func<Task>(async () => await ShowSavingFormAndShutdown(choice)));
+        }
+
+
+        private async Task ShowSavingFormAndShutdown(int choice)
+        {
+            using (FormSaving savingForm = new FormSaving())
+            {
+                savingForm.InitializeSteps(isJobStarted);
+                savingForm.Show();
+
+                await Task.Delay(300); // Let UI settle
+
+                if (isJobStarted)
+                {
+                    // STEP 0: Parameters
+                    await Task.Delay(300);
+                    savingForm.UpdateStep(0, ShutdownSteps.ParamsDone);
+
+                    // STEP 1: AgShare Upload
+                    bool agShareInserted = false;
+                    int fieldSaveIndex = 1;
+
+                    if (Settings.Default.AgShareEnabled && Settings.Default.AgShareUploadActive && !isAgShareUploadStarted)
+                    {
+                        agShareInserted = true;
+                        isAgShareUploadStarted = true;
+
+                        savingForm.InsertStep(1, ShutdownSteps.UploadAgShare);
+                        try
+                        {
+                            agShareUploadTask = CAgShareUploader.UploadAsync(snapshot, agShareClient, this);
+                            await agShareUploadTask;
+                            savingForm.UpdateStep(1, ShutdownSteps.UploadDone);
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.EventWriter("AgShare upload error during shutdown: " + ex.Message);
+                            savingForm.UpdateStep(1, ShutdownSteps.UploadFailed);
+                        }
+
+                        fieldSaveIndex = 2;
+                    }
+
+                    // STEP 2: Save Field
+                    savingForm.UpdateStep(fieldSaveIndex, ShutdownSteps.SaveField);
+                    await FileSaveEverythingBeforeClosingField();
+                    savingForm.UpdateStep(fieldSaveIndex, ShutdownSteps.FieldSaved);
+
+                    // STEP 3: Settings
+                    int settingsIndex = agShareInserted ? 3 : 2;
+                    await Task.Delay(300);
+                    savingForm.UpdateStep(settingsIndex, ShutdownSteps.SettingsSaved);
+
+                    // STEP 4: Finalizing
+                    int finalIndex = agShareInserted ? 4 : 3;
+                    await Task.Delay(500);
+                    savingForm.UpdateStep(finalIndex, ShutdownSteps.AllDone);
+                    await Task.Delay(750);
+                    savingForm.AddFinalMessage();
+                }
+                else
+                {
+                    // Only saving settings and finalizing
+                    await Task.Delay(300);
+                    savingForm.UpdateStep(0, ShutdownSteps.SettingsSaved);
+                    await Task.Delay(300);
+                    savingForm.UpdateStep(1, ShutdownSteps.AllDone);
+                    await Task.Delay(750);
+                    savingForm.AddFinalMessage();
+                }
+
+                await Task.Delay(2000);
+                savingForm.Close();
+            }
+
             FinishShutdown(choice);
         }
 
-        private async Task DelayedShutdownAfterUpload(int choice)
-        {
-            try
-            {
-                await agShareUploadTask;
-                agShareUploadTask = null;
-            }
-            catch (Exception) { }
-            if (!this.IsDisposed && !this.Disposing)
-            {
-                FinishShutdown(choice);
-            }
-        }
 
         private void FinishShutdown(int choice)
         {
@@ -1066,6 +1113,11 @@ namespace AgOpenGPS
             btnSection1Man.Text = "1";
 
             worldGrid.BingBitmap = Properties.Resources.z_bingMap;
+
+            // Reset AgShare upload state and clear snapshot after field is closed
+            isAgShareUploadStarted = false;
+            snapshot = null;
+
         }
 
         public void FieldMenuButtonEnableDisable(bool isOn)

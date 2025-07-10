@@ -478,7 +478,7 @@ namespace AgOpenGPS
 
             if ((char)keyData == hotkeys[2])
             {
-                FileSaveEverythingBeforeClosingField();
+                _ = FileSaveEverythingBeforeClosingField();
                 return true;    // indicate that you handled this keystroke
             }
 

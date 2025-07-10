@@ -1,4 +1,4 @@
-﻿//Please, if you use this, share the improvements
+//Please, if you use this, share the improvements
 
 using System;
 using System.Collections.Generic;
@@ -7,6 +7,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using AgLibrary.Logging;
 using AgOpenGPS.Core.Models;
@@ -487,13 +488,13 @@ namespace AgOpenGPS
 
         public bool isCancelJobMenu;
 
-        private void btnJobMenu_Click(object sender, EventArgs e)
+        private async void btnJobMenu_Click(object sender, EventArgs e)
         {
             if (!isFirstFixPositionSet || sentenceCounter > 299)
             {
                 if (isJobStarted)
                 {
-                    FileSaveEverythingBeforeClosingField();
+                    await FileSaveEverythingBeforeClosingField();
                     TimedMessageBox(2500, gStr.gsField, "Field is now closed");
                 }
                 else
@@ -627,9 +628,9 @@ namespace AgOpenGPS
             PanelUpdateRightAndBottom();
         }
 
-        public async void FileSaveEverythingBeforeClosingField()
+        public async Task FileSaveEverythingBeforeClosingField()
         {
-            //turn off contour line if on
+            // Stop contour mapping and active sections (safe on UI thread)
             if (ct.isContourOn) ct.StopContourLine();
 
             if (autoBtnState == btnStates.Auto)
@@ -638,50 +639,61 @@ namespace AgOpenGPS
             if (manualBtnState == btnStates.On)
                 btnSectionMasterManual.PerformClick();
 
-            //turn off all the sections
             for (int j = 0; j < tool.numOfSections; j++)
             {
                 section[j].sectionOnOffCycle = false;
                 section[j].sectionOffRequest = false;
             }
 
-            //turn off patching
             for (int j = 0; j < triStrip.Count; j++)
             {
                 if (triStrip[j].isDrawing) triStrip[j].TurnMappingOff();
             }
 
-            //FileSaveHeadland();
-            FileSaveBoundary();
-            FileSaveSections();
-            FileSaveContour();
-            FileSaveTracks();
-
-            ExportFieldAs_KML();
-            ExportFieldAs_ISOXMLv3();
-            ExportFieldAs_ISOXMLv4();
-            if (Settings.Default.AgShareEnabled && Settings.Default.AgShareUploadActive)
+            // Heavy lifting happens in background thread
+            await Task.Run(() =>
             {
-                agShareUploadTask = CAgShareUploader.UploadAsync(snapshot, agShareClient, this);
-                await agShareUploadTask;
+                FileSaveBoundary();
+                FileSaveSections();
+                FileSaveContour();
+                FileSaveTracks();
+
+                ExportFieldAs_KML();
+                ExportFieldAs_ISOXMLv3();
+                ExportFieldAs_ISOXMLv4();
+            });
+
+            // Upload to AgShare (must stay on UI thread because of 'this')
+            if (!isAgShareUploadStarted &&
+                Settings.Default.AgShareEnabled &&
+                Settings.Default.AgShareUploadActive)
+            {
+                try
+                {
+                    isAgShareUploadStarted = true;
+                    agShareUploadTask = CAgShareUploader.UploadAsync(snapshot, agShareClient, this);
+                    await agShareUploadTask;
+                }
+                catch (Exception ex)
+                {
+                    Log.EventWriter("AgShare upload error: " + ex.Message);
+                    TimedMessageBox(4000, "AgShare upload failed", "An error occurred during upload to AgShare.");
+                }
             }
 
+            Log.EventWriter("** Field closed **   " + currentFieldDirectory + "   " +
+                DateTime.Now.ToString("f", CultureInfo.InvariantCulture));
 
-
-            Log.EventWriter("** Closed **   " + currentFieldDirectory + "   "
-                + DateTime.Now.ToString("f", CultureInfo.InvariantCulture));
-
-
+            // Back to UI updates
             panelRight.Enabled = false;
             FieldMenuButtonEnableDisable(false);
             JobClose();
 
-            //Trigger Upload to AgShare
-            AgShareUpload();
-
             Text = "AgOpenGPS";
         }
-        #region AgShare Upload
+
+
+        #region AgShare Snapshot
 
         private bool isAgShareUploadStarted = false;
         private FieldSnapshot snapshot;

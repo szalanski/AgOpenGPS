@@ -206,7 +206,7 @@ namespace AgOpenGPS
 
         private void btnFromKML_Click(object sender, EventArgs e)
         {
-            if (mf.isJobStarted) mf.FileSaveEverythingBeforeClosingField();
+            if (mf.isJobStarted) _ = mf.FileSaveEverythingBeforeClosingField();
             //back to FormGPS
             DialogResult = DialogResult.No;
             Close();
@@ -214,6 +214,7 @@ namespace AgOpenGPS
 
         private void btnFromExisting_Click(object sender, EventArgs e)
         {
+            if (mf.isJobStarted) _ = mf.FileSaveEverythingBeforeClosingField();
             //back to FormGPS
             DialogResult = DialogResult.Retry;
             Close();
@@ -221,7 +222,7 @@ namespace AgOpenGPS
 
         private void btnJobClose_Click(object sender, EventArgs e)
         {
-            if (mf.isJobStarted) mf.FileSaveEverythingBeforeClosingField();
+            if (mf.isJobStarted) _ = mf.FileSaveEverythingBeforeClosingField();
             //back to FormGPS
             DialogResult = DialogResult.OK;
             Close();
@@ -236,7 +237,7 @@ namespace AgOpenGPS
 
         private void btnFromISOXML_Click(object sender, EventArgs e)
         {
-            if (mf.isJobStarted) mf.FileSaveEverythingBeforeClosingField();
+            if (mf.isJobStarted) _ = mf.FileSaveEverythingBeforeClosingField();
             //back to FormGPS
             DialogResult = DialogResult.Abort;
             Close();
@@ -251,7 +252,7 @@ namespace AgOpenGPS
         {
             if (mf.isJobStarted)
             {
-                mf.FileSaveEverythingBeforeClosingField();
+                _ = mf.FileSaveEverythingBeforeClosingField();
             }
 
             var server = Properties.Settings.Default.AgShareServer;
