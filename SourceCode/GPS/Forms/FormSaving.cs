@@ -1,6 +1,4 @@
 ﻿using AgOpenGPS.Core.Translations;
-using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -8,88 +6,36 @@ namespace AgOpenGPS
 {
     public partial class FormSaving : Form
     {
-        private List<Color> itemColors = new List<Color>();
-
         public FormSaving()
         {
             InitializeComponent();
-            lstSteps.DrawMode = DrawMode.OwnerDrawFixed;
-            lstSteps.DrawItem += LstSteps_DrawItem;
         }
 
-        public void InitializeSteps(bool isJobStarted)
+        public void AddStep(string stepText)
         {
-            lstSteps.Items.Clear();
-            itemColors.Clear();
-
-            if (isJobStarted)
+            listViewSteps.Items.Add(new ListViewItem(stepText)
             {
-                AddStep(ShutdownSteps.SaveParams);
-                AddStep(ShutdownSteps.SaveField);
-                AddStep(ShutdownSteps.SaveSettings);
-                AddStep(ShutdownSteps.Finalizing);
-            }
-            else
-            {
-                AddStep(ShutdownSteps.SaveSettings);
-                AddStep(ShutdownSteps.Finalizing);
-            }
-        }
-
-        private void AddStep(string stepText)
-        {
-            lstSteps.Items.Add(stepText);
-            itemColors.Add(Color.Gray);
+                ForeColor = Color.Gray
+            });
         }
 
         public void UpdateStep(int index, string newText)
         {
-            if (index >= 0 && index < lstSteps.Items.Count)
-            {
-                lstSteps.Items[index] = newText;
-                itemColors[index] = Color.Black;
-                lstSteps.Invalidate();
-            }
+            listViewSteps.Items[index].Text = newText;
+            listViewSteps.Items[index].ForeColor = Color.Black;
         }
 
-        public void InsertStep(int index, string text)
+        public void AddFinalMessage(string message)
         {
-            if (index >= 0 && index <= lstSteps.Items.Count)
+            listViewSteps.Items.Add(new ListViewItem("")
             {
-                lstSteps.Items.Insert(index, text);
-                itemColors.Insert(index, Color.Gray);
-                lstSteps.Invalidate();
-            }
-        }
+                ForeColor = Color.Gray
+            });
 
-        public void AddFinalMessage()
-        {
-            lstSteps.Items.Add("");
-            itemColors.Add(Color.Gray);
-
-            lstSteps.Items.Add(ShutdownSteps.Beer);
-            itemColors.Add(Color.Black);
-        }
-
-        private void LstSteps_DrawItem(object sender, DrawItemEventArgs e)
-        {
-            if (e.Index < 0 || e.Index >= lstSteps.Items.Count)
-                return;
-
-            e.DrawBackground();
-
-            Color textColor = itemColors.Count > e.Index ? itemColors[e.Index] : Color.Black;
-            using (Brush brush = new SolidBrush(textColor))
+            listViewSteps.Items.Add(new ListViewItem(message)
             {
-                e.Graphics.DrawString(
-                    lstSteps.Items[e.Index].ToString(),
-                    e.Font,
-                    brush,
-                    e.Bounds
-                );
-            }
-
-            e.DrawFocusRectangle();
+                ForeColor = Color.Black
+            });
         }
     }
 
