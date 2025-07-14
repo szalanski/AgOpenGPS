@@ -646,7 +646,7 @@ namespace AgOpenGPS
                     await Task.Delay(500);
                     savingForm.UpdateStep(finalIndex, ShutdownSteps.AllDone);
                     await Task.Delay(750);
-                    savingForm.AddFinalMessage(ShutdownSteps.Beer);
+                    savingForm.Finish();
                 }
                 else
                 {
@@ -664,7 +664,7 @@ namespace AgOpenGPS
                     await Task.Delay(300);
                     savingForm.UpdateStep(1, ShutdownSteps.AllDone);
                     await Task.Delay(750);
-                    savingForm.AddFinalMessage(ShutdownSteps.Beer);
+                    savingForm.Finish();
                 }
 
                 await Task.Delay(2000);

@@ -9,6 +9,8 @@ namespace AgOpenGPS
         public FormSaving()
         {
             InitializeComponent();
+
+            labelBeer.Text = "✔ " + gStr.gsSaveBeerTime;
         }
 
         public void AddStep(string stepText)
@@ -25,17 +27,10 @@ namespace AgOpenGPS
             listViewSteps.Items[index].ForeColor = Color.Black;
         }
 
-        public void AddFinalMessage(string message)
+        public void Finish()
         {
-            listViewSteps.Items.Add(new ListViewItem("")
-            {
-                ForeColor = Color.Gray
-            });
-
-            listViewSteps.Items.Add(new ListViewItem(message)
-            {
-                ForeColor = Color.Black
-            });
+            progressBar.Visible = false;
+            labelBeer.Visible = true;
         }
     }
 
@@ -54,6 +49,5 @@ namespace AgOpenGPS
         public static string FieldSaved => "✓ " + gStr.gsSaveFieldSavedLocal;
         public static string SettingsSaved => "✓ " + gStr.gsSaveSettingsSaved;
         public static string AllDone => "✔ " + gStr.gsSaveAllDone;
-        public static string Beer => "✔ " + gStr.gsSaveBeerTime;
     }
 }
