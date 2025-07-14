@@ -21,22 +21,16 @@ namespace AgOpenGPS
 
         public void UpdateStep(int index, string newText)
         {
-            if (index >= 0 && index < listViewSteps.Items.Count)
-            {
-                listViewSteps.Items[index].Text = newText;
-                listViewSteps.Items[index].ForeColor = Color.Black;
-            }
+            listViewSteps.Items[index].Text = newText;
+            listViewSteps.Items[index].ForeColor = Color.Black;
         }
 
         public void InsertStep(int index, string text)
         {
-            if (index >= 0 && index <= listViewSteps.Items.Count)
+            listViewSteps.Items.Insert(index, new ListViewItem(text)
             {
-                listViewSteps.Items.Insert(index, new ListViewItem(text)
-                {
-                    ForeColor = Color.Gray
-                });
-            }
+                ForeColor = Color.Gray
+            });
         }
 
         public void AddFinalMessage(string message)
