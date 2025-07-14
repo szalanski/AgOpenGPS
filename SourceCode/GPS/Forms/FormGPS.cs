@@ -595,37 +595,27 @@ namespace AgOpenGPS
             {
                 if (isJobStarted)
                 {
+                    bool isAgShareStepEnabled = Settings.Default.AgShareEnabled && Settings.Default.AgShareUploadActive && !isAgShareUploadStarted;
+
                     savingForm.AddStep(ShutdownSteps.SaveParams);
+                    if (isAgShareStepEnabled) savingForm.AddStep(ShutdownSteps.UploadAgShare);
                     savingForm.AddStep(ShutdownSteps.SaveField);
                     savingForm.AddStep(ShutdownSteps.SaveSettings);
                     savingForm.AddStep(ShutdownSteps.Finalizing);
-                }
-                else
-                {
-                    savingForm.AddStep(ShutdownSteps.SaveSettings);
-                    savingForm.AddStep(ShutdownSteps.Finalizing);
-                }
 
-                savingForm.Show();
+                    savingForm.Show();
 
-                await Task.Delay(300); // Let UI settle
+                    await Task.Delay(300); // Let UI settle
 
-                if (isJobStarted)
-                {
                     // STEP 0: Parameters
                     await Task.Delay(300);
                     savingForm.UpdateStep(0, ShutdownSteps.ParamsDone);
 
                     // STEP 1: AgShare Upload
-                    bool agShareInserted = false;
-                    int fieldSaveIndex = 1;
-
-                    if (Settings.Default.AgShareEnabled && Settings.Default.AgShareUploadActive && !isAgShareUploadStarted)
+                    if (isAgShareStepEnabled)
                     {
-                        agShareInserted = true;
                         isAgShareUploadStarted = true;
 
-                        savingForm.InsertStep(1, ShutdownSteps.UploadAgShare);
                         try
                         {
                             agShareUploadTask = CAgShareUploader.UploadAsync(snapshot, agShareClient, this);
@@ -637,23 +627,22 @@ namespace AgOpenGPS
                             Log.EventWriter("AgShare upload error during shutdown: " + ex.Message);
                             savingForm.UpdateStep(1, ShutdownSteps.UploadFailed);
                         }
-
-                        fieldSaveIndex = 2;
                     }
 
                     // STEP 2: Save Field
+                    int fieldSaveIndex = isAgShareStepEnabled ? 2 : 1;
                     savingForm.UpdateStep(fieldSaveIndex, ShutdownSteps.SaveField);
                     await FileSaveEverythingBeforeClosingField();
                     savingForm.UpdateStep(fieldSaveIndex, ShutdownSteps.FieldSaved);
 
                     // STEP 3: Settings
-                    int settingsIndex = agShareInserted ? 3 : 2;
+                    int settingsIndex = isAgShareStepEnabled ? 3 : 2;
                     Settings.Default.Save();
                     await Task.Delay(300);
                     savingForm.UpdateStep(settingsIndex, ShutdownSteps.SettingsSaved);
 
                     // STEP 4: Finalizing
-                    int finalIndex = agShareInserted ? 4 : 3;
+                    int finalIndex = isAgShareStepEnabled ? 4 : 3;
                     await Task.Delay(500);
                     savingForm.UpdateStep(finalIndex, ShutdownSteps.AllDone);
                     await Task.Delay(750);
@@ -661,6 +650,13 @@ namespace AgOpenGPS
                 }
                 else
                 {
+                    savingForm.AddStep(ShutdownSteps.SaveSettings);
+                    savingForm.AddStep(ShutdownSteps.Finalizing);
+
+                    savingForm.Show();
+
+                    await Task.Delay(300); // Let UI settle
+
                     // Only saving settings and finalizing
                     Settings.Default.Save();
                     await Task.Delay(300);

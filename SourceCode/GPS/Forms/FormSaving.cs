@@ -25,14 +25,6 @@ namespace AgOpenGPS
             listViewSteps.Items[index].ForeColor = Color.Black;
         }
 
-        public void InsertStep(int index, string text)
-        {
-            listViewSteps.Items.Insert(index, new ListViewItem(text)
-            {
-                ForeColor = Color.Gray
-            });
-        }
-
         public void AddFinalMessage(string message)
         {
             listViewSteps.Items.Add(new ListViewItem("")
