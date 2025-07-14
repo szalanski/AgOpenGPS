@@ -13,18 +13,19 @@ namespace AgOpenGPS
             labelBeer.Text = "✔ " + gStr.gsSaveBeerTime;
         }
 
-        public void AddStep(string stepText)
+        public void AddStep(string key, string stepText)
         {
             listViewSteps.Items.Add(new ListViewItem(stepText)
             {
+                Name = key,
                 ForeColor = Color.Gray
             });
         }
 
-        public void UpdateStep(int index, string newText)
+        public void UpdateStep(string key, string newText)
         {
-            listViewSteps.Items[index].Text = newText;
-            listViewSteps.Items[index].ForeColor = Color.Black;
+            listViewSteps.Items[key].Text = newText;
+            listViewSteps.Items[key].ForeColor = Color.Black;
         }
 
         public void Finish()

@@ -597,11 +597,11 @@ namespace AgOpenGPS
                 {
                     bool isAgShareStepEnabled = Settings.Default.AgShareEnabled && Settings.Default.AgShareUploadActive && !isAgShareUploadStarted;
 
-                    savingForm.AddStep(ShutdownSteps.SaveParams);
-                    if (isAgShareStepEnabled) savingForm.AddStep(ShutdownSteps.UploadAgShare);
-                    savingForm.AddStep(ShutdownSteps.SaveField);
-                    savingForm.AddStep(ShutdownSteps.SaveSettings);
-                    savingForm.AddStep(ShutdownSteps.Finalizing);
+                    savingForm.AddStep("Params", ShutdownSteps.SaveParams);
+                    if (isAgShareStepEnabled) savingForm.AddStep("AgShare", ShutdownSteps.UploadAgShare);
+                    savingForm.AddStep("Field", ShutdownSteps.SaveField);
+                    savingForm.AddStep("Settings", ShutdownSteps.SaveSettings);
+                    savingForm.AddStep("Finalize", ShutdownSteps.Finalizing);
 
                     savingForm.Show();
 
@@ -609,7 +609,7 @@ namespace AgOpenGPS
 
                     // STEP 0: Parameters
                     await Task.Delay(300);
-                    savingForm.UpdateStep(0, ShutdownSteps.ParamsDone);
+                    savingForm.UpdateStep("Params", ShutdownSteps.ParamsDone);
 
                     // STEP 1: AgShare Upload
                     if (isAgShareStepEnabled)
@@ -620,38 +620,34 @@ namespace AgOpenGPS
                         {
                             agShareUploadTask = CAgShareUploader.UploadAsync(snapshot, agShareClient, this);
                             await agShareUploadTask;
-                            savingForm.UpdateStep(1, ShutdownSteps.UploadDone);
+                            savingForm.UpdateStep("AgShare", ShutdownSteps.UploadDone);
                         }
                         catch (Exception ex)
                         {
                             Log.EventWriter("AgShare upload error during shutdown: " + ex.Message);
-                            savingForm.UpdateStep(1, ShutdownSteps.UploadFailed);
+                            savingForm.UpdateStep("AgShare", ShutdownSteps.UploadFailed);
                         }
                     }
 
                     // STEP 2: Save Field
-                    int fieldSaveIndex = isAgShareStepEnabled ? 2 : 1;
-                    savingForm.UpdateStep(fieldSaveIndex, ShutdownSteps.SaveField);
                     await FileSaveEverythingBeforeClosingField();
-                    savingForm.UpdateStep(fieldSaveIndex, ShutdownSteps.FieldSaved);
+                    savingForm.UpdateStep("Field", ShutdownSteps.FieldSaved);
 
                     // STEP 3: Settings
-                    int settingsIndex = isAgShareStepEnabled ? 3 : 2;
                     Settings.Default.Save();
                     await Task.Delay(300);
-                    savingForm.UpdateStep(settingsIndex, ShutdownSteps.SettingsSaved);
+                    savingForm.UpdateStep("Settings", ShutdownSteps.SettingsSaved);
 
                     // STEP 4: Finalizing
-                    int finalIndex = isAgShareStepEnabled ? 4 : 3;
                     await Task.Delay(500);
-                    savingForm.UpdateStep(finalIndex, ShutdownSteps.AllDone);
+                    savingForm.UpdateStep("Finalize", ShutdownSteps.AllDone);
                     await Task.Delay(750);
                     savingForm.Finish();
                 }
                 else
                 {
-                    savingForm.AddStep(ShutdownSteps.SaveSettings);
-                    savingForm.AddStep(ShutdownSteps.Finalizing);
+                    savingForm.AddStep("Settings", ShutdownSteps.SaveSettings);
+                    savingForm.AddStep("Finalize", ShutdownSteps.Finalizing);
 
                     savingForm.Show();
 
@@ -660,9 +656,9 @@ namespace AgOpenGPS
                     // Only saving settings and finalizing
                     Settings.Default.Save();
                     await Task.Delay(300);
-                    savingForm.UpdateStep(0, ShutdownSteps.SettingsSaved);
+                    savingForm.UpdateStep("Settings", ShutdownSteps.SettingsSaved);
                     await Task.Delay(300);
-                    savingForm.UpdateStep(1, ShutdownSteps.AllDone);
+                    savingForm.UpdateStep("Finalize", ShutdownSteps.AllDone);
                     await Task.Delay(750);
                     savingForm.Finish();
                 }
