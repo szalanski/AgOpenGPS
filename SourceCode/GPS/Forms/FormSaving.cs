@@ -1,59 +1,61 @@
 ﻿using AgOpenGPS.Core.Translations;
+using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 
 namespace AgOpenGPS
 {
+    public enum SavingStepState { Pending, Done, Failed }
+
     public partial class FormSaving : Form
     {
         public FormSaving()
         {
             InitializeComponent();
+
+            labelBeer.Text = "✔ " + gStr.gsSaveBeerTime;
         }
 
-        public void AddStep(string stepText)
+        public void AddStep(string key, string message)
         {
-            listViewSteps.Items.Add(new ListViewItem(stepText)
+            listViewSteps.Items.Add(new ListViewItem()
             {
-                ForeColor = Color.Gray
+                Name = key,
+                Text = GetStepText(message, SavingStepState.Pending),
+                ForeColor = GetStepColor(SavingStepState.Pending)
             });
         }
 
-        public void UpdateStep(int index, string newText)
+        public void UpdateStep(string key, string message, SavingStepState state)
         {
-            listViewSteps.Items[index].Text = newText;
-            listViewSteps.Items[index].ForeColor = Color.Black;
+            listViewSteps.Items[key].Text = GetStepText(message, state);
+            listViewSteps.Items[key].ForeColor = GetStepColor(state);
         }
 
-        public void AddFinalMessage(string message)
+        public void Finish()
         {
-            listViewSteps.Items.Add(new ListViewItem("")
-            {
-                ForeColor = Color.Gray
-            });
-
-            listViewSteps.Items.Add(new ListViewItem(message)
-            {
-                ForeColor = Color.Black
-            });
+            progressBar.Visible = false;
+            labelBeer.Visible = true;
         }
-    }
 
-    public static class ShutdownSteps
-    {
-        public static string SaveParams => "• " + gStr.gsSaveFieldParam;
-        public static string SaveField => "• " + gStr.gsSaveField;
-        public static string SaveSettings => "• " + gStr.gsSaveSettings;
-        public static string Finalizing => "• " + gStr.gsSaveFinalizeShutdown;
+        private static string GetStepText(string message, SavingStepState state)
+        {
+            switch (state)
+            {
+                case SavingStepState.Pending:
+                    return "• " + message;
+                case SavingStepState.Done:
+                    return "✓ " + message;
+                case SavingStepState.Failed:
+                    return "✗ " + message;
+                default:
+                    throw new InvalidEnumArgumentException(nameof(state), (int)state, typeof(SavingStepState));
+            }
+        }
 
-        public static string UploadAgShare => "• " + gStr.gsSaveUploadToAgshare;
-        public static string UploadDone => "✓ " + gStr.gsSaveUploadCompleted;
-        public static string UploadFailed => "✗ " + gStr.gsSaveUploadFailed;
-
-        public static string ParamsDone => "✓ " + gStr.gsSaveFieldParamSaved;
-        public static string FieldSaved => "✓ " + gStr.gsSaveFieldSavedLocal;
-        public static string SettingsSaved => "✓ " + gStr.gsSaveSettingsSaved;
-        public static string AllDone => "✔ " + gStr.gsSaveAllDone;
-        public static string Beer => "✔ " + gStr.gsSaveBeerTime;
+        private static Color GetStepColor(SavingStepState state)
+        {
+            return state == SavingStepState.Pending ? Color.Gray : Color.Black;
+        }
     }
 }
