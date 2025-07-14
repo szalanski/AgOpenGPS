@@ -29,35 +29,21 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
-            this.lstSteps = new System.Windows.Forms.ListBox();
             this.progressBar = new System.Windows.Forms.ProgressBar();
+            this.listViewSteps = new System.Windows.Forms.ListView();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
-            this.panel1.Controls.Add(this.lstSteps);
             this.panel1.Controls.Add(this.progressBar);
+            this.panel1.Controls.Add(this.listViewSteps);
             this.panel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panel1.Location = new System.Drawing.Point(12, 12);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(909, 467);
             this.panel1.TabIndex = 0;
-            // 
-            // lstSteps
-            // 
-            this.lstSteps.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
-            this.lstSteps.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.lstSteps.Font = new System.Drawing.Font("Atlanta", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lstSteps.ForeColor = System.Drawing.SystemColors.Menu;
-            this.lstSteps.FormattingEnabled = true;
-            this.lstSteps.ItemHeight = 43;
-            this.lstSteps.Location = new System.Drawing.Point(67, 22);
-            this.lstSteps.Name = "lstSteps";
-            this.lstSteps.SelectionMode = System.Windows.Forms.SelectionMode.None;
-            this.lstSteps.Size = new System.Drawing.Size(771, 344);
-            this.lstSteps.TabIndex = 2;
             // 
             // progressBar
             // 
@@ -68,6 +54,20 @@
             this.progressBar.Step = 20;
             this.progressBar.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
             this.progressBar.TabIndex = 1;
+            // 
+            // listViewSteps
+            // 
+            this.listViewSteps.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
+            this.listViewSteps.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.listViewSteps.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.listViewSteps.ForeColor = System.Drawing.SystemColors.Menu;
+            this.listViewSteps.HideSelection = false;
+            this.listViewSteps.Location = new System.Drawing.Point(67, 22);
+            this.listViewSteps.Name = "listViewSteps";
+            this.listViewSteps.Size = new System.Drawing.Size(771, 333);
+            this.listViewSteps.TabIndex = 3;
+            this.listViewSteps.UseCompatibleStateImageBehavior = false;
+            this.listViewSteps.View = System.Windows.Forms.View.List;
             // 
             // FormSaving
             // 
@@ -92,6 +92,6 @@
 
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.ProgressBar progressBar;
-        public System.Windows.Forms.ListBox lstSteps;
+        private System.Windows.Forms.ListView listViewSteps;
     }
 }
