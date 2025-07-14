@@ -11,25 +11,7 @@ namespace AgOpenGPS
             InitializeComponent();
         }
 
-        public void InitializeSteps(bool isJobStarted)
-        {
-            listViewSteps.Items.Clear();
-
-            if (isJobStarted)
-            {
-                AddStep(ShutdownSteps.SaveParams);
-                AddStep(ShutdownSteps.SaveField);
-                AddStep(ShutdownSteps.SaveSettings);
-                AddStep(ShutdownSteps.Finalizing);
-            }
-            else
-            {
-                AddStep(ShutdownSteps.SaveSettings);
-                AddStep(ShutdownSteps.Finalizing);
-            }
-        }
-
-        private void AddStep(string stepText)
+        public void AddStep(string stepText)
         {
             listViewSteps.Items.Add(new ListViewItem(stepText)
             {
@@ -57,14 +39,14 @@ namespace AgOpenGPS
             }
         }
 
-        public void AddFinalMessage()
+        public void AddFinalMessage(string message)
         {
             listViewSteps.Items.Add(new ListViewItem("")
             {
                 ForeColor = Color.Gray
             });
 
-            listViewSteps.Items.Add(new ListViewItem(ShutdownSteps.Beer)
+            listViewSteps.Items.Add(new ListViewItem(message)
             {
                 ForeColor = Color.Black
             });

@@ -593,7 +593,19 @@ namespace AgOpenGPS
         {
             using (FormSaving savingForm = new FormSaving())
             {
-                savingForm.InitializeSteps(isJobStarted);
+                if (isJobStarted)
+                {
+                    savingForm.AddStep(ShutdownSteps.SaveParams);
+                    savingForm.AddStep(ShutdownSteps.SaveField);
+                    savingForm.AddStep(ShutdownSteps.SaveSettings);
+                    savingForm.AddStep(ShutdownSteps.Finalizing);
+                }
+                else
+                {
+                    savingForm.AddStep(ShutdownSteps.SaveSettings);
+                    savingForm.AddStep(ShutdownSteps.Finalizing);
+                }
+
                 savingForm.Show();
 
                 await Task.Delay(300); // Let UI settle
@@ -645,7 +657,7 @@ namespace AgOpenGPS
                     await Task.Delay(500);
                     savingForm.UpdateStep(finalIndex, ShutdownSteps.AllDone);
                     await Task.Delay(750);
-                    savingForm.AddFinalMessage();
+                    savingForm.AddFinalMessage(ShutdownSteps.Beer);
                 }
                 else
                 {
@@ -656,7 +668,7 @@ namespace AgOpenGPS
                     await Task.Delay(300);
                     savingForm.UpdateStep(1, ShutdownSteps.AllDone);
                     await Task.Delay(750);
-                    savingForm.AddFinalMessage();
+                    savingForm.AddFinalMessage(ShutdownSteps.Beer);
                 }
 
                 await Task.Delay(2000);
