@@ -31,7 +31,6 @@ namespace AgOpenGPS
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.panelLeftSideMenu = new System.Windows.Forms.Panel();
             this.btnFeatureHides = new System.Windows.Forms.Button();
             this.btnDisplay = new System.Windows.Forms.Button();
@@ -541,6 +540,7 @@ namespace AgOpenGPS
             this.lblFeetMeters = new System.Windows.Forms.Label();
             this.btnOK = new System.Windows.Forms.Button();
             this.labelUnitsBottom = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.panelLeftSideMenu.SuspendLayout();
             this.panelArduinoSubMenu.SuspendLayout();
             this.panelDataSourcesSubMenu.SuspendLayout();
@@ -1232,6 +1232,7 @@ namespace AgOpenGPS
             // tabSummary
             // 
             this.tabSummary.BackColor = System.Drawing.Color.Gainsboro;
+            this.tabSummary.Controls.Add(this.label2);
             this.tabSummary.Controls.Add(this.labelWidth);
             this.tabSummary.Controls.Add(this.labelOverlap);
             this.tabSummary.Controls.Add(this.lblOverlap);
@@ -9589,6 +9590,21 @@ namespace AgOpenGPS
             this.labelUnitsBottom.Text = "Units:";
             this.labelUnitsBottom.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // label2
+            // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label2.BackColor = System.Drawing.Color.CornflowerBlue;
+            this.label2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.label2.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(184, 467);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(497, 84);
+            this.label2.TabIndex = 520;
+            this.label2.Text = "The vehicle settings are now called \"profiles\" and\r\ncan be created/loaded in the " +
+    "main menu (top left).";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // FormConfig
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -10256,5 +10272,6 @@ namespace AgOpenGPS
         private System.Windows.Forms.Label labelUser1;
         private System.Windows.Forms.Label labelABSmoothOnOff;
         private System.Windows.Forms.PictureBox HitchLengthBlindBox;
+        private System.Windows.Forms.Label label2;
     }
 }
