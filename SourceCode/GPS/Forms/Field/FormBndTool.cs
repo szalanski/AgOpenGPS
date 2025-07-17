@@ -1,4 +1,5 @@
 using AgOpenGPS.Core.Translations;
+using AgOpenGPS.Forms;
 using AgOpenGPS.Helpers;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
@@ -424,18 +425,20 @@ namespace AgOpenGPS
 
             if (mf.bnd.bndList.Count > 0)
             {
-                DialogResult result3 = MessageBox.Show(gStr.gsDeleteBoundaryMapping,
+                // Show custom confirmation dialog for boundary deletion
+                DialogResult result3 = FormDialog.Show(
                     gStr.gsDeleteForSure,
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Question,
-                    MessageBoxDefaultButton.Button2);
-                if (result3 != DialogResult.Yes)
+                    gStr.gsDeleteBoundaryMapping,
+                    MessageBoxButtons.YesNo);
+
+                if (result3 != DialogResult.OK)
                 {
                     return;
                 }
             }
 
             DeleteBoundary();
+
 
             isStep = false;
             timer1.Interval = 500;
