@@ -1,14 +1,14 @@
-﻿using System;
-using OpenTK;
-using OpenTK.Graphics.OpenGL;
-using System.Windows.Forms;
-using System.Text;
-using System.Drawing;
-using AgLibrary.Logging;
+﻿using AgLibrary.Logging;
 using AgOpenGPS.Core.Drawing;
 using AgOpenGPS.Core.DrawLib;
 using AgOpenGPS.Core.Models;
 using AgOpenGPS.Properties;
+using OpenTK;
+using OpenTK.Graphics.OpenGL;
+using System;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
 
 namespace AgOpenGPS
 {
@@ -525,10 +525,17 @@ namespace AgOpenGPS
                         DrawVersion("Beta Testing v" + Program.SemVer);
                     }
 
+                    if (bnd.isHeadlandOn && isHeadlandDistanceOn)
+                    {
+                        DrawHeadlandDistance();
+                    }
+
+
                     if (pn.age > pn.ageAlarm) DrawAge();
 
                     //at least one track
                     if (guideLineCounter > 0) DrawGuidanceLineText();
+
 
                     //if hardware messages
                     if (isHardwareMessages) DrawHardwareMessageText();
@@ -2488,6 +2495,56 @@ namespace AgOpenGPS
                 }
             }
         }
+
+        private void DrawHeadlandDistance()
+        {
+            double y = oglMain.Height / 6.0 - 30;
+
+            string label = bnd.HeadlandDebugDistance.HasValue
+                ? bnd.HeadlandDebugDistance.Value.ToString("0.0") + " m"
+                : "--";
+
+            double textWidth = label.Length * 6.5;
+            double iconWidth = 42.0;
+            double iconHeight = 42.0;
+            double spacing = 8.0;
+            double totalWidth = iconWidth + spacing + textWidth;
+            double xStart = -totalWidth / 2.0;
+
+            // ➤ 1. Icoon tekenen
+            Texture2D iconTexture = UseLightIcon()
+                ? ScreenTextures.HeadlandLight
+                : ScreenTextures.HeadlandDark;
+
+            GL.Color3(1.0f, 1.0f, 1.0f);
+            GL.PushMatrix();
+            GL.Translate(xStart + iconWidth / 2, y + iconHeight / 2, 0);
+            iconTexture.DrawCenteredAroundOrigin(new XyDelta(iconWidth, iconHeight));
+            GL.PopMatrix();
+
+            // ➤ 2. Tekst tekenen
+            double textX = xStart + iconWidth + spacing;
+
+            if (bnd.HeadlandDebugDistance.HasValue && bnd.HeadlandDebugDistance.Value < 3.0)
+                GL.Color3(1.0f, 0.1f, 0.1f); // Rood bij kritieke afstand
+            else
+                GL.Color3(1f, 0.3f, 0f);     // Oranje
+
+            font.DrawText(textX, y + 6, label, 1.0);
+        }
+
+
+        private bool UseLightIcon()
+        {
+            Color bg = oglMain.BackColor;
+            int brightness = (bg.R * 299 + bg.G * 587 + bg.B * 114) / 1000;
+            return brightness < 128; // Donkere achtergrond → licht icoon
+        }
+
+
+
+
+
 
         private void DrawHardwareMessageText()
         {

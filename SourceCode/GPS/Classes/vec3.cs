@@ -37,9 +37,14 @@ namespace AgOpenGPS
         {
             return new GeoCoord(northing, easting);
         }
-    }
+        public vec2 ToVec2()
+        {
+            return new vec2(easting, northing);
+        }
 
-    public struct vecFix2Fix
+}
+
+public struct vecFix2Fix
     {
         public double easting; //easting
         public double distance; //distance since last point

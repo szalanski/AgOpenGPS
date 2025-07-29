@@ -55,6 +55,7 @@ namespace AgOpenGPS
         public bool isLogElevation = false, isDirectionMarkers;
         public bool isKeyboardOn = true, isAutoStartAgIO = true, isSvennArrowOn = true;
         public bool isSectionlinesOn = true, isLineSmooth = true;
+        public bool isHeadlandDistanceOn = true;
 
         public bool isLightBarNotSteerBar = false;
 
@@ -326,6 +327,8 @@ namespace AgOpenGPS
             {
                 //reset the counter
                 oneHalfSecondCounter = 0;
+
+                bnd.CheckHeadlandProximity();
 
                 isFlashOnOff = !isFlashOnOff;
 

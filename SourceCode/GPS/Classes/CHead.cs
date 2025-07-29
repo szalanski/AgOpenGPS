@@ -9,6 +9,9 @@ namespace AgOpenGPS
         public bool isToolInHeadland,
             isToolOuterPointsInHeadland, isSectionControlledByHeadland;
 
+        public vec2? HeadlandDebugNearestPoint { get; private set; } = null;
+        public double? HeadlandDebugDistance { get; private set; } = null;
+
         public void SetHydPosition()
         {
             if (mf.vehicle.isHydLiftOn && mf.avgSpeed > 0.2 && !mf.isReverse)
@@ -109,6 +112,63 @@ namespace AgOpenGPS
                 return true;
             }
             return false;
+        }
+        public void CheckHeadlandProximity()
+        {
+            if (!isHeadlandOn || bndList.Count == 0 || bndList[0].hdLine.Count < 2)
+            {
+                HeadlandDebugNearestPoint = null;
+                HeadlandDebugDistance = null;
+                return;
+            }
+
+            vec3 vehiclePos = mf.toolPivotPos;
+
+            if (mf.avgSpeed < 0.2) return;
+
+            bool isInside = bndList[0].hdLine.IsPointInPolygon(vehiclePos.ToVec2());
+
+            vec2? nearest = glm.GetClosestPointInFront(vehiclePos, bndList[0].hdLine);
+
+            if (!nearest.HasValue)
+            {
+                HeadlandDebugNearestPoint = null;
+                HeadlandDebugDistance = null;
+                return;
+            }
+
+            vec2 nearestVal = nearest.Value;
+
+            double dx = nearestVal.easting - vehiclePos.easting;
+            double dy = nearestVal.northing - vehiclePos.northing;
+            double angleToPolygon = Math.Atan2(dx, dy);
+
+            double headingDiff = glm.AngleDiff(vehiclePos.heading, angleToPolygon);
+            bool headingOk = headingDiff < glm.toRadians(60);
+
+            double distance = glm.Distance(vehiclePos.ToVec2(), nearestVal);
+
+            // Save debug info for OpenGL HUD
+            HeadlandDebugNearestPoint = nearestVal;
+            HeadlandDebugDistance = distance;
+
+            bool shouldPlay =
+                (isInside && headingOk && distance < 10.0) ||
+                (!isInside && headingOk && distance < 3.0);
+
+
+            if (shouldPlay && mf.isHeadlandDistanceOn)
+            {
+                if (!mf.sounds.isBoundAlarming)
+                {
+                    mf.sounds.sndHeadland.Play();
+                    mf.sounds.isBoundAlarming = true;
+                }
+            }
+            else
+            {
+                mf.sounds.isBoundAlarming = false;
+            }
         }
     }
 }

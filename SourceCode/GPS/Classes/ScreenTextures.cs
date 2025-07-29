@@ -26,6 +26,8 @@ namespace AgOpenGPS.Classes
         private Texture2D _questionMark;
         private Texture2D _zoomIn;
         private Texture2D _zoomOut;
+        private Texture2D _HeadlandLight;
+        private Texture2D _HeadlandDark;
 
         public ScreenTextures()
         {
@@ -220,6 +222,23 @@ namespace AgOpenGPS.Classes
             }
         }
 
+        public Texture2D HeadlandLight
+        {
+            get
+            {
+                if (_HeadlandLight == null) _HeadlandLight = new Texture2D(Resources.z_HeadlandLight);
+                return _HeadlandLight;
+            }
+        }
+
+        public Texture2D HeadlandDark
+        {
+            get
+            {
+                if (_HeadlandDark == null) _HeadlandDark = new Texture2D(Resources.z_HeadlandDark);
+                return _HeadlandDark;
+            }
+        }
 
     }
 
