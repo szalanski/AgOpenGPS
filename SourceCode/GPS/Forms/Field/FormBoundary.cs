@@ -1,6 +1,8 @@
 using AgLibrary.Logging;
+using AgOpenGPS.Classes;
 using AgOpenGPS.Core.Models;
 using AgOpenGPS.Core.Translations;
+using AgOpenGPS.Forms.Field;
 using AgOpenGPS.Forms;
 using AgOpenGPS.Helpers;
 using System;
@@ -8,12 +10,14 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
+using System.Runtime.CompilerServices;
 
 namespace AgOpenGPS
 {
     public partial class FormBoundary : Form
     {
         private readonly FormGPS mf = null;
+
 
         private double latK, lonK;
         private int fenceSelected = -1;
@@ -227,6 +231,7 @@ namespace AgOpenGPS
                 mf.fd.UpdateFieldBoundaryGUIAreas();
                 mf.bnd.BuildTurnLines();
                 UpdateChart();
+                
             }
             else
             {
@@ -434,6 +439,26 @@ namespace AgOpenGPS
             panelKML.Visible = false;
             isClosing = true;
         }
+
+        private void btnBuildBoundaryFromTracks_Click(object sender, EventArgs e)
+        {
+            if (mf.bnd.bndList.Count > 0)
+            {
+                var result = FormDialog.Show("Boundary Exists", "A boundary already exists. Do you want to remove it?", MessageBoxButtons.YesNo);
+                if (result != DialogResult.OK) return;
+
+                mf.bnd.bndList.Clear();
+            }
+
+            var form = new FormBuildBoundaryFromTracks(mf, this);
+            form.ShowDialog();
+            isClosing = true;
+            Close();
+
+
+        }   
+
+
 
         private void FormBoundary_ResizeEnd(object sender, EventArgs e)
         {
