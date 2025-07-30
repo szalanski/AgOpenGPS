@@ -484,6 +484,7 @@ namespace AgOpenGPS
         private void EnableAlert_Click(object sender, EventArgs e)
         {
             pboxSendSteer.Visible = true;
+            btnClose.Enabled = false;
 
             if (sender is CheckBox checkbox)
             {
@@ -549,12 +550,15 @@ namespace AgOpenGPS
             if (((NudlessNumericUpDown)sender).ShowKeypad(this))
             {
                 pboxSendSteer.Visible = true;
+                btnClose.Enabled = false;
+
             }
         }
 
         private void hsbarSensor_Scroll(object sender, ScrollEventArgs e)
         {
             pboxSendSteer.Visible = true;
+            btnClose.Enabled = false;
             lblhsbarSensor.Text = ((int)((double)hsbarSensor.Value * 0.3921568627)).ToString() + "%";
         }
 
@@ -1035,11 +1039,6 @@ namespace AgOpenGPS
             if (mf.vehicle.driveFreeSteerAngle > 40) mf.vehicle.driveFreeSteerAngle = 40;
         }
 
-        private void label34_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void btnSteerAngleDown_MouseDown(object sender, MouseEventArgs e)
         {
             mf.vehicle.driveFreeSteerAngle--;
@@ -1054,10 +1053,14 @@ namespace AgOpenGPS
             SaveSettings();
             mf.SendPgnToLoop(mf.p_251.pgn);
             pboxSendSteer.Visible = false;
+            btnClose.Enabled = true;
             Log.EventWriter("Steer Form, Send and Save Pressed");
 
             mf.TimedMessageBox(2000, gStr.gsAutoSteerPort, "Settings Sent To Steer Module");
-            
+        }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
             Close();
         }
 
