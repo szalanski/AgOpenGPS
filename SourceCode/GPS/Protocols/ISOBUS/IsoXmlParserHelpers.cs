@@ -51,8 +51,11 @@ namespace AgOpenGPS.Protocols.ISOBUS
             var points = lsg.SelectNodes("PNT");
             if (points.Count < 2) return;
 
-            var ptA = ParseVec2(points[0], appModel);
-            var ptB = ParseVec2(points[1], appModel);
+            var geoA = ParseGeoCoord(points[0], appModel);
+            var geoB = ParseGeoCoord(points[1], appModel);
+
+            var ptA = new vec2(geoA);
+            var ptB = new vec2(geoB);
 
             double heading = Math.Atan2(ptB.easting - ptA.easting, ptB.northing - ptA.northing);
             if (heading < 0) heading += glm.twoPI;
@@ -68,6 +71,7 @@ namespace AgOpenGPS.Protocols.ISOBUS
 
             mf.trk.gArr.Add(track);
         }
+
 
         private static void ParseCurveLine(XmlNode lsg, string name, ApplicationModel appModel, FormGPS mf)
         {
@@ -114,20 +118,28 @@ namespace AgOpenGPS.Protocols.ISOBUS
 
             mf.trk.gArr.Add(track);
         }
-
-        private static vec2 ParseVec2(XmlNode pnt, ApplicationModel appModel)
-        {
-            double.TryParse(pnt.Attributes["C"]?.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out double lat);
-            double.TryParse(pnt.Attributes["D"]?.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out double lon);
-            GeoCoord geo = appModel.LocalPlane.ConvertWgs84ToGeoCoord(new Wgs84(lat, lon));
-            return new vec2(geo);
-        }
-
         private static GeoCoord ParseGeoCoord(XmlNode pnt, ApplicationModel appModel)
         {
-            double.TryParse(pnt.Attributes["C"]?.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out double lat);
-            double.TryParse(pnt.Attributes["D"]?.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out double lon);
-            return appModel.LocalPlane.ConvertWgs84ToGeoCoord(new Wgs84(lat, lon));
+            if (!TryParseWgs84(pnt, out Wgs84 wgs))
+                return new GeoCoord();
+
+            return appModel.LocalPlane.ConvertWgs84ToGeoCoord(wgs);
         }
+
+        private static bool TryParseWgs84(XmlNode pnt, out Wgs84 result)
+        {
+            result = default;
+
+            if (pnt?.Attributes == null) return false;
+
+            bool latOk = double.TryParse(pnt.Attributes["C"]?.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out double lat);
+            bool lonOk = double.TryParse(pnt.Attributes["D"]?.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out double lon);
+
+            if (!latOk || !lonOk) return false;
+
+            result = new Wgs84(lat, lon);
+            return true;
+        }
+
     }
 }
