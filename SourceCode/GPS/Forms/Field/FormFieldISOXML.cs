@@ -1,5 +1,4 @@
-// Updated version of FormFieldISOXML with logic delegated to IsoXmlFieldBuilder
-using AgLibrary.Logging;
+﻿using AgLibrary.Logging;
 using AgOpenGPS.Controls;
 using AgOpenGPS.Core;
 using AgOpenGPS.Core.Models;
@@ -16,21 +15,22 @@ using System.Xml;
 
 namespace AgOpenGPS
 {
-    public partial class FormFieldISOXML : Form
+    public partial class FormFieldIsoXml : Form
     {
         private readonly FormGPS mf;
         private XmlDocument iso;
         private string xmlFilename;
         private XmlNodeList pfd;
         private int idxFieldSelected;
+        private Wgs84 _origin;
 
-        public FormFieldISOXML(Form _callingForm)
+        public FormFieldIsoXml(FormGPS callingForm)
         {
-            mf = _callingForm as FormGPS;
+            mf = callingForm;
             InitializeComponent();
         }
 
-        private void FormFieldISOXML_Load(object sender, EventArgs e)
+        private void FormFieldIsoXml_Load(object sender, EventArgs e)
         {
             tboxFieldName.Text = "";
             btnBuildFields.Enabled = false;
@@ -45,99 +45,137 @@ namespace AgOpenGPS
                 InitialDirectory = RegistrySettings.fieldsDirectory
             };
 
-            if (ofd.ShowDialog() != DialogResult.Cancel)
+            if (ofd.ShowDialog() == DialogResult.Cancel)
             {
-                xmlFilename = ofd.FileName;
-                iso = new XmlDocument { PreserveWhitespace = false };
-                iso.Load(xmlFilename);
+                Close();
+                return;
+            }
 
-                pfd = iso.GetElementsByTagName("PFD");
-                int index = 0;
+            xmlFilename = ofd.FileName;
+            iso = new XmlDocument { PreserveWhitespace = false };
+            iso.Load(xmlFilename);
 
-                try
+            pfd = iso.GetElementsByTagName("PFD");
+            int index = 0;
+
+            try
+            {
+                foreach (XmlNode nodePFD in pfd)
                 {
-                    foreach (XmlNode nodePFD in pfd)
+                    double.TryParse(nodePFD.Attributes["D"]?.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out double area);
+                    area *= 0.0001;
+
+                    string fieldName = nodePFD.Attributes["C"]?.Value ?? "Unnamed";
+                    string fieldLabel = fieldName + " Area: " + area.ToString("0.00") + " Ha  " + nodePFD.Attributes["A"]?.Value;
+
+                    TreeNode fieldNode = new TreeNode(fieldLabel);
+                    fieldNode.Tag = index++;
+                    tree.Nodes.Add(fieldNode);
+
+                    XmlNodeList fieldParts = nodePFD.ChildNodes;
+
+                    //Parse GGP → GPN → LSG structure (v3-style)
+                    foreach (XmlNode nodeGgp in nodePFD.SelectNodes("GGP"))
                     {
-                        double area;
-                        double.TryParse(nodePFD.Attributes["D"].Value, NumberStyles.Float, CultureInfo.InvariantCulture, out area);
-                        area *= 0.0001;
+                        XmlNode gpn = nodeGgp.SelectSingleNode("GPN");
+                        if (gpn == null) continue;
 
-                        tree.Nodes.Add(nodePFD.Attributes["C"].Value + " Area: " + area + " Ha  " + nodePFD.Attributes["A"].Value);
-                        tree.Nodes[tree.Nodes.Count - 1].Tag = index++;
+                        string name = nodeGgp.Attributes["B"]?.Value ?? "Unnamed";
+                        string type = gpn.Attributes["C"]?.Value ?? "";
+                        TreeNode node = null;
 
-                        XmlNodeList fieldParts = nodePFD.ChildNodes;
-                        TreeNode fieldNode = tree.Nodes[tree.Nodes.Count - 1]; // laatste veld-node
-
-                        // GGP-based guidance
-                        foreach (XmlNode nodePart in fieldParts)
+                        if (type == "1") // AB
                         {
-                            if (nodePart.Name == "GGP")
-                            {
-                                XmlNode gpn = nodePart.SelectSingleNode("GPN");
-                                if (gpn != null && gpn.Attributes["B"] != null && gpn.Attributes["C"] != null)
-                                {
-                                    string name = gpn.Attributes["B"].Value;
-                                    string type = gpn.Attributes["C"].Value;
-
-                                    if (type == "1") // AB-line
-                                    {
-                                        TreeNode abNode = new TreeNode("AB-" + name);
-                                        abNode.ForeColor = System.Drawing.Color.Green;
-                                        fieldNode.Nodes.Add(abNode);
-                                    }
-                                    else if (type == "3") // Curve
-                                    {
-                                        TreeNode curveNode = new TreeNode("Curve-" + name);
-                                        curveNode.ForeColor = System.Drawing.Color.Orange;
-                                        fieldNode.Nodes.Add(curveNode);
-                                    }
-                                }
-                            }
+                            node = new TreeNode("AB: " + name);
+                        }
+                        else if (type == "2") // A+
+                        {
+                            node = new TreeNode("A+: " + name);
+                        }
+                        else if (type == "3") // Curve
+                        {
+                            node = new TreeNode("Curve: " + name);
                         }
 
-                        // LSG-only guidance (v3 stijl)
-                        foreach (XmlNode nodePart in fieldParts)
+                        if (node != null)
                         {
-                            if (nodePart.Name == "LSG" && nodePart.Attributes["A"] != null && nodePart.Attributes["A"].Value == "5")
-                            {
-                                string name = nodePart.Attributes["B"] != null ? nodePart.Attributes["B"].Value : "Unnamed";
-                                XmlNodeList pnts = nodePart.SelectNodes("PNT");
-                                int pointCount = pnts != null ? pnts.Count : 0;
+                            fieldNode.Nodes.Add(node);
+                        }
+                    }
 
-                                if (pointCount == 2)
-                                {
-                                    TreeNode abNode = new TreeNode("AB-" + name);
-                                    abNode.ForeColor = System.Drawing.Color.Green;
-                                    fieldNode.Nodes.Add(abNode);
-                                }
-                                else if (pointCount > 2)
-                                {
-                                    TreeNode curveNode = new TreeNode("Curve-" + name);
-                                    curveNode.ForeColor = System.Drawing.Color.Orange;
-                                    fieldNode.Nodes.Add(curveNode);
-                                }
-                            }
+
+                    //Parse PLN nodes (v2-style)
+                    foreach (XmlNode nodePart in fieldParts)
+                    {
+                        if (nodePart.Name != "PLN") continue;
+
+                        string name = nodePart.Attributes?["B"]?.Value ?? "Unnamed";
+                        string type = nodePart.Attributes?["C"]?.Value ?? "";
+                        XmlNodeList pnts = nodePart.SelectNodes("PNT");
+                        int pointCount = pnts != null ? pnts.Count : 0;
+
+                        TreeNode lineNode = null;
+
+                        if (type == "1" && pointCount == 2)
+                        {
+                            lineNode = new TreeNode("AB: " + name);
+                        }
+                        else if (type == "2" && pointCount == 1)
+                        {
+                            lineNode = new TreeNode("A+: " + name);
+                        }
+                        else if (type == "3" && pointCount > 2)
+                        {
+                            lineNode = new TreeNode("Curve: " + name);
+                        }
+
+                        if (lineNode != null)
+                        {
+                            fieldNode.Nodes.Add(lineNode);
+                        }
+                    }
+
+                    //Parse direct LSG nodes (v3 standalone guidance)
+                    foreach (XmlNode nodePart in fieldParts)
+                    {
+                        if (nodePart.Name != "LSG" || nodePart.Attributes["A"]?.Value != "5") continue;
+
+                        string name = nodePart.Attributes?["B"]?.Value ?? "Unnamed";
+                        string type = nodePart.Attributes?["C"]?.Value ?? "";
+                        XmlNodeList pnts = nodePart.SelectNodes("PNT");
+                        int pointCount = pnts != null ? pnts.Count : 0;
+
+                        TreeNode lineNode = null;
+
+                        if (type == "1" && pointCount == 2)
+                        {
+                            lineNode = new TreeNode("AB: " + name);
+                        }
+                        else if (type == "2" && pointCount == 1)
+                        {
+                            lineNode = new TreeNode("A+: " + name);
+                        }
+                        else if (type == "3" && pointCount > 2)
+                        {
+                            lineNode = new TreeNode("Curve: " + name);
+                        }
+
+                        if (lineNode != null)
+                        {
+                            fieldNode.Nodes.Add(lineNode);
                         }
                     }
                 }
-                catch (Exception ex)
-                {
-                    Log.EventWriter("Creating new iso field " + ex.ToString());
-                    FormDialog.Show(gStr.gsError, ex.ToString(), MessageBoxButtons.OK);
-                    return;
-                }
-
-                if (tree.Nodes.Count == 0)
-                {
-                    btnBuildFields.Enabled = false;
-                }
-
-                tree.Sort();
             }
-            else
+            catch (Exception ex)
             {
-                Close();
+                Log.EventWriter("Failed to create new field: " + ex);
+                FormDialog.Show(gStr.gsError, ex.ToString(), MessageBoxButtons.OK);
+                return;
             }
+
+            btnBuildFields.Enabled = tree.Nodes.Count > 0;
+            tree.Sort();
 
             if (!ScreenHelper.IsOnScreen(Bounds))
             {
@@ -145,7 +183,6 @@ namespace AgOpenGPS
                 Left = 0;
             }
         }
-
 
         private void tree_AfterSelect(object sender, TreeViewEventArgs e)
         {
@@ -158,25 +195,23 @@ namespace AgOpenGPS
                 idxFieldSelected = (int)tree.SelectedNode.Parent.Tag;
             }
 
-            if (idxFieldSelected >= 0)
+            bool enabled = (idxFieldSelected >= 0);
+
+            if (enabled)
             {
-                labelField.Text = idxFieldSelected + " " + pfd[idxFieldSelected].Attributes["C"].Value;
-                tboxFieldName.Text = pfd[idxFieldSelected].Attributes["C"].Value;
-                btnBuildFields.Enabled = true;
-                btnAddDate.Enabled = true;
-                btnAddTime.Enabled = true;
-                tboxFieldName.Enabled = true;
+                string fieldName = pfd[idxFieldSelected].Attributes["C"].Value;
+                labelField.Text = $"{idxFieldSelected} {fieldName}";
+                tboxFieldName.Text = fieldName;
             }
-            else
-            {
-                btnBuildFields.Enabled = false;
-                btnAddDate.Enabled = false;
-                btnAddTime.Enabled = false;
-                tboxFieldName.Enabled = false;
-            }
+
+            btnBuildFields.Enabled = enabled;
+            btnAddDate.Enabled = enabled;
+            btnAddTime.Enabled = enabled;
+            tboxFieldName.Enabled = enabled;
+
         }
 
-        private async void btnBuildFields_Click(object sender, EventArgs e)
+        private void btnBuildFields_Click(object sender, EventArgs e)
         {
             mf.currentFieldDirectory = tboxFieldName.Text.Trim();
             string directoryPath = Path.Combine(RegistrySettings.fieldsDirectory, mf.currentFieldDirectory);
@@ -189,16 +224,16 @@ namespace AgOpenGPS
             }
 
             var fieldParts = pfd[idxFieldSelected].ChildNodes;
-            var builder = new IsoXmlFieldBuilder(fieldParts, mf.currentFieldDirectory, mf.AppModel, mf);
+            var builder = new IsoXmlFieldImporter(fieldParts, mf.currentFieldDirectory, mf.AppModel, mf);
 
-            if (!builder.TryExtractOrigin(out var origin))
+            if (!builder.TryExtractOrigin(out _origin))
             {
                 mf.YesMessageBox("Can't calculate center of field. Missing Outer Boundary or AB line.");
                 return;
             }
 
             mf.JobNew();
-            mf.pn.DefineLocalPlane(origin, true);
+            mf.pn.DefineLocalPlane(_origin, true);
 
             if (!mf.isJobStarted)
             {
@@ -206,11 +241,11 @@ namespace AgOpenGPS
                 return;
             }
 
-            builder.TryBuildBoundaries();
-            builder.TryBuildHeadland();
-            builder.TryBuildGuidanceLines();
-            builder.SaveFieldFiles(directoryPath);
-            builder.FinalizeField();
+            builder.BuildBoundaries();
+            builder.BuildHeadland();
+            builder.BuildGuidanceLines();
+            SaveFieldFiles(directoryPath);
+            FinalizeField();
 
             if (mf.bnd.bndList.Count > 0) mf.btnABDraw.Visible = true;
             mf.FieldMenuButtonEnableDisable(mf.bnd.bndList.Count > 0 && mf.bnd.bndList[0].hdLine.Count > 0);
@@ -219,12 +254,13 @@ namespace AgOpenGPS
             Close();
         }
 
+
         private void tboxFieldName_TextChanged(object sender, EventArgs e)
         {
-            TextBox textboxSender = (TextBox)sender;
-            int cursorPosition = textboxSender.SelectionStart;
-            textboxSender.Text = Regex.Replace(textboxSender.Text, glm.fileRegex, "");
-            textboxSender.SelectionStart = cursorPosition;
+            TextBox textBoxSender = (TextBox)sender;
+            int cursorPosition = textBoxSender.SelectionStart;
+            textBoxSender.Text = Regex.Replace(textBoxSender.Text, glm.fileRegex, "");
+            textBoxSender.SelectionStart = cursorPosition;
         }
 
         private void tboxFieldName_Click(object sender, EventArgs e)
@@ -249,6 +285,45 @@ namespace AgOpenGPS
         private void btnAddTime_Click(object sender, EventArgs e)
         {
             tboxFieldName.Text += " " + DateTime.Now.ToString("HH-mm", CultureInfo.InvariantCulture);
+        }
+
+        // Save field files after job is started
+        public void SaveFieldFiles(string directoryPath)
+        {
+            string fieldFile = Path.Combine(directoryPath, "Field.txt");
+
+            if (!Directory.Exists(directoryPath)) Directory.CreateDirectory(directoryPath);
+
+            using (StreamWriter writer = new StreamWriter(fieldFile))
+            {
+                writer.WriteLine(DateTime.Now.ToString("yyyy-MMMM-dd hh:mm:ss tt", CultureInfo.InvariantCulture));
+                writer.WriteLine("$FieldDir");
+                writer.WriteLine("XML Derived");
+                writer.WriteLine("$Offsets");
+                writer.WriteLine("0,0");
+                writer.WriteLine("Convergence");
+                writer.WriteLine("0");
+                writer.WriteLine("StartFix");
+                writer.WriteLine(_origin.Latitude.ToString(CultureInfo.InvariantCulture) + "," +
+                                 _origin.Longitude.ToString(CultureInfo.InvariantCulture));
+            }
+
+            mf.FileCreateSections();
+            mf.FileCreateRecPath();
+            mf.FileCreateContour();
+            mf.FileCreateElevation();
+            mf.FileSaveFlags();
+        }
+
+
+        public void FinalizeField()
+        {
+            mf.FileSaveBoundary();
+            mf.bnd.BuildTurnLines();
+            mf.fd.UpdateFieldBoundaryGUIAreas();
+            mf.CalculateMinMax();
+            mf.FileSaveHeadland();
+            mf.FileSaveTracks();
         }
     }
 }

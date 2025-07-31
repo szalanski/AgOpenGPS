@@ -1,25 +1,24 @@
-﻿using System;
+﻿using AgOpenGPS.Core;
+using AgOpenGPS.Core.Models;
+using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Xml;
-using System.Collections.Generic;
-using AgOpenGPS.Core.Models;
-using AgOpenGPS.Core;
 
 namespace AgOpenGPS.Protocols.ISOBUS
 {
     // Handles all logic for building a field from ISOXML data
-    public class IsoXmlFieldBuilder
+    public class IsoXmlFieldImporter
     {
         private readonly XmlNodeList _fieldParts;
         private readonly string _fieldName;
         private readonly FormGPS _mf;
         private readonly ApplicationModel _appModel;
-
         private double _latSum = 0, _lonSum = 0;
         private int _coordCount = 0;
 
-        public IsoXmlFieldBuilder(XmlNodeList fieldParts, string fieldName, ApplicationModel appModel, FormGPS mf)
+        public IsoXmlFieldImporter(XmlNodeList fieldParts, string fieldName, ApplicationModel appModel, FormGPS mf)
         {
             _fieldParts = fieldParts;
             _fieldName = fieldName;
@@ -61,7 +60,7 @@ namespace AgOpenGPS.Protocols.ISOBUS
         }
 
         // Build the outer boundary and inner boundaries
-        public void TryBuildBoundaries()
+        public void BuildBoundaries()
         {
             bool outerBuilt = false;
 
@@ -70,12 +69,18 @@ namespace AgOpenGPS.Protocols.ISOBUS
                 if (node.Name != "PLN") continue;
 
                 string type = node.Attributes["A"]?.Value;
+
                 if ((type == "1" || type == "9") && !outerBuilt)
                 {
                     if (node.SelectSingleNode("LSG[@A='1']") is XmlNode lsg)
                     {
                         var boundary = ParseBoundaryFromLSG(lsg);
                         _mf.bnd.bndList.Add(boundary);
+
+                        int idx = _mf.bnd.bndList.Count - 1;
+                        boundary.CalculateFenceArea(idx);
+                        boundary.FixFenceLine(idx);
+
                         outerBuilt = true;
                     }
                 }
@@ -85,13 +90,18 @@ namespace AgOpenGPS.Protocols.ISOBUS
                     {
                         var boundary = ParseBoundaryFromLSG(lsg);
                         _mf.bnd.bndList.Add(boundary);
+
+                        int idx = _mf.bnd.bndList.Count - 1;
+                        boundary.CalculateFenceArea(idx);
+                        boundary.FixFenceLine(idx);
                     }
                 }
             }
         }
 
+
         // Build headland boundary if present
-        public void TryBuildHeadland()
+        public void BuildHeadland()
         {
             if (_mf.bnd.bndList.Count == 0 || _mf.bnd.bndList[0].hdLine.Count > 0) return;
 
@@ -111,7 +121,7 @@ namespace AgOpenGPS.Protocols.ISOBUS
         }
 
         // Parse guidance lines (AB and Curves) from ISOXML
-        public void TryBuildGuidanceLines()
+        public void BuildGuidanceLines()
         {
             foreach (XmlNode node in _fieldParts)
             {
@@ -125,45 +135,6 @@ namespace AgOpenGPS.Protocols.ISOBUS
                 }
             }
         }
-
-        // Save field files after job is started
-        public void SaveFieldFiles(string directoryPath)
-        {
-            string fieldFile = Path.Combine(directoryPath, "Field.txt");
-
-            if (!Directory.Exists(directoryPath)) Directory.CreateDirectory(directoryPath);
-
-            using (StreamWriter writer = new StreamWriter(fieldFile))
-            {
-                writer.WriteLine(DateTime.Now.ToString("yyyy-MMMM-dd hh:mm:ss tt", CultureInfo.InvariantCulture));
-                writer.WriteLine("$FieldDir");
-                writer.WriteLine("XML Derived");
-                writer.WriteLine("$Offsets");
-                writer.WriteLine("0,0");
-                writer.WriteLine("Convergence");
-                writer.WriteLine("0");
-                writer.WriteLine("StartFix");
-                writer.WriteLine(_appModel.LocalPlane.Origin.Latitude.ToString(CultureInfo.InvariantCulture) + "," +
-                                 _appModel.LocalPlane.Origin.Longitude.ToString(CultureInfo.InvariantCulture));
-            }
-
-            _mf.FileCreateSections();
-            _mf.FileCreateRecPath();
-            _mf.FileCreateContour();
-            _mf.FileCreateElevation();
-            _mf.FileSaveFlags();
-        }
-
-        public void FinalizeField()
-        {
-            _mf.FileSaveBoundary();
-            _mf.bnd.BuildTurnLines();
-            _mf.fd.UpdateFieldBoundaryGUIAreas();
-            _mf.CalculateMinMax();
-            _mf.FileSaveHeadland();
-            _mf.FileSaveTracks();
-        }
-
         private void AccumulatePntCoordinates(XmlNode parent)
         {
             foreach (XmlNode pnt in parent.SelectNodes(".//PNT"))
@@ -178,9 +149,11 @@ namespace AgOpenGPS.Protocols.ISOBUS
             }
         }
 
+        // Parse LSG node into a CBoundaryList with vec3 points
         private CBoundaryList ParseBoundaryFromLSG(XmlNode lsg)
         {
             var list = new CBoundaryList();
+
             foreach (XmlNode pnt in lsg.SelectNodes("PNT"))
             {
                 if (double.TryParse(pnt.Attributes["C"]?.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out double lat) &&
@@ -190,10 +163,10 @@ namespace AgOpenGPS.Protocols.ISOBUS
                     list.fenceLine.Add(new vec3(geo));
                 }
             }
-            list.CalculateFenceArea(_mf.bnd.bndList.Count);
-            list.FixFenceLine(_mf.bnd.bndList.Count);
+
             return list;
         }
+
 
         private List<vec3> ParseVec3ListFromLSG(XmlNode lsg)
         {

@@ -579,7 +579,7 @@ namespace AgOpenGPS
                 else if (result == DialogResult.Abort)
                 {
                     //ask for a field to copy
-                    using (var form2 = new FormFieldISOXML(this))
+                    using (var form2 = new FormFieldIsoXml(this))
                     { form2.ShowDialog(this); }
                 }
 
