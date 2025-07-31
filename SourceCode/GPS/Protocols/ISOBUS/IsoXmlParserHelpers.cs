@@ -7,60 +7,184 @@ using AgOpenGPS.Core.Models;
 
 namespace AgOpenGPS.Protocols.ISOBUS
 {
-    // Static helpers to parse GGP and LSG guidance lines
     public static class IsoXmlParserHelpers
     {
-        // Parse a GGP node (usually AB or curve lines nested in GPN → LSG → PNT)
-        public static void ParseGGPNode(XmlNode node, ApplicationModel appModel, FormGPS mf)
+        // Extract WGS84 origin from PLN or GGP lines
+        public static bool TryExtractOrigin(XmlNodeList fieldParts, out Wgs84 origin)
+        {
+            double latSum = 0, lonSum = 0;
+            int count = 0;
+
+            foreach (XmlNode node in fieldParts)
+            {
+                if (node.Name == "PLN" && node.Attributes["A"]?.Value == "1")
+                {
+                    AccumulateCoordinates(node, ref latSum, ref lonSum, ref count);
+                }
+            }
+
+            if (count == 0)
+            {
+                foreach (XmlNode node in fieldParts)
+                {
+                    if (node.Name == "GGP")
+                    {
+                        var lsg = node.SelectSingleNode("GPN/LSG");
+                        if (lsg != null) AccumulateCoordinates(lsg.ParentNode, ref latSum, ref lonSum, ref count);
+                    }
+                }
+            }
+
+            if (count == 0)
+            {
+                origin = new Wgs84();
+                return false;
+            }
+
+            origin = new Wgs84(latSum / count, lonSum / count);
+            return true;
+        }
+
+        // Parse PLN boundaries into CBoundaryList objects
+        public static List<CBoundaryList> ParseBoundaries(XmlNodeList fieldParts, ApplicationModel appModel)
+        {
+            List<CBoundaryList> boundaries = new List<CBoundaryList>();
+            bool outerBuilt = false;
+
+            foreach (XmlNode node in fieldParts)
+            {
+                if (node.Name != "PLN") continue;
+                string type = node.Attributes["A"]?.Value;
+
+                if ((type == "1" || type == "9") && !outerBuilt)
+                {
+                    if (node.SelectSingleNode("LSG[@A='1']") is XmlNode lsg)
+                    {
+                        boundaries.Add(ParseBoundaryFromLSG(lsg, appModel));
+                        outerBuilt = true;
+                    }
+                }
+                else if (type == "3" || type == "4" || type == "6")
+                {
+                    if (node.SelectSingleNode("LSG[@A='1']") is XmlNode lsg)
+                    {
+                        boundaries.Add(ParseBoundaryFromLSG(lsg, appModel));
+                    }
+                }
+            }
+
+            return boundaries;
+        }
+        // Parse Headland if available
+        public static List<vec3> ParseHeadland(XmlNodeList fieldParts, ApplicationModel appModel)
+        {
+            foreach (XmlNode node in fieldParts)
+            {
+                if (node.Name == "PLN" && node.Attributes["A"]?.Value == "10")
+                {
+                    if (node.SelectSingleNode("LSG[@A='1']") is XmlNode lsg)
+                    {
+                        var list = new List<vec3>();
+                        foreach (XmlNode pnt in lsg.SelectNodes("PNT"))
+                        {
+                            if (double.TryParse(pnt.Attributes["C"]?.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out double lat) &&
+                                double.TryParse(pnt.Attributes["D"]?.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out double lon))
+                            {
+                                GeoCoord geo = appModel.LocalPlane.ConvertWgs84ToGeoCoord(new Wgs84(lat, lon));
+                                list.Add(new vec3(geo));
+                            }
+                        }
+
+                        CurveCABTools.CalculateHeadings(ref list);
+                        return list;
+                    }
+                }
+            }
+
+            return new List<vec3>();
+        }
+
+
+        // Parse all valid guidance lines
+        public static List<CTrk> ParseAllGuidanceLines(XmlNodeList fieldParts, ApplicationModel appModel)
+        {
+            List<CTrk> tracks = new List<CTrk>();
+
+            foreach (XmlNode node in fieldParts)
+            {
+                if (node.Name == "GGP")
+                {
+                    var trk = ParseGGPNode(node, appModel);
+                    if (trk != null) tracks.Add(trk);
+                }
+                else if (node.Name == "LSG" && node.Attributes["A"]?.Value == "5")
+                {
+                    var trk = ParseLSGNode(node, appModel);
+                    if (trk != null) tracks.Add(trk);
+                }
+            }
+
+            return tracks;
+        }
+
+        public static CBoundaryList ParseBoundaryFromLSG(XmlNode lsg, ApplicationModel appModel)
+        {
+            var list = new CBoundaryList();
+
+            foreach (XmlNode pnt in lsg.SelectNodes("PNT"))
+            {
+                if (double.TryParse(pnt.Attributes["C"]?.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out double lat) &&
+                    double.TryParse(pnt.Attributes["D"]?.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out double lon))
+                {
+                    GeoCoord geo = appModel.LocalPlane.ConvertWgs84ToGeoCoord(new Wgs84(lat, lon));
+                    list.fenceLine.Add(new vec3(geo));
+                }
+            }
+
+            return list;
+        }
+
+        // Parse GGP → GPN → LSG line
+        public static CTrk ParseGGPNode(XmlNode node, ApplicationModel appModel)
         {
             var gpn = node.SelectSingleNode("GPN");
             var lsg = gpn?.SelectSingleNode("LSG[@A='5']");
-            if (gpn == null || lsg == null) return;
+            if (gpn == null || lsg == null) return null;
 
             string lineType = gpn.Attributes["C"]?.Value;
             string name = gpn.Attributes["B"]?.Value ?? node.Attributes["B"]?.Value ?? "Unnamed";
 
-            if (lineType == "1" && lsg.ChildNodes.Count >= 2) // AB Line
-            {
-                ParseABLine(lsg, name, appModel, mf);
-            }
-            else if (lineType == "3" && lsg.ChildNodes.Count > 2) // Curve
-            {
-                ParseCurveLine(lsg, name, appModel, mf);
-            }
+            if (lineType == "1") return ParseABLine(lsg, name, appModel);
+            else if (lineType == "3") return ParseCurveLine(lsg, name, appModel);
+
+            return null;
         }
 
-        // Parse a top-level LSG node (v3 style)
-        public static void ParseLSGNode(XmlNode lsg, ApplicationModel appModel, FormGPS mf)
+        // Parse LSG line directly
+        public static CTrk ParseLSGNode(XmlNode lsg, ApplicationModel appModel)
         {
             string name = lsg.Attributes["B"]?.Value ?? "Unnamed";
-            int pointCount = lsg.SelectNodes("PNT").Count;
+            int count = lsg.SelectNodes("PNT").Count;
 
-            if (pointCount == 2)
-            {
-                ParseABLine(lsg, name, appModel, mf);
-            }
-            else if (pointCount > 2)
-            {
-                ParseCurveLine(lsg, name, appModel, mf);
-            }
+            if (count == 2) return ParseABLine(lsg, name, appModel);
+            else if (count > 2) return ParseCurveLine(lsg, name, appModel);
+
+            return null;
         }
 
-        private static void ParseABLine(XmlNode lsg, string name, ApplicationModel appModel, FormGPS mf)
+        // Parse AB line into CTrk
+        private static CTrk ParseABLine(XmlNode lsg, string name, ApplicationModel appModel)
         {
             var points = lsg.SelectNodes("PNT");
-            if (points.Count < 2) return;
+            if (points.Count < 2) return null;
 
-            var geoA = ParseGeoCoord(points[0], appModel);
-            var geoB = ParseGeoCoord(points[1], appModel);
-
-            var ptA = new vec2(geoA);
-            var ptB = new vec2(geoB);
+            var ptA = ParseVec2(points[0], appModel);
+            var ptB = ParseVec2(points[1], appModel);
 
             double heading = Math.Atan2(ptB.easting - ptA.easting, ptB.northing - ptA.northing);
             if (heading < 0) heading += glm.twoPI;
 
-            var track = new CTrk
+            return new CTrk
             {
                 heading = heading,
                 mode = TrackMode.AB,
@@ -68,15 +192,13 @@ namespace AgOpenGPS.Protocols.ISOBUS
                 ptB = ptB,
                 name = name.Trim()
             };
-
-            mf.trk.gArr.Add(track);
         }
 
-
-        private static void ParseCurveLine(XmlNode lsg, string name, ApplicationModel appModel, FormGPS mf)
+        // Parse Curve line into CTrk
+        private static CTrk ParseCurveLine(XmlNode lsg, string name, ApplicationModel appModel)
         {
             var points = lsg.SelectNodes("PNT");
-            if (points.Count <= 2) return;
+            if (points.Count <= 2) return null;
 
             var desList = new List<vec3>();
             foreach (XmlNode pnt in points)
@@ -85,61 +207,55 @@ namespace AgOpenGPS.Protocols.ISOBUS
                 desList.Add(new vec3(geo));
             }
 
-            mf.curve.MakePointMinimumSpacing(ref desList, 1.6);
-            mf.curve.CalculateHeadings(ref desList);
+            CurveCABTools.Preprocess(ref desList, 1.6, 0.5); // afgeleid van jouw CABCurve gedrag
 
-            double x = 0, y = 0;
-            foreach (vec3 pt in desList)
-            {
-                x += Math.Cos(pt.heading);
-                y += Math.Sin(pt.heading);
-            }
-            x /= desList.Count;
-            y /= desList.Count;
-            double avgHeading = Math.Atan2(y, x);
-            if (avgHeading < 0) avgHeading += glm.twoPI;
-
-            mf.curve.AddFirstLastPoints(ref desList);
-            mf.curve.CalculateHeadings(ref desList);
+            double avgHeading = CurveCABTools.ComputeAverageHeading(desList);
 
             var track = new CTrk
             {
                 heading = avgHeading,
                 mode = TrackMode.Curve,
-                name = string.IsNullOrWhiteSpace(name)
-                    ? Math.Round(glm.toDegrees(avgHeading), 1).ToString(CultureInfo.InvariantCulture) + "°" + DateTime.Now.ToString("HH:mm:ss")
-                    : name
+                ptA = new vec2(desList[0].easting, desList[0].northing),
+                ptB = new vec2(desList[desList.Count - 1].easting, desList[desList.Count - 1].northing),
+                name = string.IsNullOrWhiteSpace(name) ? "Curve_" + DateTime.Now.ToString("HHmmss") : name
             };
 
-            foreach (vec3 pt in desList)
+            foreach (var pt in desList)
             {
-                track.curvePts.Add(new vec3(pt));
+                track.curvePts.Add(pt);
             }
 
-            mf.trk.gArr.Add(track);
+            return track;
         }
+
+        // Helpers
+        private static void AccumulateCoordinates(XmlNode parent, ref double latSum, ref double lonSum, ref int count)
+        {
+            foreach (XmlNode pnt in parent.SelectNodes(".//PNT"))
+            {
+                if (double.TryParse(pnt.Attributes["C"]?.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out double lat) &&
+                    double.TryParse(pnt.Attributes["D"]?.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out double lon))
+                {
+                    latSum += lat;
+                    lonSum += lon;
+                    count++;
+                }
+            }
+        }
+
+        private static vec2 ParseVec2(XmlNode pnt, ApplicationModel appModel)
+        {
+            double.TryParse(pnt.Attributes["C"]?.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out double lat);
+            double.TryParse(pnt.Attributes["D"]?.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out double lon);
+            GeoCoord geo = appModel.LocalPlane.ConvertWgs84ToGeoCoord(new Wgs84(lat, lon));
+            return new vec2(geo);
+        }
+
         private static GeoCoord ParseGeoCoord(XmlNode pnt, ApplicationModel appModel)
         {
-            if (!TryParseWgs84(pnt, out Wgs84 wgs))
-                return new GeoCoord();
-
-            return appModel.LocalPlane.ConvertWgs84ToGeoCoord(wgs);
+            double.TryParse(pnt.Attributes["C"]?.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out double lat);
+            double.TryParse(pnt.Attributes["D"]?.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out double lon);
+            return appModel.LocalPlane.ConvertWgs84ToGeoCoord(new Wgs84(lat, lon));
         }
-
-        private static bool TryParseWgs84(XmlNode pnt, out Wgs84 result)
-        {
-            result = default;
-
-            if (pnt?.Attributes == null) return false;
-
-            bool latOk = double.TryParse(pnt.Attributes["C"]?.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out double lat);
-            bool lonOk = double.TryParse(pnt.Attributes["D"]?.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out double lon);
-
-            if (!latOk || !lonOk) return false;
-
-            result = new Wgs84(lat, lon);
-            return true;
-        }
-
     }
 }

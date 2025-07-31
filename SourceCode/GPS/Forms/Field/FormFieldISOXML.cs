@@ -7,6 +7,7 @@ using AgOpenGPS.Forms;
 using AgOpenGPS.Helpers;
 using AgOpenGPS.Protocols.ISOBUS;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -62,8 +63,16 @@ namespace AgOpenGPS
             {
                 foreach (XmlNode nodePFD in pfd)
                 {
-                    double.TryParse(nodePFD.Attributes["D"]?.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out double area);
-                    area *= 0.0001;
+                    double area = 0;
+                    if (double.TryParse(nodePFD.Attributes["D"]?.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out double areaRaw) && areaRaw >= 1)
+                    {
+                        area = areaRaw * 0.0001; // Convert m² to hectares
+                    }
+                    else
+                    {
+                        // Fallback to estimate if D is missing or invalid
+                        area = EstimateAreaFromPln(nodePFD, mf.AppModel) * 0.0001;
+                    }
 
                     string fieldName = nodePFD.Attributes["C"]?.Value ?? "Unnamed";
                     string fieldLabel = fieldName + " Area: " + area.ToString("0.00") + " Ha  " + nodePFD.Attributes["A"]?.Value;
@@ -104,7 +113,7 @@ namespace AgOpenGPS
                     }
 
 
-                    //Parse PLN nodes (v2-style)
+                    // Parse PLN nodes (v2-style)
                     foreach (XmlNode nodePart in fieldParts)
                     {
                         if (nodePart.Name != "PLN") continue;
@@ -128,12 +137,21 @@ namespace AgOpenGPS
                         {
                             lineNode = new TreeNode("Curve: " + name);
                         }
+                        else if (type == "4" && pointCount > 0)
+                        {
+                            lineNode = new TreeNode("Pivot: " + name);
+                        }
+                        else if (type == "5" && pointCount > 0)
+                        {
+                            lineNode = new TreeNode("Spiral: " + name);
+                        }
 
                         if (lineNode != null)
                         {
                             fieldNode.Nodes.Add(lineNode);
                         }
                     }
+
 
                     //Parse direct LSG nodes (v3 standalone guidance)
                     foreach (XmlNode nodePart in fieldParts)
@@ -158,6 +176,14 @@ namespace AgOpenGPS
                         else if (type == "3" && pointCount > 2)
                         {
                             lineNode = new TreeNode("Curve: " + name);
+                        }
+                        else if (type == "4" && pointCount > 0)
+                        {
+                            lineNode = new TreeNode("Pivot: " + name);
+                        }
+                        else if (type == "5" && pointCount > 0)
+                        {
+                            lineNode = new TreeNode("Spiral: " + name);
                         }
 
                         if (lineNode != null)
@@ -224,9 +250,9 @@ namespace AgOpenGPS
             }
 
             var fieldParts = pfd[idxFieldSelected].ChildNodes;
-            var builder = new IsoXmlFieldImporter(fieldParts, mf.currentFieldDirectory, mf.AppModel, mf);
+            var importer = new IsoXmlFieldImporter(fieldParts, mf.AppModel);
 
-            if (!builder.TryExtractOrigin(out _origin))
+            if (!importer.TryGetOrigin(out _origin))
             {
                 mf.YesMessageBox("Can't calculate center of field. Missing Outer Boundary or AB line.");
                 return;
@@ -235,24 +261,38 @@ namespace AgOpenGPS
             mf.JobNew();
             mf.pn.DefineLocalPlane(_origin, true);
 
-            if (!mf.isJobStarted)
+            List<CBoundaryList> boundaries = importer.GetBoundaries();
+            foreach (var bnd in boundaries)
             {
-                mf.TimedMessageBox(3000, gStr.gsFieldNotOpen, gStr.gsCreateNewField);
-                return;
+                mf.bnd.bndList.Add(bnd);
+                int idx = mf.bnd.bndList.Count - 1;
+                bnd.CalculateFenceArea(idx);
+                bnd.FixFenceLine(idx);
             }
 
-            builder.BuildBoundaries();
-            builder.BuildHeadland();
-            builder.BuildGuidanceLines();
+            List<vec3> headland = importer.GetHeadland();
+            if (headland.Count > 0 && mf.bnd.bndList.Count > 0 && mf.bnd.bndList[0].hdLine.Count == 0)
+            {
+                mf.bnd.bndList[0].hdLine.AddRange(headland);
+            }
+
+            List<CTrk> guidanceLines = importer.GetGuidanceLines();
+            mf.trk.gArr.AddRange(guidanceLines);
+
             SaveFieldFiles(directoryPath);
             FinalizeField();
 
-            if (mf.bnd.bndList.Count > 0) mf.btnABDraw.Visible = true;
-            mf.FieldMenuButtonEnableDisable(mf.bnd.bndList.Count > 0 && mf.bnd.bndList[0].hdLine.Count > 0);
+            if (mf.bnd.bndList.Count > 0)
+                mf.btnABDraw.Visible = true;
+
+            mf.FieldMenuButtonEnableDisable(
+                mf.bnd.bndList.Count > 0 && mf.bnd.bndList[0].hdLine.Count > 0
+            );
 
             DialogResult = DialogResult.OK;
             Close();
         }
+
 
 
         private void tboxFieldName_TextChanged(object sender, EventArgs e)
@@ -324,6 +364,41 @@ namespace AgOpenGPS
             mf.CalculateMinMax();
             mf.FileSaveHeadland();
             mf.FileSaveTracks();
+        }
+        private static double EstimateAreaFromPln(XmlNode nodePfd, ApplicationModel appModel)
+        {
+            // Find PLN with type "1" (outer boundary)
+            foreach (XmlNode nodePln in nodePfd.SelectNodes("PLN"))
+            {
+                if (nodePln.Attributes["A"]?.Value != "1") continue;
+
+                XmlNode lsg = nodePln.SelectSingleNode("LSG[@A='1']");
+                if (lsg == null) continue;
+
+                var pts = lsg.SelectNodes("PNT");
+                if (pts.Count < 3) continue;
+
+                var vecs = new vec2[pts.Count];
+                for (int i = 0; i < pts.Count; i++)
+                {
+                    double lat, lon;
+                    if (!double.TryParse(pts[i].Attributes["C"]?.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out lat)) continue;
+                    if (!double.TryParse(pts[i].Attributes["D"]?.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out lon)) continue;
+
+                    GeoCoord geo = appModel.LocalPlane.ConvertWgs84ToGeoCoord(new Wgs84(lat, lon));
+                    vecs[i] = new vec2(geo.Easting, geo.Northing);
+                }
+
+                // Shoelace formula to compute area (in m²)
+                double area = 0;
+                for (int i = 0, j = vecs.Length - 1; i < vecs.Length; j = i++)
+                {
+                    area += (vecs[j].easting + vecs[i].easting) * (vecs[j].northing - vecs[i].northing);
+                }
+                return Math.Abs(area / 2.0); // m²
+            }
+
+            return 0.0;
         }
     }
 }

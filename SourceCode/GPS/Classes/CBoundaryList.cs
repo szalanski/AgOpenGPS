@@ -17,11 +17,5 @@ namespace AgOpenGPS
             area = 0;
             isDriveThru = false;
         }
-
-        public void CalculateFenceArea()
-        {
-
-        }
-
     }
 }
