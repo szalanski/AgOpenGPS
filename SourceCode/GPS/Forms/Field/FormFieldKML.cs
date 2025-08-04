@@ -152,12 +152,12 @@ namespace AgOpenGPS
                                 if (endIndex == -1)
                                 {
                                     //just add the line
-                                    if (startIndex == -1) coordinates += line.Substring(0);
+                                    if (startIndex == -1) coordinates += " " + line.Substring(0);
                                     else coordinates += line.Substring(startIndex + 13);
                                 }
                                 else
                                 {
-                                    if (startIndex == -1) coordinates += line.Substring(0, endIndex);
+                                    if (startIndex == -1) coordinates += " " + line.Substring(0, endIndex);
                                     else coordinates += line.Substring(startIndex + 13, endIndex - (startIndex + 13));
                                     break;
                                 }
@@ -255,12 +255,12 @@ namespace AgOpenGPS
                                 if (endIndex == -1)
                                 {
                                     //just add the line
-                                    if (startIndex == -1) coordinates += line.Substring(0);
+                                    if (startIndex == -1) coordinates += " " + line.Substring(0);
                                     else coordinates += line.Substring(startIndex + 13);
                                 }
                                 else
                                 {
-                                    if (startIndex == -1) coordinates += line.Substring(0, endIndex);
+                                    if (startIndex == -1) coordinates += " " + line.Substring(0, endIndex);
                                     else coordinates += line.Substring(startIndex + 13, endIndex - (startIndex + 13));
                                     break;
                                 }
