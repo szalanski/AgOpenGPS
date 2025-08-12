@@ -386,7 +386,8 @@ namespace AgOpenGPS.Forms.Field
             if (!_redrawPending)
             {
                 _redrawPending = true;
-                BeginInvoke((Action)(() => {
+                BeginInvoke((Action)(() =>
+                {
                     glControlPreview.Invalidate();
                     _redrawPending = false;
                 }));

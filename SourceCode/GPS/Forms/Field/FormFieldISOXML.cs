@@ -260,12 +260,12 @@ namespace AgOpenGPS
                     }
                 }
                 //pick from the first AB
-                if(counter == 0 )
+                if (counter == 0)
                 {
                     foreach (XmlNode nodePart in fieldParts)
                     {
                         //grab the AB
-                        if(nodePart.Name == "GGP" && nodePart.FirstChild.Name == "GPN" && nodePart.FirstChild.FirstChild.Name == "LSG")
+                        if (nodePart.Name == "GGP" && nodePart.FirstChild.Name == "GPN" && nodePart.FirstChild.FirstChild.Name == "LSG")
                         {
                             foreach (XmlNode pnt in nodePart.ChildNodes[0].ChildNodes[0].ChildNodes) //PNT
                             {
@@ -281,7 +281,7 @@ namespace AgOpenGPS
                     }
                 }
 
-                if (counter  == 0) 
+                if (counter == 0)
                 {
 
                     mf.YesMessageBox("Can't calculate center of field. Missing Outer Boundary or AB line.");
@@ -339,7 +339,6 @@ namespace AgOpenGPS
                         mf.AppModel.LocalPlane.Origin.Longitude.ToString(CultureInfo.InvariantCulture));
                 }
 
-                
                 mf.FileCreateSections();
                 mf.FileCreateRecPath();
                 mf.FileCreateContour();
@@ -609,7 +608,7 @@ namespace AgOpenGPS
                                         if (cnt > 3)
                                         {
                                             mf.trk.gArr.Add(new CTrk());
-                                            int idx = mf.trk.gArr.Count-1;
+                                            int idx = mf.trk.gArr.Count - 1;
 
                                             //make sure point distance isn't too big 
                                             mf.curve.MakePointMinimumSpacing(ref mf.curve.desList, 1.6);
@@ -779,7 +778,7 @@ namespace AgOpenGPS
                                         mf.trk.gArr[idx].name = mf.curve.desName;
                                     else mf.trk.gArr[idx].name =
                                             (Math.Round(glm.toDegrees(mf.trk.gArr[idx].heading), 1)).ToString(CultureInfo.InvariantCulture)
-                                            + "\u00B0" 
+                                            + "\u00B0"
                                             + DateTime.Now.ToString("hh:mm:ss", CultureInfo.InvariantCulture);
 
                                     mf.trk.gArr[idx].mode = TrackMode.Curve;

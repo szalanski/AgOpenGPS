@@ -69,7 +69,7 @@ namespace AgOpenGPS.Forms.Field
         {
             if (lbFields.SelectedItems.Count == 0) return;
 
-            var dto = lbFields.SelectedItems[0].Tag as AgShareGetOwnFieldDto;   
+            var dto = lbFields.SelectedItems[0].Tag as AgShareGetOwnFieldDto;
             if (dto == null) return;
 
             lblSelectedField.Text = "Selected Field: " + dto.Name;

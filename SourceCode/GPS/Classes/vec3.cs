@@ -4,6 +4,8 @@ using AgOpenGPS.Core.Models;
 using System;
 using System.Globalization;
 
+namespace AgOpenGPS
+{
     public struct vec3
     {
         public double easting;
@@ -161,6 +163,5 @@ using System.Globalization;
             t = Math.Max(0, Math.Min(1, Dot(ap, ab) / abLenSq));
             return a + ab * t;
         }
+    }
 }
-
-

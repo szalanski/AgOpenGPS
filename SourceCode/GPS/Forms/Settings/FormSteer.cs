@@ -58,11 +58,11 @@ namespace AgOpenGPS
             labelMaxLimit.Text = gStr.gsMaxLimit;
             labelMinToMove.Text = gStr.gsMinToMove;
             labelWasZero.Text = gStr.gsWasZero;
-            labelCountsPerDegree.Text = gStr.gsCountsPerDegree; 
+            labelCountsPerDegree.Text = gStr.gsCountsPerDegree;
             labelAckermann.Text = gStr.gsAckermann;
-            labelMaxSteerAngle.Text = gStr.gsMaxSteerAngle; 
+            labelMaxSteerAngle.Text = gStr.gsMaxSteerAngle;
             labelDeadzone.Text = gStr.gsDeadzone;
-            labelHeadingDegree.Text = gStr.gsHeading;   
+            labelHeadingDegree.Text = gStr.gsHeading;
             labelOnDelay.Text = gStr.gsOnDelay;
             labelSpeedFactor.Text = gStr.gsSpeedFactor;
             labelAquireFactor.Text = gStr.gsAquireFactor;
@@ -73,14 +73,14 @@ namespace AgOpenGPS
 
             //translate pop-out
             labelEncoder.Text = gStr.gsTurnSensor;
-            labelTurnSensor.Text = gStr.gsTurnSensor;   
+            labelTurnSensor.Text = gStr.gsTurnSensor;
             labelPressureTurnSensor.Text = gStr.gsPressureTurnSensor;
             labelCurrentTurnSensor.Text = gStr.gsCurrentTurnSensor;
-            labelInvertWas.Text = gStr.gsInvertWas; 
+            labelInvertWas.Text = gStr.gsInvertWas;
             labelInvertMotor.Text = gStr.gsInvertMotor;
             labelInvertRelays.Text = gStr.gsInvertRelays;
             labelMotorDriver.Text = gStr.gsMotorDriver;
-            labelADConverter.Text = gStr.gsADConverter; 
+            labelADConverter.Text = gStr.gsADConverter;
             labelIMUAxis.Text = gStr.gsIMUAxis;
             labelSteerEnable.Text = gStr.gsSteerEnable;
             labelSteerDescription.Text = gStr.gsSteerDescription;
@@ -99,7 +99,7 @@ namespace AgOpenGPS
             labelSteerBar.Text = gStr.gsSteerBar;
             labelWizard.Text = gStr.gsWizard;
             labelReset.Text = gStr.gsReset;
-            labelSendAndSave.Text = gStr.gsSendAndSave; 
+            labelSendAndSave.Text = gStr.gsSendAndSave;
 
             this.Width = 388;
             this.Height = 490;
@@ -222,7 +222,7 @@ namespace AgOpenGPS
             mf.vehicle.driveFreeSteerAngle = 0;
 
             //nudDeadZoneDistance.Value = (decimal)((double)(Properties.Settings.Default.setAS_deadZoneDistance)/10);
-            nudDeadZoneHeading.Value = (decimal)((double)(Properties.Settings.Default.setAS_deadZoneHeading)/100);
+            nudDeadZoneHeading.Value = (decimal)((double)(Properties.Settings.Default.setAS_deadZoneHeading) / 100);
             nudDeadZoneDelay.Value = (decimal)(mf.vehicle.deadZoneDelay);
 
             toSend = false;
@@ -425,7 +425,7 @@ namespace AgOpenGPS
             lblAV_Set.Text = mf.setAngVel.ToString("N1");
 
             lblPWMDisplay.Text = mf.mc.pwmDisplay.ToString();
-            
+
             counter++;
 
             if (toSend && counter > 4)
@@ -1168,7 +1168,7 @@ namespace AgOpenGPS
             mf.p_251.pgn[mf.p_251.set0] = Properties.Settings.Default.setArdSteer_setting0;
             mf.p_251.pgn[mf.p_251.set1] = Properties.Settings.Default.setArdSteer_setting1;
             mf.p_251.pgn[mf.p_251.maxPulse] = Properties.Settings.Default.setArdSteer_maxPulseCounts;
-            mf.p_251.pgn[mf.p_251.minSpeed] = unchecked((byte)(Properties.Settings.Default.setAS_minSteerSpeed * 10)); 
+            mf.p_251.pgn[mf.p_251.minSpeed] = unchecked((byte)(Properties.Settings.Default.setAS_minSteerSpeed * 10));
 
             if (Properties.Settings.Default.setAS_isConstantContourOn)
                 mf.p_251.pgn[mf.p_251.angVel] = 1;
@@ -1225,7 +1225,7 @@ namespace AgOpenGPS
                 Properties.Settings.Default.stanleyIntegralGainAB = 0;
 
                 Properties.Settings.Default.purePursuitIntegralGainAB = 0;
-                
+
                 Properties.Settings.Default.setAS_sideHillComp = 0;
 
                 Properties.Settings.Default.setAS_uTurnCompensation = 1;

@@ -292,11 +292,11 @@ namespace AgOpenGPS
 
             if (!File.Exists(fileStr))
             {
-               mf.TimedMessageBox(2000, gStr.gsFieldFileIsCorrupt, gStr.gsChooseADifferentField);
+                mf.TimedMessageBox(2000, gStr.gsFieldFileIsCorrupt, gStr.gsChooseADifferentField);
                 return;
             }
 
-            if (mf.isJobStarted) 
+            if (mf.isJobStarted)
                 await mf.FileSaveEverythingBeforeClosingField();
 
             //get the directory and make sure it exists, create if not

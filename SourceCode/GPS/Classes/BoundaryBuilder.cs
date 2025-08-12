@@ -210,19 +210,19 @@ namespace AgOpenGPS.Classes
 
         #region Geometry Helpers
         private bool BoundingBoxesIntersect(Segment s1, Segment s2, double tolerance)
-                {
-                    double minX1 = Math.Min(s1.Start.easting, s1.End.easting) - tolerance;
-                    double maxX1 = Math.Max(s1.Start.easting, s1.End.easting) + tolerance;
-                    double minY1 = Math.Min(s1.Start.northing, s1.End.northing) - tolerance;
-                    double maxY1 = Math.Max(s1.Start.northing, s1.End.northing) + tolerance;
+        {
+            double minX1 = Math.Min(s1.Start.easting, s1.End.easting) - tolerance;
+            double maxX1 = Math.Max(s1.Start.easting, s1.End.easting) + tolerance;
+            double minY1 = Math.Min(s1.Start.northing, s1.End.northing) - tolerance;
+            double maxY1 = Math.Max(s1.Start.northing, s1.End.northing) + tolerance;
 
-                    double minX2 = Math.Min(s2.Start.easting, s2.End.easting);
-                    double maxX2 = Math.Max(s2.Start.easting, s2.End.easting);
-                    double minY2 = Math.Min(s2.Start.northing, s2.End.northing);
-                    double maxY2 = Math.Max(s2.Start.northing, s2.End.northing);
+            double minX2 = Math.Min(s2.Start.easting, s2.End.easting);
+            double maxX2 = Math.Max(s2.Start.easting, s2.End.easting);
+            double minY2 = Math.Min(s2.Start.northing, s2.End.northing);
+            double maxY2 = Math.Max(s2.Start.northing, s2.End.northing);
 
-                    return !(maxX1 < minX2 || maxX2 < minX1 || maxY1 < minY2 || maxY2 < minY1);
-                }
+            return !(maxX1 < minX2 || maxX2 < minX1 || maxY1 < minY2 || maxY2 < minY1);
+        }
         private (bool intersects, vec2 intersection) LineSegmentsIntersect(vec2 p1, vec2 p2, vec2 p3, vec2 p4)
         {
             vec2 r = p2 - p1;

@@ -58,18 +58,17 @@ namespace AgOpenGPS
             else
             {
                 lblResumeField.Text = gStr.gsResume + ": " + mf.currentFieldDirectory;
-            
 
-            if (mf.isJobStarted)
-            {
+                if (mf.isJobStarted)
+                {
 
-                btnJobResume.Enabled = false;
-                lblResumeField.Text = gStr.gsOpen + ": " + mf.currentFieldDirectory;
-            }
-            else
-            {
-                btnJobClose.Enabled = false;
-            }
+                    btnJobResume.Enabled = false;
+                    lblResumeField.Text = gStr.gsOpen + ": " + mf.currentFieldDirectory;
+                }
+                else
+                {
+                    btnJobClose.Enabled = false;
+                }
             }
 
             Location = Properties.Settings.Default.setJobMenu_location;
