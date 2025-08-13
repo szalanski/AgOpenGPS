@@ -228,7 +228,7 @@ namespace AgOpenGPS
         {
             mf.bnd.isDrawAtPivot = !mf.bnd.isDrawAtPivot;
             btnAntennaTool.Image = mf.bnd.isDrawAtPivot ? Properties.Resources.BoundaryRecordPivot : Properties.Resources.BoundaryRecordTool;
-            Properties.Settings.Default.setBnd_isDrawPivot = mf.bnd.isDrawAtPivot;            
+            Properties.Settings.Default.setBnd_isDrawPivot = mf.bnd.isDrawAtPivot;
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)

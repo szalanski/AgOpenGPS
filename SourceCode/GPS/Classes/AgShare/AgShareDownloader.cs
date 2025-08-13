@@ -240,7 +240,7 @@ namespace AgOpenGPS
             File.WriteAllLines(Path.Combine(fieldDir, "Flags.txt"), new[] { "$Flags", "0" });
             File.WriteAllLines(Path.Combine(fieldDir, "Headland.txt"), new[] { "$Headland", "0" });
             File.WriteAllLines(Path.Combine(fieldDir, "Contour.txt"), new[] { "$Contour", "0" });
-            File.WriteAllLines(Path.Combine(fieldDir, "Sections.txt"), new[] { "Sections", "0" });  
+            File.WriteAllLines(Path.Combine(fieldDir, "Sections.txt"), new[] { "Sections", "0" });
         }
     }
 

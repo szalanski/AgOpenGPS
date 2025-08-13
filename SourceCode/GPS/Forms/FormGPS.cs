@@ -42,9 +42,11 @@ namespace AgOpenGPS
 
         // Deprecated. Only here to avoid numerous changes to existing code that not has been refactored.
         // Please use AppViewModel.IsMetric directly
-        public bool isMetric {
+        public bool isMetric
+        {
             get { return AppViewModel.IsMetric; }
-            set {
+            set
+            {
                 AppViewModel.IsMetric = value;
             }
         }
@@ -802,7 +804,7 @@ namespace AgOpenGPS
             }
         }
 
-         //request a new job
+        //request a new job
         public void JobNew()
         {
             //SendSteerSettingsOutAutoSteerPort();

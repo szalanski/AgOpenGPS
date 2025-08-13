@@ -108,7 +108,7 @@ namespace AgOpenGPS
             {
                 tboxFieldName.Text = System.IO.Path.GetFileNameWithoutExtension(ofd.FileName);
             }
-            fileName= ofd.FileName;
+            fileName = ofd.FileName;
             //get lat and lon from boundary in kml
             FindLatLon(fileName);
 
@@ -207,7 +207,8 @@ namespace AgOpenGPS
                             break;
                         }
                     }
-                    if(fieldCreated) { 
+                    if (fieldCreated)
+                    {
                         mf.FileSaveBoundary();
                         mf.bnd.BuildTurnLines();
                         mf.fd.UpdateFieldBoundaryGUIAreas();
@@ -226,7 +227,7 @@ namespace AgOpenGPS
                     return;
                 }
             }
-             
+
             mf.bnd.isOkToAddPoints = false;
         }
 

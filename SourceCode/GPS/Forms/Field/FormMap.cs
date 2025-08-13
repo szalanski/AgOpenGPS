@@ -30,7 +30,7 @@ namespace AgOpenGPS
             InitializeComponent();
             //translate all the controls
             this.Text = gStr.gsMapForBackground;
-            labelNewBoundary.Text = gStr.gsNew + " " + gStr.gsBoundary; 
+            labelNewBoundary.Text = gStr.gsNew + " " + gStr.gsBoundary;
             labelBoundary.Text = gStr.gsBoundary;
             lblPoints.Text = gStr.gsPoints + ":";
             labelBackground.Text = gStr.gsBackground;
@@ -259,7 +259,7 @@ namespace AgOpenGPS
             if (result3 == DialogResult.OK)
             {
                 int cnt = mf.bnd.bndList.Count;
-                mf.bnd.bndList[cnt-1].hdLine?.Clear();
+                mf.bnd.bndList[cnt - 1].hdLine?.Clear();
                 mf.bnd.bndList.RemoveAt(cnt - 1);
 
                 mf.FileSaveBoundary();
@@ -469,7 +469,7 @@ namespace AgOpenGPS
 
             if (mf.bnd.bndList.Count > 1)
             {
-                lblBnds.Text = "1 " + gStr.gsOuter +"\r\n" + (mf.bnd.bndList.Count - 1).ToString() + " " + gStr.gsInner;
+                lblBnds.Text = "1 " + gStr.gsOuter + "\r\n" + (mf.bnd.bndList.Count - 1).ToString() + " " + gStr.gsInner;
             }
             else if (mf.bnd.bndList.Count == 1)
             {

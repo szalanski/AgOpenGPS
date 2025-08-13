@@ -42,7 +42,7 @@ namespace AgOpenGPS
 
         private void FormBoundary_Load(object sender, EventArgs e)
         {
-            this.Size = new Size(600,300);
+            this.Size = new Size(600, 300);
 
             //update the list view with real data
             UpdateChart();
@@ -231,7 +231,6 @@ namespace AgOpenGPS
                 mf.fd.UpdateFieldBoundaryGUIAreas();
                 mf.bnd.BuildTurnLines();
                 UpdateChart();
-                
             }
             else
             {
@@ -271,7 +270,7 @@ namespace AgOpenGPS
             panelChoose.Visible = false;
             panelKML.Visible = false;
 
-            this.Size = new System.Drawing.Size(600,300);
+            this.Size = new System.Drawing.Size(600, 300);
             isClosing = true;
             UpdateChart();
             Close();
@@ -291,7 +290,7 @@ namespace AgOpenGPS
             panelChoose.Visible = true;
             panelChoose.Dock = DockStyle.Fill;
 
-            this.Size = new Size(245,350);
+            this.Size = new Size(245, 350);
         }
 
         private void btnLoadBoundaryFromGE_Click(object sender, EventArgs e)
@@ -412,7 +411,7 @@ namespace AgOpenGPS
             panelChoose.Visible = false;
             panelKML.Visible = false;
 
-            this.Size = new Size(600,300);
+            this.Size = new Size(600, 300);
 
             UpdateChart();
         }
@@ -454,10 +453,7 @@ namespace AgOpenGPS
             form.ShowDialog();
             isClosing = true;
             Close();
-
-
-        }   
-
+        }
 
 
         private void FormBoundary_ResizeEnd(object sender, EventArgs e)

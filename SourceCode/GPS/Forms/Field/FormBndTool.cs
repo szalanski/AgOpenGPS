@@ -72,7 +72,7 @@ namespace AgOpenGPS
             panel1.Visible = false;
             //translate
             labelCreate.Text = gStr.gsCreate;
-            labelSmooth.Text = gStr.gsSmooth;   
+            labelSmooth.Text = gStr.gsSmooth;
             labelPleaseWait.Text = gStr.gsPleaseWait;
             labelReducedPoints.Text = gStr.gsReducedPoints;
             labelSpacing.Text = gStr.gsSpacing;
@@ -626,7 +626,7 @@ namespace AgOpenGPS
 
                 //points all around it are removed or > minDist
                 arr[i].heading = 2;
-                
+
                 cntr++;
 
                 if (cntr > 200)
@@ -954,7 +954,7 @@ namespace AgOpenGPS
             start = 99999; end = 99999;
             btnExit.Focus();
             isC = false;
-            isA= true;
+            isA = true;
 
             btnAddPoints.Enabled = false;
         }
