@@ -93,8 +93,8 @@ namespace AgOpenGPS
 
                     XmlNodeList fieldParts = nodePFD.ChildNodes;
 
-                //Parse GGP → GPN → LSG structure (v3-style)
-                foreach (XmlNode nodeGgp in nodePFD.SelectNodes("GGP"))
+                    //Parse GGP → GPN → LSG structure (v3-style)
+                    foreach (XmlNode nodeGgp in nodePFD.SelectNodes("GGP"))
                     {
                         XmlNode gpn = nodeGgp.SelectSingleNode("GPN");
                         if (gpn == null) continue;
