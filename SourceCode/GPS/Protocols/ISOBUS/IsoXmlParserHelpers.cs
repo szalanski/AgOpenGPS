@@ -95,7 +95,7 @@ namespace AgOpenGPS.Protocols.ISOBUS
                             }
                         }
 
-                        CurveCABTools.CalculateHeadings(ref list);
+                        CurveCABTools.CalculateHeadings(list);
                         return list;
                     }
                 }
@@ -145,7 +145,7 @@ namespace AgOpenGPS.Protocols.ISOBUS
         }
 
         // Parse GGP → GPN → LSG line
-        public static CTrk ParseGGPNode(XmlNode node, ApplicationModel appModel)
+        private static CTrk ParseGGPNode(XmlNode node, ApplicationModel appModel)
         {
             var gpn = node.SelectSingleNode("GPN");
             var lsg = gpn?.SelectSingleNode("LSG[@A='5']");
@@ -161,7 +161,7 @@ namespace AgOpenGPS.Protocols.ISOBUS
         }
 
         // Parse LSG line directly
-        public static CTrk ParseLSGNode(XmlNode lsg, ApplicationModel appModel)
+        private static CTrk ParseLSGNode(XmlNode lsg, ApplicationModel appModel)
         {
             string name = lsg.Attributes["B"]?.Value ?? "Unnamed";
             int count = lsg.SelectNodes("PNT").Count;
@@ -198,8 +198,9 @@ namespace AgOpenGPS.Protocols.ISOBUS
         private static CTrk ParseCurveLine(XmlNode lsg, string name, ApplicationModel appModel)
         {
             var points = lsg.SelectNodes("PNT");
-            if (points.Count <= 2) return null;
+            if (points == null || points.Count <= 2) return null;
 
+            // Build raw list from ISOXML
             var desList = new List<vec3>();
             foreach (XmlNode pnt in points)
             {
@@ -207,28 +208,53 @@ namespace AgOpenGPS.Protocols.ISOBUS
                 desList.Add(new vec3(geo));
             }
 
-            CurveCABTools.Preprocess(ref desList, 1.6, 0.5); // afgeleid van jouw CABCurve gedrag
+            // Keep originals if you want ptA/ptB to reflect the original span
+            var originalFirst = desList[0];
+            var originalLast = desList[desList.Count - 1];
+
+            // Extend ends before preprocessing (pure, no ref)
+            double extendMeters = 100.0;     // tweak as needed
+            bool keepOriginalAB = false;   // true => ptA/ptB = original endpoints
+            desList = ExtendEnds(desList, extendMeters);
+
+            // CABCurve-like pipeline (no ref, returns new lists)
+            desList = CurveCABTools.Preprocess(desList, 1.6, 0.5);
+            if (desList == null || desList.Count < 2) return null;
 
             double avgHeading = CurveCABTools.ComputeAverageHeading(desList);
 
+            // Decide ptA/ptB (extended vs original)
+            vec2 ptA, ptB;
+            if (keepOriginalAB)
+            {
+                ptA = new vec2(originalFirst.easting, originalFirst.northing);
+                ptB = new vec2(originalLast.easting, originalLast.northing);
+            }
+            else
+            {
+                ptA = new vec2(desList[0].easting, desList[0].northing);
+                ptB = new vec2(desList[desList.Count - 1].easting, desList[desList.Count - 1].northing);
+            }
+
+            // Build track
             var track = new CTrk
             {
                 heading = avgHeading,
                 mode = TrackMode.Curve,
-                ptA = new vec2(desList[0].easting, desList[0].northing),
-                ptB = new vec2(desList[desList.Count - 1].easting, desList[desList.Count - 1].northing),
+                ptA = ptA,
+                ptB = ptB,
                 name = string.IsNullOrWhiteSpace(name) ? "Curve_" + DateTime.Now.ToString("HHmmss") : name
             };
 
-            foreach (var pt in desList)
-            {
-                track.curvePts.Add(pt);
-            }
+            // Copy processed curve points
+            for (int i = 0; i < desList.Count; i++)
+                track.curvePts.Add(desList[i]);
 
             return track;
         }
 
-        // Helpers
+        // Now we can use some helpers
+
         private static void AccumulateCoordinates(XmlNode parent, ref double latSum, ref double lonSum, ref int count)
         {
             foreach (XmlNode pnt in parent.SelectNodes(".//PNT"))
@@ -257,5 +283,47 @@ namespace AgOpenGPS.Protocols.ISOBUS
             double.TryParse(pnt.Attributes["D"]?.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out double lon);
             return appModel.LocalPlane.ConvertWgs84ToGeoCoord(new Wgs84(lat, lon));
         }
+        private static List<vec3> ExtendEnds(List<vec3> pts, double extendMeters)
+        {
+            if (pts == null || pts.Count < 2 || extendMeters <= 0) return pts;
+
+            // Work on a copy to keep this pure
+            var list = new List<vec3>(pts);
+
+            // Extend before the first point (backwards along first segment)
+            var first = list[0];
+            var second = list[1];
+            double dxF = first.easting - second.easting;
+            double dyF = first.northing - second.northing;
+            double lenF = Math.Sqrt(dxF * dxF + dyF * dyF);
+            if (lenF > 1e-6)
+            {
+                dxF /= lenF; dyF /= lenF;
+                list.Insert(0, new vec3(
+                    first.easting + dxF * extendMeters,
+                    first.northing + dyF * extendMeters,
+                    0
+                ));
+            }
+
+            // Extend after the last point (forwards along last segment)
+            var last = list[list.Count - 1];
+            var beforeLast = list[list.Count - 2];
+            double dxL = last.easting - beforeLast.easting;
+            double dyL = last.northing - beforeLast.northing;
+            double lenL = Math.Sqrt(dxL * dxL + dyL * dyL);
+            if (lenL > 1e-6)
+            {
+                dxL /= lenL; dyL /= lenL;
+                list.Add(new vec3(
+                    last.easting + dxL * extendMeters,
+                    last.northing + dyL * extendMeters,
+                    0
+                ));
+            }
+
+            return list;
+        }
+
     }
 }

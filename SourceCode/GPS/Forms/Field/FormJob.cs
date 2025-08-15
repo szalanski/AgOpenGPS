@@ -248,6 +248,10 @@ namespace AgOpenGPS
 
         private void btnFromISOXML_Click(object sender, EventArgs e)
         {
+            if (mf.isJobStarted)
+            {
+                _ = mf.FileSaveEverythingBeforeClosingField();
+            }
             //back to FormGPS
             DialogResult = DialogResult.Abort;
             Close();

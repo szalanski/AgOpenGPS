@@ -3,54 +3,55 @@ using System.Collections.Generic;
 
 namespace AgOpenGPS
 {
-    // Stateless curve processing helpers matching CABCurve behavior
+    // Stateless, no ref, pipeline via return values
     public static class CurveCABTools
     {
-        // Perform minimum spacing, interpolation and heading calculation
-        public static void Preprocess(ref List<vec3> points, double minSpacing, double interpolationSpacing)
+        // Full pipeline: minimum spacing -> interpolate -> headings
+        public static List<vec3> Preprocess(List<vec3> points, double minSpacing, double interpolationSpacing)
         {
-            MakePointMinimumSpacing(ref points, minSpacing);
-            InterpolatePoints(ref points, interpolationSpacing);
-            CalculateHeadings(ref points);
+            points = MakePointMinimumSpacing(points, minSpacing);
+            points = InterpolatePoints(points, interpolationSpacing);
+            points = CalculateHeadings(points);
+            return points;
         }
 
-        // Remove points that are too close to each other
-        public static void MakePointMinimumSpacing(ref List<vec3> points, double minSpacing)
+        // Step 1: Ensure minimum spacing between points
+        private static List<vec3> MakePointMinimumSpacing(List<vec3> points, double minSpacing)
         {
-            if (points.Count < 2) return;
+            if (points == null || points.Count < 2) return points;
 
-            List<vec3> spaced = new List<vec3>();
+            var spaced = new List<vec3>(points.Count);
             vec3 last = points[0];
             spaced.Add(last);
+
+            double minSq = minSpacing * minSpacing;
 
             for (int i = 1; i < points.Count; i++)
             {
                 double dx = points[i].easting - last.easting;
                 double dy = points[i].northing - last.northing;
-
-                if ((dx * dx + dy * dy) >= (minSpacing * minSpacing))
+                if ((dx * dx + dy * dy) >= minSq)
                 {
                     spaced.Add(points[i]);
                     last = points[i];
                 }
             }
 
+            // Always add the original last point
             vec3 final = points[points.Count - 1];
             vec3 compare = spaced[spaced.Count - 1];
-            if (glm.DistanceSquared(final, compare) > 0.00001)
-            {
+            if (glm.DistanceSquared(final, compare) > 1e-10)
                 spaced.Add(final);
-            }
 
-            points = spaced;
+            return spaced;
         }
 
-        // Add interpolated points between existing ones
-        public static void InterpolatePoints(ref List<vec3> points, double spacingMeters)
+        // Step 2: Interpolate points at fixed spacing
+        private static List<vec3> InterpolatePoints(List<vec3> points, double spacingMeters)
         {
-            if (points.Count < 2) return;
+            if (points == null || points.Count < 2) return points;
 
-            List<vec3> result = new List<vec3>();
+            var result = new List<vec3>(points.Count * 2);
 
             for (int i = 0; i < points.Count - 1; i++)
             {
@@ -73,49 +74,49 @@ namespace AgOpenGPS
             }
 
             result.Add(points[points.Count - 1]);
-            points = result;
+            return result;
         }
 
-        // Compute segment-based headings (AgOpenGPS: heading = atan2(dx, dy))
-        public static void CalculateHeadings(ref List<vec3> points)
+        // Step 3: Calculate headings
+        public static List<vec3> CalculateHeadings(List<vec3> points)
         {
-            if (points.Count < 2) return;
+            if (points == null || points.Count < 2) return points;
 
             for (int i = 0; i < points.Count - 1; i++)
             {
                 double dx = points[i + 1].easting - points[i].easting;
                 double dy = points[i + 1].northing - points[i].northing;
-                vec3 pt = points[i];
-                pt.heading = Math.Atan2(dx, dy); // AgOpenGPS heading: easting over northing
+                var pt = points[i];
+                pt.heading = Math.Atan2(dx, dy);
                 if (pt.heading < 0) pt.heading += glm.twoPI;
                 points[i] = pt;
             }
 
-            vec3 last = points[points.Count - 1];
+            // Copy last heading from the second last
+            var last = points[points.Count - 1];
             last.heading = points[points.Count - 2].heading;
             points[points.Count - 1] = last;
+
+            return points;
         }
 
-        // Calculate average heading (circular mean)
+        // Step 4: Compute circular mean heading
         public static double ComputeAverageHeading(List<vec3> points)
         {
-            if (points.Count == 0) return 0;
+            if (points == null || points.Count == 0) return 0;
 
-            double x = 0;
-            double y = 0;
-
+            double cx = 0, sy = 0;
             for (int i = 0; i < points.Count; i++)
             {
-                x += Math.Cos(points[i].heading);
-                y += Math.Sin(points[i].heading);
+                cx += Math.Cos(points[i].heading);
+                sy += Math.Sin(points[i].heading);
             }
+            cx /= points.Count;
+            sy /= points.Count;
 
-            x /= points.Count;
-            y /= points.Count;
-
-            double avgHeading = Math.Atan2(y, x);
-            if (avgHeading < 0) avgHeading += glm.twoPI;
-            return avgHeading;
+            double avg = Math.Atan2(sy, cx);
+            if (avg < 0) avg += glm.twoPI;
+            return avg;
         }
     }
 }

@@ -19,27 +19,8 @@ public class IsoXmlFieldImporter
     public bool TryGetOrigin(out Wgs84 origin) =>
         IsoXmlParserHelpers.TryExtractOrigin(_fieldParts, out origin);
 
-    public List<CBoundaryList> GetBoundaries()
-    {
-        var result = new List<CBoundaryList>();
-        foreach (XmlNode node in _fieldParts)
-        {
-            if (node.Name == "PLN" && (node.Attributes["A"]?.Value == "1" || node.Attributes["A"]?.Value == "9"))
-            {
-                var lsg = node.SelectSingleNode("LSG[@A='1']");
-                if (lsg != null)
-                    result.Add(IsoXmlParserHelpers.ParseBoundaryFromLSG(lsg, _appModel));
-            }
-            else if (node.Name == "PLN" && (node.Attributes["A"]?.Value == "3" || node.Attributes["A"]?.Value == "4" || node.Attributes["A"]?.Value == "6"))
-            {
-                var lsg = node.SelectSingleNode("LSG[@A='1']");
-                if (lsg != null)
-                    result.Add(IsoXmlParserHelpers.ParseBoundaryFromLSG(lsg, _appModel));
-            }
-        }
-
-        return result;
-    }
+    public List<CBoundaryList> GetBoundaries() =>
+        IsoXmlParserHelpers.ParseBoundaries(_fieldParts, _appModel);
 
     public List<vec3> GetHeadland() =>
         IsoXmlParserHelpers.ParseHeadland(_fieldParts, _appModel);
