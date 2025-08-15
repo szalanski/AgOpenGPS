@@ -5,6 +5,13 @@ using AgOpenGPS;
 using System.Collections.Generic;
 using System.Xml;
 
+/// <summary>
+/// This class is responsible for importing field data from an ISO XML file.
+/// It uses the `IsoXmlParserHelpers` to extract various components such as origin, boundaries, headland, and guidance lines.
+/// For Curves, it also uses CurveCABTools to match CABCurve functionality.
+/// This class is stateless and does not hold any references to the application state.
+/// We keep that CurveCABTools class until we decoupled the CABCurve functionality from the UI.
+/// </summary>
 public class IsoXmlFieldImporter
 {
     private readonly XmlNodeList _fieldParts;

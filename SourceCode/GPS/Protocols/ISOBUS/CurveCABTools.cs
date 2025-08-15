@@ -3,7 +3,10 @@ using System.Collections.Generic;
 
 namespace AgOpenGPS
 {
-    // Stateless, no ref, pipeline via return values
+    /// <summary>
+    /// This class helps converting a Curve to the CABCurve format.
+    /// We use this class temporarily until we decouple the CABCurve functionality from the UI.
+    /// </summary>
     public static class CurveCABTools
     {
         // Full pipeline: minimum spacing -> interpolate -> headings

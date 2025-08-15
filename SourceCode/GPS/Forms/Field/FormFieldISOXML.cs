@@ -16,6 +16,10 @@ using System.Xml;
 
 namespace AgOpenGPS
 {
+    /// <summary>
+    /// Form for creating a new field based on an ISO XML "Taskdata.xml".
+    /// Tested with ISO XML from Agleader, AGCO Valtra and FendtOne
+    /// </summary>
     public partial class FormFieldIsoXml : Form
     {
         private readonly FormGPS mf;
@@ -61,30 +65,36 @@ namespace AgOpenGPS
 
             try
             {
+                const double SqmToHectares = 0.0001;
+
                 foreach (XmlNode nodePFD in pfd)
                 {
-                    double area = 0;
+                    // 1) Get area in m² (either from attribute D or fallback estimate)
+                    double areaSqm;
                     if (double.TryParse(nodePFD.Attributes["D"]?.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out double areaRaw) && areaRaw >= 1)
                     {
-                        area = areaRaw * 0.0001; // Convert m² to hectares
+                        areaSqm = areaRaw; // still in m²
                     }
                     else
                     {
-                        // Fallback to estimate if D is missing or invalid
-                        area = EstimateAreaFromPln(nodePFD, mf.AppModel) * 0.0001;
+                        areaSqm = EstimateAreaFromPln(nodePFD, mf.AppModel); // still in m²
                     }
 
-                    string fieldName = nodePFD.Attributes["C"]?.Value ?? "Unnamed";
-                    string fieldLabel = fieldName + " Area: " + area.ToString("0.00") + " Ha  " + nodePFD.Attributes["A"]?.Value;
+                    // 2) Convert to hectares and round to 2 decimals
+                    double areaHa = Math.Round(areaSqm * SqmToHectares, 2, MidpointRounding.AwayFromZero);
 
-                    TreeNode fieldNode = new TreeNode(fieldLabel);
-                    fieldNode.Tag = index++;
+                    // 3) Build label (always show 2 decimals)
+                    string fieldName = nodePFD.Attributes["C"]?.Value ?? "Unnamed";
+                    string fieldLabel = $"{fieldName} Area: {areaHa:0.00} Ha";
+
+                    // 4) Add to tree
+                    TreeNode fieldNode = new TreeNode(fieldLabel) { Tag = index++ };
                     tree.Nodes.Add(fieldNode);
 
                     XmlNodeList fieldParts = nodePFD.ChildNodes;
 
-                    //Parse GGP → GPN → LSG structure (v3-style)
-                    foreach (XmlNode nodeGgp in nodePFD.SelectNodes("GGP"))
+                //Parse GGP → GPN → LSG structure (v3-style)
+                foreach (XmlNode nodeGgp in nodePFD.SelectNodes("GGP"))
                     {
                         XmlNode gpn = nodeGgp.SelectSingleNode("GPN");
                         if (gpn == null) continue;

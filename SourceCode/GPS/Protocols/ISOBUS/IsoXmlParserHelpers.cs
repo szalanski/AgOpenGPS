@@ -7,6 +7,10 @@ using AgOpenGPS.Core.Models;
 
 namespace AgOpenGPS.Protocols.ISOBUS
 {
+    /// <summary>
+    /// This class provides helper methods for parsing ISO XML data related to agricultural fields.
+    /// It does all the conversion and extraction of coordinates, boundaries, headlands, and guidance lines.
+    /// </summary>
     public static class IsoXmlParserHelpers
     {
         // Extract WGS84 origin from PLN or GGP lines
