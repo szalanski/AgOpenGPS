@@ -69,6 +69,7 @@ namespace AgOpenGPS
             this.resetALLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resetEverythingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.AgShareApiMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tmrWatchdog = new System.Windows.Forms.Timer(this.components);
             this.contextMenuStripFlag = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -217,7 +218,7 @@ namespace AgOpenGPS
             this.btnMinimizeMainForm = new System.Windows.Forms.Button();
             this.btnFieldStats = new System.Windows.Forms.Button();
             this.lblHardwareMessage = new System.Windows.Forms.Label();
-            this.AgShareApiMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuLanguageEstonian = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStripOpenGL.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.contextMenuStripFlag.SuspendLayout();
@@ -333,6 +334,7 @@ namespace AgOpenGPS
             this.menuLanguageDanish,
             this.menuLanguageDeutsch,
             this.menuLanguageEnglish,
+            this.menuLanguageEstonian,
             this.menuLanguageSpanish,
             this.menuLanguageFrench,
             this.menuLanguageItalian,
@@ -501,6 +503,13 @@ namespace AgOpenGPS
             this.menuLanguageChinese.Text = "中国人 (Chinese)";
             this.menuLanguageChinese.Click += new System.EventHandler(this.menuLanguageChinese_Click);
             // 
+            // menuLanguageEstonian
+            // 
+            this.menuLanguageEstonian.Name = "menuLanguageEstonian";
+            this.menuLanguageEstonian.Size = new System.Drawing.Size(485, 50);
+            this.menuLanguageEstonian.Text = "Eesti (Estonia)";
+            this.menuLanguageEstonian.Click += new System.EventHandler(this.menuLanguageEstonian_Click);
+            // 
             // menuLanguageTest
             // 
             this.menuLanguageTest.Name = "menuLanguageTest";
@@ -561,6 +570,13 @@ namespace AgOpenGPS
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(382, 50);
             this.aboutToolStripMenuItem.Text = "About...";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
+            // 
+            // AgShareApiMenuItem
+            // 
+            this.AgShareApiMenuItem.Name = "AgShareApiMenuItem";
+            this.AgShareApiMenuItem.Size = new System.Drawing.Size(382, 50);
+            this.AgShareApiMenuItem.Text = "AgShare API";
+            this.AgShareApiMenuItem.Click += new System.EventHandler(this.AgShareApiMenuItem_Click);
             // 
             // helpMenuItem
             // 
@@ -1305,7 +1321,7 @@ namespace AgOpenGPS
             this.panelSim.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.panelSim.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 56F));
             this.panelSim.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.panelSim.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 54F));
+            this.panelSim.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 56F));
             this.panelSim.Controls.Add(this.btnSpeedDn, 5, 0);
             this.panelSim.Controls.Add(this.btnSimSpeedUp, 7, 0);
             this.panelSim.Controls.Add(this.btnResetSim, 0, 0);
@@ -1330,7 +1346,7 @@ namespace AgOpenGPS
             this.btnSpeedDn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSpeedDn.Location = new System.Drawing.Point(333, 4);
             this.btnSpeedDn.Name = "btnSpeedDn";
-            this.btnSpeedDn.Size = new System.Drawing.Size(79, 34);
+            this.btnSpeedDn.Size = new System.Drawing.Size(78, 34);
             this.btnSpeedDn.TabIndex = 533;
             this.btnSpeedDn.UseVisualStyleBackColor = false;
             this.btnSpeedDn.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnSpeedDn_MouseDown);
@@ -1343,9 +1359,9 @@ namespace AgOpenGPS
             this.btnSimSpeedUp.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnSimSpeedUp.FlatAppearance.BorderSize = 0;
             this.btnSimSpeedUp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSimSpeedUp.Location = new System.Drawing.Point(476, 4);
+            this.btnSimSpeedUp.Location = new System.Drawing.Point(475, 4);
             this.btnSimSpeedUp.Name = "btnSimSpeedUp";
-            this.btnSimSpeedUp.Size = new System.Drawing.Size(79, 34);
+            this.btnSimSpeedUp.Size = new System.Drawing.Size(78, 34);
             this.btnSimSpeedUp.TabIndex = 532;
             this.btnSimSpeedUp.UseVisualStyleBackColor = false;
             this.btnSimSpeedUp.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnSimSpeedUp_MouseDown);
@@ -1359,7 +1375,7 @@ namespace AgOpenGPS
             this.btnSimSetSpeedToZero.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSimSetSpeedToZero.Font = new System.Drawing.Font("Tahoma", 9.75F);
             this.btnSimSetSpeedToZero.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.btnSimSetSpeedToZero.Location = new System.Drawing.Point(419, 4);
+            this.btnSimSetSpeedToZero.Location = new System.Drawing.Point(418, 4);
             this.btnSimSetSpeedToZero.Name = "btnSimSetSpeedToZero";
             this.btnSimSetSpeedToZero.Size = new System.Drawing.Size(50, 34);
             this.btnSimSetSpeedToZero.TabIndex = 453;
@@ -1376,7 +1392,7 @@ namespace AgOpenGPS
             this.btnSimReverseDirection.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSimReverseDirection.Font = new System.Drawing.Font("Tahoma", 9.75F);
             this.btnSimReverseDirection.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.btnSimReverseDirection.Location = new System.Drawing.Point(569, 4);
+            this.btnSimReverseDirection.Location = new System.Drawing.Point(568, 4);
             this.btnSimReverseDirection.Name = "btnSimReverseDirection";
             this.btnSimReverseDirection.Size = new System.Drawing.Size(35, 34);
             this.btnSimReverseDirection.TabIndex = 537;
@@ -3055,13 +3071,6 @@ namespace AgOpenGPS
             this.lblHardwareMessage.Visible = false;
             this.lblHardwareMessage.Click += new System.EventHandler(this.lblHardwareMessage_Click);
             // 
-            // AgShareApiMenuItem
-            // 
-            this.AgShareApiMenuItem.Name = "AgShareApiMenuItem";
-            this.AgShareApiMenuItem.Size = new System.Drawing.Size(382, 50);
-            this.AgShareApiMenuItem.Text = "AgShare API";
-            this.AgShareApiMenuItem.Click += new System.EventHandler(this.AgShareApiMenuItem_Click);
-            // 
             // FormGPS
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -3331,6 +3340,7 @@ namespace AgOpenGPS
         private System.Windows.Forms.ToolStripMenuItem profileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newProfileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem loadProfileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem menuLanguageEstonian;
     }
 }
 
