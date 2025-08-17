@@ -2539,7 +2539,7 @@ namespace AgOpenGPS
             double textX = xStart + iconWidth + spacing + 10;
 
             // Color: green if > 20 m, otherwise orange
-            if (bnd.HeadlandDistance.HasValue && bnd.HeadlandDistance.Value > 200.0)
+            if (bnd.HeadlandDistance.HasValue && bnd.HeadlandDistance.Value > 20.0)
                 GL.Color3(0.0f, 0.9f, 0.0f);
             else
                 GL.Color3(1.0f, 1.0f, 0.0f);
