@@ -40,7 +40,8 @@ namespace AgOpenGPS
         private void btnSectionMasterManual_Click(object sender, EventArgs e)
         {
             //System.Media.SystemSounds.Asterisk.Play();
-            if (sounds.isSectionsSoundOn) sounds.sndSectionOff.Play();
+            if (sounds.isSectionsSoundOn && (!mc.isSteerWorkSwitchEnabled || !mc.isSteerWorkSwitchManualSections))
+                sounds.sndSectionOff.Play();
 
             //if Auto is on, turn it off
             autoBtnState = btnStates.Off;
@@ -82,7 +83,8 @@ namespace AgOpenGPS
 
                     autoBtnState = btnStates.Auto;
                     btnSectionMasterAuto.Image = Properties.Resources.SectionMasterOn;
-                    if (sounds.isSectionsSoundOn) sounds.sndSectionOn.Play();
+                    if (sounds.isSectionsSoundOn && (!mc.isSteerWorkSwitchEnabled || !mc.isSteerWorkSwitchManualSections))
+                        sounds.sndSectionOn.Play();
 
                     //add current track when it doesn't exist in the worked track list
                     MarkAsWorkedTrack();
@@ -93,7 +95,8 @@ namespace AgOpenGPS
 
                     autoBtnState = btnStates.Off;
                     btnSectionMasterAuto.Image = Properties.Resources.SectionMasterOff;
-                    if (sounds.isSectionsSoundOn) sounds.sndSectionOn.Play();
+                    if (sounds.isSectionsSoundOn && (!mc.isSteerWorkSwitchEnabled || !mc.isSteerWorkSwitchManualSections))
+                        sounds.sndSectionOn.Play();
                     break;
             }
 

@@ -495,6 +495,7 @@ namespace AgOpenGPS
                     {
                         if (pn.fixQuality != 4)
                         {
+                            // LOST: raise alarm (existing behavior) and arm "recovered" for next time
                             if (!sounds.isRTKAlarming)
                             {
                                 if (isRTK_KillAutosteer && isBtnAutoSteerOn)
@@ -504,15 +505,47 @@ namespace AgOpenGPS
                                     Log.EventWriter("Autosteer Off, RTK Fix Alarm");
                                 }
 
-                                Log.EventWriter("RTK Alarm Fix is Lost");
+                                Log.EventWriter("RTK Alarm: Fix lost");
                                 sounds.sndRTKAlarm.Play();
                             }
+
                             sounds.isRTKAlarming = true;
+                            sounds.RTKWasAlarming = true;
+                            RTKBackSinceUtc = DateTime.MinValue; // reset since we are not fixed
                             DrawLostRTK();
                         }
-                        else
+                        else // pn.fixQuality == 4
                         {
+                            // FIXED: clear alarm flag
                             sounds.isRTKAlarming = false;
+
+                            // If we were alarming, detect a *recovered* edge with debounce
+                            if (sounds.RTKWasAlarming)
+                            {
+                                if (RTKBackSinceUtc == DateTime.MinValue)
+                                {
+                                    // first frame we see 4 after a loss -> start debounce timer
+                                    RTKBackSinceUtc = DateTime.UtcNow;
+                                }
+                                else
+                                {
+                                    var stableMs = (DateTime.UtcNow - RTKBackSinceUtc).TotalMilliseconds;
+                                    if (stableMs >= RTK_RECOVER_DEBOUNCE_MS)
+                                    {
+                                        // One-shot "recovered" event
+                                        Log.EventWriter("RTK Fix Recovered");
+                                        sounds.sndRTKRecoverd.Play();
+
+                                        sounds.RTKWasAlarming = false;
+                                        RTKBackSinceUtc = DateTime.MinValue;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                // Normal fixed state, nothing to do
+                                RTKBackSinceUtc = DateTime.MinValue;
+                            }
                         }
                     }
 
