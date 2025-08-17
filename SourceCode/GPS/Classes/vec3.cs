@@ -42,9 +42,9 @@ namespace AgOpenGPS
             return new vec2(easting, northing);
         }
 
-}
+    }
 
-public struct vecFix2Fix
+    public struct vecFix2Fix
     {
         public double easting; //easting
         public double distance; //distance since last point
