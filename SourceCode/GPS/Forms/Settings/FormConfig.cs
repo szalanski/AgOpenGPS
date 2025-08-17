@@ -114,18 +114,9 @@ namespace AgOpenGPS
             tab1.SelectedTab = tabSummary;
             //Label translations
             //configload-save
-            labelUnits.Text = gStr.gsUnit;
-            labelWidth.Text = gStr.gsWidth;
-            labelSections.Text = gStr.gsSections;
-            labelOffset.Text = gStr.gsOffset;
-            labelOverlap.Text = gStr.gsOverlap;
-            labelLookAhead.Text = gStr.gsLookAhead;
-            labelNudge.Text = gStr.gsNudge;
-            labelTramW.Text = gStr.gsTramWidth;
             labelUnitsBottom.Text = gStr.gsUnit;
             labelToolWidthBottom.Text = gStr.gsWidth;
             //tractorconfig
-            labelWheelBase.Text = gStr.gsWheelbase;
             labelVehicleGroupBox.Text = gStr.gsVehiclegroupbox;
             labelImage.Text = gStr.gsImage;
             labelOpacity.Text = gStr.gsOpacity;
@@ -372,7 +363,6 @@ namespace AgOpenGPS
         private void tabSummary_Enter(object sender, EventArgs e)
         {
             SectionFeetInchesTotalWidthLabelUpdate();
-            lblSummaryVehicleName.Text = RegistrySettings.vehicleFileName;
             UpdateSummary();
         }
 

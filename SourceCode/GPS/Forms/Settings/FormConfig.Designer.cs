@@ -61,26 +61,7 @@ namespace AgOpenGPS
             this.btnVehicle = new System.Windows.Forms.Button();
             this.tab1 = new System.Windows.Forms.TabControl();
             this.tabSummary = new System.Windows.Forms.TabPage();
-            this.label2 = new System.Windows.Forms.Label();
-            this.labelWidth = new System.Windows.Forms.Label();
-            this.labelOverlap = new System.Windows.Forms.Label();
-            this.lblOverlap = new System.Windows.Forms.Label();
-            this.labelLookAhead = new System.Windows.Forms.Label();
-            this.lblLookahead = new System.Windows.Forms.Label();
-            this.labelOffset = new System.Windows.Forms.Label();
-            this.lblToolOffset = new System.Windows.Forms.Label();
-            this.labelWheelBase = new System.Windows.Forms.Label();
-            this.labelTramW = new System.Windows.Forms.Label();
-            this.lblUnits = new System.Windows.Forms.Label();
-            this.lblTramWidth = new System.Windows.Forms.Label();
-            this.lblNudgeDistance = new System.Windows.Forms.Label();
-            this.lblSumNumSections = new System.Windows.Forms.Label();
-            this.labelUnits = new System.Windows.Forms.Label();
-            this.labelNudge = new System.Windows.Forms.Label();
-            this.labelSections = new System.Windows.Forms.Label();
-            this.lblSummaryVehicleName = new System.Windows.Forms.Label();
-            this.lblSummaryWidth = new System.Windows.Forms.Label();
-            this.lblSumWheelbase = new System.Windows.Forms.Label();
+            this.configSummaryControl = new AgOpenGPS.Forms.Config.ConfigSummaryControl();
             this.tabVConfig = new System.Windows.Forms.TabPage();
             this.lblOpacityPercent = new System.Windows.Forms.Label();
             this.labelVehicleGroupBox = new System.Windows.Forms.GroupBox();
@@ -1234,26 +1215,7 @@ namespace AgOpenGPS
             // tabSummary
             // 
             this.tabSummary.BackColor = System.Drawing.Color.Gainsboro;
-            this.tabSummary.Controls.Add(this.label2);
-            this.tabSummary.Controls.Add(this.labelWidth);
-            this.tabSummary.Controls.Add(this.labelOverlap);
-            this.tabSummary.Controls.Add(this.lblOverlap);
-            this.tabSummary.Controls.Add(this.labelLookAhead);
-            this.tabSummary.Controls.Add(this.lblLookahead);
-            this.tabSummary.Controls.Add(this.labelOffset);
-            this.tabSummary.Controls.Add(this.lblToolOffset);
-            this.tabSummary.Controls.Add(this.labelWheelBase);
-            this.tabSummary.Controls.Add(this.labelTramW);
-            this.tabSummary.Controls.Add(this.lblUnits);
-            this.tabSummary.Controls.Add(this.lblTramWidth);
-            this.tabSummary.Controls.Add(this.lblNudgeDistance);
-            this.tabSummary.Controls.Add(this.lblSumNumSections);
-            this.tabSummary.Controls.Add(this.labelUnits);
-            this.tabSummary.Controls.Add(this.labelNudge);
-            this.tabSummary.Controls.Add(this.labelSections);
-            this.tabSummary.Controls.Add(this.lblSummaryVehicleName);
-            this.tabSummary.Controls.Add(this.lblSummaryWidth);
-            this.tabSummary.Controls.Add(this.lblSumWheelbase);
+            this.tabSummary.Controls.Add(this.configSummaryControl);
             this.tabSummary.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.tabSummary.Location = new System.Drawing.Point(4, 44);
             this.tabSummary.Name = "tabSummary";
@@ -1264,285 +1226,19 @@ namespace AgOpenGPS
             this.tabSummary.Enter += new System.EventHandler(this.tabSummary_Enter);
             this.tabSummary.Leave += new System.EventHandler(this.tabSummary_Leave);
             // 
-            // label2
+            // configSummaryControl
             // 
-            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.configSummaryControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.label2.BackColor = System.Drawing.Color.CornflowerBlue;
-            this.label2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.label2.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(184, 467);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(497, 84);
-            this.label2.TabIndex = 520;
-            this.label2.Text = "The vehicle settings are now called \"profiles\" and\r\ncan be created/loaded in the " +
-    "main menu (top left).";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // labelWidth
-            // 
-            this.labelWidth.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.labelWidth.BackColor = System.Drawing.Color.Transparent;
-            this.labelWidth.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelWidth.ForeColor = System.Drawing.Color.DimGray;
-            this.labelWidth.Location = new System.Drawing.Point(304, 163);
-            this.labelWidth.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
-            this.labelWidth.Name = "labelWidth";
-            this.labelWidth.Size = new System.Drawing.Size(111, 23);
-            this.labelWidth.TabIndex = 518;
-            this.labelWidth.Text = "Width:";
-            this.labelWidth.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // labelOverlap
-            // 
-            this.labelOverlap.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.labelOverlap.BackColor = System.Drawing.Color.Transparent;
-            this.labelOverlap.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelOverlap.ForeColor = System.Drawing.Color.DimGray;
-            this.labelOverlap.Location = new System.Drawing.Point(295, 265);
-            this.labelOverlap.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
-            this.labelOverlap.Name = "labelOverlap";
-            this.labelOverlap.Size = new System.Drawing.Size(120, 32);
-            this.labelOverlap.TabIndex = 517;
-            this.labelOverlap.Text = "Overlap:";
-            this.labelOverlap.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // lblOverlap
-            // 
-            this.lblOverlap.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.lblOverlap.BackColor = System.Drawing.Color.Transparent;
-            this.lblOverlap.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblOverlap.ForeColor = System.Drawing.Color.Black;
-            this.lblOverlap.Location = new System.Drawing.Point(432, 271);
-            this.lblOverlap.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
-            this.lblOverlap.Name = "lblOverlap";
-            this.lblOverlap.Size = new System.Drawing.Size(91, 23);
-            this.lblOverlap.TabIndex = 516;
-            this.lblOverlap.Text = "3 cm";
-            this.lblOverlap.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // labelLookAhead
-            // 
-            this.labelLookAhead.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.labelLookAhead.BackColor = System.Drawing.Color.Transparent;
-            this.labelLookAhead.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelLookAhead.ForeColor = System.Drawing.Color.DimGray;
-            this.labelLookAhead.Location = new System.Drawing.Point(295, 305);
-            this.labelLookAhead.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
-            this.labelLookAhead.Name = "labelLookAhead";
-            this.labelLookAhead.Size = new System.Drawing.Size(120, 32);
-            this.labelLookAhead.TabIndex = 515;
-            this.labelLookAhead.Text = "Lookahead:";
-            this.labelLookAhead.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // lblLookahead
-            // 
-            this.lblLookahead.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.lblLookahead.BackColor = System.Drawing.Color.Transparent;
-            this.lblLookahead.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblLookahead.ForeColor = System.Drawing.Color.Black;
-            this.lblLookahead.Location = new System.Drawing.Point(432, 310);
-            this.lblLookahead.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
-            this.lblLookahead.Name = "lblLookahead";
-            this.lblLookahead.Size = new System.Drawing.Size(91, 23);
-            this.lblLookahead.TabIndex = 514;
-            this.lblLookahead.Text = "1 sec";
-            this.lblLookahead.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // labelOffset
-            // 
-            this.labelOffset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.labelOffset.BackColor = System.Drawing.Color.Transparent;
-            this.labelOffset.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelOffset.ForeColor = System.Drawing.Color.DimGray;
-            this.labelOffset.Location = new System.Drawing.Point(295, 227);
-            this.labelOffset.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
-            this.labelOffset.Name = "labelOffset";
-            this.labelOffset.Size = new System.Drawing.Size(120, 32);
-            this.labelOffset.TabIndex = 513;
-            this.labelOffset.Text = "Offset:";
-            this.labelOffset.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // lblToolOffset
-            // 
-            this.lblToolOffset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.lblToolOffset.BackColor = System.Drawing.Color.Transparent;
-            this.lblToolOffset.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblToolOffset.ForeColor = System.Drawing.Color.Black;
-            this.lblToolOffset.Location = new System.Drawing.Point(432, 233);
-            this.lblToolOffset.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
-            this.lblToolOffset.Name = "lblToolOffset";
-            this.lblToolOffset.Size = new System.Drawing.Size(91, 23);
-            this.lblToolOffset.TabIndex = 512;
-            this.lblToolOffset.Text = "5";
-            this.lblToolOffset.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // labelWheelBase
-            // 
-            this.labelWheelBase.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.labelWheelBase.BackColor = System.Drawing.Color.Transparent;
-            this.labelWheelBase.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelWheelBase.ForeColor = System.Drawing.Color.DimGray;
-            this.labelWheelBase.Location = new System.Drawing.Point(295, 414);
-            this.labelWheelBase.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
-            this.labelWheelBase.Name = "labelWheelBase";
-            this.labelWheelBase.Size = new System.Drawing.Size(120, 32);
-            this.labelWheelBase.TabIndex = 511;
-            this.labelWheelBase.Text = "Wheelbase:";
-            this.labelWheelBase.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // labelTramW
-            // 
-            this.labelTramW.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.labelTramW.BackColor = System.Drawing.Color.Transparent;
-            this.labelTramW.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelTramW.ForeColor = System.Drawing.Color.DimGray;
-            this.labelTramW.Location = new System.Drawing.Point(295, 376);
-            this.labelTramW.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
-            this.labelTramW.Name = "labelTramW";
-            this.labelTramW.Size = new System.Drawing.Size(120, 32);
-            this.labelTramW.TabIndex = 511;
-            this.labelTramW.Text = "Tram Width:";
-            this.labelTramW.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // lblUnits
-            // 
-            this.lblUnits.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.lblUnits.BackColor = System.Drawing.Color.Transparent;
-            this.lblUnits.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblUnits.ForeColor = System.Drawing.Color.Black;
-            this.lblUnits.Location = new System.Drawing.Point(432, 119);
-            this.lblUnits.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
-            this.lblUnits.Name = "lblUnits";
-            this.lblUnits.Size = new System.Drawing.Size(91, 23);
-            this.lblUnits.TabIndex = 510;
-            this.lblUnits.Text = "Metric";
-            this.lblUnits.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // lblTramWidth
-            // 
-            this.lblTramWidth.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.lblTramWidth.BackColor = System.Drawing.Color.Transparent;
-            this.lblTramWidth.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTramWidth.ForeColor = System.Drawing.Color.Black;
-            this.lblTramWidth.Location = new System.Drawing.Point(432, 382);
-            this.lblTramWidth.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
-            this.lblTramWidth.Name = "lblTramWidth";
-            this.lblTramWidth.Size = new System.Drawing.Size(99, 23);
-            this.lblTramWidth.TabIndex = 509;
-            this.lblTramWidth.Text = "2400 cm";
-            this.lblTramWidth.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // lblNudgeDistance
-            // 
-            this.lblNudgeDistance.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.lblNudgeDistance.BackColor = System.Drawing.Color.Transparent;
-            this.lblNudgeDistance.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblNudgeDistance.ForeColor = System.Drawing.Color.Black;
-            this.lblNudgeDistance.Location = new System.Drawing.Point(432, 346);
-            this.lblNudgeDistance.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
-            this.lblNudgeDistance.Name = "lblNudgeDistance";
-            this.lblNudgeDistance.Size = new System.Drawing.Size(91, 23);
-            this.lblNudgeDistance.TabIndex = 509;
-            this.lblNudgeDistance.Text = "5";
-            this.lblNudgeDistance.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // lblSumNumSections
-            // 
-            this.lblSumNumSections.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.lblSumNumSections.BackColor = System.Drawing.Color.Transparent;
-            this.lblSumNumSections.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSumNumSections.ForeColor = System.Drawing.Color.Black;
-            this.lblSumNumSections.Location = new System.Drawing.Point(432, 197);
-            this.lblSumNumSections.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
-            this.lblSumNumSections.Name = "lblSumNumSections";
-            this.lblSumNumSections.Size = new System.Drawing.Size(91, 23);
-            this.lblSumNumSections.TabIndex = 508;
-            this.lblSumNumSections.Text = "5";
-            this.lblSumNumSections.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // labelUnits
-            // 
-            this.labelUnits.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.labelUnits.BackColor = System.Drawing.Color.Transparent;
-            this.labelUnits.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelUnits.ForeColor = System.Drawing.Color.DimGray;
-            this.labelUnits.Location = new System.Drawing.Point(304, 118);
-            this.labelUnits.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
-            this.labelUnits.Name = "labelUnits";
-            this.labelUnits.Size = new System.Drawing.Size(114, 23);
-            this.labelUnits.TabIndex = 507;
-            this.labelUnits.Text = "Units:";
-            this.labelUnits.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // labelNudge
-            // 
-            this.labelNudge.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.labelNudge.BackColor = System.Drawing.Color.Transparent;
-            this.labelNudge.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelNudge.ForeColor = System.Drawing.Color.DimGray;
-            this.labelNudge.Location = new System.Drawing.Point(304, 345);
-            this.labelNudge.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
-            this.labelNudge.Name = "labelNudge";
-            this.labelNudge.Size = new System.Drawing.Size(111, 23);
-            this.labelNudge.TabIndex = 506;
-            this.labelNudge.Text = "Line Shift:";
-            this.labelNudge.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // labelSections
-            // 
-            this.labelSections.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.labelSections.BackColor = System.Drawing.Color.Transparent;
-            this.labelSections.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelSections.ForeColor = System.Drawing.Color.DimGray;
-            this.labelSections.Location = new System.Drawing.Point(304, 196);
-            this.labelSections.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
-            this.labelSections.Name = "labelSections";
-            this.labelSections.Size = new System.Drawing.Size(111, 23);
-            this.labelSections.TabIndex = 505;
-            this.labelSections.Text = "Sections:";
-            this.labelSections.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // lblSummaryVehicleName
-            // 
-            this.lblSummaryVehicleName.BackColor = System.Drawing.Color.Transparent;
-            this.lblSummaryVehicleName.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSummaryVehicleName.ForeColor = System.Drawing.Color.Black;
-            this.lblSummaryVehicleName.Location = new System.Drawing.Point(174, 36);
-            this.lblSummaryVehicleName.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
-            this.lblSummaryVehicleName.Name = "lblSummaryVehicleName";
-            this.lblSummaryVehicleName.Size = new System.Drawing.Size(507, 23);
-            this.lblSummaryVehicleName.TabIndex = 503;
-            this.lblSummaryVehicleName.Text = "Vehicle Name";
-            this.lblSummaryVehicleName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lblSummaryWidth
-            // 
-            this.lblSummaryWidth.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.lblSummaryWidth.BackColor = System.Drawing.Color.Transparent;
-            this.lblSummaryWidth.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSummaryWidth.ForeColor = System.Drawing.Color.Black;
-            this.lblSummaryWidth.Location = new System.Drawing.Point(432, 164);
-            this.lblSummaryWidth.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
-            this.lblSummaryWidth.Name = "lblSummaryWidth";
-            this.lblSummaryWidth.Size = new System.Drawing.Size(99, 23);
-            this.lblSummaryWidth.TabIndex = 519;
-            this.lblSummaryWidth.Text = "7.2 m";
-            this.lblSummaryWidth.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // lblSumWheelbase
-            // 
-            this.lblSumWheelbase.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.lblSumWheelbase.BackColor = System.Drawing.Color.Transparent;
-            this.lblSumWheelbase.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSumWheelbase.ForeColor = System.Drawing.Color.Black;
-            this.lblSumWheelbase.Location = new System.Drawing.Point(432, 420);
-            this.lblSumWheelbase.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
-            this.lblSumWheelbase.Name = "lblSumWheelbase";
-            this.lblSumWheelbase.Size = new System.Drawing.Size(106, 23);
-            this.lblSumWheelbase.TabIndex = 509;
-            this.lblSumWheelbase.Text = "2.4m";
-            this.lblSumWheelbase.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.configSummaryControl.BackColor = System.Drawing.Color.Gainsboro;
+            this.configSummaryControl.Font = new System.Drawing.Font("Tahoma", 9.75F);
+            this.configSummaryControl.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.configSummaryControl.Location = new System.Drawing.Point(0, 0);
+            this.configSummaryControl.Name = "configSummaryControl";
+            this.configSummaryControl.Padding = new System.Windows.Forms.Padding(3);
+            this.configSummaryControl.Size = new System.Drawing.Size(859, 583);
+            this.configSummaryControl.TabIndex = 521;
             // 
             // tabVConfig
             // 
@@ -10175,7 +9871,6 @@ namespace AgOpenGPS
         private System.Windows.Forms.Label lblHeadingDistance;
         private System.Windows.Forms.Label labelOverride;
         private System.Windows.Forms.CheckBox chkBoxOverrideTramControlPos;
-        private System.Windows.Forms.Label lblSummaryVehicleName;
         private System.Windows.Forms.RadioButton rbtnBrandAHolder;
         private System.Windows.Forms.TabPage tabDisplay;
         private System.Windows.Forms.Label labelSvenArrowOnOff;
@@ -10200,24 +9895,6 @@ namespace AgOpenGPS
         private System.Windows.Forms.Label labelGuideLinesOnOff;
         private System.Windows.Forms.Label labelGridOnOff;
         private System.Windows.Forms.Button btnDisplay;
-        private System.Windows.Forms.Label labelSections;
-        private System.Windows.Forms.Label labelUnits;
-        private System.Windows.Forms.Label labelNudge;
-        private System.Windows.Forms.Label lblUnits;
-        private System.Windows.Forms.Label lblNudgeDistance;
-        private System.Windows.Forms.Label lblSumNumSections;
-        private System.Windows.Forms.Label lblTramWidth;
-        private System.Windows.Forms.Label labelTramW;
-        private System.Windows.Forms.Label labelOffset;
-        private System.Windows.Forms.Label lblToolOffset;
-        private System.Windows.Forms.Label labelLookAhead;
-        private System.Windows.Forms.Label lblLookahead;
-        private System.Windows.Forms.Label labelOverlap;
-        private System.Windows.Forms.Label lblOverlap;
-        private System.Windows.Forms.Label lblSummaryWidth;
-        private System.Windows.Forms.Label labelWidth;
-        private System.Windows.Forms.Label labelWheelBase;
-        private System.Windows.Forms.Label lblSumWheelbase;
         private System.Windows.Forms.Button btnSubToolOffset;
         private System.Windows.Forms.TabPage tabToolOffset;
         private System.Windows.Forms.Label labelToolLeft;
@@ -10308,8 +9985,8 @@ namespace AgOpenGPS
         private System.Windows.Forms.Label labelUser1;
         private System.Windows.Forms.Label labelABSmoothOnOff;
         private System.Windows.Forms.PictureBox HitchLengthBlindBox;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label lblHeadlandDist;
         private System.Windows.Forms.CheckBox chkboxHeadlandDist;
+        private Forms.Config.ConfigSummaryControl configSummaryControl;
     }
 }
