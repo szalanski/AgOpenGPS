@@ -527,6 +527,8 @@ namespace AgOpenGPS
 
             isDirectionMarkers = Settings.Default.setTool_isDirectionMarkers;
 
+            isHeadlandDistanceOn = Settings.Default.isHeadlandDistanceOn;
+
             panelNavigation.Location = new System.Drawing.Point(90, 100);
             panelDrag.Location = new System.Drawing.Point(87, 268);
 

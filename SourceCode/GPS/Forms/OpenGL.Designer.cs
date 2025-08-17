@@ -2500,15 +2500,15 @@ namespace AgOpenGPS
         private void DrawHeadlandDistance()
         {
             // --- Fixed anchor (pixels) ---
-            const int anchorCenterX = 300;   // horizontal center of the icon+text block
-            const int anchorTopY = 60;    // top Y of the icon row
+            const int anchorCenterX = -20;   // horizontal center of the icon+text block
+            const int anchorTopY = 160;    // top Y of the icon row
 
             // Text size (kept local here)
-            const double textSize = 1.5;
+            const double textSize = 1.2;
 
             // Build the label text
             string label = bnd.HeadlandDistance.HasValue
-                ? bnd.HeadlandDistance.Value.ToString("0.0") + " m"
+                ? bnd.HeadlandDistance.Value.ToString("0.0") + " M"
                 : "--";
 
             // Rough text width estimate (scaled with text size for better centering)
