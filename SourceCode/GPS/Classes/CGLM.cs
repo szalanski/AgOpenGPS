@@ -417,7 +417,5 @@ namespace AgOpenGPS
 
             return false;
         }
-
-
     }
 }
