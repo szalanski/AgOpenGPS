@@ -1974,99 +1974,115 @@ namespace AgOpenGPS
             catch { }
         }
 
+        // Helper: draw a single arrow as a triangle, with optional halo ---
+        private void DrawArrowTriangle(float cx, float cy, float size, bool isRight, bool isHalo)
+        {
+            float s = size;
+
+            GL.Begin(PrimitiveType.Triangles);
+            if (isRight)
+            {
+                // '>' : base on left, tip on right
+                // base-top, base-bottom, tip
+                GL.Vertex2(cx - s, cy - s);
+                GL.Vertex2(cx - s, cy + s);
+                GL.Vertex2(cx + s, cy);
+            }
+            else
+            {
+                // '<' : base on right, tip on left
+                GL.Vertex2(cx + s, cy - s);
+                GL.Vertex2(cx + s, cy + s);
+                GL.Vertex2(cx - s, cy);
+            }
+            GL.End();
+        }
+
         public double avgPivDistance, lightbarDistance, longAvgPivDistance;
 
         private void DrawLightBar(double width, double height, double offlineDistance)
         {
-            // Keep original visual: same point sizes, colors, spacing (32), counts, y-position.
-            // Only push the left/right rails outward to make room for the text background used by DrawLightBarText.
+            const int spacing = 32;
+            const int dotsPerSide = 12;
+            const double down = 25.0;
 
-            const int spacing = 32;          // original dot spacing in pixels
-            const int dotsPerSide = 8;       // original count
-            const double down = 25.0;        // original y
+            // Arrow sizes
+            const float arrowSizeFill = 10f;
+            const float arrowSizeHalo = 16f;
+
             GL.LineWidth(1);
 
-            // Compute how wide the text background is (same as SteerBar/LightBarText)
+            // Compute center gap so text background has space
             int wide = (int)(width / 18.0);
             if (wide < 64) wide = 64;
+            int margin = 20; // margin for spacing in centre
+            int desiredInner = wide + margin;
+            int currentInner = 2 * spacing;
+            int shift = Math.Max(0, desiredInner - currentInner);
 
-            // We want the first inner dot (i=±2 → 2*32 = 64 px from center in original)
-            // to sit OUTSIDE the background by a small margin.
-            // So compute how far to shift both rails outward.
-            int margin = 20; // tweak if you want a bigger/smaller gap from the background
-            int desiredInner = wide + margin;   // inner dot target distance from center
-            int currentInner = 2 * spacing;     // original inner distance (64 px)
-            int shift = Math.Max(0, desiredInner - currentInner); // extra outward shift per side
-
-            // Representation of how far from AB line
+            // Represent how far from AB line
             int dotDistance = (int)(offlineDistance);
             int limit = (int)lightbarCmPerPixel * dotsPerSide;
             if (dotDistance < -limit) dotDistance = -limit;
             if (dotDistance > limit) dotDistance = limit;
 
-            // --- Background rails (black dots), exactly as before but shifted outward ---
+            // Background rail (small dark points)
             GL.PointSize(8.0f);
             GL.Color3(0.00f, 0.0f, 0.0f);
             GL.Begin(PrimitiveType.Points);
-            for (int i = -dotsPerSide; i < -1; i++) GL.Vertex2((i * spacing) - shift, down); // left rail shifted left
-            for (int i = 2; i < dotsPerSide + 1; i++) GL.Vertex2((i * spacing) + shift, down); // right rail shifted right
+            for (int i = -dotsPerSide; i < -1; i++) GL.Vertex2((i * spacing) - shift, down);         // left rail
+            for (int i = 2; i < dotsPerSide + 1; i++) GL.Vertex2((i * spacing) + shift, down);       // right rail
             GL.End();
 
-            GL.PointSize(4.0f);
+            // Bring lit indicators slightly “above”
             GL.Translate(0, 0, 0.01);
 
-            // --- Rail colors (left red, right green) with same shift ---
-            GL.Begin(PrimitiveType.Points);
-
-            // left (red)
-            GL.Color3(0.750f, 0.0f, 0.0f);
-            for (int i = -dotsPerSide; i < -1; i++) GL.Vertex2((i * spacing) - shift, down);
-
-            // right (green)
-            GL.Color3(0.0f, 0.750f, 0.0f);
-            for (int i = 2; i < dotsPerSide + 1; i++) GL.Vertex2((i * spacing) + shift, down);
-            GL.End();
-
-            // --- Lit dots logic unchanged, just apply the same shift ---
-            if (offlineDistance < 0.0) // right/green side
+            // Lit indicators as triangles (with halo)
+            if (offlineDistance < 0.0)
             {
+                // Right/green side (negative = right correction)
                 int lit = (-dotDistance / lightbarCmPerPixel) + 1;
+                if (lit < 0) lit = 0;
 
-                // black halo
-                GL.PointSize(24.0f);
+                // HALO first
                 GL.Color3(0.0f, 0.0f, 0.0f);
-                GL.Begin(PrimitiveType.Points);
-                for (int i = 2; i < lit + 1; i++) GL.Vertex2((i * spacing) + shift, down);
-                GL.End();
+                for (int i = 2; i < lit + 1; i++)
+                {
+                    float cx = (float)((i * spacing) + shift);
+                    DrawArrowTriangle(cx, (float)down, arrowSizeHalo, true, true);
+                }
 
-                // bright green
-                GL.PointSize(16.0f);
+                // FILL
                 GL.Color3(0.0f, 0.980f, 0.0f);
-                GL.Begin(PrimitiveType.Points);
-                for (int i = 1; i < lit; i++) GL.Vertex2((i * spacing + spacing) + shift, down);
-                GL.End();
+                for (int i = 1; i < lit; i++)
+                {
+                    float cx = (float)((i * spacing + spacing) + shift);
+                    DrawArrowTriangle(cx, (float)down, arrowSizeFill, true, false);
+                }
             }
-            else // left/red side
+            else
             {
+                // Left/red side (positive = left correction)
                 int lit = (dotDistance / lightbarCmPerPixel) + 1;
+                if (lit < 0) lit = 0;
 
-                // black halo
-                GL.PointSize(24.0f);
+                // HALO first
                 GL.Color3(0.0f, 0.0f, 0.0f);
-                GL.Begin(PrimitiveType.Points);
-                for (int i = 2; i < lit + 1; i++) GL.Vertex2((i * -spacing) - shift, down);
-                GL.End();
+                for (int i = 2; i < lit + 1; i++)
+                {
+                    float cx = (float)((i * -spacing) - shift);
+                    DrawArrowTriangle(cx, (float)down, arrowSizeHalo, false, true);
+                }
 
-                // orange-red
-                GL.PointSize(16.0f);
+                // FILL
                 GL.Color3(0.980f, 0.30f, 0.0f);
-                GL.Begin(PrimitiveType.Points);
-                for (int i = 1; i < lit; i++) GL.Vertex2((i * -spacing - spacing) - shift, down);
-                GL.End();
+                for (int i = 1; i < lit; i++)
+                {
+                    float cx = (float)((i * -spacing - spacing) - shift);
+                    DrawArrowTriangle(cx, (float)down, arrowSizeFill, false, false);
+                }
             }
         }
-
-
 
         private void DrawLightBarText()
         {
@@ -2078,7 +2094,7 @@ namespace AgOpenGPS
                 avgPivDistance = avgPivDistance * 0.5 + lightbarDistance * 0.5;
 
                 // Low-pass of absolute error in mm (for the small secondary text)
-                longAvgPivDistance = longAvgPivDistance * 0.97 + Math.Abs(avgPivDistance) * 0.03;
+                longAvgPivDistance = longAvgPivDistance * 0.98 + Math.Abs(avgPivDistance) * 0.02;
                 if (longAvgPivDistance > 150) longAvgPivDistance = 150; // cap AFTER filter to keep smoothing effective
 
                 // Convert to display units: cm (metric) or inch (imperial)
@@ -2137,7 +2153,7 @@ namespace AgOpenGPS
                     string small = (Math.Abs(longAvgPivDistance * (isMetric ? 0.1 : 0.03937))).ToString("N1");
                     GL.Color3(0.950f, 0.952f, 0.3f);
                     int centerSmall = -(int)((small.Length * 0.5) * 16);
-                    font.DrawText(centerSmall, (int)(45 * (1.0 + 0.2 * textSize)), small, 1.0);
+                    font.DrawText(centerSmall, (int)(45 * (1.0 + 0.2 * textSize)) + 10, small, 1.0);
                 }
 
                 // Optional: same top line indicator as SteerBar when in dead-zone
