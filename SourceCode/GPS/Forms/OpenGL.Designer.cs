@@ -1975,15 +1975,15 @@ namespace AgOpenGPS
         }
 
         // Helper: draw a single arrow as a triangle, with optional halo ---
-        private void DrawArrowTriangle(float cx, float cy, float size, bool isRight, bool isHalo)
-        {
-            float s = size;
 
+        public double avgPivDistance, lightbarDistance, longAvgPivDistance;
+        private void DrawArrowTriangle(double cx, double cy, double size, bool isRight)
+        {
+            double s = size;
             GL.Begin(PrimitiveType.Triangles);
             if (isRight)
             {
                 // '>' : base on left, tip on right
-                // base-top, base-bottom, tip
                 GL.Vertex2(cx - s, cy - s);
                 GL.Vertex2(cx - s, cy + s);
                 GL.Vertex2(cx + s, cy);
@@ -1998,66 +1998,63 @@ namespace AgOpenGPS
             GL.End();
         }
 
-        public double avgPivDistance, lightbarDistance, longAvgPivDistance;
-
         private void DrawLightBar(double width, double height, double offlineDistance)
         {
             const int spacing = 32;
             const int dotsPerSide = 12;
             const double down = 25.0;
 
-            // Arrow sizes
-            const float arrowSizeFill = 10f;
-            const float arrowSizeHalo = 16f;
+            const double arrowSizeFill = 10.0;
+            const double arrowSizeHalo = 16.0;
 
             GL.LineWidth(1);
 
             // Compute center gap so text background has space
-            int wide = (int)(width / 18.0);
+            double wide = width / 18.0;
             if (wide < 64) wide = 64;
-            int margin = 20; // margin for spacing in centre
-            int desiredInner = wide + margin;
-            int currentInner = 2 * spacing;
-            int shift = Math.Max(0, desiredInner - currentInner);
+            double margin = 20.0; // extra spacing in the center
+            double desiredInner = wide + margin;
+            double currentInner = 2 * spacing;
+            double shift = Math.Max(0.0, desiredInner - currentInner);
 
-            // Represent how far from AB line
-            int dotDistance = (int)(offlineDistance);
-            int limit = (int)lightbarCmPerPixel * dotsPerSide;
+            // Clamp offline distance
+            int dotDistance = (int)offlineDistance;
+            int limit = (int)(lightbarCmPerPixel * dotsPerSide);
             if (dotDistance < -limit) dotDistance = -limit;
             if (dotDistance > limit) dotDistance = limit;
 
             // Background rail (small dark points)
             GL.PointSize(8.0f);
-            GL.Color3(0.00f, 0.0f, 0.0f);
+            GL.Color3(0.00, 0.0, 0.0);
             GL.Begin(PrimitiveType.Points);
-            for (int i = -dotsPerSide; i < -1; i++) GL.Vertex2((i * spacing) - shift, down);         // left rail
-            for (int i = 2; i < dotsPerSide + 1; i++) GL.Vertex2((i * spacing) + shift, down);       // right rail
+            for (int i = -dotsPerSide; i < -1; i++) GL.Vertex2((i * spacing) - shift, down);   // left rail
+            for (int i = 2; i < dotsPerSide + 1; i++) GL.Vertex2((i * spacing) + shift, down); // right rail
             GL.End();
 
-            // Bring lit indicators slightly “above”
+            GL.PushMatrix();
             GL.Translate(0, 0, 0.01);
 
-            // Lit indicators as triangles (with halo)
             if (offlineDistance < 0.0)
             {
                 // Right/green side (negative = right correction)
                 int lit = (-dotDistance / lightbarCmPerPixel) + 1;
                 if (lit < 0) lit = 0;
+                lit = Math.Min(lit, dotsPerSide + 1);
 
                 // HALO first
                 GL.Color3(0.0f, 0.0f, 0.0f);
                 for (int i = 2; i < lit + 1; i++)
                 {
-                    float cx = (float)((i * spacing) + shift);
-                    DrawArrowTriangle(cx, (float)down, arrowSizeHalo, true, true);
+                    double cx = (i * spacing) + shift;
+                    DrawArrowTriangle(cx, down, arrowSizeHalo, true);
                 }
 
                 // FILL
                 GL.Color3(0.0f, 0.980f, 0.0f);
                 for (int i = 1; i < lit; i++)
                 {
-                    float cx = (float)((i * spacing + spacing) + shift);
-                    DrawArrowTriangle(cx, (float)down, arrowSizeFill, true, false);
+                    double cx = (i * spacing + spacing) + shift;
+                    DrawArrowTriangle(cx, down, arrowSizeFill, true);
                 }
             }
             else
@@ -2065,24 +2062,28 @@ namespace AgOpenGPS
                 // Left/red side (positive = left correction)
                 int lit = (dotDistance / lightbarCmPerPixel) + 1;
                 if (lit < 0) lit = 0;
+                lit = Math.Min(lit, dotsPerSide + 1);
 
                 // HALO first
                 GL.Color3(0.0f, 0.0f, 0.0f);
                 for (int i = 2; i < lit + 1; i++)
                 {
-                    float cx = (float)((i * -spacing) - shift);
-                    DrawArrowTriangle(cx, (float)down, arrowSizeHalo, false, true);
+                    double cx = (i * -spacing) - shift;
+                    DrawArrowTriangle(cx, down, arrowSizeHalo, false);
                 }
 
                 // FILL
                 GL.Color3(0.980f, 0.30f, 0.0f);
                 for (int i = 1; i < lit; i++)
                 {
-                    float cx = (float)((i * -spacing - spacing) - shift);
-                    DrawArrowTriangle(cx, (float)down, arrowSizeFill, false, false);
+                    double cx = (i * -spacing - spacing) - shift;
+                    DrawArrowTriangle(cx, down, arrowSizeFill, false);
                 }
             }
+
+            GL.PopMatrix();
         }
+
 
         private void DrawLightBarText()
         {
