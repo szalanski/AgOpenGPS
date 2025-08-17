@@ -2498,10 +2498,8 @@ namespace AgOpenGPS
 
         private void DrawHeadlandDistance()
         {
-            double y = oglMain.Height / 6.0 - 30;
-
-            string label = bnd.HeadlandDebugDistance.HasValue
-                ? bnd.HeadlandDebugDistance.Value.ToString("0.0") + " m"
+            string label = bnd.HeadlandDistance.HasValue
+                ? bnd.HeadlandDistance.Value.ToString("0.0") + " m"
                 : "--";
 
             double textWidth = label.Length * 6.5;
@@ -2509,7 +2507,10 @@ namespace AgOpenGPS
             double iconHeight = 42.0;
             double spacing = 8.0;
             double totalWidth = iconWidth + spacing + textWidth;
-            double xStart = -totalWidth / 2.0;
+            double xStart = oglMain.Width / 4.5 - totalWidth / 2.0;
+            double y = oglMain.Height / 9.0 - 50; // dichter bij bovenrand
+
+
 
             // ➤ 1. Icoon tekenen
             Texture2D iconTexture = UseLightIcon()
@@ -2525,7 +2526,7 @@ namespace AgOpenGPS
             // ➤ 2. Tekst tekenen
             double textX = xStart + iconWidth + spacing;
 
-            if (bnd.HeadlandDebugDistance.HasValue && bnd.HeadlandDebugDistance.Value < 3.0)
+            if (bnd.HeadlandDistance.HasValue && bnd.HeadlandDistance.Value < 3.0)
                 GL.Color3(1.0f, 0.1f, 0.1f); // Rood bij kritieke afstand
             else
                 GL.Color3(1f, 0.3f, 0f);     // Oranje

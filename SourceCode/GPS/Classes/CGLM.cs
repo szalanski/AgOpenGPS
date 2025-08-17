@@ -364,33 +364,12 @@ namespace AgOpenGPS
             if (diff > Math.PI) diff = twoPI - diff;
             return diff;
         }
-        // Returns the shortest distance from a point to the edge of a polygon
-        public static double GetMinDistanceToPolygon(vec2 pt, List<vec3> polygon)
-        {
-            double minDist = double.MaxValue;
 
-            for (int i = 0; i < polygon.Count; i++)
-            {
-                vec2 p1 = polygon[i].ToVec2();
-                vec2 p2 = polygon[(i + 1) % polygon.Count].ToVec2(); // wraparound
-                double dist = DistancePointToSegment(pt, p1, p2);
-                if (dist < minDist) minDist = dist;
-            }
-
-            return minDist;
-        }
-        // Returns angle difference between heading and vector pt → target
-        public static double HeadingAngleDiff(vec3 from, vec2 to)
+        public static vec2? RaycastToPolygon(vec3 origin, List<vec3> polygon)
         {
-            double dx = to.easting - from.easting;
-            double dy = to.northing - from.northing;
-            double angleToTarget = Math.Atan2(dx, dy);
-            return AngleDiff(from.heading, angleToTarget);
-        }
+            vec2 from = origin.ToVec2();
+            vec2 dir = new vec2(Math.Sin(origin.heading), Math.Cos(origin.heading));
 
-        // Returns closest point on polygon edge from given point
-        public static vec2? GetClosestPointInFront(vec3 from, List<vec3> polygon, double maxAngleRad = 0.26 /* ≈ 15° */)
-        {
             double minDist = double.MaxValue;
             vec2? closest = null;
 
@@ -399,54 +378,41 @@ namespace AgOpenGPS
                 vec2 p1 = polygon[i].ToVec2();
                 vec2 p2 = polygon[(i + 1) % polygon.Count].ToVec2();
 
-                // Project  
-                vec2 proj = ClosestPointOnSegment(from.ToVec2(), p1, p2);
-                double angle = HeadingAngleDiff(from, proj);
-
-                if (angle < maxAngleRad)
+                if (TryRaySegmentIntersection(from, dir, p1, p2, out vec2 intersection))
                 {
-                    double dist = Distance(from.ToVec2(), proj);
+                    double dist = Distance(from, intersection);
                     if (dist < minDist)
                     {
                         minDist = dist;
-                        closest = proj;
+                        closest = intersection;
                     }
                 }
             }
 
             return closest;
         }
-
-
-        // Returns closest point from pt to segment a-b
-        public static vec2 ClosestPointOnSegment(vec2 pt, vec2 a, vec2 b)
+        public static bool TryRaySegmentIntersection(vec2 rayOrigin, vec2 rayDir, vec2 segA, vec2 segB, out vec2 intersection)
         {
-            double dx = b.easting - a.easting;
-            double dy = b.northing - a.northing;
+            intersection = new vec2();
 
-            if (dx == 0 && dy == 0) return a;
+            double dx = segB.easting - segA.easting;
+            double dy = segB.northing - segA.northing;
 
-            double t = ((pt.easting - a.easting) * dx + (pt.northing - a.northing) * dy) / (dx * dx + dy * dy);
-            t = Math.Max(0, Math.Min(1, t));
+            double det = (-rayDir.easting * dy + dx * rayDir.northing);
+            if (Math.Abs(det) < 1e-8) return false; // parallel
 
-            return new vec2(a.easting + t * dx, a.northing + t * dy);
+            double s = (-dy * (segA.easting - rayOrigin.easting) + dx * (segA.northing - rayOrigin.northing)) / det;
+            double t = (rayDir.easting * (segA.northing - rayOrigin.northing) - rayDir.northing * (segA.easting - rayOrigin.easting)) / det;
+
+            if (s >= 0 && t >= 0 && t <= 1)
+            {
+                intersection = new vec2(rayOrigin.easting + s * rayDir.easting, rayOrigin.northing + s * rayDir.northing);
+                return true;
+            }
+
+            return false;
         }
-        // Calculates the distance from a point to a line segment
-        public static double DistancePointToSegment(vec2 pt, vec2 a, vec2 b)
-        {
-            double dx = b.easting - a.easting;
-            double dy = b.northing - a.northing;
 
-            if (dx == 0 && dy == 0) return Distance(pt, a); // segment is a single point
-
-            double t = ((pt.easting - a.easting) * dx + (pt.northing - a.northing) * dy) / (dx * dx + dy * dy);
-            t = Math.Max(0, Math.Min(1, t));
-
-            double closestX = a.easting + t * dx;
-            double closestY = a.northing + t * dy;
-
-            return Distance(pt, new vec2(closestX, closestY));
-        }
 
     }
 }
