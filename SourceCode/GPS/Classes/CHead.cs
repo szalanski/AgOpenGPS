@@ -105,7 +105,6 @@ namespace AgOpenGPS
                 {
                     if (bndList[i].hdLine.IsPointInPolygon(pt))
                     {
-                        //point is in an inner turn area but inside outer
                         return false;
                     }
                 }
@@ -124,7 +123,6 @@ namespace AgOpenGPS
 
             vec3 vehiclePos = mf.toolPivotPos;
 
-            // Detecteer dichtstbijzijnde polygonsegment in kijkrichting
             vec2? nearest = glm.RaycastToPolygon(vehiclePos, bndList[0].hdLine);
             if (!nearest.HasValue)
             {
@@ -139,19 +137,17 @@ namespace AgOpenGPS
             HeadlandNearestPoint = nearestVal;
             HeadlandDistance = distance;
 
-            // isInside is optioneel voor verdere logica (bv. tekstkleur)
             bool isInside = bndList[0].hdLine.IsPointInPolygon(vehiclePos.ToVec2());
 
-            // Hoekberekening t.b.v. filtering (kan optioneel worden)
             double dx = nearestVal.easting - vehiclePos.easting;
             double dy = nearestVal.northing - vehiclePos.northing;
             double angleToPolygon = Math.Atan2(dx, dy);
             double headingDiff = glm.AngleDiff(vehiclePos.heading, angleToPolygon);
             bool headingOk = headingDiff < glm.toRadians(60); // eventueel verwijderen: zit al in GetClosestPointInFront
 
-            // Waarschuwingslogica
+            // Warning Logic
             bool shouldPlay =
-                (isInside && headingOk && distance < 15.0) ||
+                (isInside && headingOk && distance < 20.0) ||
                 (!isInside && headingOk && distance < 5.0);
 
             if (shouldPlay && mf.isHeadlandDistanceOn)

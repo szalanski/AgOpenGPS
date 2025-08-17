@@ -365,6 +365,11 @@ namespace AgOpenGPS
             return diff;
         }
 
+        /// <summary>
+        /// This method performs a raycast from the origin point in the direction of the heading
+        /// This is used for HeadlandProximity and the distance to the headland
+        /// </summary>
+
         public static vec2? RaycastToPolygon(vec3 origin, List<vec3> polygon)
         {
             vec2 from = origin.ToVec2();
