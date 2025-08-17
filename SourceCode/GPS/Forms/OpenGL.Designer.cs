@@ -1,14 +1,14 @@
-﻿using System;
-using OpenTK;
-using OpenTK.Graphics.OpenGL;
-using System.Windows.Forms;
-using System.Text;
-using System.Drawing;
-using AgLibrary.Logging;
+﻿using AgLibrary.Logging;
 using AgOpenGPS.Core.Drawing;
 using AgOpenGPS.Core.DrawLib;
 using AgOpenGPS.Core.Models;
 using AgOpenGPS.Properties;
+using OpenTK;
+using OpenTK.Graphics.OpenGL;
+using System;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
 
 namespace AgOpenGPS
 {
@@ -558,10 +558,17 @@ namespace AgOpenGPS
                         DrawVersion("Beta Testing v" + Program.SemVer);
                     }
 
+                    if (bnd.isHeadlandOn && isHeadlandDistanceOn)
+                    {
+                        DrawHeadlandDistance();
+                    }
+
+
                     if (pn.age > pn.ageAlarm) DrawAge();
 
                     //at least one track
                     if (guideLineCounter > 0) DrawGuidanceLineText();
+
 
                     //if hardware messages
                     if (isHardwareMessages) DrawHardwareMessageText();
@@ -2520,6 +2527,102 @@ namespace AgOpenGPS
                     lblGuidanceLine.Visible = false;
                 }
             }
+        }
+
+        // Draw the headland distance at a fixed screen position (not scaling with window size)
+        private void DrawHeadlandDistance()
+        {
+            // --- Fixed anchor (pixels) ---
+            const int anchorCenterX = -20;   // horizontal center of the icon+text block
+            const int anchorTopY = 160;    // top Y of the icon row
+
+            // Text size (kept local here)
+            const double textSize = 1.2;
+
+            // Build the label text
+            string label = bnd.HeadlandDistance.HasValue
+                ? bnd.HeadlandDistance.Value.ToString("0.0") + " M"
+                : "--";
+
+            // Rough text width estimate (scaled with text size for better centering)
+            const double charWidth = 6.5;
+            double textWidth = label.Length * charWidth * textSize;
+
+            double iconWidth = 42.0;
+            double iconHeight = 42.0;
+            double spacing = 8.0;
+            double totalWidth = iconWidth + spacing + textWidth;
+
+            // Position: center the whole block around anchorCenterX; Y stays fixed
+            double xStart = anchorCenterX - totalWidth / 2.0;
+            double yTop = anchorTopY;
+
+            // Decide light/dark icon by sampling the actual GL background under the icon
+            bool useLight = UseLightIconBySampling((int)xStart, (int)yTop, (int)iconWidth, (int)iconHeight);
+            Texture2D iconTexture = useLight ? ScreenTextures.HeadlandLight : ScreenTextures.HeadlandDark;
+
+            // Draw icon (centered around its own rect)
+            GL.Color3(1.0f, 1.0f, 1.0f);
+            GL.PushMatrix();
+            GL.Translate(xStart + iconWidth / 2.0, yTop + iconHeight / 2.0, 0);
+            iconTexture.DrawCenteredAroundOrigin(new XyDelta(iconWidth, iconHeight));
+            GL.PopMatrix();
+
+            // Text position next to the icon
+            double textX = xStart + iconWidth + spacing + 10;
+
+            // Color: green if > 20 m, otherwise orange
+            if (bnd.HeadlandDistance.HasValue && bnd.HeadlandDistance.Value > 20.0)
+                GL.Color3(0.0f, 0.9f, 0.0f);
+            else
+                GL.Color3(1.0f, 1.0f, 0.0f);
+
+            // Draw the text slightly below icon top for a nicer baseline
+            font.DrawText((int)textX, (int)(yTop), label, textSize);
+        }
+
+
+        /// <summary>
+        /// Decide whether to use a light icon by sampling a small pixel area under the icon.
+        /// Returns true for dark background (use light icon), false for light background (use dark icon).
+        /// </summary>
+        private bool UseLightIconBySampling(int x, int yTop, int w, int h)
+        {
+            // Sample a tiny 8x8 block around the center of the icon
+            const int sampleSize = 8;
+            int centerX = x + w / 2;
+            int centerY_TopOrigin = yTop + h / 2;
+
+            // OpenGL's ReadPixels origin is bottom-left; convert from top-origin coordinates
+            int readX = Math.Max(0, centerX - sampleSize / 2);
+            int readY = Math.Max(0, oglMain.Height - centerY_TopOrigin - sampleSize / 2);
+            int maxW = Math.Min(sampleSize, oglMain.Width - readX);
+            int maxH = Math.Min(sampleSize, oglMain.Height - readY);
+            if (maxW <= 0 || maxH <= 0) return false; // fallback: assume light background → use dark icon
+
+            // Read pixels (BGRA order when using PixelFormat.Bgra)
+            byte[] buffer = new byte[maxW * maxH * 4];
+            // If you have a System.Drawing.PixelFormat in scope, fully qualify the OpenGL one:
+            // using GLPixelFormat = OpenTK.Graphics.OpenGL.PixelFormat;
+            GL.ReadPixels(readX, readY, maxW, maxH,
+                          OpenTK.Graphics.OpenGL.PixelFormat.Bgra,
+                          PixelType.UnsignedByte, buffer);
+
+            // Compute average luma (BT.601): Y ≈ 0.299R + 0.587G + 0.114B
+            double sum = 0;
+            for (int i = 0; i < buffer.Length; i += 4)
+            {
+                byte b = buffer[i + 0];
+                byte g = buffer[i + 1];
+                byte r = buffer[i + 2];
+                // byte a = buffer[i + 3]; // not needed
+                double y601 = 0.299 * r + 0.587 * g + 0.114 * b;
+                sum += y601;
+            }
+            double avg = sum / (buffer.Length / 4);
+
+            // Threshold around mid-gray; tune if needed (e.g., 140–155 depending on your visuals)
+            return avg < 140.0; // dark background → use light icon
         }
 
         private void DrawHardwareMessageText()

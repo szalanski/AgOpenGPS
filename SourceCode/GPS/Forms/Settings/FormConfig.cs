@@ -395,6 +395,7 @@ namespace AgOpenGPS
             chkDirectionMarkers.Checked = Properties.Settings.Default.setTool_isDirectionMarkers;
             chkSectionLines.Checked = Properties.Settings.Default.setDisplay_isSectionLinesOn;
             chkLineSmooth.Checked = Properties.Settings.Default.setDisplay_isLineSmooth;
+            chkboxHeadlandDist.Checked = Properties.Settings.Default.isHeadlandDistanceOn;
 
             if (mf.isMetric) rbtnDisplayMetric.Checked = true;
             else rbtnDisplayImperial.Checked = true;

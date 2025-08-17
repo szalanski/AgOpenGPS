@@ -55,6 +55,7 @@ namespace AgOpenGPS
         public bool isLogElevation = false, isDirectionMarkers;
         public bool isKeyboardOn = true, isAutoStartAgIO = true, isSvennArrowOn = true;
         public bool isSectionlinesOn = true, isLineSmooth = true;
+        public bool isHeadlandDistanceOn;
 
         public bool isLightBarNotSteerBar = false;
 
@@ -327,6 +328,8 @@ namespace AgOpenGPS
                 //reset the counter
                 oneHalfSecondCounter = 0;
 
+                bnd.CheckHeadlandProximity();
+
                 isFlashOnOff = !isFlashOnOff;
 
                 //the main formgps windows
@@ -523,6 +526,8 @@ namespace AgOpenGPS
             isAutoStartAgIO = Settings.Default.setDisplay_isAutoStartAgIO;
 
             isDirectionMarkers = Settings.Default.setTool_isDirectionMarkers;
+
+            isHeadlandDistanceOn = Settings.Default.isHeadlandDistanceOn;
 
             panelNavigation.Location = new System.Drawing.Point(90, 100);
             panelDrag.Location = new System.Drawing.Point(87, 268);
