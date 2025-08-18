@@ -117,9 +117,6 @@ namespace AgOpenGPS
             labelUnitsBottom.Text = gStr.gsUnit;
             labelToolWidthBottom.Text = gStr.gsWidth;
             //tractorconfig
-            labelVehicleGroupBox.Text = gStr.gsVehiclegroupbox;
-            labelImage.Text = gStr.gsImage;
-            labelOpacity.Text = gStr.gsOpacity;
             labelBoxAttachmentStyle.Text = gStr.gsAttachmentStyle;
             labelTractorUnits.Text = gStr.gsUnit;
             labelHitchLength.Text = gStr.gsHitchLength;
