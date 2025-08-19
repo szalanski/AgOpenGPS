@@ -180,7 +180,7 @@ namespace AgOpenGPS
 
             //3 vehicle types  tractor=0 harvestor=1 Articulated=2
             ColorRgba vehicleColor = new ColorRgba(VehicleConfig.Color, (float)VehicleConfig.Opacity);
-            if (mf.isVehicleImage)
+            if (VehicleConfig.IsImage)
             {
                 if (VehicleConfig.Type == VehicleType.Tractor)
                 {

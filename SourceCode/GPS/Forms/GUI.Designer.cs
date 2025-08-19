@@ -45,8 +45,6 @@ namespace AgOpenGPS
         public Color textColorDay;
         public Color textColorNight;
 
-        public bool isVehicleImage;
-
         //Is it in 2D or 3D, metric or imperial, display lightbar, display grid etc
         public bool isLightbarOn = true, isGridOn, isFullScreen;
         public bool isUTurnAlwaysOn, isSpeedoOn, isSideGuideLines = true;
@@ -533,7 +531,7 @@ namespace AgOpenGPS
             panelDrag.Location = new System.Drawing.Point(87, 268);
 
             vehicle.VehicleConfig.Opacity = ((double)(Properties.Settings.Default.setDisplay_vehicleOpacity) * 0.01);
-            isVehicleImage = Properties.Settings.Default.setDisplay_isVehicleImage;
+            vehicle.VehicleConfig.IsImage = Properties.Settings.Default.setDisplay_isVehicleImage;
 
             string directoryName = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
 
