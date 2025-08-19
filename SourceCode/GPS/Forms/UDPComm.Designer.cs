@@ -465,7 +465,7 @@ namespace AgOpenGPS
 
         #region keystrokes
 
-        private HotkeyMessageFilter _hotkeyFilter;
+        private Helpers.HotkeyMessageFilter _hotkeyFilter;
 
         // Will be used to handle app-wide hotkeys
         public bool HandleAppWideKey(Keys key, Keys mods)
@@ -483,7 +483,7 @@ namespace AgOpenGPS
             // register once
             if (_hotkeyFilter == null)
             {
-                _hotkeyFilter = new HotkeyMessageFilter(this);
+                _hotkeyFilter = new Helpers.HotkeyMessageFilter(this);
                 Application.AddMessageFilter(_hotkeyFilter);
             }
         }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace AgOpenGPS
+namespace AgOpenGPS.Helpers
 {
     public sealed class HotkeyMessageFilter : IMessageFilter, IDisposable
     {
@@ -16,13 +16,13 @@ namespace AgOpenGPS
         {
             if (m.Msg != WM_KEYDOWN && m.Msg != WM_SYSKEYDOWN) return false;
 
-            // Als gebruiker in een tekstbox aan het typen is => niet onderscheppen
+            // if user in typing in textbox, ignore hotkey
             if (IsTypingContext()) return false;
 
             var key = (Keys)m.WParam.ToInt32();
             var mods = Control.ModifierKeys;
 
-            // Laat FormGPS de bestaande mapping afhandelen
+            // Let FormGPS do the handling
             return _mf.HandleAppWideKey(key, mods);
         }
 
