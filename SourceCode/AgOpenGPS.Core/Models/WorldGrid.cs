@@ -3,6 +3,7 @@
 using AgOpenGPS.Core.Drawing;
 using AgOpenGPS.Core.DrawLib;
 using AgOpenGPS.Core.Models;
+using OpenTK.Graphics.OpenGL;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -92,17 +93,29 @@ namespace AgOpenGPS.Core
             else Count = 80;
 
             GLW.SetColor(fieldColor);
+            GL.Begin(PrimitiveType.TriangleStrip);
+            GL.TexCoord2(0, 0);
+            GL.Vertex3(eastingMin, northingMax, -0.10);
+            GL.TexCoord2(Count, 0.0);
+            GL.Vertex3(eastingMax, northingMax, -0.10);
+            GL.TexCoord2(0.0, Count);
+            GL.Vertex3(eastingMin, northingMin, -0.10);
+            GL.TexCoord2(Count, Count);
+            GL.Vertex3(eastingMax, northingMin, -0.10);
+            GL.End();
+
             if (mustDrawFieldTexture)
             {
                 GeoCoord u0v0 = new GeoCoord(eastingMin, northingMax);
                 GeoCoord uCountvCount = new GeoCoord(eastingMax, northingMin);
                 FloorTexture.DrawRepeatedZ(u0v0, uCountvCount, -0.10, Count);
-                if (isGeoMap)
-                {
-                    GeoCoord u0v0Map = new GeoCoord(eastingMinGeo, northingMaxGeo);
-                    GeoCoord u1v1Map = new GeoCoord(eastingMaxGeo, northingMinGeo);
-                    BingTexture.DrawZ(u0v0Map, u1v1Map, -0.05);
-                }
+            }
+
+            if (isGeoMap)
+            {
+                GeoCoord u0v0Map = new GeoCoord(eastingMinGeo, northingMaxGeo);
+                GeoCoord u1v1Map = new GeoCoord(eastingMaxGeo, northingMinGeo);
+                BingTexture.DrawZ(u0v0Map, u1v1Map, -0.05);
             }
         }
 
