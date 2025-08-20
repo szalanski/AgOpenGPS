@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Net;
 using System.Net.Sockets;
 using System.Windows.Forms;
+using AgOpenGPS.Helpers;
 
 namespace AgOpenGPS
 {
@@ -465,7 +466,7 @@ namespace AgOpenGPS
 
         #region keystrokes
 
-        private Helpers.HotkeyMessageFilter _hotkeyFilter;
+        private HotkeyMessageFilter _hotkeyFilter;
 
         // Will be used to handle app-wide hotkeys
         public bool HandleAppWideKey(Keys key, Keys mods)
@@ -483,7 +484,7 @@ namespace AgOpenGPS
             // register once
             if (_hotkeyFilter == null)
             {
-                _hotkeyFilter = new Helpers.HotkeyMessageFilter(this);
+                _hotkeyFilter = new HotkeyMessageFilter(this);
                 Application.AddMessageFilter(_hotkeyFilter);
             }
         }
