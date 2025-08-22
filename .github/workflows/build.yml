@@ -33,14 +33,14 @@ jobs:
       uses: actions/setup-dotnet@v4
 
     - name: Setup GitVersion
-      uses: gittools/actions/gitversion/setup@v3.1.11
+      uses: gittools/actions/gitversion/setup@v4.1.0
       with:
-        versionSpec: '5.12.x'
+        versionSpec: '6.3.x'
 
     - name: Determine Version
-      uses: gittools/actions/gitversion/execute@v3.1.11
+      uses: gittools/actions/gitversion/execute@v4.1.0
       with:
-        updateAssemblyInfo: true
+        updateProjectFiles: true
 
     - name: Install dependencies
       run: dotnet restore ${{env.SOLUTION_FILE_PATH}}
