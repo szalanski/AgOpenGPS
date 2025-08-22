@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace AgLibrary.ViewModels
+namespace AgOpenGPS.Core.ViewModels
 {
     public class ViewModel : INotifyPropertyChanged
     {

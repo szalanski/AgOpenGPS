@@ -1,9 +1,5 @@
-﻿using AgLibrary.ViewModels;
-using AgOpenGPS.Core.Interfaces;
-using AgOpenGPS.Core.Models;
+﻿using AgOpenGPS.Core.Interfaces;
 using AgOpenGPS.Core.Streamers;
-using System.Collections.ObjectModel;
-using System.IO;
 using System.Windows.Input;
 
 namespace AgOpenGPS.Core.ViewModels

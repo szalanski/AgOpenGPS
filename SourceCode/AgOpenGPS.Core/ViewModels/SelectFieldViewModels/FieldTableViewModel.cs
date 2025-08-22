@@ -1,5 +1,4 @@
-﻿using AgLibrary.ViewModels;
-using AgOpenGPS.Core.Models;
+﻿using AgOpenGPS.Core.Models;
 using AgOpenGPS.Core.Streamers;
 using System.Collections.ObjectModel;
 using System.Windows;

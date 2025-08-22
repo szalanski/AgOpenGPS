@@ -1,5 +1,4 @@
-﻿using AgLibrary.ViewModels;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 
 namespace AgOpenGPS.Core.ViewModels
 {

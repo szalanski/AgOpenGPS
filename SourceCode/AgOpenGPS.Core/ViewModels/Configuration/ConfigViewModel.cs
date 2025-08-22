@@ -1,6 +1,4 @@
-﻿using AgLibrary.ViewModels;
-
-namespace AgOpenGPS.Core.ViewModels
+﻿namespace AgOpenGPS.Core.ViewModels
 {
     public class ConfigViewModel : DayNightAndUnitsViewModel
     {
