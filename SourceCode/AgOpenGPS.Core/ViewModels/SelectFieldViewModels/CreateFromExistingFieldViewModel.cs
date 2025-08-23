@@ -1,6 +1,4 @@
-﻿using AgLibrary.ViewModels;
-using AgOpenGPS.Core.Interfaces;
-using AgOpenGPS.Core.Models;
+﻿using AgOpenGPS.Core.Interfaces;
 using System.Globalization;
 using System;
 using System.Windows.Input;

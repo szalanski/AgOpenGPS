@@ -1,5 +1,4 @@
-﻿using AgLibrary.ViewModels;
-using AgOpenGPS.Core.Interfaces;
+﻿using AgOpenGPS.Core.Interfaces;
 using AgOpenGPS.Core.Presenters;
 using AgOpenGPS.Core.Streamers;
 using System.Windows.Input;

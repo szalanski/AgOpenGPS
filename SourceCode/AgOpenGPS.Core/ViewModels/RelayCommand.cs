@@ -1,7 +1,7 @@
 using System;
 using System.Windows.Input;
 
-namespace AgLibrary.ViewModels
+namespace AgOpenGPS.Core.ViewModels
 {
     public class RelayCommand : ICommand
     {
