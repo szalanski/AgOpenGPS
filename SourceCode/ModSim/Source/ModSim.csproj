@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <OutputPath>..\..\..\AgOpenGPS\</OutputPath>
+    <PublishDir>..\..\..\AgOpenGPS\</PublishDir>
     <ApplicationIcon>ModSim_ico.ico</ApplicationIcon>
     <UseWindowsForms>true</UseWindowsForms>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
