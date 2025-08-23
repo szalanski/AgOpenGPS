@@ -25,7 +25,7 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         fetch-depth: 0
 
@@ -59,24 +59,12 @@ jobs:
       run: Compress-Archive -Path "${{env.PUBLISH_DIR}}" -Destination "AgOpenGPS.zip"
 
     - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: softprops/action-gh-release@v2
       with:
+        name: Release ${{ env.GitVersion_SemVer }}
         tag_name: ${{ env.GitVersion_SemVer }}
-        release_name: Release ${{ env.GitVersion_SemVer }}
         body: |
           Automated Release by GitHub Action CI
         draft: ${{ github.ref_name == 'master' }}
         prerelease: ${{ contains(github.ref_name, 'release/') }}
-
-    - name: Upload Release Asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./AgOpenGPS.zip
-        asset_name: AgOpenGPS.zip
-        asset_content_type: application/zip
+        files: AgOpenGPS.zip
