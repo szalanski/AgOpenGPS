@@ -16,6 +16,9 @@ env:
   # https://docs.github.com/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
   BUILD_CONFIGURATION: Release
 
+  # Path to the output folder
+  PUBLISH_DIR: ./AgOpenGPS
+
 jobs:
   build-and-release:
     runs-on: windows-latest
@@ -43,14 +46,17 @@ jobs:
       run: dotnet restore ${{env.SOLUTION_FILE_PATH}}
 
     - name: Build
-      run: dotnet build --no-restore --configuration ${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
+      run: dotnet build --no-restore ${{env.SOLUTION_FILE_PATH}}
 
     - name: Test
-      run: dotnet test --no-restore ${{env.SOLUTION_FILE_PATH}}
+      run: dotnet test --no-restore --no-build ${{env.SOLUTION_FILE_PATH}}
+
+    - name: Publish
+      run: dotnet publish --no-restore --configuration ${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
 
     - name: Create AgOpenGPS.zip
       shell: powershell
-      run: Compress-Archive -Path "AgOpenGPS" -Destination "AgOpenGPS.zip"
+      run: Compress-Archive -Path "${{env.PUBLISH_DIR}}" -Destination "AgOpenGPS.zip"
 
     - name: Create Release
       id: create_release
