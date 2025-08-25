@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -59,7 +59,7 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -250,7 +250,7 @@
     <value>错误</value>
   </data>
   <data name="gsErrorreadingKML" xml:space="preserve">
-    <value>读取KML错误 </value>
+    <value>读取KML错误</value>
   </data>
   <data name="gsFieldFileIsCorrupt" xml:space="preserve">
     <value>田块文件错误</value>
@@ -379,7 +379,7 @@
     <value>请重启以解决问题</value>
   </data>
   <data name="gsReallyResetEverything" xml:space="preserve">
-    <value>确定全部重置</value>
+    <value>确定全部重置?</value>
   </data>
   <data name="gsRecord" xml:space="preserve">
     <value>记录</value>
