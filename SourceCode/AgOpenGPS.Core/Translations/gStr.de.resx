@@ -1125,18 +1125,6 @@ VERWENDUNG AUF EIGENES RISIKO.</value>
   <data name="gsCmPix" xml:space="preserve">
     <value>Cm -&gt; Pixel</value>
   </data>
-  <data name="gsCountsPerDegree" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="gsCurrentTurnSensor" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="gsDisplay" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="gsGpsStep" xml:space="preserve">
-    <value></value>
-  </data>
   <data name="gsGrid" xml:space="preserve">
     <value>Raster</value>
   </data>
@@ -1175,9 +1163,6 @@ VERWENDUNG AUF EIGENES RISIKO.</value>
   </data>
   <data name="gsStatus" xml:space="preserve">
     <value>Status</value>
-  </data>
-  <data name="gsSvennArrow" xml:space="preserve">
-    <value></value>
   </data>
   <data name="gsTotal" xml:space="preserve">
     <value>Total</value>
