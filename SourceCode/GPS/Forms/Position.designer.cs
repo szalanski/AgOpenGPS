@@ -93,6 +93,8 @@ namespace AgOpenGPS
         public vecFix2Fix[] stepFixPts = new vecFix2Fix[totalFixSteps];
         public double distanceCurrentStepFix = 0, distanceCurrentStepFixDisplay = 0, minHeadingStepDist = 1, startSpeed = 0.5;
         public double fixToFixHeadingDistance = 0, gpsMinimumStepDistance = 0.05;
+        private bool hasBeenFirstHeadingSet = false;
+
 
         public bool isChangingDirection, isReverseWithIMU;
 
@@ -146,6 +148,25 @@ namespace AgOpenGPS
             {
                 InitializeFirstFewGPSPositions();
                 return;
+            }
+            // Detect re-initialization of heading
+            if (!isFirstHeadingSet && hasBeenFirstHeadingSet)
+            {
+                for (int i = 0; i < totalFixSteps; i++)
+                {
+                    stepFixPts[i].isSet = 0;
+                    stepFixPts[i].easting = 0;
+                    stepFixPts[i].northing = 0;
+                    stepFixPts[i].distance = 0;
+                }
+
+                prevFix = pn.fix;
+                prevDistFix = pn.fix;
+                gpsHeading = 0;
+                fixHeading = 0;
+                imuGPS_Offset = 0;
+
+                hasBeenFirstHeadingSet = false;
             }
 
             pn.speed = pn.vtgSpeed;
@@ -295,6 +316,7 @@ namespace AgOpenGPS
                                 pn.fix.northing = stepFixPts[0].northing;
 
                                 isFirstHeadingSet = true;
+                                hasBeenFirstHeadingSet = true;
                                 TimedMessageBox(2000, "Direction Reset", "Forward is Set");
                                 Log.EventWriter("Forward Is Set");
 
