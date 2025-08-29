@@ -426,6 +426,5 @@ namespace AgOpenGPS
             }
 
         }
-
     }
 }

@@ -36,6 +36,9 @@ namespace AgOpenGPS
                 labelGboxDual.Enabled = false;
             }
 
+            cboxMinGPSStep.Checked = (Properties.Settings.Default.setF_minHeadingStepDistance == 1.0);
+            UpdateStepDistanceUI();
+
             nudDualHeadingOffset.Value = (decimal)Properties.Settings.Default.setGPS_dualHeadingOffset;
             nudDualReverseDistance.Value = (decimal)Properties.Settings.Default.setGPS_dualReverseDetectionDistance;
 
@@ -51,26 +54,6 @@ namespace AgOpenGPS
             cboxIsReverseOn.Checked = Properties.Settings.Default.setIMU_isReverseOn;
             cboxIsAutoSwitchDualFixOn.Checked = Properties.Settings.Default.setAutoSwitchDualFixOn;
             nudAutoSwitchDualFixSpeed.Value = (decimal)Properties.Settings.Default.setAutoSwitchDualFixSpeed;
-
-            if (Properties.Settings.Default.setF_minHeadingStepDistance == 1.0)
-                cboxMinGPSStep.Checked = true;
-            else
-                cboxMinGPSStep.Checked = false;
-
-            if (cboxMinGPSStep.Checked)
-            {
-                Properties.Settings.Default.setF_minHeadingStepDistance = 1.0;
-                Properties.Settings.Default.setGPS_minimumStepLimit = 0.1;
-                cboxMinGPSStep.Text = "10 cm";
-                lblHeadingDistance.Text = "100 cm";
-            }
-            else
-            {
-                Properties.Settings.Default.setF_minHeadingStepDistance = 0.5;
-                Properties.Settings.Default.setGPS_minimumStepLimit = 0.05;
-                cboxMinGPSStep.Text = "5 cm";
-                lblHeadingDistance.Text = "50 cm";
-            }
 
             if (mf.ahrs.imuHeading != 99999)
             {
@@ -92,6 +75,33 @@ namespace AgOpenGPS
             //nudReverseComp.Value = (decimal)(Properties.Settings.Default.setGPS_reverseComp);
             //nudAgeAlarm.Value = Properties.Settings.Default.setGPS_ageAlarm;
         }
+        private void cboxMinGPSStep_CheckedChanged(object sender, EventArgs e)
+        {
+            // draw labels + update settings
+            UpdateStepDistanceUI();
+        }
+
+        private void UpdateStepDistanceUI()
+        {
+            if (cboxMinGPSStep.Checked)
+            {
+                Properties.Settings.Default.setF_minHeadingStepDistance = 1.0;
+                Properties.Settings.Default.setGPS_minimumStepLimit = 0.1;
+
+                cboxMinGPSStep.Text = mf.isMetric ? "10 cm" : "3.93 in";
+                lblHeadingDistance.Text = mf.isMetric ? "100 cm" : "39.3 in";
+            }
+            else
+            {
+                Properties.Settings.Default.setF_minHeadingStepDistance = 0.5;
+                Properties.Settings.Default.setGPS_minimumStepLimit = 0.05;
+
+                cboxMinGPSStep.Text = mf.isMetric ? "5 cm" : "1.96 in";
+                lblHeadingDistance.Text = mf.isMetric ? "50 cm" : "19.68 in";
+            }
+
+            mf.isFirstHeadingSet = false;
+        }
 
         private void tabDHeading_Leave(object sender, EventArgs e)
         {
@@ -104,18 +114,6 @@ namespace AgOpenGPS
             Properties.Settings.Default.setAutoSwitchDualFixOn = mf.ahrs.autoSwitchDualFixOn = cboxIsAutoSwitchDualFixOn.Checked;
 
             Properties.Settings.Default.setGPS_isRTK_KillAutoSteer = mf.isRTK_KillAutosteer = cboxIsRTK_KillAutoSteer.Checked;
-
-            if (cboxMinGPSStep.Checked)
-            {
-                Properties.Settings.Default.setF_minHeadingStepDistance = 1.0;
-                Properties.Settings.Default.setGPS_minimumStepLimit = 0.1;
-            }
-            else
-            {
-                Properties.Settings.Default.setF_minHeadingStepDistance = 0.5;
-                Properties.Settings.Default.setGPS_minimumStepLimit = 0.05;
-            }
-
             Properties.Settings.Default.Save();
         }
         private void rbtnHeadingFix_CheckedChanged(object sender, EventArgs e)
@@ -170,26 +168,6 @@ namespace AgOpenGPS
         //        mf.udpWatchLimit = Properties.Settings.Default.SetGPS_udpWatchMsec;
         //    }
         //}
-        private void cboxMinGPSStep_Click(object sender, EventArgs e)
-        {
-            if (cboxMinGPSStep.Checked)
-            {
-                Properties.Settings.Default.setF_minHeadingStepDistance = 1;
-                Properties.Settings.Default.setGPS_minimumStepLimit = 0.1;
-                cboxMinGPSStep.Text = "10 cm";
-                lblHeadingDistance.Text = "100 cm";
-                mf.isFirstHeadingSet = false;
-            }
-            else
-            {
-                Properties.Settings.Default.setF_minHeadingStepDistance = 0.5;
-                Properties.Settings.Default.setGPS_minimumStepLimit = 0.05;
-                cboxMinGPSStep.Text = "5 cm";
-                lblHeadingDistance.Text = "50 cm";
-                mf.isFirstHeadingSet = false;
-            }
-
-        }
 
         private void hsbarFusion_ValueChanged(object sender, EventArgs e)
         {

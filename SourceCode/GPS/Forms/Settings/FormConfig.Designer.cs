@@ -4558,7 +4558,7 @@ namespace AgOpenGPS
             this.cboxMinGPSStep.Text = "10 cm";
             this.cboxMinGPSStep.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.cboxMinGPSStep.UseVisualStyleBackColor = false;
-            this.cboxMinGPSStep.Click += new System.EventHandler(this.cboxMinGPSStep_Click);
+            this.cboxMinGPSStep.CheckedChanged += new System.EventHandler(this.cboxMinGPSStep_CheckedChanged);
             // 
             // labelDefault70
             // 
