@@ -11,6 +11,10 @@ namespace AgOpenGPS.Core.Streamers
         {
         }
 
+        public GeoStreamReader(FileInfo fileInfo) : base(fileInfo.FullName)
+        {
+        }
+
         public bool ParseBool(string boolWord)
         {
             return bool.Parse(boolWord);
