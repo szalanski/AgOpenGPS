@@ -462,7 +462,7 @@ Die Reihenfolge, in der Sie sie drücken, entspricht der Reihenfolge, in der sie
     <value>Fix2Fix-Abstand</value>
   </data>
   <data name="gsFixAlarm" xml:space="preserve">
-    <value>NO RTK !!!</value>
+    <value>RTK Fix Alarm</value>
   </data>
   <data name="gsFixAlarmStop" xml:space="preserve">
     <value>Alarm stoppt Lenkung</value>
@@ -1131,9 +1131,6 @@ VERWENDUNG AUF EIGENES RISIKO.</value>
   <data name="gsLatitude" xml:space="preserve">
     <value>Latitude</value>
   </data>
-  <data name="gsLightbar" xml:space="preserve">
-    <value>Lightbar</value>
-  </data>
   <data name="gsLongtitude" xml:space="preserve">
     <value>Longtitude</value>
   </data>
@@ -1151,9 +1148,6 @@ VERWENDUNG AUF EIGENES RISIKO.</value>
   </data>
   <data name="gsOpacity" xml:space="preserve">
     <value>Deckkraft:</value>
-  </data>
-  <data name="gsRate" xml:space="preserve">
-    <value>Rate</value>
   </data>
   <data name="gsReset" xml:space="preserve">
     <value>Reset</value>
@@ -1196,5 +1190,17 @@ VERWENDUNG AUF EIGENES RISIKO.</value>
   </data>
   <data name="v_AboutIntro" xml:space="preserve">
     <value>https://www.youtube.com/watch?v=iN2cZ8avHag</value>
+  </data>
+  <data name="gsGuidanceStopped" xml:space="preserve">
+    <value>Autom. Lenkung gestoppt</value>
+  </data>
+  <data name="gsImuFusion" xml:space="preserve">
+    <value>Fusion</value>
+  </data>
+  <data name="gsIntegral" xml:space="preserve">
+    <value>Integral</value>
+  </data>
+  <data name="gsRate" xml:space="preserve">
+    <value>Rate</value>
   </data>
 </root>

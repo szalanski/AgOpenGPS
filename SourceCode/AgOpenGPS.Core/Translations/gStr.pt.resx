@@ -567,4 +567,7 @@
   <data name="gsAPlus" xml:space="preserve">
     <value>A+</value>
   </data>
+  <data name="gsABDraw" xml:space="preserve">
+    <value>Desenhe AB - Clique em 2 pontos no limite para começar</value>
+  </data>
 </root>
