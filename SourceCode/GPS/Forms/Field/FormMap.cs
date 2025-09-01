@@ -424,10 +424,9 @@ namespace AgOpenGPS
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if (polygon.Points.Count > 0)
-                lblPoints.Text = "Pts: " + polygon.Points.Count.ToString();
-            else
-                lblPoints.Text = "";
+            lblPoints.Text = (polygon.Points.Count > 0) ?
+                (gStr.gsPoints + ": " + polygon.Points.Count.ToString()) :
+                "";
 
             if (mf.bnd.bndList.Count == 0)
             {
