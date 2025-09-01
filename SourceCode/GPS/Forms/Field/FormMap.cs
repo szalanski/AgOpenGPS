@@ -424,23 +424,22 @@ namespace AgOpenGPS
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            lblBnds.Text = mf.bnd.bndList.Count.ToString();
             if (polygon.Points.Count > 0)
                 lblPoints.Text = "Pts: " + polygon.Points.Count.ToString();
             else
                 lblPoints.Text = "";
 
-            if (mf.bnd.bndList.Count > 1)
+            if (mf.bnd.bndList.Count == 0)
             {
-                lblBnds.Text = "1 " + gStr.gsOuter + "\r\n" + (mf.bnd.bndList.Count - 1).ToString() + " " + gStr.gsInner;
-            }
-            else if (mf.bnd.bndList.Count == 1)
-            {
-                lblBnds.Text = "1 Outer\r\n";
+                lblBnds.Text = gStr.gsNone;
             }
             else
             {
-                lblBnds.Text = gStr.gsNone;
+                lblBnds.Text = "1 " + gStr.gsOuter + "\r\n";
+                if (1 < mf.bnd.bndList.Count)
+                {
+                    lblBnds.Text += (mf.bnd.bndList.Count - 1).ToString() + " " + gStr.gsInner;
+                }
             }
         }
 
