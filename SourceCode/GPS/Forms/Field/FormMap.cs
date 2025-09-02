@@ -379,7 +379,6 @@ namespace AgOpenGPS
                 mf.worldGrid.isGeoMap = false;
                 SaveBackgroundGeoFile();
             }
-
         }
 
         private void ResetMapGrid()
@@ -444,24 +443,7 @@ namespace AgOpenGPS
 
         private static string PointLatLngToString(PointLatLng point)
         {
-            return $"{DegreeToString(point.Lng, "W", "E")}, {DegreeToString(point.Lat, "S", "N")}";
-        }
-
-        private static string DegreeToString(double coordinate, string negativeSym, string positiveSym)
-        {
-            string sym = (coordinate < 0.0) ? negativeSym : positiveSym;
-            coordinate = Math.Abs(coordinate);
-            double d = Math.Floor(coordinate);
-            coordinate -= d;
-            coordinate *= 60;
-            double m = Math.Floor(coordinate);
-            coordinate -= m;
-            coordinate *= 60;
-            double s = coordinate;
-            string dd = d.ToString();
-            string mm = m.ToString().PadLeft(2, '0');
-            string ss = s.ToString("00.00", CultureInfo.InvariantCulture);
-            return $"{dd}° {mm}' {ss}\" {sym}";
+            return point.Lat.ToString("N7") + ", " + point.Lng.ToString("N7");
         }
 
         private class GMapMarkerCircle : GMapMarker
