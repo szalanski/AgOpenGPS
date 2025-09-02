@@ -1203,4 +1203,16 @@ VERWENDUNG AUF EIGENES RISIKO.</value>
   <data name="gsRate" xml:space="preserve">
     <value>Rate</value>
   </data>
+  <data name="gsDisplay" xml:space="preserve">
+    <value>Display</value>
+  </data>
+  <data name="gsHardwareMessages" xml:space="preserve">
+    <value>Hardware Nachrichten</value>
+  </data>
+  <data name="gsLateral" xml:space="preserve">
+    <value>Lateral</value>
+  </data>
+  <data name="gsLowerTime" xml:space="preserve">
+    <value>Absenkzeit</value>
+  </data>
 </root>
