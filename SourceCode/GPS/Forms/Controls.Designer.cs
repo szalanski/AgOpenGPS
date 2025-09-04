@@ -490,36 +490,34 @@ namespace AgOpenGPS
 
         private void btnJobMenu_Click(object sender, EventArgs e)
         {
+            // Remember current state before opening the Job dialog
+            var wasJobStarted = isJobStarted;
+            var prevFieldDir = currentFieldDirectory;
 
             Form f = Application.OpenForms["FormGPSData"];
-
             if (f != null)
+
             {
                 f.Focus();
                 f.Close();
             }
 
-            f = null;
             f = Application.OpenForms["FormFieldData"];
-
             if (f != null)
+
             {
                 f.Focus();
                 f.Close();
             }
 
-            f = null;
             f = Application.OpenForms["FormEventViewer"];
-
             if (f != null)
             {
                 f.Focus();
                 f.Close();
             }
 
-            f = null;
             f = Application.OpenForms["FormPan"];
-
             if (f != null)
             {
                 isPanFormVisible = false;
@@ -545,57 +543,45 @@ namespace AgOpenGPS
 
                 if (isJobStarted)
                 {
-                    if (autoBtnState == btnStates.Auto)
-                        btnSectionMasterAuto.PerformClick();
-
-                    if (manualBtnState == btnStates.On)
-                        btnSectionMasterManual.PerformClick();
+                    if (autoBtnState == btnStates.Auto) btnSectionMasterAuto.PerformClick();
+                    if (manualBtnState == btnStates.On) btnSectionMasterManual.PerformClick();
                 }
 
                 if (result == DialogResult.Yes)
                 {
-                    //new field - ask for a directory name
-                    using (var form2 = new FormFieldDir(this))
-                    { form2.ShowDialog(this); }
+                    using (var form2 = new FormFieldDir(this)) { form2.ShowDialog(this); }
                 }
-
-                //load from  KML
                 else if (result == DialogResult.No)
                 {
-                    //ask for a directory name
-                    using (var form2 = new FormFieldKML(this))
-                    { form2.ShowDialog(this); }
+                    using (var form2 = new FormFieldKML(this)) { form2.ShowDialog(this); }
                 }
-
-                //load from Existing
                 else if (result == DialogResult.Retry)
                 {
-                    //ask for a field to copy
-                    using (var form2 = new FormFieldExisting(this))
-                    { form2.ShowDialog(this); }
+                    using (var form2 = new FormFieldExisting(this)) { form2.ShowDialog(this); }
                 }
-
-                //load from Existing
                 else if (result == DialogResult.Abort)
                 {
-                    //ask for a field to copy
-                    using (var form2 = new FormFieldIsoXml(this))
-                    { form2.ShowDialog(this); }
+                    using (var form2 = new FormFieldIsoXml(this)) { form2.ShowDialog(this); }
                 }
 
-                if (isJobStarted)
+                // ---- Only log "Opened" if a field was newly opened or changed ----
+                bool openedNewOrChanged =
+                    isJobStarted &&
+                    (!wasJobStarted ||
+                     !string.Equals(currentFieldDirectory, prevFieldDir, StringComparison.OrdinalIgnoreCase));
+
+                if (openedNewOrChanged)
                 {
                     double distance = AppModel.CurrentLatLon.DistanceInKiloMeters(AppModel.LocalPlane.Origin);
                     if (distance > 10)
                     {
-                        TimedMessageBox(2500, "High Field Start Distance Warning", "Field Start is "
-                        + distance.ToString("N1") + " km From current position");
-
+                        TimedMessageBox(2500, "High Field Start Distance Warning",
+                            "Field Start is " + distance.ToString("N1") + " km From current position");
                         Log.EventWriter("High Field Start Distance Warning");
                     }
 
-                    Log.EventWriter("** Opened **  " + currentFieldDirectory + "   "
-                        + (DateTime.Now.ToString("f", CultureInfo.InvariantCulture)));
+                    Log.EventWriter("** Opened **  " + currentFieldDirectory + "   " +
+                        DateTime.Now.ToString("f", CultureInfo.InvariantCulture));
 
                     Settings.Default.setF_CurrentDir = currentFieldDirectory;
                     Settings.Default.Save();
@@ -603,13 +589,9 @@ namespace AgOpenGPS
             }
 
             FieldMenuButtonEnableDisable(isJobStarted);
-
             toolStripBtnFieldTools.Enabled = isJobStarted;
-
             bnd.isHeadlandOn = (bnd.bndList.Count > 0 && bnd.bndList[0].hdLine.Count > 0);
-
             trk.idx = -1;
-
             PanelUpdateRightAndBottom();
         }
 
@@ -660,7 +642,7 @@ namespace AgOpenGPS
                 FileSaveContour();
                 FileSaveTracks();
                 ExportFieldAs_KML();
-                ExportFieldAs_ISOXMLv3();
+                //ExportFieldAs_ISOXMLv3(); NOTE: This is very very slow, commented out until we have a field exporter
                 ExportFieldAs_ISOXMLv4();
             });
 
