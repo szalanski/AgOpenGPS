@@ -113,6 +113,7 @@ namespace AgOpenGPS.Core
 
             if (isGeoMap)
             {
+                GL.Color4(0.6f, 0.6f, 0.6f, 0.5f);
                 GeoCoord u0v0Map = new GeoCoord(eastingMinGeo, northingMaxGeo);
                 GeoCoord u1v1Map = new GeoCoord(eastingMaxGeo, northingMinGeo);
                 BingTexture.DrawZ(u0v0Map, u1v1Map, -0.05);
