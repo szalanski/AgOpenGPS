@@ -21,5 +21,14 @@ namespace AgOpenGPS.Core.Streamers
             return new FileInfo(Path.Combine(fieldDirectory.FullName, fileName ?? _defaultFileName));
         }
 
+        public void DeleteFile(DirectoryInfo fieldDirectory)
+        {
+            FileInfo fileInfo = GetFileInfo(fieldDirectory);
+            if (fileInfo.Exists)
+            {
+                fileInfo.Delete();
+            }
+        }
+
     }
 }

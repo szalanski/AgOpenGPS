@@ -16,7 +16,7 @@ namespace AgOpenGPS.Core.Models
         public DirectoryInfo FieldDirectory { get; }
 
         public string Name => FieldDirectory.Name;
-        public BackgroundPicture BackgroundPicture { get; set; }
+        public BingMap BingMap { get; set; } // Can be null;
         public Boundary Boundary { get; set; }
         public Contour Contour { get; set; }
         public FieldOverview FieldOverview { get; set; }

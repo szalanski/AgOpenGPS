@@ -100,10 +100,10 @@ namespace AgOpenGPS.Core.Streamers
 
         public void WriteGeoBoundingBox(GeoBoundingBox bb)
         {
-            WriteDouble(bb.MaxEasting);
-            WriteDouble(bb.MinEasting);
-            WriteDouble(bb.MaxNorthing);
-            WriteDouble(bb.MinNorthing);
+            WriteLine(DoubleString(bb.MaxEasting, "N3"));
+            WriteLine(DoubleString(bb.MinEasting, "N3"));
+            WriteLine(DoubleString(bb.MaxNorthing, "N3"));
+            WriteLine(DoubleString(bb.MinNorthing, "N3"));
         }
 
         public void WriteGeoPath(GeoPath path)

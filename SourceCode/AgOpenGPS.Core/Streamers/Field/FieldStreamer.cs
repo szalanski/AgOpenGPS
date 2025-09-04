@@ -6,6 +6,7 @@ namespace AgOpenGPS.Core.Streamers
 {
     public class FieldStreamer
     {
+        private readonly BingMapStreamer _bingMapStreamer;
         private readonly BoundaryStreamer _boundaryStreamer;
         private readonly ContourStreamer _contourStreamer;
         private readonly FlagListStreamer _flagsStreamer;
@@ -15,12 +16,23 @@ namespace AgOpenGPS.Core.Streamers
 
         public FieldStreamer(IFieldStreamerPresenter fieldStreamerPresenter)
         {
+            _bingMapStreamer = new BingMapStreamer(fieldStreamerPresenter);
             _boundaryStreamer = new BoundaryStreamer(fieldStreamerPresenter);
             _contourStreamer = new ContourStreamer(fieldStreamerPresenter);
             _flagsStreamer = new FlagListStreamer(fieldStreamerPresenter);
             _recordedPathStreamer = new RecordedPathStreamer(fieldStreamerPresenter);
             _tramLinesStreamer = new TramLinesStreamer(fieldStreamerPresenter);
             _workedAreaStreamer = new WorkedAreaStreamer(fieldStreamerPresenter);
+        }
+
+        public void ReadBingMap(Field field)
+        {
+            field.BingMap = _bingMapStreamer.TryRead(field.FieldDirectory);
+        }
+
+        public void WriteBingMap(Field field)
+        {
+            _bingMapStreamer.TryWrite(field.BingMap, field.FieldDirectory);
         }
 
         public Boundary ReadBoundary(DirectoryInfo fieldDirectory)
