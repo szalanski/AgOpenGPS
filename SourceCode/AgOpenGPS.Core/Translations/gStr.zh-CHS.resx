@@ -462,4 +462,7 @@
   <data name="v_AboutIntro" xml:space="preserve">
     <value>https://www.youtube.com/watch?v=iN2cZ8avHag</value>
   </data>
+  <data name="gsADConverter" xml:space="preserve">
+    <value>模拟数字转换器</value>
+  </data>
 </root>
