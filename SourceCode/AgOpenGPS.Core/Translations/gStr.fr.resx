@@ -1200,4 +1200,13 @@ UTILISER À VOS PROPRES RISQUES.</value>
   <data name="v_AboutIntro" xml:space="preserve">
     <value>https://www.youtube.com/watch?v=iN2cZ8avHag</value>
   </data>
+  <data name="gsAllSettings" xml:space="preserve">
+    <value>Voir tous les réglages</value>
+  </data>
+  <data name="gsExtraGuideLines" xml:space="preserve">
+    <value>Multilignes</value>
+  </data>
+  <data name="gsStartFullscreen" xml:space="preserve">
+    <value>Démarrer en plein écran</value>
+  </data>
 </root>
