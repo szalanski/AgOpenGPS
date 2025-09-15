@@ -570,4 +570,78 @@
   <data name="gsABDraw" xml:space="preserve">
     <value>Desenhe AB - Clique em 2 pontos no limite para começar</value>
   </data>
+  <data name="gsADConverter" xml:space="preserve">
+    <value>Conversor AD</value>
+  </data>
+  <data name="gsAOGMenu" xml:space="preserve">
+    <value>Menu AOG</value>
+  </data>
+  <data name="gsActive" xml:space="preserve">
+    <value>Ativar</value>
+  </data>
+  <data name="gsAdvancedTramLines" xml:space="preserve">
+    <value>Criar Trilhas Avançadas</value>
+  </data>
+  <data name="gsAgree" xml:space="preserve">
+    <value>Concordo com os Termos e Condições</value>
+  </data>
+  <data name="gsAllSettings" xml:space="preserve">
+    <value>Ver todas as configurações</value>
+  </data>
+  <data name="gsAlpha" xml:space="preserve">
+    <value>Alfa</value>
+  </data>
+  <data name="gsAntennaHeight" xml:space="preserve">
+    <value>Altura da antena</value>
+  </data>
+  <data name="gsAntennaOffset" xml:space="preserve">
+    <value>Deslocamento da antena</value>
+  </data>
+  <data name="gsApplied" xml:space="preserve">
+    <value>Aplicado</value>
+  </data>
+  <data name="gsAquire" xml:space="preserve">
+    <value>Adquirir</value>
+  </data>
+  <data name="gsAquireDescription" xml:space="preserve">
+    <value>Adquirir = Fator * Manter</value>
+  </data>
+  <data name="gsAquireFactor" xml:space="preserve">
+    <value>Fator de Aquisição</value>
+  </data>
+  <data name="gsArrangeText" xml:space="preserve">
+    <value>Toque nos botões do lado esquerdo que você deseja que apareçam no Menu (lado direito).
+
+A ordem em que você os tocar será a ordem em que aparecerão no menu, de baixo para cima.</value>
+  </data>
+  <data name="gsAttachmentStyle" xml:space="preserve">
+    <value>Estilo de anexo</value>
+  </data>
+  <data name="gsAuto" xml:space="preserve">
+    <value>Automático</value>
+  </data>
+  <data name="gsAutoOffAgIO" xml:space="preserve">
+    <value>Desligamento automático AgIO</value>
+  </data>
+  <data name="gsAutoStartAgIO" xml:space="preserve">
+    <value>Início automático AgIO</value>
+  </data>
+  <data name="gsAutoSwitchDualFix" xml:space="preserve">
+    <value>Automático Duplo &lt;&gt; Fixo</value>
+  </data>
+  <data name="gsAutoSwitchDualFixSpeed" xml:space="preserve">
+    <value>Velocidade de troca (km/h)</value>
+  </data>
+  <data name="gsBackground" xml:space="preserve">
+    <value>Fundo</value>
+  </data>
+  <data name="gsBottomMenu" xml:space="preserve">
+    <value>Menu inferior</value>
+  </data>
+  <data name="gsBrightness" xml:space="preserve">
+    <value>Brilho</value>
+  </data>
+  <data name="gsBuild" xml:space="preserve">
+    <value>Construir</value>
+  </data>
 </root>
