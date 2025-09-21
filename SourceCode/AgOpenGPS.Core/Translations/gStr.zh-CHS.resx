@@ -871,7 +871,7 @@
     <value>上传失败。</value>
   </data>
   <data name="gsSaveUploadToAgshare" xml:space="preserve">
-    <value>正在将田间的数据上传至 AgShare... （操作完成前请勿关闭程序）</value>
+    <value>正将田间数据上传...</value>
   </data>
   <data name="gsScreenButtons" xml:space="preserve">
     <value>屏幕按钮</value>
@@ -1141,7 +1141,7 @@
     <value>每度计数</value>
   </data>
   <data name="gsCreateNewFromIsoXML" xml:space="preserve">
-    <value>通过ISO-XML（基于ISO 11783国际标准的农业数据交换格式）创建新田块</value>
+    <value>创建基于ISO 11783标准新田块</value>
   </data>
   <data name="gsDeadzone" xml:space="preserve">
     <value>最终区域</value>
@@ -1189,7 +1189,7 @@
     <value>定位点间距离</value>
   </data>
   <data name="gsFixAlarm" xml:space="preserve">
-    <value>RTK（实时动态差分定位技术）定位报警</value>
+    <value>RTK定位报警</value>
   </data>
   <data name="gsFixAlarmStop" xml:space="preserve">
     <value>报警会停止自动转向</value>
@@ -1204,7 +1204,7 @@
     <value>定位点</value>
   </data>
   <data name="gsFromKml" xml:space="preserve">
-    <value>从KML（Keyhole Markup Language，谷歌地球等平台使用的地理数据格式）</value>
+    <value>来自KML</value>
   </data>
   <data name="gsGap" xml:space="preserve">
     <value>缺口</value>
@@ -1237,12 +1237,12 @@
     <value>液压升降机配置</value>
   </data>
   <data name="gsIMUAxis" xml:space="preserve">
-    <value>IMU（惯性测量单元）轴向切换</value>
+    <value>IMU轴向切换</value>
   </data>
   <data name="gsIfWrongDirectionTapVehicle" xml:space="preserve">
     <value>若方向错误，请点击车辆</value>
   </data>
   <data name="gsSvennArrow" xml:space="preserve">
-    <value>Svenn（特定导航系统或设备的专有名称）箭头</value>
+    <value>Svenn箭头</value>
   </data>
 </root>

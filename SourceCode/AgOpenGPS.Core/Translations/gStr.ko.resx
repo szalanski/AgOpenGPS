@@ -59,7 +59,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="gsABDraw" xml:space="preserve">
-    <value>A.B그리기 경계에서 2개의 점을 클릭하여 시작하세요</value>
+    <value>A.B라인에서 2개의 점을찍은후시작하세요</value>
   </data>
   <data name="gsABline" xml:space="preserve">
     <value>AB라인</value>
@@ -74,7 +74,7 @@
     <value>A플러스</value>
   </data>
   <data name="gsAbout" xml:space="preserve">
-    <value>약...</value>
+    <value>조향보조설명...</value>
   </data>
   <data name="gsAckermann" xml:space="preserve">
     <value>좌각도</value>
@@ -86,7 +86,7 @@
     <value>작동</value>
   </data>
   <data name="gsActual" xml:space="preserve">
-    <value>현재</value>
+    <value>현재값</value>
   </data>
   <data name="gsAdvancedTramLines" xml:space="preserve">
     <value>고급트램라인만들기</value>
@@ -130,7 +130,7 @@
 누르는 순서는 메뉴아래에서 위로 표시됩니다.</value>
   </data>
   <data name="gsAttachmentStyle" xml:space="preserve">
-    <value>첨부파일스타일</value>
+    <value>작업기 종류</value>
   </data>
   <data name="gsAuto" xml:space="preserve">
     <value>자동</value>
@@ -235,7 +235,7 @@
     <value>색상선택</value>
   </data>
   <data name="gsColors" xml:space="preserve">
-    <value>컬러</value>
+    <value>색상</value>
   </data>
   <data name="gsCompletelyDeleteBoundary" xml:space="preserve">
     <value>경계를완전히삭제</value>
@@ -262,7 +262,7 @@
     <value>처음만들기</value>
   </data>
   <data name="gsCreateABoundaryFirst" xml:space="preserve">
-    <value>먼저경계만들기</value>
+    <value>경계먼저만들기</value>
   </data>
   <data name="gsCreateNewField" xml:space="preserve">
     <value>새들판만들기</value>
@@ -373,7 +373,7 @@
     <value>들판이름편집</value>
   </data>
   <data name="gsElevationlog" xml:space="preserve">
-    <value>고도로그</value>
+    <value>고도표시</value>
   </data>
   <data name="gsEnable" xml:space="preserve">
     <value>활성</value>
@@ -469,7 +469,7 @@
     <value>KML가져오기</value>
   </data>
   <data name="gsGap" xml:space="preserve">
-    <value>간격차이</value>
+    <value>간격</value>
   </data>
   <data name="gsGpsStep" xml:space="preserve">
     <value>GPS최소단계</value>
@@ -499,7 +499,7 @@
     <value>들판개자리 만들기 및 편집</value>
   </data>
   <data name="gsHelp" xml:space="preserve">
-    <value>도와 주세요</value>
+    <value>도움말</value>
   </data>
   <data name="gsHitchLength" xml:space="preserve">
     <value>히치길이</value>
@@ -538,19 +538,19 @@
     <value>적분</value>
   </data>
   <data name="gsIntegralInfo" xml:space="preserve">
-    <value>교차경로 오류를 줄이기위해 조향각도를 천천히증가시킬것입니다</value>
+    <value>경로 오류를 줄이기위해 조향각를 천천히증가시킴</value>
   </data>
   <data name="gsInvertHydraulicRelays" xml:space="preserve">
-    <value>변환릴레이</value>
+    <value>반전릴레이</value>
   </data>
   <data name="gsInvertMotor" xml:space="preserve">
-    <value>모터방향변환</value>
+    <value>모터방향반전</value>
   </data>
   <data name="gsInvertRelays" xml:space="preserve">
-    <value>변환릴레이들</value>
+    <value>반전릴레이들</value>
   </data>
   <data name="gsInvertRoll" xml:space="preserve">
-    <value>수평변환</value>
+    <value>수평반전</value>
   </data>
   <data name="gsInvertWas" xml:space="preserve">
     <value>각도기변환</value>
@@ -577,7 +577,7 @@
     <value>좌쪽</value>
   </data>
   <data name="gsLess" xml:space="preserve">
-    <value>더작게</value>
+    <value>작게</value>
   </data>
   <data name="gsLightbar" xml:space="preserve">
     <value>라이트바</value>
@@ -667,7 +667,7 @@
     <value>북서쪽</value>
   </data>
   <data name="gsNew" xml:space="preserve">
-    <value>기본값에서새로만들기</value>
+    <value>처음부터새로만들기</value>
   </data>
   <data name="gsNextGuidanceLine" xml:space="preserve">
     <value>다음안내선</value>
@@ -697,10 +697,10 @@
     <value>삭제된내용없음</value>
   </data>
   <data name="gsNudge" xml:space="preserve">
-    <value>특정방향:</value>
+    <value>방향이동:</value>
   </data>
   <data name="gsNudgeDistance" xml:space="preserve">
-    <value>특정거리</value>
+    <value>방향거리</value>
   </data>
   <data name="gsNudgeRefTrack" xml:space="preserve">
     <value>트랙이동참조</value>
@@ -784,7 +784,7 @@
     <value>밧데리소모로 종료</value>
   </data>
   <data name="gsPresetColor" xml:space="preserve">
-    <value>사전 색상선택</value>
+    <value>색상사전선택</value>
   </data>
   <data name="gsPressureTurnSensor" xml:space="preserve">
     <value>유압턴센서</value>
@@ -922,7 +922,7 @@
     <value>버튼선택</value>
   </data>
   <data name="gsSelectPreset" xml:space="preserve">
-    <value>설정색상미리선택</value>
+    <value>색상설정미리선택</value>
   </data>
   <data name="gsSendAndSave" xml:space="preserve">
     <value>보내기 + 저장</value>
@@ -1040,9 +1040,9 @@
     <value>이 무료 프로그램의 사본을 무료로 배포하는 경우, GPLv3 라이선스에 명시된 대로 받은 것과 동일하게 전달해야 합니다.</value>
   </data>
   <data name="gsTermsThree" xml:space="preserve">
-    <value>AgOpenGPS는 안내 시스템, GPS 문장, 그리고 기계 제어의 이론적 응용에 대해 배우기 위한 엄격한 교육용 소프트웨어입니다.
+    <value>AgOpenGPS 안내 시스템은, GPS/RTK 기계 제어의 이론적 응용에 대해 배우기 위한 엄격한 교육용 소프트웨어입니다
 
-어떤 상황에서도 실제 장비에 사용할 수 없습니다. 농부들이 안전하게 조향보조를 경험할 수 있도록 시뮬레이터가 제공됩니다.
+농부들이 안전하게 조향보조를 경험할 수 있도록 시뮬레이터가 제공됩니다.
 
 소프트웨어에는 안전 시스템이 없으며 암시된 것도 없습니다.
 
@@ -1061,7 +1061,7 @@
     <value>좌측도구</value>
   </data>
   <data name="gsToolOffset" xml:space="preserve">
-    <value>수정도구방향</value>
+    <value>방향수정도구</value>
   </data>
   <data name="gsToolRight" xml:space="preserve">
     <value>우측도구</value>
@@ -1106,7 +1106,7 @@
     <value>단위들</value>
   </data>
   <data name="gsUseSelected" xml:space="preserve">
-    <value>목록선택사용</value>
+    <value>목록선택</value>
   </data>
   <data name="gsUser1" xml:space="preserve">
     <value>사용자1</value>
