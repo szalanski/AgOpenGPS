@@ -1002,6 +1002,19 @@ namespace AgOpenGPS
             }
         }
 
+        private void ZoomByMouseWheel(object sender, MouseEventArgs e)
+        {
+            if (e.Delta < 0)
+            {
+                camera.ZoomOutSmallStep();
+            }
+            else
+            {
+                camera.ZoomInSmallStep();
+            }
+            SetZoom();
+        }
+
         public void SwapDayNightMode()
         {
             isDay = !isDay;
@@ -1351,19 +1364,14 @@ namespace AgOpenGPS
                     // --
                     if (point.Y < 260 && point.Y > 170)
                     {
-                        double adjustFactor = (camera.ZoomValue <= 20) ? 1.2 : 1.1;
-                        camera.ZoomValue = System.Math.Min(adjustFactor * camera.ZoomValue, 180);
-                        camera.DistanceToLookAt = 0.5 * camera.ZoomValue * camera.ZoomValue;
+                        camera.ZoomOut();
                         SetZoom();
                         return;
                     }
-
                     //++
                     if (point.Y < 120 && point.Y > 30)
                     {
-                        double adjustFactor = (camera.ZoomValue <= 20) ? 0.8 : 0.9;
-                        camera.ZoomValue = System.Math.Max(4.0, adjustFactor * camera.ZoomValue);
-                        camera.DistanceToLookAt = 0.5 * camera.ZoomValue * camera.ZoomValue;
+                        camera.ZoomIn();
                         SetZoom();
                         return;
                     }

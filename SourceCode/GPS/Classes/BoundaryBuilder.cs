@@ -4,6 +4,7 @@ using System.Linq;
 using System.Globalization;
 using System.IO;
 using AgLibrary.Logging;
+using AgOpenGPS.Core.Models;
 
 namespace AgOpenGPS.Classes
 {
@@ -33,6 +34,44 @@ namespace AgOpenGPS.Classes
             InputTracks = tracks?.ToList() ?? new List<CTrk>();
             Log.EventWriter("Tracks set successfully");
         }
+
+        public void ExtendAllTracks(double extendMeters)
+        {
+            var extendedTracks = new List<CTrk>();
+
+            foreach (var trk in InputTracks)
+            {
+                var pts = trk.mode == TrackMode.AB
+                    ? new List<GeoCoord>
+                      {
+                  new GeoCoord(trk.ptA.northing, trk.ptA.easting),
+                  new GeoCoord(trk.ptB.northing, trk.ptB.easting)
+                      }
+                    : trk.curvePts
+                        .Select(p => new GeoCoord(p.northing, p.easting))
+                        .ToList();
+
+                var extended = ExtendTrackEndpoints(pts, extendMeters);
+
+                if (trk.mode == TrackMode.AB && extended.Count >= 2)
+                {
+                    trk.ptA = new vec2(extended[0].Easting, extended[0].Northing);
+                    trk.ptB = new vec2(extended[extended.Count - 1].Easting,
+                                       extended[extended.Count - 1].Northing);
+                }
+                else if (trk.mode == TrackMode.Curve)
+                {
+                    trk.curvePts = extended
+                        .Select(p => new vec3(p.Easting, p.Northing, 0))
+                        .ToList();
+                }
+
+                extendedTracks.Add(trk);
+            }
+
+            InputTracks = extendedTracks;
+        }
+
 
         public List<vec3> BuildTrimmedBoundary()
         {
@@ -93,6 +132,50 @@ namespace AgOpenGPS.Classes
         #endregion
 
         #region Core Processing
+
+        // Adds extra length to both ends of a track polyline (AB or Curve).
+        // This helps ensure intersections are found just beyond original endpoints.
+        private List<GeoCoord> ExtendTrackEndpoints(List<GeoCoord> pts, double extendMeters)
+        {
+            if (pts == null || pts.Count < 2) return pts;
+
+            var result = new List<GeoCoord>(pts.Count + 2);
+
+            // First segment direction
+            var a0 = pts[0];
+            var a1 = pts[1];
+            var dirstart = new GeoDelta(a1, a0);
+            var lengthStart = dirstart.Length;
+            if (lengthStart > 1e-6)
+            {
+                var extend = extendMeters / lengthStart;
+                var extStart = new GeoCoord(
+                    a0.Northing + dirstart.NorthingDelta * extend,
+                    a0.Easting + dirstart.EastingDelta * extend
+                );
+                result.Add(extStart);
+            }
+
+            for (int i = 0; i < pts.Count; i++) result.Add(pts[i]);
+
+            var b0 = pts[pts.Count - 2];
+            var b1 = pts[pts.Count - 1];
+            var dirEnd = new GeoDelta(b0, b1);
+            var lengthEnd = dirEnd.Length;
+            if (lengthEnd > 1e-6)
+            {
+                var extend = extendMeters / lengthEnd;
+                var extEnd = new GeoCoord(
+                    b1.Northing + dirEnd.NorthingDelta * extend,
+                    b1.Easting + dirEnd.EastingDelta * extend
+                );
+                result.Add(extEnd);
+            }
+
+            return result;
+        }
+
+
         public void BuildSegments()
         {
             try
