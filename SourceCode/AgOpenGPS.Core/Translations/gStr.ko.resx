@@ -59,13 +59,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="gsABDraw" xml:space="preserve">
-    <value>A.B라인에서 2개의 점을찍은후시작하세요</value>
+    <value>A점B점을찍은후시작하세요</value>
   </data>
   <data name="gsABline" xml:space="preserve">
     <value>AB라인</value>
   </data>
   <data name="gsADConverter" xml:space="preserve">
-    <value>AD로 변환</value>
+    <value>AD변환</value>
   </data>
   <data name="gsAOGMenu" xml:space="preserve">
     <value>AOG메뉴</value>
@@ -130,7 +130,7 @@
 누르는 순서는 메뉴아래에서 위로 표시됩니다.</value>
   </data>
   <data name="gsAttachmentStyle" xml:space="preserve">
-    <value>작업기 종류</value>
+    <value>작업기종류</value>
   </data>
   <data name="gsAuto" xml:space="preserve">
     <value>자동</value>
@@ -304,7 +304,7 @@
     <value>적용된영역삭제</value>
   </data>
   <data name="gsDeleteBoundaryMapping" xml:space="preserve">
-    <value>모든경계를 삭제합니다. 계속하시겠습니까?</value>
+    <value>모든경계를 삭제합니다.계속하시겠습니까?</value>
   </data>
   <data name="gsDeleteContourPaths" xml:space="preserve">
     <value>등고선경로삭제</value>
@@ -313,10 +313,10 @@
     <value>들판삭제</value>
   </data>
   <data name="gsDeleteForSure" xml:space="preserve">
-    <value>확실히 삭제하시겠습니까?</value>
+    <value>확실히삭제하시겠습니까?</value>
   </data>
   <data name="gsDiameter" xml:space="preserve">
-    <value>지름</value>
+    <value>지름거리</value>
   </data>
   <data name="gsDirect" xml:space="preserve">
     <value>직접</value>
@@ -343,13 +343,13 @@
     <value>거리</value>
   </data>
   <data name="gsDistanceToFlag" xml:space="preserve">
-    <value>깃발까지의 거리</value>
+    <value>깃발까지거리</value>
   </data>
   <data name="gsDriveIn" xml:space="preserve">
-    <value>드라이브 인</value>
+    <value>작업없이통과</value>
   </data>
   <data name="gsDriveThru" xml:space="preserve">
-    <value>드라이브 스루</value>
+    <value>작업없이통과</value>
   </data>
   <data name="gsDriving" xml:space="preserve">
     <value>운전중</value>
@@ -358,13 +358,13 @@
     <value>이중안테나설정</value>
   </data>
   <data name="gsDualpositionAntennaRight" xml:space="preserve">
-    <value>RTK 안테나는 오른쪽</value>
+    <value>RTK안테나는오른쪽</value>
   </data>
   <data name="gsEast" xml:space="preserve">
     <value>동쪽</value>
   </data>
   <data name="gsEditABLine" xml:space="preserve">
-    <value>AB라인 편집</value>
+    <value>AB라인편집</value>
   </data>
   <data name="gsEditColor" xml:space="preserve">
     <value>색상편집</value>
@@ -394,19 +394,19 @@
     <value>기록된이름입력</value>
   </data>
   <data name="gsEnterSimCoords" xml:space="preserve">
-    <value>심 코드입력</value>
+    <value>심코드입력</value>
   </data>
   <data name="gsError" xml:space="preserve">
     <value>오류</value>
   </data>
   <data name="gsErrorreadingKML" xml:space="preserve">
-    <value>KML 읽기오류</value>
+    <value>KML읽기오류</value>
   </data>
   <data name="gsExit" xml:space="preserve">
     <value>나가기</value>
   </data>
   <data name="gsExitToWindows" xml:space="preserve">
-    <value>Windows로 나가기:</value>
+    <value>Windows로나가기:</value>
   </data>
   <data name="gsExtraGuideLines" xml:space="preserve">
     <value>안내선추가</value>
@@ -439,64 +439,64 @@
     <value>파일오류</value>
   </data>
   <data name="gsFix2Fix" xml:space="preserve">
-    <value>거리수정하기</value>
+    <value>거리기준설정</value>
   </data>
   <data name="gsFixAlarm" xml:space="preserve">
-    <value>RTK 고정경고</value>
+    <value>RTK해제경고</value>
   </data>
   <data name="gsFixAlarmStop" xml:space="preserve">
-    <value>경고후자동핸들 멈춤</value>
+    <value>경고후자동멈춤</value>
   </data>
   <data name="gsFlagByLatLon" xml:space="preserve">
-    <value>위도/경도표시깃발</value>
+    <value>위도/경도표시</value>
   </data>
   <data name="gsFlagFileIsCorrupt" xml:space="preserve">
-    <value>깃발파일손상</value>
+    <value>표시파일손상</value>
   </data>
   <data name="gsFlags" xml:space="preserve">
-    <value>깃발만들기</value>
+    <value>표시만들기</value>
   </data>
   <data name="gsForNow" xml:space="preserve">
-    <value>현재로</value>
+    <value>임시로</value>
   </data>
   <data name="gsFormFlag" xml:space="preserve">
-    <value>표시깃발</value>
+    <value>표시</value>
   </data>
   <data name="gsFromExisting" xml:space="preserve">
-    <value>기존에서가져오기</value>
+    <value>작업저장불러오기</value>
   </data>
   <data name="gsFromKml" xml:space="preserve">
-    <value>KML가져오기</value>
+    <value>KML불러오기</value>
   </data>
   <data name="gsGap" xml:space="preserve">
     <value>간격</value>
   </data>
   <data name="gsGpsStep" xml:space="preserve">
-    <value>GPS최소단계</value>
+    <value>이동최소거리</value>
   </data>
   <data name="gsGrid" xml:space="preserve">
     <value>격자무늬</value>
   </data>
   <data name="gsGuidanceStopped" xml:space="preserve">
-    <value>안내 중단</value>
+    <value>자율주행중지</value>
   </data>
   <data name="gsHardwareMessages" xml:space="preserve">
-    <value>기기장치메시지</value>
+    <value>장치메시지</value>
   </data>
   <data name="gsHeading" xml:space="preserve">
-    <value>방향</value>
+    <value>진행방향</value>
   </data>
   <data name="gsHeadingChart" xml:space="preserve">
-    <value>방향차트</value>
+    <value>진행방향차트</value>
   </data>
   <data name="gsHeadingOffset" xml:space="preserve">
-    <value>방향수정(각도)</value>
+    <value>진행방향수정(각도)</value>
   </data>
   <data name="gsHeadland" xml:space="preserve">
-    <value>들판개자리</value>
+    <value>회전구역</value>
   </data>
   <data name="gsHeadlandForm" xml:space="preserve">
-    <value>들판개자리 만들기 및 편집</value>
+    <value>회전구역만들기및편집</value>
   </data>
   <data name="gsHelp" xml:space="preserve">
     <value>도움말</value>
@@ -520,19 +520,19 @@
     <value>IMU축변경</value>
   </data>
   <data name="gsIfWrongDirectionTapVehicle" xml:space="preserve">
-    <value>방향이 잘못된 경우 탭 차량</value>
+    <value>잘못된방향일경우차량터치</value>
   </data>
   <data name="gsImage" xml:space="preserve">
     <value>이미지없음:</value>
   </data>
   <data name="gsImuFusion" xml:space="preserve">
-    <value>결합</value>
+    <value>데이터융합</value>
   </data>
   <data name="gsInches" xml:space="preserve">
     <value>인치</value>
   </data>
   <data name="gsInner" xml:space="preserve">
-    <value>내부</value>
+    <value>회전경로안쪽</value>
   </data>
   <data name="gsIntegral" xml:space="preserve">
     <value>적분</value>
@@ -553,7 +553,7 @@
     <value>수평반전</value>
   </data>
   <data name="gsInvertWas" xml:space="preserve">
-    <value>각도기변환</value>
+    <value>각도반전</value>
   </data>
   <data name="gsKMH" xml:space="preserve">
     <value>킬로미터</value>
@@ -568,7 +568,7 @@
     <value>위도+경도</value>
   </data>
   <data name="gsLateral" xml:space="preserve">
-    <value>측위</value>
+    <value>좌우오차조정</value>
   </data>
   <data name="gsLatitude" xml:space="preserve">
     <value>위도</value>
@@ -589,7 +589,7 @@
     <value>라인너비</value>
   </data>
   <data name="gsLongtitude" xml:space="preserve">
-    <value>길이</value>
+    <value>경도</value>
   </data>
   <data name="gsLookAhead" xml:space="preserve">
     <value>앞미리보기:</value>
@@ -598,13 +598,13 @@
     <value>앞미리보기시간설정</value>
   </data>
   <data name="gsLowerTime" xml:space="preserve">
-    <value>짧은시간</value>
+    <value>데이터수집주기</value>
   </data>
   <data name="gsMPH" xml:space="preserve">
     <value>메가파스칼</value>
   </data>
   <data name="gsMachinePort" xml:space="preserve">
-    <value>기계 포트</value>
+    <value>연결통신포트</value>
   </data>
   <data name="gsManual" xml:space="preserve">
     <value>수동</value>
@@ -619,7 +619,7 @@
     <value>최대치</value>
   </data>
   <data name="gsMaxSpeed" xml:space="preserve">
-    <value>최대속도</value>
+    <value>최고속도</value>
   </data>
   <data name="gsMaxSteerAngle" xml:space="preserve">
     <value>최대각도</value>
@@ -631,7 +631,7 @@
     <value>최저속도</value>
   </data>
   <data name="gsMinToMove" xml:space="preserve">
-    <value>최소이동</value>
+    <value>최소이동값</value>
   </data>
   <data name="gsMissingABLinesFile" xml:space="preserve">
     <value>잘못된AB라인파일</value>
@@ -643,19 +643,19 @@
     <value>잘못된윤곽선파일</value>
   </data>
   <data name="gsMissingFlagsFile" xml:space="preserve">
-    <value>잘못된깃발파일</value>
+    <value>잘못된표시파일</value>
   </data>
   <data name="gsMissingSectionFile" xml:space="preserve">
     <value>잘못된섹션파일</value>
   </data>
   <data name="gsMode" xml:space="preserve">
-    <value>모드</value>
+    <value>작동방식</value>
   </data>
   <data name="gsMore" xml:space="preserve">
     <value>추가</value>
   </data>
   <data name="gsMotorDriver" xml:space="preserve">
-    <value>모터 유형</value>
+    <value>모터유형</value>
   </data>
   <data name="gsMultiColorSections" xml:space="preserve">
     <value>멀티컬러</value>
@@ -688,7 +688,7 @@
     <value>안내선없음</value>
   </data>
   <data name="gsNone" xml:space="preserve">
-    <value>없음</value>
+    <value>미적용</value>
   </data>
   <data name="gsNorth" xml:space="preserve">
     <value>북쪽</value>
@@ -697,10 +697,10 @@
     <value>삭제된내용없음</value>
   </data>
   <data name="gsNudge" xml:space="preserve">
-    <value>방향이동:</value>
+    <value>소폭조정:</value>
   </data>
   <data name="gsNudgeDistance" xml:space="preserve">
-    <value>방향거리</value>
+    <value>소폭거리</value>
   </data>
   <data name="gsNudgeRefTrack" xml:space="preserve">
     <value>트랙이동참조</value>
@@ -712,7 +712,7 @@
     <value>수정</value>
   </data>
   <data name="gsOffsetFix" xml:space="preserve">
-    <value>수정고정</value>
+    <value>수정후고정</value>
   </data>
   <data name="gsOn" xml:space="preserve">
     <value>켜기</value>
@@ -730,7 +730,7 @@
     <value>열기</value>
   </data>
   <data name="gsOuter" xml:space="preserve">
-    <value>외부</value>
+    <value>바깥선</value>
   </data>
   <data name="gsOverlap" xml:space="preserve">
     <value>겹침:</value>
@@ -739,16 +739,16 @@
     <value>겹침 / 간격</value>
   </data>
   <data name="gsOverride" xml:space="preserve">
-    <value>개무시</value>
+    <value>강제조작</value>
   </data>
   <data name="gsOvershootReduction" xml:space="preserve">
-    <value>벗어남 감소</value>
+    <value>과도조향방지</value>
   </data>
   <data name="gsPasses" xml:space="preserve">
-    <value>그냥넘어가기</value>
+    <value>작업구간수</value>
   </data>
   <data name="gsPastEndOfCurve" xml:space="preserve">
-    <value>과거곡선 끝</value>
+    <value>곡선종료지점통과</value>
   </data>
   <data name="gsPause" xml:space="preserve">
     <value>일시중지</value>
@@ -760,7 +760,7 @@
     <value>중심축거리</value>
   </data>
   <data name="gsPlantPop" xml:space="preserve">
-    <value>플랜트 팝</value>
+    <value>식재밀도</value>
   </data>
   <data name="gsPleaseEnterABLine" xml:space="preserve">
     <value>AB라인을 지정하세요</value>
@@ -775,7 +775,7 @@
     <value>지점들</value>
   </data>
   <data name="gsPointsToProcess" xml:space="preserve">
-    <value>처리할 지점</value>
+    <value>처리할지점</value>
   </data>
   <data name="gsPolygons" xml:space="preserve">
     <value>다각형</value>
@@ -787,13 +787,13 @@
     <value>색상사전선택</value>
   </data>
   <data name="gsPressureTurnSensor" xml:space="preserve">
-    <value>유압턴센서</value>
+    <value>조향압력감지센서</value>
   </data>
   <data name="gsPreview" xml:space="preserve">
     <value>미리보기</value>
   </data>
   <data name="gsProblemMakingPath" xml:space="preserve">
-    <value>경로를 만드는 문제</value>
+    <value>주행경로생성오류</value>
   </data>
   <data name="gsProgramWillExitPleaseRestart" xml:space="preserve">
     <value>프로그램이 종료됩니다 재시작해 주세요</value>
@@ -802,34 +802,34 @@
     <value>비례</value>
   </data>
   <data name="gsQuickAB" xml:space="preserve">
-    <value>빠른 AB 라인 생성</value>
+    <value>AB라인만들기</value>
   </data>
   <data name="gsRaiseTime" xml:space="preserve">
-    <value>시간늘리기</value>
+    <value>목표도달시간</value>
   </data>
   <data name="gsRate" xml:space="preserve">
-    <value>비율</value>
+    <value>변화속도</value>
   </data>
   <data name="gsReallyResetEverything" xml:space="preserve">
     <value>정말모든것을초기화할까요?</value>
   </data>
   <data name="gsRecord" xml:space="preserve">
-    <value>기록</value>
+    <value>기록/저장</value>
   </data>
   <data name="gsRecordedPathFileIsCorrupt" xml:space="preserve">
-    <value>기록된경로파일 손상</value>
+    <value>저장된경로파일 손상</value>
   </data>
   <data name="gsRecordedPathMenu" xml:space="preserve">
-    <value>기록된경로</value>
+    <value>저장된경로</value>
   </data>
   <data name="gsRecordedPathPicker" xml:space="preserve">
-    <value>기록된경로로드</value>
+    <value>저장된경로로드</value>
   </data>
   <data name="gsReducedPoints" xml:space="preserve">
-    <value>지점줄임</value>
+    <value>경로점간소화</value>
   </data>
   <data name="gsRemain" xml:space="preserve">
-    <value>남아있음</value>
+    <value>미완료</value>
   </data>
   <data name="gsRemoveOffset" xml:space="preserve">
     <value>수정제거</value>
@@ -844,7 +844,7 @@
     <value>확실히모두재설정하시겠습니까?</value>
   </data>
   <data name="gsResume" xml:space="preserve">
-    <value>이력</value>
+    <value>일시정지작업</value>
   </data>
   <data name="gsReverseDistance" xml:space="preserve">
     <value>후진거리</value>
@@ -871,7 +871,7 @@
     <value>완료됨. 지금닫습니다..</value>
   </data>
   <data name="gsSaveAndReturn" xml:space="preserve">
-    <value>저장및반환</value>
+    <value>저장/이전화면</value>
   </data>
   <data name="gsSaveBeerTime" xml:space="preserve">
     <value>막걸리마실시간이에요! 안녕히 계세요!</value>
@@ -880,16 +880,16 @@
     <value>들판저장중..</value>
   </data>
   <data name="gsSaveFieldParam" xml:space="preserve">
-    <value>들판매개변수저장 중...</value>
+    <value>들판설정저장중...</value>
   </data>
   <data name="gsSaveFieldParamSaved" xml:space="preserve">
-    <value>들판매개변수가저장되었습니다.</value>
+    <value>들판설정저장되었습니다.</value>
   </data>
   <data name="gsSaveFieldSavedLocal" xml:space="preserve">
-    <value>들판이현지에저장되었습니다.</value>
+    <value>들판정보저장완료.</value>
   </data>
   <data name="gsSaveFinalizeShutdown" xml:space="preserve">
-    <value>마지막 종료중입니다..</value>
+    <value>마지막종료중입니다..</value>
   </data>
   <data name="gsSaveSettings" xml:space="preserve">
     <value>설정저장중...</value>
@@ -928,16 +928,16 @@
     <value>보내기 + 저장</value>
   </data>
   <data name="gsSentToMachineModule" xml:space="preserve">
-    <value>자율주행모듈로전송됨</value>
+    <value>자율주행모듈로전송</value>
   </data>
   <data name="gsSetPoint" xml:space="preserve">
     <value>설정값</value>
   </data>
   <data name="gsShiftGPSPosition" xml:space="preserve">
-    <value>이동GPS 위치(cm)</value>
+    <value>GPS위치이동(cm)</value>
   </data>
   <data name="gsShutdown" xml:space="preserve">
-    <value>종료</value>
+    <value>모두종료</value>
   </data>
   <data name="gsShutdownIn" xml:space="preserve">
     <value>종료위치:</value>
@@ -949,16 +949,16 @@
     <value>간단트램만들기</value>
   </data>
   <data name="gsSimulatorOn" xml:space="preserve">
-    <value>가상실현 켜기</value>
+    <value>가상체험켜기</value>
   </data>
   <data name="gsSingleAntennaSetting" xml:space="preserve">
-    <value>단일 안테나 설정</value>
+    <value>단일안테나설정</value>
   </data>
   <data name="gsSlow" xml:space="preserve">
     <value>천천히</value>
   </data>
   <data name="gsSlowDownBelow" xml:space="preserve">
-    <value>아래에서 천천히</value>
+    <value>아래에서천천히</value>
   </data>
   <data name="gsSmooth" xml:space="preserve">
     <value>부드럽게</value>
@@ -967,7 +967,7 @@
     <value>부드러운AB곡선</value>
   </data>
   <data name="gsSort" xml:space="preserve">
-    <value>종류</value>
+    <value>항목정렬</value>
   </data>
   <data name="gsSound" xml:space="preserve">
     <value>소리</value>
@@ -979,7 +979,7 @@
     <value>간격(cm)</value>
   </data>
   <data name="gsSpeedFactor" xml:space="preserve">
-    <value>속도 계수</value>
+    <value>속도계수</value>
   </data>
   <data name="gsSpeedo" xml:space="preserve">
     <value>속도</value>
@@ -997,7 +997,7 @@
     <value>새로운들판시작</value>
   </data>
   <data name="gsStatus" xml:space="preserve">
-    <value>상황</value>
+    <value>현재상태정보표시</value>
   </data>
   <data name="gsSteerAngle" xml:space="preserve">
     <value>바퀴각</value>
@@ -1013,7 +1013,7 @@
 스위치 - 켜기. 끄기</value>
   </data>
   <data name="gsSteerEnable" xml:space="preserve">
-    <value>외부스위치활성화</value>
+    <value>외부스위치활성</value>
   </data>
   <data name="gsSteerInReverse" xml:space="preserve">
     <value>후진중조향</value>
@@ -1028,13 +1028,13 @@
     <value>조향마법사</value>
   </data>
   <data name="gsStopRecordPauseBoundary" xml:space="preserve">
-    <value>경계기록일시중지</value>
+    <value>경계저장일시중지</value>
   </data>
   <data name="gsSvennArrow" xml:space="preserve">
     <value>화살표시</value>
   </data>
   <data name="gsTermsConditions" xml:space="preserve">
-    <value>조향이용 약관: </value>
+    <value>사용약관: </value>
   </data>
   <data name="gsTermsOne" xml:space="preserve">
     <value>이 무료 프로그램의 사본을 무료로 배포하는 경우, GPLv3 라이선스에 명시된 대로 받은 것과 동일하게 전달해야 합니다.</value>
@@ -1070,7 +1070,7 @@
     <value>도구메뉴</value>
   </data>
   <data name="gsTotal" xml:space="preserve">
-    <value>모두합</value>
+    <value>전체</value>
   </data>
   <data name="gsTrack" xml:space="preserve">
     <value>트랙</value>
@@ -1091,10 +1091,10 @@
     <value>선회지연끄기</value>
   </data>
   <data name="gsTurnOffRecordedPath" xml:space="preserve">
-    <value>선회기록경계끄기</value>
+    <value>선회경계저장끄기</value>
   </data>
   <data name="gsTurnOnContourOrMakeABLine" xml:space="preserve">
-    <value>AB라인선회만들기윤곽선켜기</value>
+    <value>AB라인선회만들기위한윤곽선켜기</value>
   </data>
   <data name="gsTurnSensor" xml:space="preserve">
     <value>선회센서</value>
@@ -1106,7 +1106,7 @@
     <value>단위들</value>
   </data>
   <data name="gsUseSelected" xml:space="preserve">
-    <value>목록선택</value>
+    <value>저장목록선택</value>
   </data>
   <data name="gsUser1" xml:space="preserve">
     <value>사용자1</value>
@@ -1121,16 +1121,16 @@
     <value>사용자4</value>
   </data>
   <data name="gsUturn" xml:space="preserve">
-    <value>유턴</value>
+    <value>회전</value>
   </data>
   <data name="gsUturnCompensation" xml:space="preserve">
-    <value>유턴보상</value>
+    <value>회전보상</value>
   </data>
   <data name="gsUturnExtension" xml:space="preserve">
-    <value>길이를확장 반경 2배 또는 3배로 설정</value>
+    <value>반경2배 또는3배로설정</value>
   </data>
   <data name="gsUturnSmooth" xml:space="preserve">
-    <value>평활화 3-4배 반경 설정</value>
+    <value>평활화 3-4배반경설정</value>
   </data>
   <data name="gsVehiclegroupbox" xml:space="preserve">
     <value>트랙터유형:</value>
