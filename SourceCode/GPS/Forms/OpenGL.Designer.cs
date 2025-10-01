@@ -1005,10 +1005,6 @@ namespace AgOpenGPS
                 //is the tool completely in the headland or not
                 bnd.isToolInHeadland = bnd.isToolOuterPointsInHeadland && !isHeadlandClose;
 
-                //if we are in headland, turn off trams
-                if (bnd.isToolInHeadland) tram.controlByte = 0;
-
-                //set hydraulics based on tool in headland or not
                 bnd.SetHydPosition();
             }
 
