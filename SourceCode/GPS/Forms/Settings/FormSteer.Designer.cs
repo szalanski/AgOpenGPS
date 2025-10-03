@@ -441,7 +441,7 @@
             this.lblCalcSteerAngleInner.BackColor = System.Drawing.Color.Transparent;
             this.lblCalcSteerAngleInner.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblCalcSteerAngleInner.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.lblCalcSteerAngleInner.Location = new System.Drawing.Point(238, 113);
+            this.lblCalcSteerAngleInner.Location = new System.Drawing.Point(294, 113);
             this.lblCalcSteerAngleInner.Name = "lblCalcSteerAngleInner";
             this.lblCalcSteerAngleInner.Size = new System.Drawing.Size(40, 23);
             this.lblCalcSteerAngleInner.TabIndex = 326;
@@ -455,7 +455,7 @@
             this.lblDiameter.BackColor = System.Drawing.Color.Transparent;
             this.lblDiameter.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDiameter.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.lblDiameter.Location = new System.Drawing.Point(238, 148);
+            this.lblDiameter.Location = new System.Drawing.Point(294, 148);
             this.lblDiameter.Name = "lblDiameter";
             this.lblDiameter.Size = new System.Drawing.Size(64, 23);
             this.lblDiameter.TabIndex = 325;

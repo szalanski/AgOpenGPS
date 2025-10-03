@@ -139,23 +139,6 @@ namespace AgOpenGPS
                 bnd.bndList.AddRange(boundaries);
                 CalculateMinMax();
                 bnd.BuildTurnLines();
-
-                btnABDraw.Visible = bnd.bndList.Count > 0;
-                if (bnd.bndList.Count > 0 && bnd.bndList[0].hdLine.Count > 0)
-                {
-                    bnd.isHeadlandOn = true;
-                    btnHeadlandOnOff.Image = Properties.Resources.HeadlandOn;
-                    btnHeadlandOnOff.Visible = true;
-                    btnHydLift.Image = Properties.Resources.HydraulicLiftOff;
-                }
-                else
-                {
-                    bnd.isHeadlandOn = false;
-                    btnHeadlandOnOff.Image = Properties.Resources.HeadlandOff;
-                    btnHeadlandOnOff.Visible = false;
-                }
-                int sett = Properties.Settings.Default.setArdMac_setting0;
-                btnHydLift.Visible = (((sett & 2) == 2) && bnd.isHeadlandOn);
             }
 
             // --- Headlands ---
@@ -170,7 +153,6 @@ namespace AgOpenGPS
                 tram.tramBndInnerArr.AddRange(tramData.Inner);
                 tram.tramList.Clear();
                 tram.tramList.AddRange(tramData.Lines);
-                tram.displayMode = tram.tramBndOuterArr.Count > 0 ? 1 : 0;
                 FixTramModeButton();
             }
 
@@ -179,7 +161,6 @@ namespace AgOpenGPS
             {
                 recPath.recList.Clear();
                 recPath.recList.AddRange(recPathList);
-                panelDrag.Visible = recPath.recList.Count > 0;
             }
 
             // --- BackPic ---
@@ -208,6 +189,7 @@ namespace AgOpenGPS
 
             // --- Final UI refresh ---
             PanelsAndOGLSize();
+            SetButtons();
             SetZoom();
             oglZoom.Refresh();
         }
@@ -382,6 +364,35 @@ namespace AgOpenGPS
         {
             FlagsFiles.Save(GetFieldDir(true), flagPts);
         }
+
+        private void SetButtons()
+        {
+            // Boundary & Headland
+            btnABDraw.Visible = bnd?.bndList != null && bnd.bndList.Count > 0;
+
+            bool hasHeadland = bnd?.bndList != null
+                && bnd.bndList.Count > 0
+                && bnd.bndList[0]?.hdLine != null
+                && bnd.bndList[0].hdLine.Count > 0;
+
+            bnd.isHeadlandOn = hasHeadland;
+            btnHeadlandOnOff.Visible = hasHeadland;
+            btnHeadlandOnOff.Image = hasHeadland
+                ? Properties.Resources.HeadlandOn
+                : Properties.Resources.HeadlandOff;
+
+            int sett = Properties.Settings.Default.setArdMac_setting0;
+            btnHydLift.Visible = (((sett & 2) == 2) && hasHeadland);
+            if (hasHeadland) btnHydLift.Image = Properties.Resources.HydraulicLiftOff;
+
+            // RecPath
+            panelDrag.Visible = recPath?.recList != null && recPath.recList.Count > 0;
+
+            // Tram
+            btnTramDisplayMode.Visible = tram.tramBndOuterArr.Count > 0 || tram.tramList.Count > 0;
+
+        }
+
 
         // Export one flag to KML using WGS84 from LocalPlane.
         public void FileSaveSingleFlagKML2(int flagNumber)
