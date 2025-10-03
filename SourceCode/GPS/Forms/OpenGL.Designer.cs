@@ -578,6 +578,28 @@ namespace AgOpenGPS
                     //just in case
                     GL.Disable(EnableCap.LineStipple);
 
+                    GL.PopMatrix();//  Pop the modelview.
+
+                    ////-------------------------------------------------ORTHO END---------------------------------------
+
+                    //  back to the projection and pop it, then back to the model view.
+                    GL.MatrixMode(MatrixMode.Projection);
+                    GL.PopMatrix();
+                    GL.MatrixMode(MatrixMode.Modelview);
+
+                    //reset point size
+                    GL.PointSize(1.0f);
+
+                    // --- SCREEN BORDER: draw last so nothing can overdraw it ---
+                    GL.MatrixMode(MatrixMode.Projection);
+                    GL.PushMatrix();
+                    GL.LoadIdentity();
+                    GL.Ortho(-(double)oglMain.Width / 2, (double)oglMain.Width / 2, (double)oglMain.Height, 0, -1, 1);
+
+                    GL.MatrixMode(MatrixMode.Modelview);
+                    GL.PushMatrix();
+                    GL.LoadIdentity();
+
                     GL.LineWidth(8);
                     GL.Color3(0, 0, 0);
 
@@ -601,25 +623,17 @@ namespace AgOpenGPS
                     }
 
                     GL.Begin(PrimitiveType.LineLoop);
-
                     GL.Vertex3(-oglMain.Width / 2, 0, 0);
                     GL.Vertex3(oglMain.Width / 2, 0, 0);
                     GL.Vertex3(oglMain.Width / 2, oglMain.Height, 0);
                     GL.Vertex3(-oglMain.Width / 2, oglMain.Height, 0);
-
                     GL.End();
 
-                    GL.PopMatrix();//  Pop the modelview.
-
-                    ////-------------------------------------------------ORTHO END---------------------------------------
-
-                    //  back to the projection and pop it, then back to the model view.
+                    GL.PopMatrix();
                     GL.MatrixMode(MatrixMode.Projection);
                     GL.PopMatrix();
                     GL.MatrixMode(MatrixMode.Modelview);
 
-                    //reset point size
-                    GL.PointSize(1.0f);
                     GL.Flush();
                     oglMain.SwapBuffers();
 
