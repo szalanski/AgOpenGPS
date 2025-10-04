@@ -1,7 +1,7 @@
 # AgOpenGPS - Guidance software
 
 [![GitHub Release](https://img.shields.io/github/v/release/agopengps-official/AgOpenGPS)](https://github.com/agopengps-official/AgOpenGPS/releases/latest)
-[![Translation status](https://hosted.weblate.org/widget/agopengps/svg-badge.svg)](https://hosted.weblate.org/engage/agopengps/)
+[![Translation status](https://hosted.weblate.org/widget/agopengps/language-badge.svg)](https://hosted.weblate.org/engage/agopengps/)
 
 Ag Precision Mapping and Section Control Software
 
@@ -62,6 +62,10 @@ If you want to help translate AgOpenGPS, follow these steps:
 2. Go to the [AgOpenGPS Project on Weblate](https://hosted.weblate.org/engage/agopengps)
 3. Select your language (or add a new one if it's missing)
 4. Translate strings directly in the web interface
+
+### Translation Status
+
+[![Translation status](https://hosted.weblate.org/widget/agopengps/multi-auto.svg)](https://hosted.weblate.org/engage/agopengps/)
 
 ## Links
 
