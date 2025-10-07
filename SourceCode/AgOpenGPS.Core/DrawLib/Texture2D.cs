@@ -100,7 +100,12 @@ namespace AgOpenGPS.Core.DrawLib
         {
             if (!isDisposed)
             {
-                DeleteTexture();
+                if (disposing)
+                {
+                    // Only delete texture when explicitly disposed, not during finalization
+                    // OpenGL calls require an active context and must be on the correct thread
+                    DeleteTexture();
+                }
                 isDisposed = true;
             }
         }
