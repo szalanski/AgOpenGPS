@@ -46,6 +46,40 @@ dotnet run --project SourceCode/GPS/AgOpenGPS.csproj
 dotnet run --project SourceCode/AgIO/Source/AgIO.csproj
 ```
 
+## Running the Application (Backend-Driven Mode)
+
+The application now uses a **two-process architecture**:
+
+### 1. Start Backend (Required)
+```bash
+dotnet run --project SourceCode/AgOpenGPS.Api/AgOpenGPS.Api.csproj
+```
+- Backend runs on http://localhost:5000
+- ApplicationOrchestrator starts automatically (4 Hz / 250ms)
+- Logs: "ApplicationOrchestrator starting - 4 Hz tick loop"
+
+### 2. Start Frontend
+```bash
+dotnet run --project SourceCode/GPS/AgOpenGPS.csproj
+```
+- FormGPS connects to backend automatically via SignalR
+- Logs: "Backend connection established"
+- Legacy timer (tmrWatchdog) is **completely deleted** - backend now drives application loop
+
+### 3. Verify Connection
+- Backend logs: "ApplicationOrchestrator starting - 4 Hz tick loop"
+- FormGPS logs: "Backend connection established"
+- FormGPS logs: "Backend state received: HH:mm:ss.fff" (every 250ms)
+
+**Note**: Backend must be running before starting FormGPS. If backend is unavailable, FormGPS will log connection error and use legacy timerSim for simulator only.
+
+### Architecture Changes from Workflow 001
+- **tmrWatchdog timer**: Completely deleted (was 250ms / 4 Hz)
+- **ProcessApplicationTick()**: Refactored timer logic (called on backend state updates)
+- **timerSim**: Still active at 93ms (simulator independent)
+- **Backend frequency**: 4 Hz (250ms) matches original tmrWatchdog timing
+- **State updates**: SignalR broadcasts ApplicationState with Timestamp
+
 ## Architecture
 
 ### Current Platform Dependencies
@@ -97,23 +131,41 @@ This codebase has TWO INDEPENDENT cross-platform initiatives:
 **Tests:**
 - `AgLibrary.Tests/`
 - `AgOpenGPS.Core.Tests/`
+- `Tests/AgOpenGPS.API.IntegrationTests/` - Backend integration tests (NUnit)
 
 ### Backend API Migration (Strangler Fig Pattern - Initiative 2)
 
-**Status**: Planning phase (see [docs/README.md](docs/README.md))
+**Status**: In Progress - Workflow 001 Completed (see [docs/README.md](docs/README.md))
 
-**New Projects** (to be created):
-- `AgOpenGPS.Api/` (.NET 8) - Backend Web API with business logic
-- `AgOpenGPS.Api.Client/` (.NET Standard 2.0) - Client library for in-process/HTTP calls
+**New Projects**:
+- `AgOpenGPS.Api/` (.NET 8) - Backend Web API
+  - `Abstractions/IStatePublisher.cs` - Transport abstraction (backend)
+  - `Services/ApplicationOrchestrator.cs` - Main loop (4 Hz / 250ms)
+  - `Services/SignalRStatePublisher.cs` - SignalR implementation
+  - `Hubs/StateHub.cs` - SignalR Hub
+
+- `AgOpenGPS.Api.Client/` (.NET Standard 2.0) - Client library for FormGPS
+  - `Models/ApplicationState.cs` - Strongly-typed state (Timestamp property)
+  - `Models/ConnectionOptions.cs` - Backend connection configuration
+  - `Abstractions/IStateSubscriber.cs` - Transport abstraction (implements IDisposable/IAsyncDisposable)
+  - `SignalR/SignalRStateSubscriber.cs` - SignalR implementation
+  - `Factories/SubscriberFactory.cs` - Factory for creating subscribers
+
+**Tests**:
+- `Tests/AgOpenGPS.API.IntegrationTests/` - Integration tests for state broadcasting
+  - `Common/BaseIntegrationTest.cs` - Base class for tests
+  - `Common/TestWebApplicationFactory.cs` - In-memory test server
+  - `StateReceptionTests.cs` - State reception validation tests
 
 **Key Architecture Patterns**:
-1. **Backend-driven**: ApplicationOrchestrator main loop (10 Hz)
-2. **SignalR**: Real-time communication (Backend pushes state → WinForms)
-3. **Strangler Fig**: Gradually migrate GPS/Classes/ → AgOpenGPS.Api/Services/
-4. **Adapter Pattern**: Wrap legacy code to delegate to new API (safe rollout)
-5. **Feature Flags**: Toggle between legacy/new code for A/B testing
-6. **Keep running**: GPS application works throughout entire migration
-7. **Future-ready**: Enable Electron + React frontend (Phase 2)
+1. **Backend-driven**: ApplicationOrchestrator main loop (4 Hz / 250ms) - ✅ IMPLEMENTED
+2. **SignalR**: Real-time communication (Backend pushes state → WinForms) - ✅ IMPLEMENTED
+3. **Transport Abstraction**: IStatePublisher/IStateSubscriber interfaces (easy to swap SignalR for WebSocket/gRPC)
+4. **Factory Pattern**: SubscriberFactory creates configured subscribers
+5. **Strangler Fig**: Gradually migrate GPS/Classes/ → AgOpenGPS.Api/Services/ (future workflows)
+6. **Adapter Pattern**: Wrap legacy code to delegate to new API (future workflows)
+7. **Keep running**: GPS application works throughout entire migration
+8. **Future-ready**: Enable Electron + React frontend (Phase 2)
 
 **Domain Modules to Migrate** (from GPS/Classes/):
 - **Navigation & Path Planning**: CGuidance, CABLine, CABCurve, CYouTurn, CDubins, CHead, CTurn
