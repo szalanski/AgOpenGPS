@@ -15,6 +15,7 @@ namespace AgOpenGPS.Api.Client.SignalR
     {
         private readonly HubConnection _hubConnection;
         private readonly Subject<ApplicationState> _stateSubject = new Subject<ApplicationState>();
+        private IDisposable? _subscription;
 
         /// <summary>
         /// Initializes a new instance of SignalRStateSubscriber.
@@ -32,15 +33,15 @@ namespace AgOpenGPS.Api.Client.SignalR
         }
 
         /// <inheritdoc />
-        public IDisposable Subscribe(Action<ApplicationState> onNext, Action<Exception>? onError = null)
+        public void Subscribe(Action<ApplicationState> onNext, Action<Exception>? onError = null)
         {
             if (onNext == null)
                 throw new ArgumentNullException(nameof(onNext));
 
-            if (onError != null)
-                return _stateSubject.Subscribe(onNext, onError);
-            else
-                return _stateSubject.Subscribe(onNext);
+            // Store subscription internally for disposal
+            _subscription = onError != null
+                ? _stateSubject.Subscribe(onNext, onError)
+                : _stateSubject.Subscribe(onNext);
         }
 
         /// <inheritdoc />
@@ -61,6 +62,22 @@ namespace AgOpenGPS.Api.Client.SignalR
                 await _hubConnection.StopAsync();
                 _stateSubject.OnCompleted(); // Signal stream end
             }
+        }
+
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            _subscription?.Dispose();
+            DisconnectAsync().GetAwaiter().GetResult();
+            _stateSubject.Dispose();
+        }
+
+        /// <inheritdoc />
+        public async ValueTask DisposeAsync()
+        {
+            _subscription?.Dispose();
+            await DisconnectAsync();
+            _stateSubject.Dispose();
         }
     }
 }

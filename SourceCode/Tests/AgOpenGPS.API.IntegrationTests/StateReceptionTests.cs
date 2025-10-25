@@ -26,7 +26,7 @@ public class StateReceptionTests : BaseIntegrationTest
         subscriber.IsConnected.Should().BeTrue();
 
         // Cleanup
-        await subscriber.DisconnectAsync();
+        await subscriber.DisposeAsync();
         await hubConnection.DisposeAsync();
     }
 
@@ -39,17 +39,17 @@ public class StateReceptionTests : BaseIntegrationTest
         var receivedStates = new List<ApplicationState>();
 
         // Subscribe to state updates
-        var subscription = subscriber.Subscribe(state => receivedStates.Add(state));
+        subscriber.Subscribe(state => receivedStates.Add(state));
 
         // Act
         await subscriber.ConnectAsync();
 
-        // Wait for some updates (1 second should give ~10 updates at 10 Hz)
+        // Wait for some updates (1 second should give ~4 updates at 4 Hz)
         await Task.Delay(1000);
 
         // Assert
-        receivedStates.Should().HaveCountGreaterThan(8, "at least 8 updates should arrive in 1 second at 10 Hz");
-        receivedStates.Should().HaveCountLessThan(12, "at most 12 updates should arrive in 1 second at 10 Hz");
+        receivedStates.Should().HaveCountGreaterThan(2, "at least 3 updates should arrive in 1 second at 4 Hz");
+        receivedStates.Should().HaveCountLessThan(6, "at most 5 updates should arrive in 1 second at 4 Hz");
 
         // Verify timestamps are recent and increasing
         receivedStates.Should().OnlyContain(s => s.Timestamp > DateTime.UtcNow.AddSeconds(-2));
@@ -58,8 +58,7 @@ public class StateReceptionTests : BaseIntegrationTest
         timestamps.Should().BeInAscendingOrder("timestamps should be monotonically increasing");
 
         // Cleanup
-        subscription.Dispose();
-        await subscriber.DisconnectAsync();
+        await subscriber.DisposeAsync();
         await hubConnection.DisposeAsync();
     }
 
@@ -79,9 +78,9 @@ public class StateReceptionTests : BaseIntegrationTest
         var count2 = 0;
         var count3 = 0;
 
-        var subscription1 = subscriber1.Subscribe(s => count1++);
-        var subscription2 = subscriber2.Subscribe(s => count2++);
-        var subscription3 = subscriber3.Subscribe(s => count3++);
+        subscriber1.Subscribe(s => count1++);
+        subscriber2.Subscribe(s => count2++);
+        subscriber3.Subscribe(s => count3++);
 
         // Act
         await subscriber1.ConnectAsync();
@@ -97,12 +96,9 @@ public class StateReceptionTests : BaseIntegrationTest
         count3.Should().BeGreaterThan(0, "subscriber 3 should receive updates");
 
         // Cleanup
-        subscription1.Dispose();
-        subscription2.Dispose();
-        subscription3.Dispose();
-        await subscriber1.DisconnectAsync();
-        await subscriber2.DisconnectAsync();
-        await subscriber3.DisconnectAsync();
+        await subscriber1.DisposeAsync();
+        await subscriber2.DisposeAsync();
+        await subscriber3.DisposeAsync();
         await hubConnection1.DisposeAsync();
         await hubConnection2.DisposeAsync();
         await hubConnection3.DisposeAsync();

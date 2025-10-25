@@ -91,8 +91,8 @@ namespace AgOpenGPS
 
         public List<int> buttonOrder = new List<int>();
 
-        //Timer triggers at 125 msec
-        private void tmrWatchdog_tick(object sender, EventArgs e)
+        //Main application tick loop - called by backend state updates (250ms / 4 Hz)
+        public void ProcessApplicationTick()
         {
             if (sentenceCounter == 19)
             {

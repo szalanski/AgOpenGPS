@@ -4,7 +4,7 @@ using AgOpenGPS.Api.Client.Models;
 namespace AgOpenGPS.Api.Services;
 
 /// <summary>
-/// Main application orchestrator that runs at 10 Hz (every 100ms).
+/// Main application orchestrator that runs at 4 Hz (every 250ms).
 /// Generates application state and broadcasts to all connected clients.
 /// </summary>
 public class ApplicationOrchestrator : IHostedService, IDisposable
@@ -27,14 +27,14 @@ public class ApplicationOrchestrator : IHostedService, IDisposable
     /// </summary>
     public Task StartAsync(CancellationToken cancellationToken)
     {
-        _logger.LogInformation("ApplicationOrchestrator starting - 10 Hz tick loop");
+        _logger.LogInformation("ApplicationOrchestrator starting - 4 Hz tick loop");
 
-        // Create timer with 100ms interval (10 Hz)
+        // Create timer with 250ms interval (4 Hz)
         _timer = new Timer(
             callback: OnTick,
             state: null,
             dueTime: TimeSpan.Zero,      // Start immediately
-            period: TimeSpan.FromMilliseconds(100)); // 10 Hz
+            period: TimeSpan.FromMilliseconds(250)); // 4 Hz
 
         _isRunning = true;
 
@@ -55,7 +55,7 @@ public class ApplicationOrchestrator : IHostedService, IDisposable
     }
 
     /// <summary>
-    /// Executed every 100ms (10 Hz).
+    /// Executed every 250ms (4 Hz).
     /// Generates application state and broadcasts to clients.
     /// </summary>
     private async void OnTick(object? state)
@@ -73,8 +73,6 @@ public class ApplicationOrchestrator : IHostedService, IDisposable
 
             // Broadcast to all connected clients
             await _statePublisher.BroadcastStateAsync(appState);
-
-            _logger.LogInformation("Tick at {Timestamp}", appState.Timestamp);
         }
         catch (Exception ex)
         {

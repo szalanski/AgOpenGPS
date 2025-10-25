@@ -10,7 +10,8 @@
       "Bash(dotnet run:*)",
       "Bash(dotnet add:*)",
       "Bash(mkdir:*)",
-      "Bash(dotnet test:*)"
+      "Bash(dotnet test:*)",
+      "Bash(taskkill:*)"
     ],
     "deny": [],
     "ask": []
