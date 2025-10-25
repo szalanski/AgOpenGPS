@@ -46,6 +46,40 @@ dotnet run --project SourceCode/GPS/AgOpenGPS.csproj
 dotnet run --project SourceCode/AgIO/Source/AgIO.csproj
 ```
 
+## Running the Application (Backend-Driven Mode)
+
+The application now uses a **two-process architecture**:
+
+### 1. Start Backend (Required)
+```bash
+dotnet run --project SourceCode/AgOpenGPS.Api/AgOpenGPS.Api.csproj
+```
+- Backend runs on http://localhost:5000
+- ApplicationOrchestrator starts automatically (4 Hz / 250ms)
+- Logs: "ApplicationOrchestrator starting - 4 Hz tick loop"
+
+### 2. Start Frontend
+```bash
+dotnet run --project SourceCode/GPS/AgOpenGPS.csproj
+```
+- FormGPS connects to backend automatically via SignalR
+- Logs: "Backend connection established"
+- Legacy timer (tmrWatchdog) is **completely deleted** - backend now drives application loop
+
+### 3. Verify Connection
+- Backend logs: "ApplicationOrchestrator starting - 4 Hz tick loop"
+- FormGPS logs: "Backend connection established"
+- FormGPS logs: "Backend state received: HH:mm:ss.fff" (every 250ms)
+
+**Note**: Backend must be running before starting FormGPS. If backend is unavailable, FormGPS will log connection error and use legacy timerSim for simulator only.
+
+### Architecture Changes from Workflow 001
+- **tmrWatchdog timer**: Completely deleted (was 250ms / 4 Hz)
+- **ProcessApplicationTick()**: Refactored timer logic (called on backend state updates)
+- **timerSim**: Still active at 93ms (simulator independent)
+- **Backend frequency**: 4 Hz (250ms) matches original tmrWatchdog timing
+- **State updates**: SignalR broadcasts ApplicationState with Timestamp
+
 ## Architecture
 
 ### Current Platform Dependencies
@@ -54,11 +88,30 @@ dotnet run --project SourceCode/AgIO/Source/AgIO.csproj
 - **3D Rendering**: OpenTK 3.3.3 (OpenGL bindings)
 - **Configuration Storage**: Windows Registry (via `RegistrySettings.cs`)
 
+## IMPORTANT: Parallel Migration Initiatives
+
+This codebase has TWO INDEPENDENT cross-platform initiatives:
+
+### Initiative 1: AgOpenGPS.Core (MVP Pattern - Separate Team)
+- **Project**: `AgOpenGPS.Core/`, `AgOpenGPS.WpfApp/`, `AgOpenGPS.WpfViews/`
+- **Approach**: Model-View-Presenter pattern, WPF migration
+- **Team**: Separate team (not this migration)
+- **Status**: In progress by others
+
+### Initiative 2: Backend API Migration (Strangler Fig - THIS Migration)
+- **New Projects**: `AgOpenGPS.Api/` (.NET 8), `AgOpenGPS.Api.Client/` (.NET Standard 2.0)
+- **Approach**: Backend-driven with SignalR, Strangler Fig Pattern
+- **Documentation**: [docs/architecture/](docs/architecture/) and [docs/workflow/](docs/workflow/)
+- **Team**: THIS migration work (cross-platform-support branch)
+- **Status**: Planning phase
+
+**These initiatives are COMPLETELY INDEPENDENT and do not share code.**
+
 ### Project Structure
 
 **Core Libraries:**
 - `AgLibrary/` - Shared utilities (logging, settings, UI controls)
-- `AgOpenGPS.Core/` - Domain models, interfaces, presenters, and view models for cross-platform refactor (uses MVP pattern)
+- `AgOpenGPS.Core/` - **[SEPARATE INITIATIVE]** MVP pattern refactor (see Initiative 1 above)
 
 **Main Applications:**
 - `GPS/` - Main AgOpenGPS WinForms application
@@ -78,34 +131,85 @@ dotnet run --project SourceCode/AgIO/Source/AgIO.csproj
 **Tests:**
 - `AgLibrary.Tests/`
 - `AgOpenGPS.Core.Tests/`
+- `Tests/AgOpenGPS.API.IntegrationTests/` - Backend integration tests (NUnit)
 
-### Cross-Platform Migration (Phase 1)
+### Backend API Migration (Strangler Fig Pattern - Initiative 2)
 
-The codebase is undergoing architectural migration to support Linux/macOS backends. See [docs/migration/phase1-overview.md](docs/migration/phase1-overview.md) and [docs/migration/phase1-architecture.md](docs/migration/phase1-architecture.md) for detailed plans.
+**Status**: In Progress - Workflow 001 Completed (see [docs/README.md](docs/README.md))
 
-**Key Migration Goals:**
-1. Decouple business logic from WinForms UI layer
-2. Replace Windows Registry with cross-platform file-based configuration
-3. Abstract OpenGL rendering behind platform-agnostic interfaces
-4. Extract domain services following the module contracts defined in phase1-architecture.md
+**New Projects**:
+- `AgOpenGPS.Api/` (.NET 8) - Backend Web API
+  - `Abstractions/IStatePublisher.cs` - Transport abstraction (backend)
+  - `Services/ApplicationOrchestrator.cs` - Main loop (4 Hz / 250ms)
+  - `Services/SignalRStatePublisher.cs` - SignalR implementation
+  - `Hubs/StateHub.cs` - SignalR Hub
 
-**Domain Module Organization (from phase1-architecture.md):**
-- **Navigation & Path Planning**: CGuidance, CABLine, CABCurve, CYouTurn, CDubins, CHead, CTurn, etc.
-- **Field & Geometry Management**: CBoundary, CFieldData, CWorldGrid, CFence, CFlag
-- **Section Control & Implement**: CSection, CTool, CFeatureSettings
-- **Vehicle & Hardware Integration**: CVehicle, CAutoSteer, CAHRS, CNMEA, CModuleComm
-- **Visualization & 3D Graphics**: CCamera, CGLM, OpenTK rendering
-- **Simulation & Testing**: CSim
+- `AgOpenGPS.Api.Client/` (.NET Standard 2.0) - Client library for FormGPS
+  - `Models/ApplicationState.cs` - Strongly-typed state (Timestamp property)
+  - `Models/ConnectionOptions.cs` - Backend connection configuration
+  - `Abstractions/IStateSubscriber.cs` - Transport abstraction (implements IDisposable/IAsyncDisposable)
+  - `SignalR/SignalRStateSubscriber.cs` - SignalR implementation
+  - `Factories/SubscriberFactory.cs` - Factory for creating subscribers
 
-**Planned Service Interfaces (from phase1-architecture.md):**
+**Tests**:
+- `Tests/AgOpenGPS.API.IntegrationTests/` - Integration tests for state broadcasting
+  - `Common/BaseIntegrationTest.cs` - Base class for tests
+  - `Common/TestWebApplicationFactory.cs` - In-memory test server
+  - `StateReceptionTests.cs` - State reception validation tests
+
+**Key Architecture Patterns**:
+1. **Backend-driven**: ApplicationOrchestrator main loop (4 Hz / 250ms) - ✅ IMPLEMENTED
+2. **SignalR**: Real-time communication (Backend pushes state → WinForms) - ✅ IMPLEMENTED
+3. **Transport Abstraction**: IStatePublisher/IStateSubscriber interfaces (easy to swap SignalR for WebSocket/gRPC)
+4. **Factory Pattern**: SubscriberFactory creates configured subscribers
+5. **Strangler Fig**: Gradually migrate GPS/Classes/ → AgOpenGPS.Api/Services/ (future workflows)
+6. **Adapter Pattern**: Wrap legacy code to delegate to new API (future workflows)
+7. **Keep running**: GPS application works throughout entire migration
+8. **Future-ready**: Enable Electron + React frontend (Phase 2)
+
+**Domain Modules to Migrate** (from GPS/Classes/):
+- **Navigation & Path Planning**: CGuidance, CABLine, CABCurve, CYouTurn, CDubins, CHead, CTurn
+- **Field & Geometry**: CBoundary, CFieldData, CWorldGrid, CFence, CFlag
+- **Section Control**: CSection, CTool, CFeatureSettings
+- **Vehicle & Hardware**: CVehicle, CAutoSteer, CAHRS, CNMEA, CModuleComm
+- **Visualization**: CCamera, CGLM (OpenGL rendering data)
+- **Simulation**: CSim
+
+**Backend Service Interfaces** (in AgOpenGPS.Api):
 - `IGuidanceService`, `IPathPlanner`, `ITramlineService`
-- `IFieldRepository`, `IBoundaryService`, `IHeadlandGenerator`
-- `ISectionControlService`, `IImplementConfigurationProvider`, `ICoverageMapService`
-- `IVehicleStateService`, `IAutoSteerGateway`, `IGnssGateway`, `IImuGateway`
-- `IRenderSceneProvider`, `ICameraStateService`, `IThemeService`
-- `ISimulationService`
+- `IFieldService`, `IBoundaryService`, `IHeadlandGenerator`
+- `ISectionControlService`, `ICoverageMapService`
+- `IVehicleService`, `IGnssService`, `IImuService`, `IAutoSteerService`
+- `IConfigurationService`, `ISimulationService`
 
-### MVP Pattern in AgOpenGPS.Core
+**Documentation Structure**:
+
+See [docs/README.md](docs/README.md) for complete documentation navigation.
+
+**Set A (Architecture)** - Static knowledge base (~100-200 lines each):
+- [docs/architecture/01-goals.md](docs/architecture/01-goals.md) - Phase 1 goals and current problems
+- [docs/architecture/02-strangler-fig.md](docs/architecture/02-strangler-fig.md) - Gradual migration pattern
+- [docs/architecture/03-backend-driven.md](docs/architecture/03-backend-driven.md) - Backend-driven architecture
+- [docs/architecture/04-signalr.md](docs/architecture/04-signalr.md) - Real-time communication
+- [docs/architecture/05-adapter-pattern.md](docs/architecture/05-adapter-pattern.md) - Safe migration with feature flags
+
+**Set B (Workflow)** - Task-based workflow (vertical slices):
+- [docs/workflow/001-application-orchestrator/](docs/workflow/001-application-orchestrator/) - Backend main loop
+  - plan.md - Concept only (~200 lines, zero code)
+  - task1.md through task6.md - Independent units of work
+
+**AI Workflow Instructions**:
+
+When working on migration tasks:
+1. **For context**: Read relevant architecture docs (Set A) - small files optimized for AI context
+2. **For implementation**: Use workflow chunks (Set B) - each task is self-contained and actionable
+3. **Don't read everything**: Tasks include necessary context or link to architecture docs
+4. **Start here**: [docs/README.md](docs/README.md) for navigation and quick start guide
+
+### AgOpenGPS.Core (MVP Pattern - Initiative 1)
+
+**Status**: In progress by separate team (NOT part of our docs/architecture/ or docs/workflow/)
+
 The `AgOpenGPS.Core` project follows Model-View-Presenter pattern:
 - **Models** (`Models/`) - Domain data and business logic
 - **ViewModels** (`ViewModels/`) - Presentation state (e.g., `ApplicationViewModel`)
@@ -113,6 +217,8 @@ The `AgOpenGPS.Core` project follows Model-View-Presenter pattern:
 - **Interfaces** (`Interfaces/Presenters/`) - Contracts like `IPanelPresenter`, `IErrorPresenter`
 
 The `ApplicationCore` class serves as the composition root, wiring up models, view models, and presenters.
+
+**Note**: This is a SEPARATE cross-platform approach using WPF. OUR migration (see docs/architecture/ and docs/workflow/) uses AgOpenGPS.Api with SignalR and Strangler Fig Pattern instead.
 
 ## Important Implementation Notes
 

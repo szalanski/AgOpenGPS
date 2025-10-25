@@ -21,6 +21,9 @@ using AgOpenGPS.Forms.Profiles;
 using AgOpenGPS.Properties;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
+using AgOpenGPS.Api.Client.Abstractions;
+using AgOpenGPS.Api.Client.Models;
+using AgOpenGPS.Api.Client.Factories;
 
 namespace AgOpenGPS
 {
@@ -84,6 +87,8 @@ namespace AgOpenGPS
 
         private Task agShareUploadTask = null;
 
+        // Backend state subscription
+        private IStateSubscriber _stateSubscriber;
 
         #region // Class Props and instances
 
@@ -398,6 +403,8 @@ namespace AgOpenGPS
                 + DateTime.Now.ToString("f", CultureInfo.InvariantCulture));
             Log.EventWriter("AOG Version: " + Application.ProductVersion.ToString(CultureInfo.InvariantCulture));
 
+            // Initialize backend connection
+            InitializeBackendConnection();
             if (!Properties.Settings.Default.setDisplay_isTermsAccepted)
             {
                 using (var form = new Form_First(this))
@@ -533,6 +540,66 @@ namespace AgOpenGPS
             }
             //Init AgShareClient
             agShareClient = new AgShareClient(Settings.Default.AgShareServer, Settings.Default.AgShareApiKey);
+
+        }
+
+        private async void InitializeBackendConnection()
+        {
+            try
+            {
+                // Create connection options
+                var options = new ConnectionOptions
+                {
+                    Url = "http://localhost:5000",
+                    EnableAutomaticReconnect = true
+                };
+
+                // Create state subscriber using factory
+                _stateSubscriber = SubscriberFactory.CreateSignalRSubscriber(options);
+
+                // Subscribe to state updates
+                _stateSubscriber.Subscribe(
+                    onNext: OnStateReceived,
+                    onError: OnStateError
+                );
+
+                // Connect to backend
+                await _stateSubscriber.ConnectAsync();
+
+                Log.EventWriter("Backend connection established");
+
+                // Disable legacy simulator timer (backend now drives state updates)
+                timerSim.Enabled = false;
+
+                Log.EventWriter("Legacy simulator timer disabled - backend-driven mode active");
+            }
+            catch (Exception ex)
+            {
+                Log.EventWriter($"Failed to connect to backend: {ex.Message}");
+                // Don't crash - fallback to legacy simulator timer
+                timerSim.Enabled = true;
+            }
+        }
+
+        private void OnStateReceived(ApplicationState state)
+        {
+            // Marshal to UI thread if needed
+            if (InvokeRequired)
+            {
+                BeginInvoke(new Action<ApplicationState>(OnStateReceived), state);
+                return;
+            }
+
+            // Update UI to show backend is connected and timestamp
+            Log.EventWriter($"Backend state received: {state.Timestamp:HH:mm:ss.fff}");
+
+            // Execute main application tick loop (replaces legacy tmrWatchdog timer)
+            ProcessApplicationTick();
+        }
+
+        private void OnStateError(Exception error)
+        {
+            Log.EventWriter($"Backend state error: {error.Message}");
         }
 
         #region Shutdown Handling
@@ -728,7 +795,11 @@ namespace AgOpenGPS
             }
 
             // Close the main application form
-            try { Close(); }
+            try
+            {
+                Close();
+                _stateSubscriber?.Dispose();
+            }
             catch (ObjectDisposedException) { }
         }
         #endregion

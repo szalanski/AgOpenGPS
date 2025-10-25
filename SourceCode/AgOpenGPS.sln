@@ -33,6 +33,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgOpenGPS.WpfViews", "AgOpe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgDiag", "AgDiag\AgDiag.csproj", "{8AE86C22-D6EA-46D3-A053-C10B15EDEC8A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgOpenGPS.Api", "AgOpenGPS.Api\AgOpenGPS.Api.csproj", "{E360B547-95D4-21A6-9F78-C6CD68871AE7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgOpenGPS.API.IntegrationTests", "Tests\AgOpenGPS.API.IntegrationTests\AgOpenGPS.API.IntegrationTests.csproj", "{615C9657-C055-8263-4C91-0343CA20FEE6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgOpenGPS.Api.Client", "AgOpenGPS.Api.Client\AgOpenGPS.Api.Client.csproj", "{CB51D2E5-C365-67C2-0CA4-BFFB661E839B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,16 +95,31 @@ Global
 		{8AE86C22-D6EA-46D3-A053-C10B15EDEC8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8AE86C22-D6EA-46D3-A053-C10B15EDEC8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8AE86C22-D6EA-46D3-A053-C10B15EDEC8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E360B547-95D4-21A6-9F78-C6CD68871AE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E360B547-95D4-21A6-9F78-C6CD68871AE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E360B547-95D4-21A6-9F78-C6CD68871AE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E360B547-95D4-21A6-9F78-C6CD68871AE7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{615C9657-C055-8263-4C91-0343CA20FEE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{615C9657-C055-8263-4C91-0343CA20FEE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{615C9657-C055-8263-4C91-0343CA20FEE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{615C9657-C055-8263-4C91-0343CA20FEE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CB51D2E5-C365-67C2-0CA4-BFFB661E839B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB51D2E5-C365-67C2-0CA4-BFFB661E839B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB51D2E5-C365-67C2-0CA4-BFFB661E839B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB51D2E5-C365-67C2-0CA4-BFFB661E839B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{615C9657-C055-8263-4C91-0343CA20FEE6} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {31C86FEF-A77A-49A7-9088-8E0D8AD2ACA5}
-		RESX_ConfirmAddLanguageFile = True
-		RESX_NeutralResourcesLanguage = en-US
-		RESX_SortFileContentOnSave = True
-		RESX_ShowErrorsInErrorList = False
 		RESX_ResXSortingComparison = Ordinal
+		RESX_ShowErrorsInErrorList = False
+		RESX_SortFileContentOnSave = True
+		RESX_NeutralResourcesLanguage = en-US
+		RESX_ConfirmAddLanguageFile = True
+		SolutionGuid = {31C86FEF-A77A-49A7-9088-8E0D8AD2ACA5}
 	EndGlobalSection
 EndGlobal

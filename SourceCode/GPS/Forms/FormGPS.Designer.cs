@@ -50,7 +50,6 @@ namespace AgOpenGPS
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.AgShareApiMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.tmrWatchdog = new System.Windows.Forms.Timer(this.components);
             this.contextMenuStripFlag = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemFlagRed = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuFlagGrn = new System.Windows.Forms.ToolStripMenuItem();
@@ -379,12 +378,7 @@ namespace AgOpenGPS
             this.helpMenuItem.Size = new System.Drawing.Size(382, 50);
             this.helpMenuItem.Text = "Help";
             this.helpMenuItem.Click += new System.EventHandler(this.helpMenuItem_Click);
-            // 
-            // tmrWatchdog
-            // 
-            this.tmrWatchdog.Interval = 250;
-            this.tmrWatchdog.Tick += new System.EventHandler(this.tmrWatchdog_tick);
-            // 
+            //
             // contextMenuStripFlag
             // 
             this.contextMenuStripFlag.AutoSize = false;
@@ -2952,7 +2946,6 @@ namespace AgOpenGPS
         #endregion
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.Timer tmrWatchdog;
         private System.Windows.Forms.Button btnSection1Man;
         private System.Windows.Forms.Button btnSection2Man;
         private System.Windows.Forms.Button btnSection3Man;
