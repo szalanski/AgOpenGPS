@@ -2,7 +2,15 @@
   "permissions": {
     "allow": [
       "Bash(awk:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(git checkout:*)",
+      "Bash(dotnet new:*)",
+      "Bash(dotnet build:*)",
+      "Bash(timeout /t 5 dotnet run --project SourceCode/AgOpenGPS.Api/AgOpenGPS.Api.csproj)",
+      "Bash(dotnet run:*)",
+      "Bash(dotnet add:*)",
+      "Bash(mkdir:*)",
+      "Bash(dotnet test:*)"
     ],
     "deny": [],
     "ask": []
