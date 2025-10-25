@@ -11,7 +11,8 @@
       "Bash(dotnet add:*)",
       "Bash(mkdir:*)",
       "Bash(dotnet test:*)",
-      "Bash(taskkill:*)"
+      "Bash(taskkill:*)",
+      "Bash(git log:*)"
     ],
     "deny": [],
     "ask": []
