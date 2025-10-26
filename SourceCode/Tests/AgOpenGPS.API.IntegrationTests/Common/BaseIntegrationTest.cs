@@ -1,3 +1,4 @@
+using System.Net.Sockets;
 using Microsoft.AspNetCore.SignalR.Client;
 
 namespace AgOpenGPS.API.IntegrationTests.Common;
@@ -14,10 +15,20 @@ public abstract class BaseIntegrationTest
     protected string BackendUrl => HttpClient.BaseAddress?.ToString().TrimEnd('/') ?? string.Empty;
 
     [OneTimeSetUp]
-    public void OneTimeSetUp()
+    public async Task OneTimeSetUp()
     {
+        // Check if port 15556 is available (backend uses 15556, FormGPS uses 15555)
+        if (IsPortInUse(15556))
+        {
+            Assert.Fail("Port 15556 is already in use. Backend must bind to this port for tests.");
+        }
+
         Factory = new TestWebApplicationFactory();
         HttpClient = Factory.CreateClient();
+
+        // Wait for ApplicationOrchestrator BackgroundService to start and bind UDP socket
+        // BackgroundServices start asynchronously, need extra time to fully initialize
+        await Task.Delay(2000);
     }
 
     [OneTimeTearDown]
@@ -25,6 +36,22 @@ public abstract class BaseIntegrationTest
     {
         HttpClient?.Dispose();
         Factory?.Dispose();
+    }
+
+    /// <summary>
+    /// Check if a UDP port is already in use.
+    /// </summary>
+    private bool IsPortInUse(int port)
+    {
+        try
+        {
+            using var udpClient = new UdpClient(port);
+            return false;
+        }
+        catch (SocketException)
+        {
+            return true;
+        }
     }
 
     /// <summary>
