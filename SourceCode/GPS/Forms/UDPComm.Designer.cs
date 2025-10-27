@@ -361,6 +361,12 @@ namespace AgOpenGPS
                 loopBackSocket.BeginReceiveFrom(loopBuffer, 0, loopBuffer.Length, SocketFlags.None,
                     ref endPointLoopBack, new AsyncCallback(ReceiveAppData), null);
 
+                // Forward GPS packets (PGN 0xD6) to backend API on port 15556
+                if (localMsg.Length > 3 && localMsg[0] == 0x80 && localMsg[1] == 0x81 && localMsg[3] == 0xD6)
+                {
+                    ForwardPacketToBackend(localMsg);
+                }
+
                 BeginInvoke((MethodInvoker)(() => ReceiveFromAgIO(localMsg)));
             }
             catch (Exception)
@@ -402,6 +408,24 @@ namespace AgOpenGPS
             catch (Exception)
             {
                 //MessageBox.Show("SendData Error: " + ex.Message, "UDP Server", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /// <summary>
+        /// Forward GPS packets to backend API on port 15556.
+        /// Called when FormGPS receives GPS data from AgIO on port 15555.
+        /// </summary>
+        private void ForwardPacketToBackend(byte[] packet)
+        {
+            try
+            {
+                var epBackend = new IPEndPoint(IPAddress.Loopback, 15556);
+                loopBackSocket.BeginSendTo(packet, 0, packet.Length, SocketFlags.None,
+                    epBackend, new AsyncCallback(SendAsyncLoopData), null);
+            }
+            catch (Exception)
+            {
+                // Silently fail if backend is not running
             }
         }
 

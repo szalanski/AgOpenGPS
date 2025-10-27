@@ -11,7 +11,13 @@
       "Bash(dotnet add:*)",
       "Bash(mkdir:*)",
       "Bash(dotnet test:*)",
-      "Bash(taskkill:*)"
+      "Bash(taskkill:*)",
+      "Bash(git log:*)",
+      "Bash(dotnet list:*)",
+      "Bash(Select-String -Pattern \"Powodzenie|Niepowodzenie|liczba testów|pomyślnie|niepowodzeniem\" -Context 0,1)",
+      "Bash(ren IStateSubscriber.cs IBackendClient.cs)",
+      "Bash(Select-String -Pattern \"Powodzenie|Niepowodzenie|liczba testów|pomyślnie|niepowodzeniem|Passed|Failed\" -Context 0,1)",
+      "Bash(powershell -Command:*)"
     ],
     "deny": [],
     "ask": []

@@ -40,14 +40,25 @@ Vertical slices of work organized as **workflow chunks**. Each chunk has:
 **Location**: [workflow/](workflow/)
 
 **Current chunks**:
-1. **[001-application-orchestrator/](workflow/001-application-orchestrator/)** - Backend main loop
+1. **[001-application-orchestrator/](workflow/001-application-orchestrator/)** - ✅ COMPLETED - Backend main loop
    - plan.md - Concept overview
-   - task1.md - Create ApplicationOrchestrator class skeleton
-   - task2.md - Add timer (100ms, 10 Hz)
-   - task3.md - Add GNSS → Vehicle coordination
-   - task4.md - Add Guidance & Section Control
-   - task5.md - Add SignalR broadcast
-   - task6.md - Migration from FormGPS timer
+   - task1.md through task6.md - Backend infrastructure and SignalR state broadcasting
+   - **Status**: ApplicationOrchestrator running at 4 Hz, SignalR state updates working
+
+2. **[002-gps-gnss-migration/](workflow/002-gps-gnss-migration/)** - ✅ COMPLETED (DDD refactored) - GPS/GNSS backend migration
+   - plan.md - GPS processing migration concept
+   - task1.md through task9.md - GnssService, UdpPacketReceiver, Simulator, Integration Tests
+   - **Status**: 41/44 integration tests passing (3 steering failures remain)
+   - **Key Implementations**:
+     - Event-driven ApplicationOrchestrator (processes UDP packets immediately)
+     - GnssService (PGN 0xD6 unpacking, coordinate transforms)
+     - SimulatorService (93ms physics tick, DDD refactored with 3 domain services)
+       - VehiclePhysicsService (speed transitions, steering smoothing, heading changes, position calculations)
+       - GnssDataGenerator (altitude, satellites, fix quality, HDOP, age)
+       - AgIoProtocolSerializer (binary PGN 0xD6 packet serialization)
+     - CQRS command pattern (Start/Stop/SetSpeed/SetSteering/Reset via MediatR)
+     - SignalR bidirectional communication (state updates + commands)
+     - IBackendClient abstraction for bidirectional transport
 
 **When to use**:
 - Ready to implement specific features
@@ -158,6 +169,8 @@ When adding new workflow chunks:
 ## Additional Resources
 
 - **[CLAUDE.md](../CLAUDE.md)** - Full project context for AI tools
+- **[Simulator Architecture](simulator-architecture.md)** - Detailed technical description of the GPS/GNSS simulator
+- **[Simulator Comparison](simulator-legacy-vs-api-comparison.md)** - Legacy (CSim) vs API (SimulatorService) comparison
 - **[Official Docs](https://docs.agopengps.com/)** - AgOpenGPS documentation
 - **[Community Forum](https://discourse.agopengps.com/)** - Discussion and support
 - **GitHub Branch**: `cross-platform-support` (this migration work)

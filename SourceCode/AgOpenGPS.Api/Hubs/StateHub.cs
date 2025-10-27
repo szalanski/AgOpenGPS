@@ -1,18 +1,22 @@
+using AgOpenGPS.Api.Client.Commands;
+using MediatR;
 using Microsoft.AspNetCore.SignalR;
 
 namespace AgOpenGPS.Api.Hubs;
 
 /// <summary>
 /// SignalR Hub for broadcasting application state to connected clients.
-/// Minimal implementation - used internally by SignalRStatePublisher.
+/// Also handles commands from clients (bidirectional communication).
 /// </summary>
 public class StateHub : Hub
 {
     private readonly ILogger<StateHub> _logger;
+    private readonly IMediator _mediator;
 
-    public StateHub(ILogger<StateHub> logger)
+    public StateHub(ILogger<StateHub> logger, IMediator mediator)
     {
         _logger = logger;
+        _mediator = mediator;
     }
 
     /// <summary>
@@ -40,4 +44,19 @@ public class StateHub : Hub
 
         return base.OnDisconnectedAsync(exception);
     }
+
+    #region Command Methods (Client → Server)
+
+    /// <summary>
+    /// Unified simulator command handler.
+    /// Accepts all simulator control events via single endpoint.
+    /// </summary>
+    public async Task UpdateSimulator(UpdateSimulatorCommand command)
+    {
+        _logger.LogDebug("UpdateSimulator command from {ConnectionId}: Type={EventType}",
+            Context.ConnectionId, command.Event.Type);
+        await _mediator.Send(command);
+    }
+
+    #endregion
 }

@@ -1,87 +1,98 @@
 using AgOpenGPS.Api.Abstractions;
 using AgOpenGPS.Api.Client.Models;
+using AgOpenGPS.Api.Models;
 
 namespace AgOpenGPS.Api.Services;
 
 /// <summary>
-/// Main application orchestrator that runs at 4 Hz (every 250ms).
-/// Generates application state and broadcasts to all connected clients.
+/// Main application orchestrator - GPS-driven (not timer-based).
+/// Receives UDP packets from AgIO, processes GPS data, broadcasts state via SignalR.
 /// </summary>
-public class ApplicationOrchestrator : IHostedService, IDisposable
+public class ApplicationOrchestrator : BackgroundService
 {
     private readonly ILogger<ApplicationOrchestrator> _logger;
     private readonly IStatePublisher _statePublisher;
-    private Timer? _timer;
-    private bool _isRunning;
+    private readonly IGnssService _gnssService;
+    private readonly IUdpPacketReceiver _udpReceiver;
 
     public ApplicationOrchestrator(
         ILogger<ApplicationOrchestrator> logger,
-        IStatePublisher statePublisher)
+        IStatePublisher statePublisher,
+        IGnssService gnssService,
+        IUdpPacketReceiver udpReceiver)
     {
         _logger = logger;
         _statePublisher = statePublisher;
+        _gnssService = gnssService;
+        _udpReceiver = udpReceiver;
     }
 
-    /// <summary>
-    /// Start the orchestrator when the application starts.
-    /// </summary>
-    public Task StartAsync(CancellationToken cancellationToken)
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        _logger.LogInformation("ApplicationOrchestrator starting - 4 Hz tick loop");
+        _logger.LogInformation("ApplicationOrchestrator starting - GPS-driven UDP mode");
 
-        // Create timer with 250ms interval (4 Hz)
-        _timer = new Timer(
-            callback: OnTick,
-            state: null,
-            dueTime: TimeSpan.Zero,      // Start immediately
-            period: TimeSpan.FromMilliseconds(250)); // 4 Hz
+        // TODO: Initialize local plane (will be configurable in future)
+        // For now, using placeholder coordinates for testing
+        _gnssService.InitializeLocalPlane(new Wgs84Position(45.0, -93.0));
 
-        _isRunning = true;
-
-        return Task.CompletedTask;
-    }
-
-    /// <summary>
-    /// Stop the orchestrator when the application stops.
-    /// </summary>
-    public Task StopAsync(CancellationToken cancellationToken)
-    {
-        _logger.LogInformation("ApplicationOrchestrator stopping");
-
-        _isRunning = false;
-        _timer?.Change(Timeout.Infinite, 0); // Stop timer
-
-        return Task.CompletedTask;
-    }
-
-    /// <summary>
-    /// Executed every 250ms (4 Hz).
-    /// Generates application state and broadcasts to clients.
-    /// </summary>
-    private async void OnTick(object? state)
-    {
-        if (!_isRunning)
-            return;
-
-        try
+        // Main loop: Consume UDP packets and broadcast GPS state
+        await foreach (var packet in _udpReceiver.GetPacketsAsync(stoppingToken))
         {
-            // Generate application state with current timestamp
-            var appState = new ApplicationState
+            try
             {
-                Timestamp = DateTime.UtcNow
-            };
+                await ProcessPacketAsync(packet);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error processing {PacketType} packet", packet.Type);
+            }
+        }
 
-            // Broadcast to all connected clients
-            await _statePublisher.BroadcastStateAsync(appState);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error in tick execution");
-        }
+        _logger.LogInformation("ApplicationOrchestrator stopped");
     }
 
-    public void Dispose()
+    /// <summary>
+    /// Process incoming UDP packet by type and broadcast GPS state.
+    /// </summary>
+    private async Task ProcessPacketAsync(UdpPacket packet)
     {
-        _timer?.Dispose();
+        switch (packet.Type)
+        {
+            case UdpPacketType.Gps:
+                // Process GPS packet
+                _gnssService.ProcessGpsPacket(packet.Data);
+
+                // Get current GPS state
+                var gnssState = _gnssService.GetCurrentState();
+
+                // Broadcast via SignalR (only if GPS data is valid)
+                if (gnssState != null)
+                {
+                    var appState = new ApplicationState
+                    {
+                        Timestamp = DateTime.UtcNow,
+                        Gnss = gnssState
+                    };
+
+                    await _statePublisher.BroadcastStateAsync(appState);
+                }
+                break;
+
+            case UdpPacketType.Imu:
+                _logger.LogDebug("IMU packet received - not yet implemented");
+                break;
+
+            case UdpPacketType.Disconnect:
+                _logger.LogInformation("Disconnect packet received");
+                break;
+
+            case UdpPacketType.AutoSteer:
+                _logger.LogDebug("AutoSteer packet received - not yet implemented");
+                break;
+
+            default:
+                _logger.LogDebug("Received {PacketType} packet - not yet implemented", packet.Type);
+                break;
+        }
     }
 }

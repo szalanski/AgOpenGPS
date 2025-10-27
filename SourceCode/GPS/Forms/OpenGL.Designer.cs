@@ -53,6 +53,7 @@ namespace AgOpenGPS
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
             GL.CullFace(CullFaceMode.Back);
             SetZoom();
+            tmrWatchdog.Enabled = true;
         }
 
         //oglMain needs a resize
@@ -1397,6 +1398,7 @@ namespace AgOpenGPS
             //if a minute has elapsed save the field in case of crash and to be able to resume
             if (fileSaveCounter > 30 && sentenceCounter < 20)
             {
+                tmrWatchdog.Enabled = false;
                 fileSaveCounter = 0;
 
                 DistanceToFieldOriginCheck();
@@ -1416,6 +1418,9 @@ namespace AgOpenGPS
 
                 //set saving flag off
                 isSavingFile = false;
+
+                //go see if data ready for draw and position updates
+                tmrWatchdog.Enabled = true;
 
                 //calc overlap
                 oglZoom.Refresh();
