@@ -1,3 +1,5 @@
+using AgOpenGPS.Api.Client.Models;
+
 namespace AgOpenGPS.Api.Client.Commands
 {
     /// <summary>
@@ -30,24 +32,29 @@ namespace AgOpenGPS.Api.Client.Commands
     }
 
     /// <summary>
-    /// Strongly-typed parameters for Start event.
+    /// Strongly-typed parameters for Start event using value objects.
     /// </summary>
     public record SimulatorStartData(
-        double Latitude,
-        double Longitude,
-        double Heading,
-        double Speed);
+        Wgs84Position Position,
+        Heading Heading,
+        Speed Speed);
 
     /// <summary>
-    /// Strongly-typed simulator event containing type, optional value, and optional start data.
+    /// Strongly-typed simulator event containing type and optional typed parameters.
     /// </summary>
     public record SimulatorEvent
     {
         /// <summary>Type of simulator event.</summary>
         public SimulatorEventType Type { get; init; }
 
-        /// <summary>Optional numeric value (used by speed/steering events).</summary>
-        public double? Value { get; init; }
+        /// <summary>Optional speed value (used by SpeedSet, SpeedSetSmooth events).</summary>
+        public Speed? SpeedValue { get; init; }
+
+        /// <summary>Optional speed delta (used by SpeedAdjust event).</summary>
+        public double? SpeedDelta { get; init; }
+
+        /// <summary>Optional steering angle (used by SteeringSet event).</summary>
+        public SteeringAngle? SteeringValue { get; init; }
 
         /// <summary>Optional start parameters (used by Start event).</summary>
         public SimulatorStartData? StartData { get; init; }
@@ -55,10 +62,10 @@ namespace AgOpenGPS.Api.Client.Commands
         // Factory methods for type-safe event creation
 
         /// <summary>Create Start event with initial position, heading, and speed.</summary>
-        public static SimulatorEvent Start(double lat, double lon, double heading, double speed) => new()
+        public static SimulatorEvent Start(Wgs84Position position, Heading heading, Speed speed) => new()
         {
             Type = SimulatorEventType.Start,
-            StartData = new SimulatorStartData(lat, lon, heading, speed)
+            StartData = new SimulatorStartData(position, heading, speed)
         };
 
         /// <summary>Create Stop event.</summary>
@@ -71,21 +78,21 @@ namespace AgOpenGPS.Api.Client.Commands
         public static SimulatorEvent SpeedAdjust(double delta) => new()
         {
             Type = SimulatorEventType.SpeedAdjust,
-            Value = delta
+            SpeedDelta = delta
         };
 
         /// <summary>Create SpeedSet event (instant speed change).</summary>
-        public static SimulatorEvent SpeedSet(double speed) => new()
+        public static SimulatorEvent SpeedSet(Speed speed) => new()
         {
             Type = SimulatorEventType.SpeedSet,
-            Value = speed
+            SpeedValue = speed
         };
 
         /// <summary>Create SpeedSetSmooth event (gradual speed transition).</summary>
-        public static SimulatorEvent SpeedSetSmooth(double speed) => new()
+        public static SimulatorEvent SpeedSetSmooth(Speed speed) => new()
         {
             Type = SimulatorEventType.SpeedSetSmooth,
-            Value = speed
+            SpeedValue = speed
         };
 
         /// <summary>Create SpeedZero event (instant stop).</summary>
@@ -95,10 +102,10 @@ namespace AgOpenGPS.Api.Client.Commands
         };
 
         /// <summary>Create SteeringSet event (angle in degrees).</summary>
-        public static SimulatorEvent SteeringSet(double angle) => new()
+        public static SimulatorEvent SteeringSet(SteeringAngle angle) => new()
         {
             Type = SimulatorEventType.SteeringSet,
-            Value = angle
+            SteeringValue = angle
         };
 
         /// <summary>Create SteeringReset event (center steering).</summary>
@@ -128,16 +135,23 @@ namespace AgOpenGPS.Api.Client.Commands
 
     /// <summary>
     /// Unified simulator command - single command for all simulator interactions.
-    /// Uses event object pattern with factory methods for clean, type-safe API.
+    /// Uses event object pattern with factory methods for clean, type-safe API with value objects.
     /// </summary>
     /// <example>
-    /// // Start simulator
+    /// // Start simulator with strongly-typed position, heading, and speed
+    /// var position = new Wgs84Position(45.0, -93.0);
+    /// var heading = new Heading(0.0);
+    /// var speed = new Speed(10.0);
     /// await client.SendCommandAsync(new UpdateSimulatorCommand(
-    ///     SimulatorEvent.Start(45.0, -93.0, 0.0, 10.0)));
+    ///     SimulatorEvent.Start(position, heading, speed)));
     ///
-    /// // Speed up by 1 km/h
+    /// // Speed up by 1 km/h (delta is still a double)
     /// await client.SendCommandAsync(new UpdateSimulatorCommand(
     ///     SimulatorEvent.SpeedAdjust(1.0)));
+    ///
+    /// // Set steering with type-safe SteeringAngle
+    /// await client.SendCommandAsync(new UpdateSimulatorCommand(
+    ///     SimulatorEvent.SteeringSet(new SteeringAngle(20.0))));
     ///
     /// // Reverse direction
     /// await client.SendCommandAsync(new UpdateSimulatorCommand(

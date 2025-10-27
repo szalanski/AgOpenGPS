@@ -6,38 +6,42 @@ You are helping the user create a new workflow plan for the AgOpenGPS backend mi
 
 # Step 1: Read Context
 
-First, read `docs/README.md` to understand the documentation structure and patterns.
+Start by reading `docs/README.md` to understand the documentation structure and patterns.
 
 # Step 2: Find Next Workflow Number
 
-Check `docs/workflow/` directory to find the highest existing workflow number (e.g., if 001-backend-tick-foundation exists, next is 002).
+Check the `docs/workflow/` directory to find the highest existing workflow number (e.g., if `001-backend-tick-foundation` exists, the next is `002`).
 
-# Step 3: Ask for Objective
+# Step 3: Determine Objective
 
-Ask the user: "What is the objective of this workflow?"
+Identify the workflow objective. If the conversation already makes it clear, restate it to confirm alignment. Otherwise ask: "What is the objective of this workflow?"
 
 Wait for their response.
 
-# Step 4: Interactive Planning
+# Step 4: Build Shared Context
 
-Guide the user through a planning conversation. Ask these questions ONE AT A TIME and wait for each answer:
+Use the conversation to understand scope, architecture, dependencies, and risks before drafting the plan. Confirm that you understand both what needs to be done and how it should be approached.
 
-1. **Goal**: "What is the main goal? (1-2 sentences)"
-2. **Current State**: "What is the current state of the system? (brief description)"
-3. **Target State**: "What is the target state after this workflow? (brief description)"
-4. **Why**: "Why are we doing this? (key benefits, 2-3 bullet points)"
-5. **Anti-goals**: "What is this NOT? (things explicitly out of scope, 2-3 bullet points)"
-6. **Tasks**: "How many tasks do you think this needs? (Enter 0 if just plan.md is enough, or number 1-10)"
+Gather the following information, but only ask about items that are missing or unclear. Ask one focused question at a time and adapt based on the user's answers:
 
-If tasks > 0, for EACH task ask:
+- Core goal (1-2 sentences)
+- Current state of the relevant system or process
+- Target state after the workflow
+- Key benefits or drivers for the change
+- Explicit non-goals/out-of-scope items
+- Architectural or integration considerations (APIs, services, protocols, data flows)
+- Constraints, risks, or sequencing concerns
+- Expected implementation tasks (count, names, brief goals, high-level steps, test guidance)
+
+If the user indicates tasks > 0, for each task ask (only for missing details):
 - "Task N name? (e.g., 'create-api-project')"
 - "Task N goal? (1 sentence)"
 - "Task N key steps? (3-7 bullet points, high-level only)"
 - "Task N how to test? (optional, 1-2 sentences)"
 
-# Step 5: Ask for Workflow Name
+# Step 5: Choose Workflow Name
 
-Ask: "What should we name this workflow? (lowercase-with-dashes, e.g., 'state-broadcasting')"
+Derive a short, descriptive workflow name in `lowercase-with-dashes`. If the user has not provided one, propose a name that reflects the objective and confirm it briefly with them.
 
 # Step 6: Create Structure
 
@@ -47,7 +51,7 @@ Create the workflow folder and files:
 
 **Files to create**:
 
-1. **plan.md** - Follow this structure:
+1. **plan-workflow-name.md** - Follow this structure:
 ```markdown
 # [Workflow Title]
 
@@ -65,11 +69,15 @@ Create the workflow folder and files:
 
 ## Why
 
-[2-3 bullet points of benefits]
+- Benefit 1
+- Benefit 2
+- Benefit 3
 
 ## What This Is NOT
 
-[2-3 bullet points of anti-goals]
+- Anti-goal 1
+- Anti-goal 2
+- Anti-goal 3
 
 ## Migration Path (if applicable)
 
@@ -115,30 +123,25 @@ Create the workflow folder and files:
 - [ ] Criterion 1
 - [ ] Criterion 2
 - [ ] Criterion 3
-
-## Test
-
-[Optional: 1-2 lines on how to verify]
 ```
 
 # CRITICAL RULES
 
-❌ **NEVER write code in markdown files**
-❌ **NO code snippets, examples, or implementations**
-❌ **NO detailed "how to" - only high-level "what to do"**
-
-✅ **Only high-level steps and concepts**
-✅ **Tell WHAT to do, not HOW**
-✅ **Short and actionable**
-✅ **User will read actual code when implementing**
+- **NEVER write code in markdown files**
+- **NO code snippets, examples, or implementations**
+- **NO detailed "how to" - only high-level "what to do"**
+- Only high-level steps and concepts
+- Tell WHAT to do, not HOW
+- Keep guidance short and actionable
+- The user will read actual code when implementing
 
 # Step 7: Confirm Completion
 
 After creating all files, tell the user:
 
-"✅ Created workflow NNN-workflow-name with:
-- plan.md
-- N task files (or 'plan.md only' if no tasks)
+"Created workflow NNN-workflow-name with:
+- plan-workflow-name.md
+- N task files (or 'plan-workflow-name.md only' if no tasks)
 
 Location: docs/workflow/NNN-workflow-name/
 

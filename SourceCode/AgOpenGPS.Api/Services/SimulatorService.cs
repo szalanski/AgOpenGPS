@@ -173,10 +173,10 @@ namespace AgOpenGPS.Api.Services
                     if (evt.StartData != null)
                     {
                         Start(
-                            lat: evt.StartData.Latitude,
-                            lon: evt.StartData.Longitude,
-                            headingDeg: evt.StartData.Heading,
-                            speedKmh: evt.StartData.Speed);
+                            lat: evt.StartData.Position.Latitude,
+                            lon: evt.StartData.Position.Longitude,
+                            headingDeg: evt.StartData.Heading.Degrees,
+                            speedKmh: evt.StartData.Speed.KilometersPerHour);
                     }
                     break;
 
@@ -185,23 +185,23 @@ namespace AgOpenGPS.Api.Services
                     break;
 
                 case AgOpenGPS.Api.Client.Commands.SimulatorEventType.SpeedAdjust:
-                    if (evt.Value.HasValue)
+                    if (evt.SpeedDelta.HasValue)
                     {
-                        AdjustSpeed(evt.Value.Value);
+                        AdjustSpeed(evt.SpeedDelta.Value);
                     }
                     break;
 
                 case AgOpenGPS.Api.Client.Commands.SimulatorEventType.SpeedSet:
-                    if (evt.Value.HasValue)
+                    if (evt.SpeedValue.HasValue)
                     {
-                        SetSpeed(evt.Value.Value, smooth: false);
+                        SetSpeed(evt.SpeedValue.Value.KilometersPerHour, smooth: false);
                     }
                     break;
 
                 case AgOpenGPS.Api.Client.Commands.SimulatorEventType.SpeedSetSmooth:
-                    if (evt.Value.HasValue)
+                    if (evt.SpeedValue.HasValue)
                     {
-                        SetSpeed(evt.Value.Value, smooth: true);
+                        SetSpeed(evt.SpeedValue.Value.KilometersPerHour, smooth: true);
                     }
                     break;
 
@@ -210,9 +210,9 @@ namespace AgOpenGPS.Api.Services
                     break;
 
                 case AgOpenGPS.Api.Client.Commands.SimulatorEventType.SteeringSet:
-                    if (evt.Value.HasValue)
+                    if (evt.SteeringValue != null)
                     {
-                        SetSteering(evt.Value.Value);
+                        SetSteering(evt.SteeringValue.Degrees);
                     }
                     break;
 
@@ -227,7 +227,7 @@ namespace AgOpenGPS.Api.Services
                 case AgOpenGPS.Api.Client.Commands.SimulatorEventType.PositionReset:
                     if (evt.StartData != null)
                     {
-                        ResetPosition(evt.StartData.Latitude, evt.StartData.Longitude);
+                        ResetPosition(evt.StartData.Position.Latitude, evt.StartData.Position.Longitude);
                     }
                     break;
 

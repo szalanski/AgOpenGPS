@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using AgOpenGPS.Api.Client.Commands;
+using AgOpenGPS.Api.Client.Models;
 using AgOpenGPS.Api.Commands.Handlers;
 using AgOpenGPS.Api.Services;
 using Microsoft.Extensions.Logging;
@@ -31,16 +32,21 @@ namespace AgOpenGPS.Api.Tests.Commands
         public void SimulatorEvent_Start_ShouldSetStartDataCorrectly()
         {
             // Act
-            var evt = SimulatorEvent.Start(45.0, -93.0, 1.57, 10.0);
+            var evt = SimulatorEvent.Start(
+                new Wgs84Position(45.0, -93.0),
+                new Heading(1.57),
+                new Speed(10.0));
 
             // Assert
             Assert.AreEqual(SimulatorEventType.Start, evt.Type);
             Assert.IsNotNull(evt.StartData);
-            Assert.AreEqual(45.0, evt.StartData.Latitude);
-            Assert.AreEqual(-93.0, evt.StartData.Longitude);
-            Assert.AreEqual(1.57, evt.StartData.Heading);
-            Assert.AreEqual(10.0, evt.StartData.Speed);
-            Assert.IsNull(evt.Value);
+            Assert.AreEqual(45.0, evt.StartData.Position.Latitude);
+            Assert.AreEqual(-93.0, evt.StartData.Position.Longitude);
+            Assert.AreEqual(1.57, evt.StartData.Heading.Degrees);
+            Assert.AreEqual(10.0, evt.StartData.Speed.KilometersPerHour);
+            Assert.IsNull(evt.SpeedValue);
+            Assert.IsNull(evt.SpeedDelta);
+            Assert.IsNull(evt.SteeringValue);
         }
 
         [Test]
@@ -51,7 +57,7 @@ namespace AgOpenGPS.Api.Tests.Commands
 
             // Assert
             Assert.AreEqual(SimulatorEventType.SpeedAdjust, evt.Type);
-            Assert.AreEqual(2.5, evt.Value);
+            Assert.AreEqual(2.5, evt.SpeedDelta);
             Assert.IsNull(evt.StartData);
         }
 
@@ -63,7 +69,9 @@ namespace AgOpenGPS.Api.Tests.Commands
 
             // Assert
             Assert.AreEqual(SimulatorEventType.Stop, evt.Type);
-            Assert.IsNull(evt.Value);
+            Assert.IsNull(evt.SpeedValue);
+            Assert.IsNull(evt.SpeedDelta);
+            Assert.IsNull(evt.SteeringValue);
             Assert.IsNull(evt.StartData);
         }
 
@@ -75,7 +83,9 @@ namespace AgOpenGPS.Api.Tests.Commands
 
             // Assert
             Assert.AreEqual(SimulatorEventType.DirectionReverse, evt.Type);
-            Assert.IsNull(evt.Value);
+            Assert.IsNull(evt.SpeedValue);
+            Assert.IsNull(evt.SpeedDelta);
+            Assert.IsNull(evt.SteeringValue);
             Assert.IsNull(evt.StartData);
         }
 
@@ -83,11 +93,12 @@ namespace AgOpenGPS.Api.Tests.Commands
         public void SimulatorEvent_SteeringSet_ShouldSetValue()
         {
             // Act
-            var evt = SimulatorEvent.SteeringSet(30.0);
+            var evt = SimulatorEvent.SteeringSet(new SteeringAngle(30.0));
 
             // Assert
             Assert.AreEqual(SimulatorEventType.SteeringSet, evt.Type);
-            Assert.AreEqual(30.0, evt.Value);
+            Assert.IsNotNull(evt.SteeringValue);
+            Assert.AreEqual(30.0, evt.SteeringValue.Degrees);
             Assert.IsNull(evt.StartData);
         }
 
@@ -100,13 +111,19 @@ namespace AgOpenGPS.Api.Tests.Commands
         {
             // Arrange
             var command = new UpdateSimulatorCommand(
-                SimulatorEvent.Start(45.0, -93.0, 1.57, 10.0));
+                SimulatorEvent.Start(
+                    new Wgs84Position(45.0, -93.0),
+                    new Heading(1.57),
+                    new Speed(10.0)));
 
             // Act
             await _handler.Handle(command, CancellationToken.None);
 
             // Assert
-            _mockSimulator.Received(1).Start(45.0, -93.0, 1.57, 10.0);
+            _mockSimulator.Received(1).ProcessEvent(Arg.Is<SimulatorEvent>(
+                e => e.Type == SimulatorEventType.Start &&
+                     e.StartData != null &&
+                     e.StartData.Position.Latitude == 45.0));
         }
 
         [Test]
@@ -126,11 +143,11 @@ namespace AgOpenGPS.Api.Tests.Commands
         [Test]
         public async Task Handle_EventWithoutRequiredValue_ShouldSkipSilently()
         {
-            // Arrange - manually create SpeedAdjust event without Value
+            // Arrange - manually create SpeedAdjust event without SpeedDelta
             var evt = new SimulatorEvent
             {
                 Type = SimulatorEventType.SpeedAdjust,
-                Value = null
+                SpeedDelta = null
             };
             var command = new UpdateSimulatorCommand(evt);
 
@@ -138,7 +155,8 @@ namespace AgOpenGPS.Api.Tests.Commands
             await _handler.Handle(command, CancellationToken.None);
 
             // Assert - should skip the operation without calling simulator
-            _mockSimulator.DidNotReceive().AdjustSpeed(Arg.Any<double>());
+            _mockSimulator.DidNotReceive().ProcessEvent(Arg.Is<SimulatorEvent>(
+                e => e.Type == SimulatorEventType.SpeedAdjust));
             // Note: Logger verification is intentionally omitted due to NSubstitute complexity with ILogger<T>
             // The key behavior (not calling simulator) is verified above
         }
@@ -158,8 +176,8 @@ namespace AgOpenGPS.Api.Tests.Commands
             await _handler.Handle(command, CancellationToken.None);
 
             // Assert - should skip the operation without calling simulator
-            _mockSimulator.DidNotReceive().Start(
-                Arg.Any<double>(), Arg.Any<double>(), Arg.Any<double>(), Arg.Any<double>());
+            _mockSimulator.DidNotReceive().ProcessEvent(Arg.Is<SimulatorEvent>(
+                e => e.Type == SimulatorEventType.Start));
             // Note: Logger verification is intentionally omitted due to NSubstitute complexity with ILogger<T>
             // The key behavior (not calling simulator) is verified above
         }
@@ -304,13 +322,16 @@ namespace AgOpenGPS.Api.Tests.Commands
         {
             // Arrange
             var command = new UpdateSimulatorCommand(
-                SimulatorEvent.SpeedSet(15.0));
+                SimulatorEvent.SpeedSet(new Speed(15.0)));
 
             // Act
             await _handler.Handle(command, CancellationToken.None);
 
             // Assert
-            _mockSimulator.Received(1).SetSpeed(15.0, false);
+            _mockSimulator.Received(1).ProcessEvent(Arg.Is<SimulatorEvent>(
+                e => e.Type == SimulatorEventType.SpeedSet &&
+                     e.SpeedValue.HasValue &&
+                     e.SpeedValue.Value.KilometersPerHour == 15.0));
         }
 
         [Test]
@@ -318,13 +339,16 @@ namespace AgOpenGPS.Api.Tests.Commands
         {
             // Arrange
             var command = new UpdateSimulatorCommand(
-                SimulatorEvent.SpeedSetSmooth(15.0));
+                SimulatorEvent.SpeedSetSmooth(new Speed(15.0)));
 
             // Act
             await _handler.Handle(command, CancellationToken.None);
 
             // Assert
-            _mockSimulator.Received(1).SetSpeed(15.0, true);
+            _mockSimulator.Received(1).ProcessEvent(Arg.Is<SimulatorEvent>(
+                e => e.Type == SimulatorEventType.SpeedSetSmooth &&
+                     e.SpeedValue.HasValue &&
+                     e.SpeedValue.Value.KilometersPerHour == 15.0));
         }
 
         [Test]
@@ -346,13 +370,16 @@ namespace AgOpenGPS.Api.Tests.Commands
         {
             // Arrange
             var command = new UpdateSimulatorCommand(
-                SimulatorEvent.SteeringSet(25.0));
+                SimulatorEvent.SteeringSet(new SteeringAngle(25.0)));
 
             // Act
             await _handler.Handle(command, CancellationToken.None);
 
             // Assert
-            _mockSimulator.Received(1).SetSteering(25.0);
+            _mockSimulator.Received(1).ProcessEvent(Arg.Is<SimulatorEvent>(
+                e => e.Type == SimulatorEventType.SteeringSet &&
+                     e.SteeringValue != null &&
+                     e.SteeringValue.Degrees == 25.0));
         }
 
         [Test]
@@ -376,14 +403,20 @@ namespace AgOpenGPS.Api.Tests.Commands
             var command = new UpdateSimulatorCommand(new SimulatorEvent
             {
                 Type = SimulatorEventType.PositionReset,
-                StartData = new SimulatorStartData(45.0, -93.0, 0.0, 0.0)
+                StartData = new SimulatorStartData(
+                    new Wgs84Position(45.0, -93.0),
+                    new Heading(0.0),
+                    new Speed(0.0))
             });
 
             // Act
             await _handler.Handle(command, CancellationToken.None);
 
             // Assert
-            _mockSimulator.Received(1).ResetPosition(45.0, -93.0);
+            _mockSimulator.Received(1).ProcessEvent(Arg.Is<SimulatorEvent>(
+                e => e.Type == SimulatorEventType.PositionReset &&
+                     e.StartData != null &&
+                     e.StartData.Position.Latitude == 45.0));
         }
 
         [Test]

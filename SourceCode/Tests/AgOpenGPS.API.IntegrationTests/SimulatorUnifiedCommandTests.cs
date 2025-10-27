@@ -64,7 +64,7 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
     {
         // Arrange & Act
         await _backendClient!.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.Start(45.0, -93.0, 0.0, 10.0)));
+            SimulatorEvent.Start(new Wgs84Position(45.0, -93.0), new Heading(0.0), new Speed(10.0))));
 
         await Task.Delay(2000);
 
@@ -86,7 +86,7 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
     {
         // Arrange - Start simulator first
         await _backendClient!.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.Start(45.0, -93.0, 0.0, 10.0)));
+            SimulatorEvent.Start(new Wgs84Position(45.0, -93.0), new Heading(0.0), new Speed(10.0))));
         await Task.Delay(1000);
 
         var countBeforeStop = _receivedStates.ToList().Count(s => s.Gnss != null);
@@ -133,7 +133,7 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
     {
         // Arrange - Start at 5 km/h
         await _backendClient!.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.Start(45.0, -93.0, 0.0, 5.0)));
+            SimulatorEvent.Start(new Wgs84Position(45.0, -93.0), new Heading(0.0), new Speed(5.0))));
         await Task.Delay(1000);
 
         var initialSpeed = _receivedStates.ToList()
@@ -170,7 +170,7 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
     {
         // Arrange - Start at 20 km/h
         await _backendClient!.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.Start(45.0, -93.0, 0.0, 20.0)));
+            SimulatorEvent.Start(new Wgs84Position(45.0, -93.0), new Heading(0.0), new Speed(20.0))));
         await Task.Delay(1000);
 
         var initialSpeed = _receivedStates.ToList()
@@ -202,7 +202,7 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
     {
         // Arrange
         await _backendClient!.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.Start(45.0, -93.0, 0.0, 10.0)));
+            SimulatorEvent.Start(new Wgs84Position(45.0, -93.0), new Heading(0.0), new Speed(10.0))));
         await Task.Delay(1000);
 
         var initialSpeed = _receivedStates.ToList()
@@ -210,8 +210,8 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
             .Select(s => s.Gnss!.Speed!.KilometersPerHour)
             .LastOrDefault();
 
-        // Act - Send invalid event (no value)
-        var invalidEvent = new SimulatorEvent { Type = SimulatorEventType.SpeedAdjust, Value = null };
+        // Act - Send invalid event (no SpeedDelta)
+        var invalidEvent = new SimulatorEvent { Type = SimulatorEventType.SpeedAdjust, SpeedDelta = null };
         await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(invalidEvent));
         await Task.Delay(1500);
 
@@ -231,13 +231,13 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
     {
         // Arrange - Start at 5 km/h
         await _backendClient!.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.Start(45.0, -93.0, 0.0, 5.0)));
+            SimulatorEvent.Start(new Wgs84Position(45.0, -93.0), new Heading(0.0), new Speed(5.0))));
         await Task.Delay(1000);
         _receivedStates.Clear();
 
         // Act - Set speed to 25 km/h with smooth transition
         await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.SpeedSetSmooth(25.0)));
+            SimulatorEvent.SpeedSetSmooth(new Speed(25.0))));
 
         // Collect speeds over time
         await Task.Delay(3000);
@@ -265,13 +265,13 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
     {
         // Arrange
         await _backendClient!.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.Start(45.0, -93.0, 0.0, 5.0)));
+            SimulatorEvent.Start(new Wgs84Position(45.0, -93.0), new Heading(0.0), new Speed(5.0))));
         await Task.Delay(1000);
         _receivedStates.Clear();
 
         // Act - Set speed instantly
         await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.SpeedSet(30.0)));
+            SimulatorEvent.SpeedSet(new Speed(30.0))));
         await Task.Delay(500); // Short delay
 
         // Assert - Speed should change quickly
@@ -291,7 +291,7 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
     {
         // Arrange
         await _backendClient!.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.Start(45.0, -93.0, 0.0, 25.0)));
+            SimulatorEvent.Start(new Wgs84Position(45.0, -93.0), new Heading(0.0), new Speed(25.0))));
         await Task.Delay(1000);
         _receivedStates.Clear();
 
@@ -317,7 +317,7 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
     {
         // Arrange
         await _backendClient!.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.Start(45.0, -93.0, 0.0, 0.0)));
+            SimulatorEvent.Start(new Wgs84Position(45.0, -93.0), new Heading(0.0), new Speed(0.0))));
         await Task.Delay(1000);
 
         // Act - Try to exceed max speed (322 km/h)
@@ -345,7 +345,7 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
     {
         // Arrange
         await _backendClient!.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.Start(45.0, -93.0, 0.0, 15.0)));
+            SimulatorEvent.Start(new Wgs84Position(45.0, -93.0), new Heading(0.0), new Speed(15.0))));
         await Task.Delay(1000);
 
         var initialHeading = _receivedStates.ToList()
@@ -357,7 +357,7 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
 
         // Act - Apply steering
         await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.SteeringSet(20.0)));
+            SimulatorEvent.SteeringSet(new SteeringAngle(20.0))));
         await Task.Delay(2500);
 
         // Assert - Heading should have changed
@@ -377,9 +377,9 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
     {
         // Arrange - Apply steering first
         await _backendClient!.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.Start(45.0, -93.0, 0.0, 15.0)));
+            SimulatorEvent.Start(new Wgs84Position(45.0, -93.0), new Heading(0.0), new Speed(15.0))));
         await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.SteeringSet(25.0)));
+            SimulatorEvent.SteeringSet(new SteeringAngle(25.0))));
         await Task.Delay(1500);
 
         var headingBefore = _receivedStates.ToList()
@@ -413,11 +413,11 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
     {
         // Arrange
         await _backendClient!.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.Start(45.0, -93.0, 0.0, 10.0)));
+            SimulatorEvent.Start(new Wgs84Position(45.0, -93.0), new Heading(0.0), new Speed(10.0))));
         await Task.Delay(1000);
 
-        // Act - Invalid steering event
-        var invalidEvent = new SimulatorEvent { Type = SimulatorEventType.SteeringSet, Value = null };
+        // Act - Invalid steering event (no SteeringValue)
+        var invalidEvent = new SimulatorEvent { Type = SimulatorEventType.SteeringSet, SteeringValue = null };
         await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(invalidEvent));
         await Task.Delay(500);
 
@@ -437,7 +437,7 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
     {
         // Arrange - Start heading north (0°)
         await _backendClient!.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.Start(45.0, -93.0, 0.0, 10.0)));
+            SimulatorEvent.Start(new Wgs84Position(45.0, -93.0), new Heading(0.0), new Speed(10.0))));
         await Task.Delay(1500);
 
         var initialHeading = _receivedStates.ToList()
@@ -467,7 +467,7 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
     {
         // Arrange
         await _backendClient!.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.Start(45.0, -93.0, 0.0, 10.0)));
+            SimulatorEvent.Start(new Wgs84Position(45.0, -93.0), new Heading(0.0), new Speed(10.0))));
         await Task.Delay(1000);
 
         var initialHeading = _receivedStates.ToList()
@@ -499,7 +499,7 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
     {
         // Arrange
         await _backendClient!.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.Start(45.0, -93.0, 0.0, 15.0)));
+            SimulatorEvent.Start(new Wgs84Position(45.0, -93.0), new Heading(0.0), new Speed(15.0))));
         await Task.Delay(1000);
 
         var speedBefore = _receivedStates.ToList()
@@ -532,7 +532,7 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
     {
         // Arrange - Start and move
         await _backendClient!.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.Start(45.0, -93.0, 0.0, 20.0)));
+            SimulatorEvent.Start(new Wgs84Position(45.0, -93.0), new Heading(0.0), new Speed(20.0))));
         await Task.Delay(2500);
 
         var movedPosition = _receivedStates.ToList()
@@ -546,7 +546,10 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
         var resetEvent = new SimulatorEvent
         {
             Type = SimulatorEventType.PositionReset,
-            StartData = new SimulatorStartData(45.0, -93.0, 0.0, 0.0)
+            StartData = new SimulatorStartData(
+                new Wgs84Position(45.0, -93.0),
+                new Heading(0.0),
+                new Speed(0.0))
         };
         await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(resetEvent));
         await Task.Delay(1000);
@@ -568,9 +571,9 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
     {
         // Arrange - Start at initial position and let it move
         await _backendClient!.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.Start(45.0, -93.0, 90.0, 25.0)));
+            SimulatorEvent.Start(new Wgs84Position(45.0, -93.0), new Heading(90.0), new Speed(25.0))));
         await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.SteeringSet(30.0)));
+            SimulatorEvent.SteeringSet(new SteeringAngle(30.0))));
         await Task.Delay(2500); // Let it move away
 
         var movedPos = _receivedStates.ToList()
@@ -618,7 +621,7 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
 
         // Arrange
         await _backendClient!.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.Start(45.0, -93.0, 0.0, 0.0)));
+            SimulatorEvent.Start(new Wgs84Position(45.0, -93.0), new Heading(0.0), new Speed(0.0))));
         await Task.Delay(500);
         _receivedStates.Clear();
 
@@ -651,7 +654,7 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
 
         // Start
         await _backendClient!.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.Start(45.0, -93.0, 0.0, 5.0)));
+            SimulatorEvent.Start(new Wgs84Position(45.0, -93.0), new Heading(0.0), new Speed(5.0))));
         await Task.Delay(1000);
 
         // Speed up
@@ -667,7 +670,7 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
 
         // Apply steering
         await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.SteeringSet(15.0)));
+            SimulatorEvent.SteeringSet(new SteeringAngle(15.0))));
         await Task.Delay(1500);
 
         // Reverse direction
