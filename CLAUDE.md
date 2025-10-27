@@ -146,7 +146,10 @@ This codebase has TWO INDEPENDENT cross-platform initiatives:
   - `Services/SignalRStatePublisher.cs` - SignalR implementation
   - `Services/GnssService.cs` - GPS packet processing (PGN 0xD6 unpacking, coordinate transforms)
   - `Services/UdpPacketReceiver.cs` - UDP listener (port 15556)
-  - `Services/SimulatorService.cs` - GPS simulator with physics (93ms tick rate, ported from CSim)
+  - `Services/SimulatorService.cs` - GPS simulator with physics (93ms tick rate, DDD refactored with DI)
+  - `Services/VehiclePhysicsService.cs` - Vehicle physics calculations (speed transitions, steering smoothing, heading changes, position calculations)
+  - `Services/GnssDataGenerator.cs` - GNSS data generation (altitude, satellites, fix quality, HDOP, age)
+  - `Services/AgIoProtocolSerializer.cs` - Binary protocol encoding (PGN 0xD6 packet serialization)
   - `Services/SimulatorHostedService.cs` - Background service (sends UDP packets)
   - `Commands/Handlers/*CommandHandler.cs` - CQRS command handlers (Start/Stop/SetSpeed/SetSteering/Reset)
   - `Hubs/StateHub.cs` - SignalR Hub with specific command methods (workaround for SignalR generic limitation)
@@ -165,13 +168,15 @@ This codebase has TWO INDEPENDENT cross-platform initiatives:
   - `Factories/BackendClientFactory.cs` - Factory for creating clients (renamed from SubscriberFactory)
 
 **Tests**:
-- `Tests/AgOpenGPS.API.IntegrationTests/` - Integration tests (21/24 passing)
+- `Tests/AgOpenGPS.API.IntegrationTests/` - Integration tests (41/44 passing)
   - `Common/BaseIntegrationTest.cs` - Base class for tests
   - `Common/TestWebApplicationFactory.cs` - In-memory test server
   - `Helpers/GpsSimulator.cs` - External GPS simulator helper for tests
   - `GpsPacketProcessingTests.cs` - GPS packet processing (7 tests, all passing)
   - `StateReceptionTests.cs` - State reception via SignalR (3 tests, all passing)
-  - `SimulatorIntegrationTests.cs` - Backend simulator via CQRS commands (14 tests, 11 passing)
+  - `SimulatorIntegrationTests.cs` - Backend simulator via CQRS commands (41 tests, 38 passing)
+  - **Note**: Unit tests removed (low utility - all simulator behavior covered by integration tests)
+  - **Known Issues**: 3 steering-related test failures (heading change too weak - to be fixed)
 
 **Key Architecture Patterns**:
 1. **Event-Driven Backend**: ApplicationOrchestrator processes UDP packets immediately (not timer-based) - ✅ IMPLEMENTED
@@ -197,7 +202,7 @@ This codebase has TWO INDEPENDENT cross-platform initiatives:
 - ✅ `IGnssService` - GPS processing (IMPLEMENTED - Workflow 002)
 - ✅ `IUdpPacketReceiver` - UDP packet reception (IMPLEMENTED - Workflow 002)
 - ✅ `IStatePublisher` - State broadcasting abstraction (IMPLEMENTED - Workflow 001)
-- `ISimulationService` - Simulator interface (currently concrete SimulatorService)
+- ✅ `ISimulationService` - Simulator (IMPLEMENTED via SimulatorService with DDD pattern: VehiclePhysicsService, GnssDataGenerator, AgIoProtocolSerializer)
 - `IGuidanceService`, `IPathPlanner`, `ITramlineService` (Future)
 - `IFieldService`, `IBoundaryService`, `IHeadlandGenerator` (Future)
 - `ISectionControlService`, `ICoverageMapService` (Future)

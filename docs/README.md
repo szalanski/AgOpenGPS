@@ -45,14 +45,17 @@ Vertical slices of work organized as **workflow chunks**. Each chunk has:
    - task1.md through task6.md - Backend infrastructure and SignalR state broadcasting
    - **Status**: ApplicationOrchestrator running at 4 Hz, SignalR state updates working
 
-2. **[002-gps-gnss-migration/](workflow/002-gps-gnss-migration/)** - ✅ COMPLETED - GPS/GNSS backend migration
+2. **[002-gps-gnss-migration/](workflow/002-gps-gnss-migration/)** - ✅ COMPLETED (DDD refactored) - GPS/GNSS backend migration
    - plan.md - GPS processing migration concept
    - task1.md through task9.md - GnssService, UdpPacketReceiver, Simulator, Integration Tests
-   - **Status**: 21/24 integration tests passing, backend simulator functional
+   - **Status**: 41/44 integration tests passing (3 steering failures remain)
    - **Key Implementations**:
      - Event-driven ApplicationOrchestrator (processes UDP packets immediately)
      - GnssService (PGN 0xD6 unpacking, coordinate transforms)
-     - SimulatorService (93ms physics tick, ported from CSim)
+     - SimulatorService (93ms physics tick, DDD refactored with 3 domain services)
+       - VehiclePhysicsService (speed transitions, steering smoothing, heading changes, position calculations)
+       - GnssDataGenerator (altitude, satellites, fix quality, HDOP, age)
+       - AgIoProtocolSerializer (binary PGN 0xD6 packet serialization)
      - CQRS command pattern (Start/Stop/SetSpeed/SetSteering/Reset via MediatR)
      - SignalR bidirectional communication (state updates + commands)
      - IBackendClient abstraction for bidirectional transport

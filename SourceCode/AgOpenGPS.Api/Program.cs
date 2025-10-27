@@ -44,6 +44,9 @@ builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 
 // Register simulator services
+builder.Services.AddSingleton<VehiclePhysicsService>();
+builder.Services.AddSingleton<GnssDataGenerator>();
+builder.Services.AddSingleton<AgIoProtocolSerializer>();
 builder.Services.AddSingleton<SimulatorService>();
 builder.Services.AddHostedService<SimulatorHostedService>();
 

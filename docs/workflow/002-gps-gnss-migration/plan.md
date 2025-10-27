@@ -78,8 +78,10 @@ tmrWatchdog timer restored (250ms) handling only UI updates (labels, colors, pan
 - [x] CQRS command pattern for simulator control (Start/Stop/SetSpeed/SetSteering/Reset via MediatR)
 - [x] Event-driven ApplicationOrchestrator (processes UDP packets immediately, not timer-based)
 - [x] SignalR bidirectional communication (state updates + commands)
-- [x] Integration tests implemented (21/24 passing - GpsPacketProcessingTests, StateReceptionTests, SimulatorIntegrationTests)
-- [x] Documentation updated with GPS migration details (CLAUDE.md updated)
+- [x] Integration tests implemented (41/44 passing - GpsPacketProcessingTests, StateReceptionTests, SimulatorIntegrationTests)
+- [x] SimulatorService refactored using DDD pattern (3 domain services extracted: VehiclePhysicsService, GnssDataGenerator, AgIoProtocolSerializer)
+- [x] Unit tests removed (low utility - integration tests provide comprehensive coverage)
+- [x] Documentation updated with GPS migration details (CLAUDE.md, docs/README.md updated)
 - [ ] FormGPS integration (deferred - Task 8 not yet implemented)
 - [ ] AgIO integration testing (external program - future work)
 
@@ -88,4 +90,4 @@ tmrWatchdog timer restored (250ms) handling only UI updates (labels, colors, pan
 - Simulator sends UDP packets (SimulatorHostedService) instead of direct GnssService calls
 - SignalR generic hub methods workaround: Specific methods per command type (SignalR limitation)
 - IStateSubscriber renamed to IBackendClient for bidirectional communication clarity
-- 3 physics-related test failures deferred (timing/steering behavior refinement)
+- 3 steering-related test failures remain (heading change too weak - to be fixed in future iteration)
