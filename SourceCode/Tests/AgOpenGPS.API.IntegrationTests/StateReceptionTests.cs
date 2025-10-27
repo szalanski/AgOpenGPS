@@ -1,3 +1,5 @@
+using AgOpenGPS.Api.Client.Abstractions;
+using AgOpenGPS.Api.Client.Commands;
 using AgOpenGPS.Api.Client.Models;
 using AgOpenGPS.Api.Client.SignalR;
 using AgOpenGPS.API.IntegrationTests.Common;
@@ -8,10 +10,46 @@ namespace AgOpenGPS.API.IntegrationTests;
 /// <summary>
 /// Integration tests for state reception via SignalR.
 /// Validates that clients successfully receive ApplicationState updates from the backend.
+/// Note: These tests start the backend simulator to generate state updates, since
+/// ApplicationOrchestrator is event-driven and only broadcasts when UDP packets arrive.
 /// </summary>
 [TestFixture]
 public class StateReceptionTests : BaseIntegrationTest
 {
+    private IBackendClient? _simulatorClient;
+
+    [SetUp]
+    public async Task SetUp()
+    {
+        // Start backend simulator to generate state updates
+        // ApplicationOrchestrator is event-driven (no periodic broadcasts without GPS data)
+        var hubConnection = CreateTestHubConnection("/statehub");
+        _simulatorClient = new SignalRBackendClient(hubConnection);
+        await _simulatorClient.ConnectAsync();
+
+        await _simulatorClient.SendCommandAsync(
+            new StartSimulatorCommand(45.0, -93.0, 0.0, 10.0)); // Generate GPS at ~93ms intervals
+
+        await Task.Delay(500); // Let simulator start
+    }
+
+    [TearDown]
+    public async Task TearDown()
+    {
+        if (_simulatorClient != null)
+        {
+            try
+            {
+                await _simulatorClient.SendCommandAsync(new StopSimulatorCommand());
+            }
+            catch
+            {
+                // Ignore errors during cleanup
+            }
+            await _simulatorClient.DisposeAsync();
+        }
+    }
+
     [Test]
     public async Task SignalRStateSubscriber_ShouldConnect_ToBackend()
     {
@@ -44,12 +82,12 @@ public class StateReceptionTests : BaseIntegrationTest
         // Act
         await subscriber.ConnectAsync();
 
-        // Wait for some updates (1 second should give ~4 updates at 4 Hz)
+        // Wait for some updates (1 second should give ~10-11 updates at 93ms intervals)
         await Task.Delay(1000);
 
         // Assert
-        receivedStates.Should().HaveCountGreaterThan(2, "at least 3 updates should arrive in 1 second at 4 Hz");
-        receivedStates.Should().HaveCountLessThan(6, "at most 5 updates should arrive in 1 second at 4 Hz");
+        receivedStates.Should().HaveCountGreaterThan(8, "simulator sends ~10-11 packets per second at 93ms");
+        receivedStates.Should().HaveCountLessThan(13, "some packets may be missed due to timing/network overhead");
 
         // Verify timestamps are recent and increasing
         receivedStates.Should().OnlyContain(s => s.Timestamp > DateTime.UtcNow.AddSeconds(-2));

@@ -158,6 +158,7 @@ When adding new workflow chunks:
 ## Additional Resources
 
 - **[CLAUDE.md](../CLAUDE.md)** - Full project context for AI tools
+- **[Simulator Architecture](simulator-architecture.md)** - Detailed technical description of the GPS/GNSS simulator
 - **[Official Docs](https://docs.agopengps.com/)** - AgOpenGPS documentation
 - **[Community Forum](https://discourse.agopengps.com/)** - Discussion and support
 - **GitHub Branch**: `cross-platform-support` (this migration work)

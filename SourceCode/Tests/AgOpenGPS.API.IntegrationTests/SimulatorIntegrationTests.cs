@@ -221,8 +221,8 @@ public class SimulatorIntegrationTests : BaseIntegrationTest
         // This test verifies the architecture: SimulatorHostedService must send UDP packets,
         // not call GnssService directly. We verify this by observing:
         // 1. Simulator generates packets at 93ms intervals (SimulatorHostedService tick rate)
-        // 2. Backend processes them at 250ms intervals (ApplicationOrchestrator rate)
-        // 3. Timing mismatch proves UDP pipeline is used
+        // 2. ApplicationOrchestrator processes them immediately (event-driven, not timer-based)
+        // 3. Clients receive GPS updates at ~93ms intervals, proving UDP pipeline works correctly
 
         // Arrange & Act - Start simulator
         await _backendClient!.SendCommandAsync(
@@ -232,20 +232,20 @@ public class SimulatorIntegrationTests : BaseIntegrationTest
 
         // Assert - Verify timing patterns indicate UDP pipeline usage
         var gpsStates = _receivedStates.Where(s => s.Gnss != null).ToList();
-        gpsStates.Should().HaveCountGreaterThan(8, "ApplicationOrchestrator broadcasts at ~4 Hz (250ms)");
-        gpsStates.Should().HaveCountLessThan(15, "Should not receive all simulator packets (93ms rate)");
+        gpsStates.Should().HaveCountGreaterThan(25, "should receive most simulator packets (~32 expected at 93ms over 3s)");
+        gpsStates.Should().HaveCountLessThan(35, "some packets may be missed due to timing/network overhead");
 
-        // Calculate average time between GPS updates (should be ~250ms, not 93ms)
+        // Calculate average time between GPS updates (should be ~93ms matching simulator rate)
         var timestamps = gpsStates.Select(s => s.Timestamp).OrderBy(t => t).ToList();
         if (timestamps.Count >= 2)
         {
             var intervals = timestamps.Zip(timestamps.Skip(1), (a, b) => (b - a).TotalMilliseconds).ToList();
             var avgInterval = intervals.Average();
 
-            avgInterval.Should().BeInRange(200, 300,
-                "average interval should be ~250ms (ApplicationOrchestrator rate), proving UDP pipeline is used");
+            avgInterval.Should().BeInRange(80, 120,
+                "average interval should be ~93ms (simulator rate), proving immediate UDP processing");
 
-            Console.WriteLine($"✓ UDP pipeline verified: avg interval = {avgInterval:F0}ms (expected ~250ms)");
+            Console.WriteLine($"✓ UDP pipeline verified: avg interval = {avgInterval:F0}ms (expected ~93ms)");
         }
     }
 
