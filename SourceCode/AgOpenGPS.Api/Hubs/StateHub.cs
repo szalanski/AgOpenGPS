@@ -48,50 +48,13 @@ public class StateHub : Hub
     #region Command Methods (Client → Server)
 
     /// <summary>
-    /// Start the GPS simulator with specified parameters.
+    /// Unified simulator command handler.
+    /// Accepts all simulator control events via single endpoint.
     /// </summary>
-    public async Task StartSimulator(StartSimulatorCommand command)
+    public async Task UpdateSimulator(UpdateSimulatorCommand command)
     {
-        _logger.LogInformation("StartSimulator command from {ConnectionId}: Lat={Lat}, Lon={Lon}, Heading={Heading}°, Speed={Speed} km/h",
-            Context.ConnectionId, command.Latitude, command.Longitude, command.HeadingDegrees, command.SpeedKmh);
-        await _mediator.Send(command);
-    }
-
-    /// <summary>
-    /// Stop the GPS simulator.
-    /// </summary>
-    public async Task StopSimulator(StopSimulatorCommand command)
-    {
-        _logger.LogInformation("StopSimulator command from {ConnectionId}", Context.ConnectionId);
-        await _mediator.Send(command);
-    }
-
-    /// <summary>
-    /// Set the simulator speed.
-    /// </summary>
-    public async Task SetSimulatorSpeed(SetSimulatorSpeedCommand command)
-    {
-        _logger.LogInformation("SetSimulatorSpeed command from {ConnectionId}: Speed={Speed} km/h",
-            Context.ConnectionId, command.SpeedKmh);
-        await _mediator.Send(command);
-    }
-
-    /// <summary>
-    /// Set the simulator steering angle.
-    /// </summary>
-    public async Task SetSimulatorSteering(SetSimulatorSteeringCommand command)
-    {
-        _logger.LogInformation("SetSimulatorSteering command from {ConnectionId}: Angle={Angle}°",
-            Context.ConnectionId, command.SteerAngle);
-        await _mediator.Send(command);
-    }
-
-    /// <summary>
-    /// Reset the simulator to default state.
-    /// </summary>
-    public async Task ResetSimulator(ResetSimulatorCommand command)
-    {
-        _logger.LogInformation("ResetSimulator command from {ConnectionId}", Context.ConnectionId);
+        _logger.LogDebug("UpdateSimulator command from {ConnectionId}: Type={EventType}",
+            Context.ConnectionId, command.Event.Type);
         await _mediator.Send(command);
     }
 

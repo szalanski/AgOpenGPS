@@ -28,7 +28,7 @@ public class StateReceptionTests : BaseIntegrationTest
         await _simulatorClient.ConnectAsync();
 
         await _simulatorClient.SendCommandAsync(
-            new StartSimulatorCommand(45.0, -93.0, 0.0, 10.0)); // Generate GPS at ~93ms intervals
+            new UpdateSimulatorCommand(SimulatorEvent.Start(45.0, -93.0, 0.0, 10.0))); // Generate GPS at ~93ms intervals
 
         await Task.Delay(500); // Let simulator start
     }
@@ -40,7 +40,7 @@ public class StateReceptionTests : BaseIntegrationTest
         {
             try
             {
-                await _simulatorClient.SendCommandAsync(new StopSimulatorCommand());
+                await _simulatorClient.SendCommandAsync(new UpdateSimulatorCommand(SimulatorEvent.Stop()));
             }
             catch
             {

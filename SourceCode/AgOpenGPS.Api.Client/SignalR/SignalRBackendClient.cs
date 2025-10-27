@@ -60,24 +60,8 @@ namespace AgOpenGPS.Api.Client.SignalR
             // Note: SignalR doesn't support generic hub methods, so we need specific methods for each command type
             switch (command)
             {
-                case StartSimulatorCommand cmd:
-                    await _hubConnection.InvokeAsync("StartSimulator", cmd);
-                    break;
-
-                case StopSimulatorCommand cmd:
-                    await _hubConnection.InvokeAsync("StopSimulator", cmd);
-                    break;
-
-                case SetSimulatorSpeedCommand cmd:
-                    await _hubConnection.InvokeAsync("SetSimulatorSpeed", cmd);
-                    break;
-
-                case SetSimulatorSteeringCommand cmd:
-                    await _hubConnection.InvokeAsync("SetSimulatorSteering", cmd);
-                    break;
-
-                case ResetSimulatorCommand cmd:
-                    await _hubConnection.InvokeAsync("ResetSimulator", cmd);
+                case UpdateSimulatorCommand cmd:
+                    await _hubConnection.InvokeAsync("UpdateSimulator", cmd);
                     break;
 
                 default:

@@ -22,6 +22,11 @@ namespace AgOpenGPS.Api.Services
         private double _steerAngleAve;       // Smoothed steering angle
         private double _stepDistance;        // Distance per tick
 
+        // Smooth speed transition state
+        private double _targetSpeed;         // Target speed for smooth transitions
+        private const double ACCELERATION_RATE = 0.86;  // km/h per tick (matches legacy)
+        private const double DECELERATION_RATE = 0.43;  // km/h per tick (matches legacy)
+
         public bool IsEnabled { get; private set; }
 
         public SimulatorService()
@@ -31,6 +36,7 @@ namespace AgOpenGPS.Api.Services
             _longitude = -93.0;
             _headingRad = 0.0;
             _speedKmh = 10.0;
+            _targetSpeed = 10.0;
             _steerAngle = 0.0;
             _steerAngleAve = 0.0;
             _stepDistance = 0.0;
@@ -42,6 +48,7 @@ namespace AgOpenGPS.Api.Services
             _longitude = lon;
             _headingRad = headingDeg * DEG_TO_RAD;
             _speedKmh = speedKmh;
+            _targetSpeed = speedKmh;
             _steerAngle = 0.0;
             _steerAngleAve = 0.0;
             _stepDistance = 0.0;
@@ -53,9 +60,32 @@ namespace AgOpenGPS.Api.Services
             IsEnabled = false;
         }
 
-        public void SetSpeed(double speedKmh)
+        public void SetSpeed(double speedKmh, bool smooth = false)
         {
-            _speedKmh = speedKmh;
+            double clampedSpeed = Math.Clamp(speedKmh, -21.0, 322.0);
+
+            if (smooth)
+            {
+                // Set target for gradual transition
+                _targetSpeed = clampedSpeed;
+            }
+            else
+            {
+                // Instant change
+                _speedKmh = clampedSpeed;
+                _targetSpeed = clampedSpeed;
+            }
+        }
+
+        public void AdjustSpeed(double delta)
+        {
+            _targetSpeed = Math.Clamp(_targetSpeed + delta, -21.0, 322.0);
+        }
+
+        public void SetSpeedToZero()
+        {
+            _speedKmh = 0.0;
+            _targetSpeed = 0.0;
         }
 
         public void SetSteering(double steerAngle)
@@ -63,11 +93,31 @@ namespace AgOpenGPS.Api.Services
             _steerAngle = steerAngle;
         }
 
+        public void ResetSteering()
+        {
+            _steerAngle = 0.0;
+            _steerAngleAve = 0.0;
+        }
+
+        public void ReverseDirection()
+        {
+            _headingRad += Math.PI;
+            if (_headingRad > TWO_PI) _headingRad -= TWO_PI;
+        }
+
+        public void ResetPosition(double lat, double lon)
+        {
+            _latitude = lat;
+            _longitude = lon;
+        }
+
         public void Reset()
         {
             _steerAngle = 0.0;
             _steerAngleAve = 0.0;
             _stepDistance = 0.0;
+            _speedKmh = 0.0;
+            _targetSpeed = 0.0;
         }
 
         /// <summary>
@@ -79,6 +129,18 @@ namespace AgOpenGPS.Api.Services
         {
             if (!IsEnabled)
                 return null;
+
+            // Apply smooth speed transition (NEW)
+            if (Math.Abs(_speedKmh - _targetSpeed) > 0.01)
+            {
+                double rate = (_speedKmh < _targetSpeed) ? ACCELERATION_RATE : DECELERATION_RATE;
+                double speedDiff = _targetSpeed - _speedKmh;
+
+                if (Math.Abs(speedDiff) < rate)
+                    _speedKmh = _targetSpeed;
+                else
+                    _speedKmh += Math.Sign(speedDiff) * rate;
+            }
 
             // Smooth steering angle (from CSim.DoSimTick)
             double diff = Math.Abs(_steerAngle - _steerAngleAve);
