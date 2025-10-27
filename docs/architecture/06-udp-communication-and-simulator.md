@@ -610,23 +610,163 @@ private void DisableSim()
 
 ## Migration Notes for Backend API
 
-### Current State (Workflow 001)
+### Workflow 001: Backend Infrastructure (COMPLETED)
 
-- Backend (ApplicationOrchestrator) runs at 4 Hz (250ms)
-- timerSim disabled when backend connects
-- timerSim enabled as fallback when backend unavailable
+- Backend (ApplicationOrchestrator) infrastructure created
+- SignalR state broadcasting implemented (IStatePublisher/IBackendClient)
+- ApplicationState model with Timestamp property
+- FormGPS receives state updates via SignalR
 
-### Future Work
+### Workflow 002: Backend Simulator Implementation (COMPLETED)
 
-To fully integrate simulator with backend:
+**Status:** Backend simulator fully functional with GPS processing
 
-1. **Backend calls CSim.DoSimTick()** - Move simulation to ApplicationOrchestrator
-2. **Broadcast simulated state** - Send position/heading via SignalR
-3. **Remove timerSim** - Eliminate WinForms timer entirely
-4. **UDP from backend** - Backend sends PGN packets directly
+#### Backend Simulator Architecture
 
-**Reference:** [docs/workflow/001-application-orchestrator/](../workflow/001-application-orchestrator/)
+The backend now contains a complete GPS simulator with physics-based vehicle movement:
+
+**Components:**
+
+1. **SimulatorService** - Core simulator logic
+   - **Location:** [AgOpenGPS.Api/Services/SimulatorService.cs](../../SourceCode/AgOpenGPS.Api/Services/SimulatorService.cs)
+   - **Tick Rate:** 93ms (~10.75 Hz) - matches legacy CSim timing
+   - **Physics:**
+     - Steering response with smoothing/delay
+     - Heading calculation based on wheelbase geometry
+     - Position calculation using bearing/distance
+   - **State:** Position, Heading, Speed, Altitude
+   - **Methods:**
+     - `Start(lat, lon, heading, speed)` - Initialize simulator
+     - `Stop()` - Halt simulation
+     - `SetSpeed(speedKph)` - Update target speed
+     - `SetSteering(degrees)` - Update steering angle
+     - `Reset()` - Reset to initial state
+     - `DoSimTick()` - Internal physics update (called by hosted service)
+
+2. **SimulatorHostedService** - Background service
+   - **Location:** [AgOpenGPS.Api/Services/SimulatorHostedService.cs](../../SourceCode/AgOpenGPS.Api/Services/SimulatorHostedService.cs)
+   - **Purpose:** Runs simulator tick loop, sends UDP packets
+   - **Tick Rate:** 93ms
+   - **UDP Output:** Sends PGN 0xD6 packets to localhost:15556
+   - **Note:** Sends via UDP (not direct GnssService calls) to maintain packet flow architecture
+
+3. **UdpPacketReceiver** - UDP listener
+   - **Location:** [AgOpenGPS.Api/Services/UdpPacketReceiver.cs](../../SourceCode/AgOpenGPS.Api/Services/UdpPacketReceiver.cs)
+   - **Port:** 15556 (configurable via UdpOptions)
+   - **Purpose:** Receives GPS packets from AgIO or simulator
+   - **Returns:** `IAsyncEnumerable<UdpPacket>` for event-driven processing
+
+4. **GnssService** - GPS packet processing
+   - **Location:** [AgOpenGPS.Api/Services/GnssService.cs](../../SourceCode/AgOpenGPS.Api/Services/GnssService.cs)
+   - **Purpose:** Unpacks PGN 0xD6 binary protocol, performs coordinate transforms
+   - **Methods:**
+     - `InitializeLocalPlane(origin)` - Set coordinate system origin
+     - `ProcessGpsPacket(bytes)` - Unpack PGN 0xD6, transform coordinates
+     - `GetCurrentState()` - Return current GnssState
+   - **Coordinate Transforms:** Wgs84Position → LocalPosition (meters from origin)
+
+5. **ApplicationOrchestrator** - Event-driven main loop
+   - **Location:** [AgOpenGPS.Api/Services/ApplicationOrchestrator.cs](../../SourceCode/AgOpenGPS.Api/Services/ApplicationOrchestrator.cs)
+   - **Architecture:** Event-driven (NOT timer-based)
+   - **Processing:** Consumes UDP packets immediately via `IAsyncEnumerable`
+   - **Broadcasts:** ApplicationState.Gnss via SignalR when GPS data received
+   - **Performance:** ~93ms intervals when simulator running, or real GPS rate
+
+#### CQRS Command Pattern
+
+Simulator control uses CQRS with MediatR:
+
+**Commands:** [AgOpenGPS.Api.Client/Commands/SimulatorCommands.cs](../../SourceCode/AgOpenGPS.Api.Client/Commands/SimulatorCommands.cs)
+- `StartSimulatorCommand(lat, lon, heading, speedKph)`
+- `StopSimulatorCommand()`
+- `SetSimulatorSpeedCommand(speedKph)`
+- `SetSimulatorSteeringCommand(degrees)`
+- `ResetSimulatorCommand()`
+
+**Handlers:** [AgOpenGPS.Api/Commands/Handlers/](../../SourceCode/AgOpenGPS.Api/Commands/Handlers/)
+- Each command has dedicated handler that calls SimulatorService
+- MediatR dispatches commands to handlers
+
+**SignalR Hub:** [AgOpenGPS.Api/Hubs/StateHub.cs](../../SourceCode/AgOpenGPS.Api/Hubs/StateHub.cs)
+- Specific methods per command type (`StartSimulator`, `StopSimulator`, etc.)
+- Workaround: SignalR doesn't support generic hub methods (`SendCommand<T>`)
+- Client calls hub methods, hub dispatches via MediatR
+
+#### UDP Communication Flow (Backend Simulator)
+
+```
+┌─────────────────────────────────────────────────────────┐
+│ AgOpenGPS.Api Backend                                   │
+│                                                         │
+│  SimulatorHostedService (93ms loop)                    │
+│    ↓                                                    │
+│  SimulatorService.DoSimTick()                          │
+│    - Calculate physics (position, heading, speed)      │
+│    ↓                                                    │
+│  Build PGN 0xD6 packet (57 bytes)                      │
+│    ↓                                                    │
+│  Send UDP → localhost:15556                            │
+│                                                         │
+│    ↓ (loopback)                                        │
+│                                                         │
+│  UdpPacketReceiver (listening on 15556)                │
+│    ↓                                                    │
+│  ApplicationOrchestrator.ProcessPacketAsync()          │
+│    ↓                                                    │
+│  GnssService.ProcessGpsPacket()                        │
+│    - Unpack PGN 0xD6                                   │
+│    - Transform Wgs84 → Local coordinates               │
+│    - Populate GnssState                                │
+│    ↓                                                    │
+│  ApplicationState.Gnss updated                         │
+│    ↓                                                    │
+│  SignalRStatePublisher.BroadcastStateAsync()           │
+│    → SignalR broadcast                                 │
+└─────────────────────────────────────────────────────────┘
+                    ↓ SignalR WebSocket
+┌─────────────────────────────────────────────────────────┐
+│ FormGPS (Frontend)                                      │
+│  SignalRBackendClient.OnStateReceived()                │
+│    - Display GPS data from ApplicationState.Gnss       │
+└─────────────────────────────────────────────────────────┘
+```
+
+#### Integration Tests
+
+**Test Suite:** [Tests/AgOpenGPS.API.IntegrationTests/](../../SourceCode/Tests/AgOpenGPS.API.IntegrationTests/)
+
+**Test Files:**
+- `GpsPacketProcessingTests.cs` - GPS packet unpacking and coordinate transforms (7 tests)
+- `StateReceptionTests.cs` - SignalR state reception (3 tests)
+- `SimulatorIntegrationTests.cs` - Backend simulator with CQRS commands (14 tests)
+
+**Test Results:** 21/24 passing (3 physics-related tests deferred)
+
+**Test Approach:**
+- In-memory test server (`TestWebApplicationFactory`)
+- External GPS simulator helper (`GpsSimulator`)
+- SignalR client connections via `CreateTestHubConnection()`
+- Command testing via `IBackendClient.SendCommandAsync()`
+
+#### Key Design Patterns
+
+1. **Event-Driven:** ApplicationOrchestrator processes UDP immediately (not timer-based)
+2. **UDP Loopback:** Simulator sends UDP packets (maintains packet flow architecture)
+3. **CQRS:** Commands for simulator control via MediatR
+4. **Transport Abstraction:** IStatePublisher/IBackendClient interfaces
+5. **SignalR Limitation Workaround:** Specific hub methods per command type
+6. **Coordinate Value Types:** Wgs84Position, LocalPosition, Heading, Speed, Altitude (C# 9.0 init setters)
+
+#### What's NOT Yet Done
+
+- [ ] FormGPS integration (Task 8 deferred)
+- [ ] Real AgIO integration testing
+- [ ] Physics test refinements (steering behavior)
+
+**Reference:**
+- [docs/workflow/001-application-orchestrator/](../workflow/001-application-orchestrator/) - Backend infrastructure
+- [docs/workflow/002-gps-gnss-migration/](../workflow/002-gps-gnss-migration/) - GPS/GNSS migration
 
 ---
 
-*Last updated: 2025-01-26*
+*Last updated: 2025-01-27 (Workflow 002 completion)*
