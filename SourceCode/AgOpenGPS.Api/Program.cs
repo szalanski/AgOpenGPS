@@ -39,6 +39,14 @@ builder.Services.AddSingleton<IUdpPacketReceiver, UdpPacketReceiver>();
 // Register GPS processing service
 builder.Services.AddSingleton<IGnssService, GnssService>();
 
+// Register MediatR for CQRS command handling
+builder.Services.AddMediatR(cfg =>
+    cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+
+// Register simulator services
+builder.Services.AddSingleton<SimulatorService>();
+builder.Services.AddHostedService<SimulatorHostedService>();
+
 // Register ApplicationOrchestrator as hosted service (GPS-driven)
 builder.Services.AddHostedService<ApplicationOrchestrator>();
 
