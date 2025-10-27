@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using AgOpenGPS.Api.Client.Abstractions;
 using AgOpenGPS.Api.Client.Commands;
 using AgOpenGPS.Api.Client.Models;
@@ -15,7 +16,7 @@ namespace AgOpenGPS.API.IntegrationTests;
 public class SimulatorUnifiedCommandTests : BaseIntegrationTest
 {
     private IBackendClient? _backendClient;
-    private readonly List<ApplicationState> _receivedStates = new();
+    private readonly ConcurrentQueue<ApplicationState> _receivedStates = CreateStateCollection();
 
     [SetUp]
     public async Task SetUp()
@@ -26,7 +27,7 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
         _backendClient = new SignalRBackendClient(hubConnection);
 
         _backendClient.SubscribeToState(
-            onNext: state => _receivedStates.Add(state),
+            onNext: state => _receivedStates.Enqueue(state),
             onError: ex => Console.WriteLine($"State subscription error: {ex.Message}")
         );
 
@@ -88,7 +89,7 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
             SimulatorEvent.Start(45.0, -93.0, 0.0, 10.0)));
         await Task.Delay(1000);
 
-        var countBeforeStop = _receivedStates.Count(s => s.Gnss != null);
+        var countBeforeStop = _receivedStates.ToList().Count(s => s.Gnss != null);
         countBeforeStop.Should().BeGreaterThan(5);
 
         // Act - Stop simulator
@@ -100,7 +101,7 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
         await Task.Delay(1000);
 
         // Assert - No new GPS data
-        var countAfterStop = _receivedStates.Count(s => s.Gnss != null);
+        var countAfterStop = _receivedStates.ToList().Count(s => s.Gnss != null);
         countAfterStop.Should().Be(0, "no GPS data should be generated after stop");
 
         Console.WriteLine($"✓ Stop event: simulator disabled successfully");
@@ -135,7 +136,7 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
             SimulatorEvent.Start(45.0, -93.0, 0.0, 5.0)));
         await Task.Delay(1000);
 
-        var initialSpeed = _receivedStates
+        var initialSpeed = _receivedStates.ToList()
             .Where(s => s.Gnss?.Speed != null)
             .Select(s => s.Gnss!.Speed!.KilometersPerHour)
             .LastOrDefault();
@@ -153,7 +154,7 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
         await Task.Delay(2000); // Wait for smooth transition
 
         // Assert - Speed should have increased
-        var finalSpeed = _receivedStates
+        var finalSpeed = _receivedStates.ToList()
             .Where(s => s.Gnss?.Speed != null)
             .Select(s => s.Gnss!.Speed!.KilometersPerHour)
             .LastOrDefault();
@@ -172,7 +173,7 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
             SimulatorEvent.Start(45.0, -93.0, 0.0, 20.0)));
         await Task.Delay(1000);
 
-        var initialSpeed = _receivedStates
+        var initialSpeed = _receivedStates.ToList()
             .Where(s => s.Gnss?.Speed != null)
             .Select(s => s.Gnss!.Speed!.KilometersPerHour)
             .LastOrDefault();
@@ -185,7 +186,7 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
         await Task.Delay(3000); // Wait for smooth transition
 
         // Assert
-        var finalSpeed = _receivedStates
+        var finalSpeed = _receivedStates.ToList()
             .Where(s => s.Gnss?.Speed != null)
             .Select(s => s.Gnss!.Speed!.KilometersPerHour)
             .LastOrDefault();
@@ -204,7 +205,7 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
             SimulatorEvent.Start(45.0, -93.0, 0.0, 10.0)));
         await Task.Delay(1000);
 
-        var initialSpeed = _receivedStates
+        var initialSpeed = _receivedStates.ToList()
             .Where(s => s.Gnss?.Speed != null)
             .Select(s => s.Gnss!.Speed!.KilometersPerHour)
             .LastOrDefault();
@@ -215,7 +216,7 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
         await Task.Delay(1500);
 
         // Assert - Speed should be unchanged
-        var finalSpeed = _receivedStates
+        var finalSpeed = _receivedStates.ToList()
             .Where(s => s.Gnss?.Speed != null)
             .Select(s => s.Gnss!.Speed!.KilometersPerHour)
             .LastOrDefault();
@@ -242,7 +243,7 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
         await Task.Delay(3000);
 
         // Assert - Verify gradual transition
-        var speeds = _receivedStates
+        var speeds = _receivedStates.ToList()
             .Where(s => s.Gnss?.Speed != null)
             .Select(s => s.Gnss!.Speed!.KilometersPerHour)
             .ToList();
@@ -274,7 +275,7 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
         await Task.Delay(500); // Short delay
 
         // Assert - Speed should change quickly
-        var speeds = _receivedStates
+        var speeds = _receivedStates.ToList()
             .Where(s => s.Gnss?.Speed != null)
             .Select(s => s.Gnss!.Speed!.KilometersPerHour)
             .ToList();
@@ -300,7 +301,7 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
         await Task.Delay(500);
 
         // Assert
-        var speeds = _receivedStates
+        var speeds = _receivedStates.ToList()
             .Where(s => s.Gnss?.Speed != null)
             .Select(s => s.Gnss!.Speed!.KilometersPerHour)
             .ToList();
@@ -325,7 +326,7 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
         await Task.Delay(3000);
 
         // Assert - Speed should clamp at 322 km/h
-        var speed = _receivedStates
+        var speed = _receivedStates.ToList()
             .Where(s => s.Gnss?.Speed != null)
             .Select(s => s.Gnss!.Speed!.KilometersPerHour)
             .LastOrDefault();
@@ -347,7 +348,7 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
             SimulatorEvent.Start(45.0, -93.0, 0.0, 15.0)));
         await Task.Delay(1000);
 
-        var initialHeading = _receivedStates
+        var initialHeading = _receivedStates.ToList()
             .Where(s => s.Gnss?.HeadingSingle != null)
             .Select(s => s.Gnss!.HeadingSingle!.Degrees)
             .FirstOrDefault();
@@ -360,7 +361,7 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
         await Task.Delay(2500);
 
         // Assert - Heading should have changed
-        var finalHeading = _receivedStates
+        var finalHeading = _receivedStates.ToList()
             .Where(s => s.Gnss?.HeadingSingle != null)
             .Select(s => s.Gnss!.HeadingSingle!.Degrees)
             .LastOrDefault();
@@ -381,7 +382,7 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
             SimulatorEvent.SteeringSet(25.0)));
         await Task.Delay(1500);
 
-        var headingBefore = _receivedStates
+        var headingBefore = _receivedStates.ToList()
             .Where(s => s.Gnss?.HeadingSingle != null)
             .Select(s => s.Gnss!.HeadingSingle!.Degrees)
             .LastOrDefault();
@@ -394,7 +395,7 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
         await Task.Delay(2000);
 
         // Assert - Path should straighten
-        var headingsAfter = _receivedStates
+        var headingsAfter = _receivedStates.ToList()
             .Where(s => s.Gnss?.HeadingSingle != null)
             .Select(s => s.Gnss!.HeadingSingle!.Degrees)
             .ToList();
@@ -439,7 +440,7 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
             SimulatorEvent.Start(45.0, -93.0, 0.0, 10.0)));
         await Task.Delay(1500);
 
-        var initialHeading = _receivedStates
+        var initialHeading = _receivedStates.ToList()
             .Where(s => s.Gnss?.HeadingSingle != null)
             .Select(s => s.Gnss!.HeadingSingle!.Degrees)
             .FirstOrDefault();
@@ -450,7 +451,7 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
         await Task.Delay(500);
 
         // Assert - Should be 180° opposite
-        var newHeading = _receivedStates
+        var newHeading = _receivedStates.ToList()
             .Where(s => s.Gnss?.HeadingSingle != null)
             .Select(s => s.Gnss!.HeadingSingle!.Degrees)
             .LastOrDefault();
@@ -469,7 +470,7 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
             SimulatorEvent.Start(45.0, -93.0, 0.0, 10.0)));
         await Task.Delay(1000);
 
-        var initialHeading = _receivedStates
+        var initialHeading = _receivedStates.ToList()
             .Where(s => s.Gnss?.HeadingSingle != null)
             .Select(s => s.Gnss!.HeadingSingle!.Degrees)
             .FirstOrDefault();
@@ -483,7 +484,7 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
         await Task.Delay(500);
 
         // Assert - Should be back to original heading
-        var finalHeading = _receivedStates
+        var finalHeading = _receivedStates.ToList()
             .Where(s => s.Gnss?.HeadingSingle != null)
             .Select(s => s.Gnss!.HeadingSingle!.Degrees)
             .LastOrDefault();
@@ -501,7 +502,7 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
             SimulatorEvent.Start(45.0, -93.0, 0.0, 15.0)));
         await Task.Delay(1000);
 
-        var speedBefore = _receivedStates
+        var speedBefore = _receivedStates.ToList()
             .Where(s => s.Gnss?.Speed != null)
             .Select(s => s.Gnss!.Speed!.KilometersPerHour)
             .LastOrDefault();
@@ -512,7 +513,7 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
         await Task.Delay(1000);
 
         // Assert - Speed unchanged
-        var speedAfter = _receivedStates
+        var speedAfter = _receivedStates.ToList()
             .Where(s => s.Gnss?.Speed != null)
             .Select(s => s.Gnss!.Speed!.KilometersPerHour)
             .LastOrDefault();
@@ -534,7 +535,7 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
             SimulatorEvent.Start(45.0, -93.0, 0.0, 20.0)));
         await Task.Delay(2500);
 
-        var movedPosition = _receivedStates
+        var movedPosition = _receivedStates.ToList()
             .Where(s => s.Gnss != null)
             .Select(s => s.Gnss!.WgsPosition)
             .LastOrDefault();
@@ -551,7 +552,7 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
         await Task.Delay(1000);
 
         // Assert - Back to start
-        var resetPosition = _receivedStates
+        var resetPosition = _receivedStates.ToList()
             .Where(s => s.Gnss != null)
             .Select(s => s.Gnss!.WgsPosition)
             .LastOrDefault();
@@ -563,29 +564,47 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
     }
 
     [Test]
-    public async Task UpdateSimulator_Reset_ShouldClearState()
+    public async Task UpdateSimulator_Reset_ShouldResetPositionOnly()
     {
-        // Arrange - Start with steering and speed
+        // Arrange - Start at initial position and let it move
         await _backendClient!.SendCommandAsync(new UpdateSimulatorCommand(
             SimulatorEvent.Start(45.0, -93.0, 90.0, 25.0)));
         await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(
             SimulatorEvent.SteeringSet(30.0)));
-        await Task.Delay(1500);
+        await Task.Delay(2500); // Let it move away
 
-        // Act - Full reset
+        var movedPos = _receivedStates.ToList()
+            .Where(s => s.Gnss != null)
+            .Select(s => s.Gnss!.WgsPosition)
+            .LastOrDefault();
+
+        var distanceMoved = Math.Abs(movedPos.Latitude - 45.0) + Math.Abs(movedPos.Longitude - (-93.0));
+        distanceMoved.Should().BeGreaterThan(0.0001, "vehicle should have moved");
+
+        // Act - Reset (legacy: only position, not speed/steering)
         await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(
             SimulatorEvent.Reset()));
-        await Task.Delay(1000);
+        _receivedStates.Clear();
+        await Task.Delay(1500);
 
-        // Assert - Speed should be zero
-        var finalSpeed = _receivedStates
+        // Assert - Position reset, but speed/steering maintained (legacy behavior)
+        var snapshot = _receivedStates.ToList();
+        var resetPos = snapshot
+            .Where(s => s.Gnss != null)
+            .Select(s => s.Gnss!.WgsPosition)
+            .FirstOrDefault();
+
+        resetPos.Latitude.Should().BeApproximately(45.0, 0.001, "latitude reset to initial start");
+        resetPos.Longitude.Should().BeApproximately(-93.0, 0.001, "longitude reset to initial start");
+
+        // Speed should be maintained (legacy behavior)
+        var finalSpeed = snapshot
             .Where(s => s.Gnss?.Speed != null)
             .Select(s => s.Gnss!.Speed!.KilometersPerHour)
             .LastOrDefault();
+        finalSpeed.Should().BeGreaterThan(15.0, "speed maintained after reset (legacy behavior)");
 
-        finalSpeed.Should().BeApproximately(0.0, 0.5, "speed should be reset");
-
-        Console.WriteLine($"✓ Reset: state cleared");
+        Console.WriteLine($"✓ Reset: position reset to (45.0, -93.0), speed maintained at {finalSpeed:F1} km/h");
     }
 
     #endregion
@@ -614,7 +633,7 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
         await Task.Delay(3000); // Wait for smooth transition
 
         // Assert - Speed should have increased gradually
-        var speeds = _receivedStates
+        var speeds = _receivedStates.ToList()
             .Where(s => s.Gnss?.Speed != null)
             .Select(s => s.Gnss!.Speed!.KilometersPerHour)
             .ToList();
@@ -661,13 +680,13 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
             SimulatorEvent.SpeedZero()));
         await Task.Delay(1000);
 
-        var finalSpeed = _receivedStates
+        var finalSpeed = _receivedStates.ToList()
             .Where(s => s.Gnss?.Speed != null)
             .Select(s => s.Gnss!.Speed!.KilometersPerHour)
             .LastOrDefault();
         finalSpeed.Should().BeApproximately(0.0, 0.5, "should end at zero speed");
 
-        Console.WriteLine($"✓ Full workflow completed: {_receivedStates.Count(s => s.Gnss != null)} GPS states");
+        Console.WriteLine($"✓ Full workflow completed: {_receivedStates.ToList().Count(s => s.Gnss != null)} GPS states");
     }
 
     #endregion

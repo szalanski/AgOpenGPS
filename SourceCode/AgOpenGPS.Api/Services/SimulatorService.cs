@@ -13,6 +13,9 @@ namespace AgOpenGPS.Api.Services
         private const double EARTH_RADIUS_KM = 6371.0;
         private const double TWO_PI = 2.0 * Math.PI;
 
+        // Thread synchronization
+        private readonly object _lock = new object();
+
         // Simulator state
         private double _latitude;
         private double _longitude;
@@ -21,6 +24,10 @@ namespace AgOpenGPS.Api.Services
         private double _steerAngle;          // Target steering angle
         private double _steerAngleAve;       // Smoothed steering angle
         private double _stepDistance;        // Distance per tick
+
+        // Initial position for Reset() (legacy behavior)
+        private double _initialLatitude = 45.0;
+        private double _initialLongitude = -93.0;
 
         // Smooth speed transition state
         private double _targetSpeed;         // Target speed for smooth transitions
@@ -44,80 +51,115 @@ namespace AgOpenGPS.Api.Services
 
         public void Start(double lat, double lon, double headingDeg, double speedKmh)
         {
-            _latitude = lat;
-            _longitude = lon;
-            _headingRad = headingDeg * DEG_TO_RAD;
-            _speedKmh = speedKmh;
-            _targetSpeed = speedKmh;
-            _steerAngle = 0.0;
-            _steerAngleAve = 0.0;
-            _stepDistance = 0.0;
-            IsEnabled = true;
+            lock (_lock)
+            {
+                _latitude = lat;
+                _longitude = lon;
+                _initialLatitude = lat;    // Save for Reset() - legacy behavior
+                _initialLongitude = lon;   // Save for Reset() - legacy behavior
+                _headingRad = headingDeg * DEG_TO_RAD;
+                _speedKmh = speedKmh;
+                _targetSpeed = speedKmh;
+                _steerAngle = 0.0;
+                _steerAngleAve = 0.0;
+                _stepDistance = 0.0;
+                IsEnabled = true;
+            }
         }
 
         public void Stop()
         {
-            IsEnabled = false;
+            lock (_lock)
+            {
+                IsEnabled = false;
+            }
         }
 
         public void SetSpeed(double speedKmh, bool smooth = false)
         {
-            double clampedSpeed = Math.Clamp(speedKmh, -21.0, 322.0);
+            lock (_lock)
+            {
+                double clampedSpeed = Math.Clamp(speedKmh, -21.0, 322.0);
 
-            if (smooth)
-            {
-                // Set target for gradual transition
-                _targetSpeed = clampedSpeed;
-            }
-            else
-            {
-                // Instant change
-                _speedKmh = clampedSpeed;
-                _targetSpeed = clampedSpeed;
+                if (smooth)
+                {
+                    // Set target for gradual transition
+                    _targetSpeed = clampedSpeed;
+                }
+                else
+                {
+                    // Instant change
+                    _speedKmh = clampedSpeed;
+                    _targetSpeed = clampedSpeed;
+                }
             }
         }
 
         public void AdjustSpeed(double delta)
         {
-            _targetSpeed = Math.Clamp(_targetSpeed + delta, -21.0, 322.0);
+            lock (_lock)
+            {
+                _targetSpeed = Math.Clamp(_targetSpeed + delta, -21.0, 322.0);
+            }
         }
 
         public void SetSpeedToZero()
         {
-            _speedKmh = 0.0;
-            _targetSpeed = 0.0;
+            lock (_lock)
+            {
+                _speedKmh = 0.0;
+                _targetSpeed = 0.0;
+            }
         }
 
         public void SetSteering(double steerAngle)
         {
-            _steerAngle = steerAngle;
+            lock (_lock)
+            {
+                _steerAngle = steerAngle;
+            }
         }
 
         public void ResetSteering()
         {
-            _steerAngle = 0.0;
-            _steerAngleAve = 0.0;
+            lock (_lock)
+            {
+                _steerAngle = 0.0;
+                _steerAngleAve = 0.0;
+            }
         }
 
         public void ReverseDirection()
         {
-            _headingRad += Math.PI;
-            if (_headingRad > TWO_PI) _headingRad -= TWO_PI;
+            lock (_lock)
+            {
+                _headingRad += Math.PI;
+                if (_headingRad > TWO_PI) _headingRad -= TWO_PI;
+            }
         }
 
         public void ResetPosition(double lat, double lon)
         {
-            _latitude = lat;
-            _longitude = lon;
+            lock (_lock)
+            {
+                _latitude = lat;
+                _longitude = lon;
+            }
         }
 
+        /// <summary>
+        /// Reset simulator to initial start position (legacy FormGPS behavior).
+        /// Does NOT clear speed, steering, or stop simulator - only resets position.
+        /// Matches: btnResetSim_Click in FormGPS (Controls.Designer.cs:2157)
+        /// </summary>
         public void Reset()
         {
-            _steerAngle = 0.0;
-            _steerAngleAve = 0.0;
-            _stepDistance = 0.0;
-            _speedKmh = 0.0;
-            _targetSpeed = 0.0;
+            lock (_lock)
+            {
+                _latitude = _initialLatitude;
+                _longitude = _initialLongitude;
+                // Legacy behavior: Does NOT clear speed, steering, or disable simulator
+            }
         }
 
         /// <summary>
@@ -127,56 +169,59 @@ namespace AgOpenGPS.Api.Services
         /// </summary>
         public byte[]? Tick()
         {
-            if (!IsEnabled)
-                return null;
-
-            // Apply smooth speed transition (NEW)
-            if (Math.Abs(_speedKmh - _targetSpeed) > 0.01)
+            lock (_lock)
             {
-                double rate = (_speedKmh < _targetSpeed) ? ACCELERATION_RATE : DECELERATION_RATE;
-                double speedDiff = _targetSpeed - _speedKmh;
+                if (!IsEnabled)
+                    return null;
 
-                if (Math.Abs(speedDiff) < rate)
-                    _speedKmh = _targetSpeed;
+                // Apply smooth speed transition (NEW)
+                if (Math.Abs(_speedKmh - _targetSpeed) > 0.01)
+                {
+                    double rate = (_speedKmh < _targetSpeed) ? ACCELERATION_RATE : DECELERATION_RATE;
+                    double speedDiff = _targetSpeed - _speedKmh;
+
+                    if (Math.Abs(speedDiff) < rate)
+                        _speedKmh = _targetSpeed;
+                    else
+                        _speedKmh += Math.Sign(speedDiff) * rate;
+                }
+
+                // Smooth steering angle (from CSim.DoSimTick)
+                double diff = Math.Abs(_steerAngle - _steerAngleAve);
+                if (diff > 11)
+                {
+                    _steerAngleAve += (_steerAngle > _steerAngleAve) ? 6 : -6;
+                }
+                else if (diff > 5)
+                {
+                    _steerAngleAve += (_steerAngle > _steerAngleAve) ? 2 : -2;
+                }
+                else if (diff > 1)
+                {
+                    _steerAngleAve += (_steerAngle > _steerAngleAve) ? 0.5 : -0.5;
+                }
                 else
-                    _speedKmh += Math.Sign(speedDiff) * rate;
+                {
+                    _steerAngleAve = _steerAngle;
+                }
+
+                // Calculate step distance from speed (93ms tick, speed in km/h)
+                _stepDistance = (_speedKmh / 3600.0) * 0.093; // 93ms = 0.093 seconds
+
+                // Update heading based on steering (from CSim logic)
+                double headingChange = _stepDistance * Math.Tan(_steerAngleAve * DEG_TO_RAD) / 2.0;
+                _headingRad += headingChange;
+
+                // Normalize heading to [0, 2π)
+                if (_headingRad > TWO_PI) _headingRad -= TWO_PI;
+                if (_headingRad < 0) _headingRad += TWO_PI;
+
+                // Update position using great circle navigation
+                (_latitude, _longitude) = CalculateNewPosition(_latitude, _longitude, _headingRad, _stepDistance);
+
+                // Generate PGN 0xD6 packet
+                return GenerateGpsPacket();
             }
-
-            // Smooth steering angle (from CSim.DoSimTick)
-            double diff = Math.Abs(_steerAngle - _steerAngleAve);
-            if (diff > 11)
-            {
-                _steerAngleAve += (_steerAngle > _steerAngleAve) ? 6 : -6;
-            }
-            else if (diff > 5)
-            {
-                _steerAngleAve += (_steerAngle > _steerAngleAve) ? 2 : -2;
-            }
-            else if (diff > 1)
-            {
-                _steerAngleAve += (_steerAngle > _steerAngleAve) ? 0.5 : -0.5;
-            }
-            else
-            {
-                _steerAngleAve = _steerAngle;
-            }
-
-            // Calculate step distance from speed (93ms tick, speed in km/h)
-            _stepDistance = (_speedKmh / 3600.0) * 0.093; // 93ms = 0.093 seconds
-
-            // Update heading based on steering (from CSim logic)
-            double headingChange = _stepDistance * Math.Tan(_steerAngleAve * DEG_TO_RAD) / 2.0;
-            _headingRad += headingChange;
-
-            // Normalize heading to [0, 2π)
-            if (_headingRad > TWO_PI) _headingRad -= TWO_PI;
-            if (_headingRad < 0) _headingRad += TWO_PI;
-
-            // Update position using great circle navigation
-            (_latitude, _longitude) = CalculateNewPosition(_latitude, _longitude, _headingRad, _stepDistance);
-
-            // Generate PGN 0xD6 packet
-            return GenerateGpsPacket();
         }
 
         /// <summary>

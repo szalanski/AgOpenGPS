@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using AgOpenGPS.Api.Client.Abstractions;
 using AgOpenGPS.Api.Client.Commands;
 using AgOpenGPS.Api.Client.Models;
@@ -74,10 +75,10 @@ public class StateReceptionTests : BaseIntegrationTest
         // Arrange
         var hubConnection = CreateTestHubConnection("/statehub");
         var subscriber = new SignalRStateSubscriber(hubConnection);
-        var receivedStates = new List<ApplicationState>();
+        var receivedStates = CreateStateCollection();
 
         // Subscribe to state updates
-        subscriber.Subscribe(state => receivedStates.Add(state));
+        subscriber.Subscribe(state => receivedStates.Enqueue(state));
 
         // Act
         await subscriber.ConnectAsync();
@@ -86,13 +87,14 @@ public class StateReceptionTests : BaseIntegrationTest
         await Task.Delay(1000);
 
         // Assert
-        receivedStates.Should().HaveCountGreaterThan(8, "simulator sends ~10-11 packets per second at 93ms");
-        receivedStates.Should().HaveCountLessThan(13, "some packets may be missed due to timing/network overhead");
+        var snapshot = receivedStates.ToList();
+        snapshot.Should().HaveCountGreaterThan(8, "simulator sends ~10-11 packets per second at 93ms");
+        snapshot.Should().HaveCountLessThan(13, "some packets may be missed due to timing/network overhead");
 
         // Verify timestamps are recent and increasing
-        receivedStates.Should().OnlyContain(s => s.Timestamp > DateTime.UtcNow.AddSeconds(-2));
+        snapshot.Should().OnlyContain(s => s.Timestamp > DateTime.UtcNow.AddSeconds(-2));
 
-        var timestamps = receivedStates.Select(s => s.Timestamp).ToList();
+        var timestamps = snapshot.Select(s => s.Timestamp).ToList();
         timestamps.Should().BeInAscendingOrder("timestamps should be monotonically increasing");
 
         // Cleanup

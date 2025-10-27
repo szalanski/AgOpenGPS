@@ -1,4 +1,6 @@
+using System.Collections.Concurrent;
 using System.Net.Sockets;
+using AgOpenGPS.Api.Client.Models;
 using Microsoft.AspNetCore.SignalR.Client;
 
 namespace AgOpenGPS.API.IntegrationTests.Common;
@@ -68,4 +70,12 @@ public abstract class BaseIntegrationTest
             })
             .Build();
     }
+
+    /// <summary>
+    /// Creates a thread-safe collection for capturing ApplicationState in tests.
+    /// Centralized factory allows changing collection type in one place.
+    /// Uses ConcurrentQueue to preserve insertion order (FIFO) for timestamp validation.
+    /// </summary>
+    protected static ConcurrentQueue<ApplicationState> CreateStateCollection()
+        => new ConcurrentQueue<ApplicationState>();
 }

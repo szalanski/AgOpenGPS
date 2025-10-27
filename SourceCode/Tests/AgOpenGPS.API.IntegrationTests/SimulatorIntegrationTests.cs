@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using AgOpenGPS.Api.Client.Abstractions;
 using AgOpenGPS.Api.Client.Commands;
 using AgOpenGPS.Api.Client.Models;
@@ -16,7 +17,7 @@ namespace AgOpenGPS.API.IntegrationTests;
 public class SimulatorIntegrationTests : BaseIntegrationTest
 {
     private IBackendClient? _backendClient;
-    private readonly List<ApplicationState> _receivedStates = new();
+    private readonly ConcurrentQueue<ApplicationState> _receivedStates = CreateStateCollection();
 
     [SetUp]
     public async Task SetUp()
@@ -29,7 +30,7 @@ public class SimulatorIntegrationTests : BaseIntegrationTest
 
         // Subscribe to state updates
         _backendClient.SubscribeToState(
-            onNext: state => _receivedStates.Add(state),
+            onNext: state => _receivedStates.Enqueue(state),
             onError: ex => Console.WriteLine($"State subscription error: {ex.Message}")
         );
 
@@ -78,7 +79,7 @@ public class SimulatorIntegrationTests : BaseIntegrationTest
         await Task.Delay(2000); // 2 seconds at 93ms tick = ~21 packets
 
         // Assert
-        var gpsStates = _receivedStates.Where(s => s.Gnss != null).ToList();
+        var gpsStates = _receivedStates.ToList().Where(s => s.Gnss != null).ToList();
         gpsStates.Should().NotBeEmpty("simulator should generate GPS data");
         gpsStates.Should().HaveCountGreaterThan(10, "simulator should send multiple packets over 2 seconds");
 
@@ -102,7 +103,7 @@ public class SimulatorIntegrationTests : BaseIntegrationTest
             new UpdateSimulatorCommand(SimulatorEvent.Start(45.0, -93.0, 0.0, 10.0)));
         await Task.Delay(1000);
 
-        var gpsCountBeforeStop = _receivedStates.Count(s => s.Gnss != null);
+        var gpsCountBeforeStop = _receivedStates.ToList().Count(s => s.Gnss != null);
         gpsCountBeforeStop.Should().BeGreaterThan(5, "simulator should be generating data");
 
         // Act - Stop simulator
@@ -113,7 +114,7 @@ public class SimulatorIntegrationTests : BaseIntegrationTest
         await Task.Delay(1000); // Wait to see if new GPS data arrives
 
         // Assert - No new GPS data should be generated
-        var gpsCountAfterStop = _receivedStates.Count(s => s.Gnss != null);
+        var gpsCountAfterStop = _receivedStates.ToList().Count(s => s.Gnss != null);
         gpsCountAfterStop.Should().Be(0, "simulator should be disabled and not generating GPS data");
 
         Console.WriteLine($"✓ Simulator stopped successfully (no GPS data after stop)");
@@ -184,28 +185,40 @@ public class SimulatorIntegrationTests : BaseIntegrationTest
     [Test]
     public async Task ResetSimulatorCommand_ShouldResetState()
     {
-        // Arrange - Start simulator and modify state
+        // Arrange - Start simulator at initial position and let it move
         await _backendClient!.SendCommandAsync(
             new UpdateSimulatorCommand(SimulatorEvent.Start(45.0, -93.0, 90.0, 25.0))); // East at 25 km/h
         await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(SimulatorEvent.SteeringSet(30.0)));
-        await Task.Delay(1500);
+        await Task.Delay(2500); // Let it move away from start position
 
-        var modifiedState = _receivedStates
+        var movedPosition = _receivedStates.ToList()
             .Where(s => s.Gnss != null)
-            .Select(s => s.Gnss!)
+            .Select(s => s.Gnss!.WgsPosition)
             .LastOrDefault();
-        modifiedState.Should().NotBeNull();
+        movedPosition.Should().NotBeNull();
 
-        // Act - Reset simulator
+        // Verify vehicle has moved from start position
+        var distanceMoved = Math.Abs(movedPosition.Latitude - 45.0) + Math.Abs(movedPosition.Longitude - (-93.0));
+        distanceMoved.Should().BeGreaterThan(0.0001, "vehicle should have moved from initial position");
+
+        // Act - Reset simulator (legacy behavior: only resets position, keeps speed/steering)
         await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(SimulatorEvent.Reset()));
         _receivedStates.Clear();
-        await Task.Delay(1000);
+        await Task.Delay(1500);
 
-        // Assert - Simulator should be disabled (no GPS data after reset)
-        var gpsStatesAfterReset = _receivedStates.Where(s => s.Gnss != null).ToList();
-        gpsStatesAfterReset.Should().BeEmpty("simulator should be disabled after reset");
+        // Assert - Simulator still running, but position reset to initial start location
+        var gpsStatesAfterReset = _receivedStates.ToList().Where(s => s.Gnss != null).ToList();
+        gpsStatesAfterReset.Should().NotBeEmpty("simulator should still be running after reset (legacy behavior)");
 
-        Console.WriteLine($"✓ Simulator reset successfully");
+        var resetPosition = gpsStatesAfterReset.First().Gnss!.WgsPosition;
+        resetPosition.Latitude.Should().BeApproximately(45.0, 0.001, "latitude should reset to initial start position");
+        resetPosition.Longitude.Should().BeApproximately(-93.0, 0.001, "longitude should reset to initial start position");
+
+        // Speed and steering should be unchanged (legacy behavior)
+        var speed = gpsStatesAfterReset.Last().Gnss!.Speed.KilometersPerHour;
+        speed.Should().BeGreaterThan(15.0, "speed should be maintained after reset (legacy behavior)");
+
+        Console.WriteLine($"✓ Simulator reset to initial position (legacy: kept speed={speed:F1} km/h)");
     }
 
     #endregion
@@ -228,7 +241,7 @@ public class SimulatorIntegrationTests : BaseIntegrationTest
         await Task.Delay(3000); // Collect data for 3 seconds
 
         // Assert - Verify timing patterns indicate UDP pipeline usage
-        var gpsStates = _receivedStates.Where(s => s.Gnss != null).ToList();
+        var gpsStates = _receivedStates.ToList().Where(s => s.Gnss != null).ToList();
         gpsStates.Should().HaveCountGreaterThan(25, "should receive most simulator packets (~32 expected at 93ms over 3s)");
         gpsStates.Should().HaveCountLessThan(35, "some packets may be missed due to timing/network overhead");
 
@@ -255,7 +268,7 @@ public class SimulatorIntegrationTests : BaseIntegrationTest
         await Task.Delay(2500);
 
         // Assert - Verify complete pipeline processing
-        var gpsStates = _receivedStates.Where(s => s.Gnss != null).ToList();
+        var gpsStates = _receivedStates.ToList().Where(s => s.Gnss != null).ToList();
         gpsStates.Should().NotBeEmpty("GPS data should flow through full pipeline");
 
         // Verify all pipeline stages completed:
@@ -295,7 +308,7 @@ public class SimulatorIntegrationTests : BaseIntegrationTest
         await Task.Delay(3500); // Run for 3.5 seconds
 
         // Assert
-        var gpsStates = _receivedStates.Where(s => s.Gnss != null).Select(s => s.Gnss!).ToList();
+        var gpsStates = _receivedStates.ToList().Where(s => s.Gnss != null).Select(s => s.Gnss!).ToList();
         gpsStates.Should().HaveCountGreaterThan(10, "should receive multiple updates");
 
         var firstPos = gpsStates.First().WgsPosition;
@@ -322,7 +335,7 @@ public class SimulatorIntegrationTests : BaseIntegrationTest
             new UpdateSimulatorCommand(SimulatorEvent.Start(45.0, -93.0, 90.0, 15.0))); // 90° = East
         await Task.Delay(1000);
 
-        var initialStates = _receivedStates.Where(s => s.Gnss != null).ToList();
+        var initialStates = _receivedStates.ToList().Where(s => s.Gnss != null).ToList();
         _receivedStates.Clear();
 
         // Act - Apply left steering (-25 degrees) to create curved path
@@ -330,7 +343,7 @@ public class SimulatorIntegrationTests : BaseIntegrationTest
         await Task.Delay(3000); // Let vehicle turn
 
         // Assert
-        var turnedStates = _receivedStates.Where(s => s.Gnss?.HeadingSingle != null).ToList();
+        var turnedStates = _receivedStates.ToList().Where(s => s.Gnss?.HeadingSingle != null).ToList();
         turnedStates.Should().HaveCountGreaterThan(8);
 
         var initialHeading = initialStates.Last().Gnss!.HeadingSingle!.Degrees;
@@ -355,7 +368,7 @@ public class SimulatorIntegrationTests : BaseIntegrationTest
         await Task.Delay(2500);
 
         // Assert
-        var gpsStates = _receivedStates.Where(s => s.Gnss != null).Select(s => s.Gnss!).ToList();
+        var gpsStates = _receivedStates.ToList().Where(s => s.Gnss != null).Select(s => s.Gnss!).ToList();
         gpsStates.Should().NotBeEmpty("simulator should still generate packets");
 
         // Position should remain stable (no movement)
@@ -384,7 +397,7 @@ public class SimulatorIntegrationTests : BaseIntegrationTest
             new UpdateSimulatorCommand(SimulatorEvent.Start(45.0, -93.0, 0.0, 5.0))); // North at 5 km/h
         await Task.Delay(1000);
 
-        var phase1Count = _receivedStates.Count(s => s.Gnss != null);
+        var phase1Count = _receivedStates.ToList().Count(s => s.Gnss != null);
         phase1Count.Should().BeGreaterThan(0, "phase 1: simulator started");
 
         // Act 2: Speed up
@@ -423,7 +436,7 @@ public class SimulatorIntegrationTests : BaseIntegrationTest
         _receivedStates.Clear();
         await Task.Delay(1000);
 
-        var phase5Count = _receivedStates.Count(s => s.Gnss != null);
+        var phase5Count = _receivedStates.ToList().Count(s => s.Gnss != null);
         phase5Count.Should().Be(0, "phase 5: simulator stopped");
 
         Console.WriteLine($"✓ Complex scenario completed successfully");
@@ -440,7 +453,7 @@ public class SimulatorIntegrationTests : BaseIntegrationTest
             new UpdateSimulatorCommand(SimulatorEvent.Start(45.0, -93.0, 0.0, 5.0))); // North at 5 km/h
         await Task.Delay(2000);
 
-        var slowSpeedStates = _receivedStates.Where(s => s.Gnss != null).ToList();
+        var slowSpeedStates = _receivedStates.ToList().Where(s => s.Gnss != null).ToList();
         var slowStartPos = slowSpeedStates.First().Gnss!.WgsPosition;
         var slowEndPos = slowSpeedStates.Last().Gnss!.WgsPosition;
         var slowDistance = Math.Abs(slowEndPos.Latitude - slowStartPos.Latitude) * 111000; // meters
@@ -451,7 +464,7 @@ public class SimulatorIntegrationTests : BaseIntegrationTest
         await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(SimulatorEvent.SpeedSet(20.0)));
         await Task.Delay(2000);
 
-        var fastSpeedStates = _receivedStates.Where(s => s.Gnss != null).ToList();
+        var fastSpeedStates = _receivedStates.ToList().Where(s => s.Gnss != null).ToList();
         var fastStartPos = fastSpeedStates.First().Gnss!.WgsPosition;
         var fastEndPos = fastSpeedStates.Last().Gnss!.WgsPosition;
         var fastDistance = Math.Abs(fastEndPos.Latitude - fastStartPos.Latitude) * 111000; // meters
@@ -478,7 +491,7 @@ public class SimulatorIntegrationTests : BaseIntegrationTest
         await Task.Delay(2000);
 
         // Assert - Verify all AgIO packet fields are present
-        var gpsState = _receivedStates.FirstOrDefault(s => s.Gnss != null)?.Gnss;
+        var gpsState = _receivedStates.ToList().FirstOrDefault(s => s.Gnss != null)?.Gnss;
         gpsState.Should().NotBeNull();
 
         // PGN 0xD6 field verification
@@ -520,7 +533,7 @@ public class SimulatorIntegrationTests : BaseIntegrationTest
         await Task.Delay(2500);
 
         // Assert - Both clients should receive GPS data
-        var client1GpsStates = _receivedStates.Where(s => s.Gnss != null).ToList();
+        var client1GpsStates = _receivedStates.ToList().Where(s => s.Gnss != null).ToList();
         var client2GpsStates = receivedStates2.Where(s => s.Gnss != null).ToList();
 
         client1GpsStates.Should().NotBeEmpty("client 1 should receive GPS data");
