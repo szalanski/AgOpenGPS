@@ -9,10 +9,12 @@ When descriptions conflict, defer to the referenced source code - code wins.
   - [System Architecture](sections/system-architecture.md)
   - [GNSS Capabilities](sections/gnss-capabilities.md)
   - [Communication Protocols](sections/communication-protocols.md)
+  - [Frontend Integration Guide](sections/frontend-integration.md)
   - [Operational Workflows](sections/operational-workflows.md)
   - [Simulator Architecture](sections/simulator-architecture.md)
 - `adrs/` - concise architecture decision records that explain why core choices were made:
   - [ADR 0001: GNSS-Orchestrated Backend Pipeline](adrs/adr-0001-gnss-backend.md)
+  - [ADR 0002: Frontend GNSS Integration via Adapter Pattern](adrs/adr-0002-frontend-adapter-pattern.md)
 
 Other conceptual material remains under `docs/architecture/` and future work plans live in `docs/workflow/`.\
 Use those for intent; use this folder for the authoritative view of what is deployed.

@@ -19,6 +19,23 @@ This sequence ensures that by the time state starts flowing, both coordinate fra
 
 The cadence is entirely packet-driven; there is no auxiliary timer. If packets arrive at 10 Hz, clients receive 10 updates per second.
 
+## Frontend GNSS Integration Flow
+
+FormGPS consumes backend GPS data through an adapter pattern that preserves compatibility with existing UI code while implementing the Strangler Fig migration strategy.
+
+1. **State reception** - FormGPS.OnStateReceived (SourceCode/GPS/Forms/FormGPS.cs:587-613) receives ApplicationState from SignalR and caches it in the _cachedState field (line 94).
+2. **Adapter invocation** - OnStateReceived calls CNMEA.UpdateFromBackendState (SourceCode/GPS/Classes/CNMEA.cs:37-60) to translate backend GPS data into legacy field references.
+3. **Field mapping** - The adapter populates legacy CNMEA fields:
+   - Backend LocalPosition.Easting/Northing maps to fix.easting/northing
+   - Backend Speed.KilometersPerHour maps to speed and vtgSpeed
+   - Backend Altitude.Meters maps to altitude
+   - Backend Heading (single/dual) maps to headingTrue and headingTrueDual
+   - Backend Quality metrics map to fixQuality, satellitesTracked, hdop, and age
+4. **UI rendering** - Existing UI code continues to reference legacy fields (pn.fix, pn.speed, etc.) without modification. All labels, displays, and guidance calculations work transparently through the adapter.
+5. **Legacy bypass** - When the backend connection is active, UDPComm.Designer.cs (line 60-66) guards against legacy UDP GPS processing, ensuring the backend remains the single source of truth.
+
+This pattern allows zero breaking changes to existing code while gradually migrating GPS processing to the backend. The adapter serves as a temporary bridge that can be removed once all FormGPS GPS references are refactored to consume ApplicationState directly.
+
 ## Simulator Control Loop
 
 1. **User intent** - A UI control sends a simulator command (start, stop, speed change, and so on) through SignalR as `UpdateSimulatorCommand`.

@@ -6,7 +6,7 @@ AgOpenGPS positions the API backend as the coordination hub between three primar
 
 1. **Field hardware and AgIO** - capture GNSS and equipment telemetry, emitting AgIO-compatible UDP packets.
 2. **Backend API** - ingests raw packets, applies domain logic, and exposes a consolidated state surface.
-3. **FormGPS / UI clients** - consume derived state and issue intent-level commands (for example simulator controls or future steering directives).
+3. **FormGPS / UI clients** - consume derived state via SignalR, render real-time displays, and issue intent-level commands (for example simulator controls or future steering directives). FormGPS acts purely as a consumer and renderer; all GPS processing resides in the backend.
 
 This split keeps hardware integration stable while letting the backend evolve independently of the desktop application.
 
@@ -16,6 +16,8 @@ This split keeps hardware integration stable while letting the backend evolve in
 - **Domain processing core** - `ApplicationOrchestrator` and the services behind it (`GnssService`, forthcoming IMU handlers) transform transport-level packets into domain objects and enforce invariants such as "no broadcast without a valid local plane".
 - **State surface** - `SignalRStatePublisher` hides SignalR mechanics from the rest of the system, paving the way for alternate publishers (REST snapshots, message queues) without touching domain logic.
 - **Command intake** - The SignalR hub plus MediatR translate user intent (currently simulator-only) into domain events. Intent is modelled explicitly so future equipment-control commands can reuse the same flow.
+- **Adapter pattern layer** - `CNMEA.UpdateFromBackendState` (SourceCode/GPS/Classes/CNMEA.cs:37-60) acts as an adapter between backend ApplicationState and legacy FormGPS field references. This pattern implements the Strangler Fig migration strategy, enabling the backend to replace legacy GPS processing without breaking existing UI code. The adapter is a temporary bridge that will be removed once all FormGPS references are refactored to consume ApplicationState directly.
+- **Legacy bypass guard** - When FormGPS establishes a backend connection via IBackendClient, legacy UDP GPS processing (UDPComm.Designer.cs:60-66) is disabled through a connection guard. This ensures the backend remains the single source of truth for GPS data while maintaining fallback capability if the backend is unavailable.
 
 ## Data Flow Overview
 
