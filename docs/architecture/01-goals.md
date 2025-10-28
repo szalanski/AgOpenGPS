@@ -47,7 +47,7 @@ FormGPS
 **AgOpenGPS.Api (.NET 8) - Backend:**
 ```
 AgOpenGPS.Api
-├─ ApplicationOrchestrator (main loop 10 Hz)
+├─ ApplicationOrchestrator (event-driven, processes UDP packets on arrival)
 ├─ Services (pure business logic)
 ├─ SignalR Hub (pushes state to frontend)
 └─ Models & DTOs

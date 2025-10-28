@@ -105,15 +105,15 @@ Pick a workflow chunk from Set B (Workflow):
 Gradually replace legacy code with new API while keeping application running. Never "big bang" rewrite.
 
 ### Backend-Driven Architecture
-**Backend** owns main loop timing (ApplicationOrchestrator at 10 Hz), **Frontend** is passive receiver via SignalR.
+**Backend** owns event-driven processing (ApplicationOrchestrator processes UDP packets as they arrive), **Frontend** is passive receiver via SignalR.
 
 ### Adapter Pattern + Feature Flags
 Wrap legacy code to delegate to new API. Feature flags allow instant rollback if issues found.
 
 ### SignalR Communication
 Real-time bidirectional communication:
-- **Backend → Frontend**: State updates pushed at 10 Hz
-- **Frontend → Backend**: User actions via RPC calls
+- **Backend → Frontend**: State updates pushed on GPS data arrival (~10 Hz typical, event-driven)
+- **Frontend → Backend**: Commands via CQRS pattern (MediatR)
 
 ---
 
