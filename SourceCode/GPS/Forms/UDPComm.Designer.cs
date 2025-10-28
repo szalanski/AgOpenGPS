@@ -57,6 +57,14 @@ namespace AgOpenGPS
                 {
                     case 0xD6:
                         {
+                            // When backend is connected, skip legacy GPS processing.
+                            // Backend owns GPS data and sends it via SignalR to OnStateReceived.
+                            // This implements the Strangler Fig pattern: new code path replaces old one.
+                            if (_backendClient?.IsConnected == true)
+                            {
+                                return;
+                            }
+
                             if (udpWatch.ElapsedMilliseconds < udpWatchLimit)
                             {
                                 missedSentenceCount++;

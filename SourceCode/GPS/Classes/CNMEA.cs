@@ -1,5 +1,6 @@
 ﻿using AgOpenGPS.Core;
 using AgOpenGPS.Core.Models;
+using AgOpenGPS.Api.Client.Models;
 using System;
 using System.Globalization;
 using System.Text;
@@ -27,6 +28,35 @@ namespace AgOpenGPS
             mf = f;
             mf.AppModel.LocalPlane = new LocalPlane(new Wgs84(0, 0), mf.AppModel.SharedFieldProperties);
             ageAlarm = Properties.Settings.Default.setGPS_ageAlarm;
+        }
+
+        /// <summary>
+        /// Updates legacy CNMEA fields from backend ApplicationState.
+        /// Adapter pattern: translates backend GPS data to legacy field references.
+        /// </summary>
+        public void UpdateFromBackendState(ApplicationState state)
+        {
+            if (state?.Gnss == null)
+            {
+                return;
+            }
+
+            // Map backend GNSS state to legacy fields
+            fix.easting = state.Gnss.LocalPosition.Easting;
+            fix.northing = state.Gnss.LocalPosition.Northing;
+
+            speed = state.Gnss.Speed.KilometersPerHour;
+            vtgSpeed = state.Gnss.Speed.KilometersPerHour;
+
+            altitude = state.Gnss.Altitude.Meters;
+
+            headingTrue = state.Gnss.HeadingSingle.Degrees;
+            headingTrueDual = state.Gnss.HeadingDual.Degrees;
+
+            fixQuality = state.Gnss.Quality.FixQuality;
+            satellitesTracked = state.Gnss.Quality.SatellitesTracked;
+            hdop = state.Gnss.Quality.Hdop;
+            age = state.Gnss.Quality.Age;
         }
 
         public void AverageTheSpeed()

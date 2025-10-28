@@ -88,7 +88,10 @@ namespace AgOpenGPS
         private Task agShareUploadTask = null;
 
         // Backend state subscription
-        private IStateSubscriber _stateSubscriber;
+        private IBackendClient _backendClient;
+
+        // Cached backend state for GPS data consumption
+        private ApplicationState _cachedState;
 
         #region // Class Props and instances
 
@@ -555,16 +558,16 @@ namespace AgOpenGPS
                 };
 
                 // Create state subscriber using factory
-                _stateSubscriber = SubscriberFactory.CreateSignalRSubscriber(options);
+                _backendClient = BackendClientFactory.CreateSignalRClient(options);
 
                 // Subscribe to state updates
-                _stateSubscriber.Subscribe(
+                _backendClient.SubscribeToState(
                     onNext: OnStateReceived,
                     onError: OnStateError
                 );
 
                 // Connect to backend
-                await _stateSubscriber.ConnectAsync();
+                await _backendClient.ConnectAsync();
 
                 Log.EventWriter("Backend connection established");
 
@@ -590,8 +593,23 @@ namespace AgOpenGPS
                 return;
             }
 
-            // Update UI to show backend is connected and timestamp
-            Log.EventWriter($"Backend state received: {state.Timestamp:HH:mm:ss.fff}");
+            // Cache the received state for GPS data consumption
+            _cachedState = state;
+
+            // Handle null/missing GNSS data gracefully
+            if (state?.Gnss == null)
+            {
+                Log.EventWriter("Backend state received but Gnss data is null");
+                return;
+            }
+
+            // Update CNMEA fields from backend state (adapter pattern)
+            pn.UpdateFromBackendState(state);
+
+            // Trigger vehicle position update (equivalent to legacy UpdateFixPosition)
+            // TODO: Wire up vehicle state calculations
+
+            Log.EventWriter($"Backend GPS data received: Speed={state.Gnss.Speed.KilometersPerHour:F1} km/h, Fix={state.Gnss.Quality.FixQuality}");
         }
 
         private void OnStateError(Exception error)
@@ -795,7 +813,7 @@ namespace AgOpenGPS
             try
             {
                 Close();
-                _stateSubscriber?.Dispose();
+                _backendClient?.Dispose();
             }
             catch (ObjectDisposedException) { }
         }
