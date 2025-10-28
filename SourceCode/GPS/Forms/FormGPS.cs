@@ -88,7 +88,7 @@ namespace AgOpenGPS
         private Task agShareUploadTask = null;
 
         // Backend state subscription
-        private IStateSubscriber _stateSubscriber;
+        private IBackendClient _backendClient;
 
         #region // Class Props and instances
 
@@ -555,16 +555,16 @@ namespace AgOpenGPS
                 };
 
                 // Create state subscriber using factory
-                _stateSubscriber = SubscriberFactory.CreateSignalRSubscriber(options);
+                _backendClient = BackendClientFactory.CreateSignalRClient(options);
 
                 // Subscribe to state updates
-                _stateSubscriber.Subscribe(
+                _backendClient.SubscribeToState(
                     onNext: OnStateReceived,
                     onError: OnStateError
                 );
 
                 // Connect to backend
-                await _stateSubscriber.ConnectAsync();
+                await _backendClient.ConnectAsync();
 
                 Log.EventWriter("Backend connection established");
 
@@ -590,8 +590,52 @@ namespace AgOpenGPS
                 return;
             }
 
-            // Update UI to show backend is connected and timestamp
-            Log.EventWriter($"Backend state received: {state.Timestamp:HH:mm:ss.fff}");
+            // Null safety check
+            if (state?.Gnss == null)
+            {
+                // Display "No GPS data" state
+                lblSpeed.Text = "--";
+                lblFix.Text = "No GPS";
+                lblHz.Text = "-- Hz";
+                return;
+            }
+
+            // Extract GNSS data
+            var gnss = state.Gnss;
+
+            // Update speed display (km/h with one decimal)
+            lblSpeed.Text = gnss.Speed.KilometersPerHour.ToString();
+
+            // Update fix quality display (fix type, satellites, age)
+            string fixType;
+            switch (gnss.Quality.FixQuality)
+            {
+                case 0:
+                    fixType = "No Fix";
+                    break;
+                case 1:
+                    fixType = "GPS";
+                    break;
+                case 2:
+                    fixType = "DGPS";
+                    break;
+                case 4:
+                    fixType = "RTK Fixed";
+                    break;
+                case 5:
+                    fixType = "RTK Float";
+                    break;
+                case 6:
+                    fixType = "Est";
+                    break;
+                default:
+                    fixType = $"Fix {gnss.Quality.FixQuality}";
+                    break;
+            }
+            lblFix.Text = $"{fixType} ({gnss.Quality.SatellitesTracked} sats, age: {gnss.Quality.Age:F1}s)";
+
+            // Update GPS frequency display (Hz with one decimal)
+            lblHz.Text = $"{gnss.Health.GpsHz:F1} Hz";
         }
 
         private void OnStateError(Exception error)
@@ -795,7 +839,7 @@ namespace AgOpenGPS
             try
             {
                 Close();
-                _stateSubscriber?.Dispose();
+                _backendClient?.Dispose();
             }
             catch (ObjectDisposedException) { }
         }
