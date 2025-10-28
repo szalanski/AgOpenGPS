@@ -1,5 +1,6 @@
 using System;
 using AgOpenGPS.Api.Client.Models;
+using Microsoft.Extensions.Logging;
 
 namespace AgOpenGPS.Api.Services
 {
@@ -15,6 +16,7 @@ namespace AgOpenGPS.Api.Services
         private readonly object _lock = new object();
 
         // Injected services
+        private readonly ILogger<SimulatorService> _logger;
         private readonly VehiclePhysicsService _physics;
         private readonly GnssDataGenerator _gnssGenerator;
         private readonly AgIoProtocolSerializer _serializer;
@@ -36,10 +38,12 @@ namespace AgOpenGPS.Api.Services
         public bool IsEnabled { get; private set; }
 
         public SimulatorService(
+            ILogger<SimulatorService> logger,
             VehiclePhysicsService physics,
             GnssDataGenerator gnssGenerator,
             AgIoProtocolSerializer serializer)
         {
+            _logger = logger;
             _physics = physics;
             _gnssGenerator = gnssGenerator;
             _serializer = serializer;
@@ -68,6 +72,9 @@ namespace AgOpenGPS.Api.Services
                 _smoothedSteering = SteeringAngle.Zero;
                 _stepDistance = 0.0;
                 IsEnabled = true;
+
+                _logger.LogInformation("Simulator STARTED: Position=({Lat:F6}, {Lon:F6}), Heading={Heading:F1}°, Speed={Speed:F1} km/h",
+                    lat, lon, headingDeg, speedKmh);
             }
         }
 
@@ -76,6 +83,7 @@ namespace AgOpenGPS.Api.Services
             lock (_lock)
             {
                 IsEnabled = false;
+                _logger.LogInformation("Simulator STOPPED");
             }
         }
 
@@ -90,12 +98,15 @@ namespace AgOpenGPS.Api.Services
                 {
                     // Set target for gradual transition
                     _targetSpeed = speed;
+                    _logger.LogDebug("Speed set (smooth): Target={Target:F1} km/h (current={Current:F1} km/h)",
+                        clampedSpeed, _currentSpeed.KilometersPerHour);
                 }
                 else
                 {
                     // Instant change
                     _currentSpeed = speed;
                     _targetSpeed = speed;
+                    _logger.LogDebug("Speed set (instant): {Speed:F1} km/h", clampedSpeed);
                 }
             }
         }
@@ -104,8 +115,11 @@ namespace AgOpenGPS.Api.Services
         {
             lock (_lock)
             {
-                double newSpeed = Math.Clamp(_targetSpeed.KilometersPerHour + delta, -21.0, 322.0);
+                double oldSpeed = _targetSpeed.KilometersPerHour;
+                double newSpeed = Math.Clamp(oldSpeed + delta, -21.0, 322.0);
                 _targetSpeed = new Speed(newSpeed);
+
+                _logger.LogDebug("Speed adjusted:{NewSpeed:F1} km/h)", newSpeed);
             }
         }
 
@@ -115,6 +129,7 @@ namespace AgOpenGPS.Api.Services
             {
                 _currentSpeed = new Speed(0.0);
                 _targetSpeed = new Speed(0.0);
+                _logger.LogDebug("Speed set to ZERO");
             }
         }
 
@@ -123,6 +138,7 @@ namespace AgOpenGPS.Api.Services
             lock (_lock)
             {
                 _targetSteering = new SteeringAngle(steerAngle);
+                _logger.LogDebug("Steering set: {Angle:F1}°", _targetSteering.Degrees);
             }
         }
 
@@ -132,6 +148,7 @@ namespace AgOpenGPS.Api.Services
             {
                 _targetSteering = SteeringAngle.Zero;
                 _smoothedSteering = SteeringAngle.Zero;
+                _logger.LogDebug("Steering RESET to 0°");
             }
         }
 
@@ -139,9 +156,12 @@ namespace AgOpenGPS.Api.Services
         {
             lock (_lock)
             {
-                double newHeadingDeg = _currentHeading.Degrees + 180.0;
+                double oldHeading = _currentHeading.Degrees;
+                double newHeadingDeg = oldHeading + 180.0;
                 if (newHeadingDeg >= 360.0) newHeadingDeg -= 360.0;
                 _currentHeading = new Heading(newHeadingDeg);
+
+                _logger.LogDebug("Direction REVERSED: NewHeading:F1}°", newHeadingDeg);
             }
         }
 
@@ -164,6 +184,9 @@ namespace AgOpenGPS.Api.Services
             {
                 _currentPosition = _initialPosition;
                 // Legacy behavior: Does NOT clear speed, steering, or disable simulator
+
+                _logger.LogDebug("Position RESET to initial: ({Lat:F6}, {Lon:F6})",
+                    _initialPosition.Latitude, _initialPosition.Longitude);
             }
         }
 
@@ -172,6 +195,8 @@ namespace AgOpenGPS.Api.Services
         /// </summary>
         public void ProcessEvent(AgOpenGPS.Api.Client.Commands.SimulatorEvent evt)
         {
+            _logger.LogInformation("SimulatorEvent received: {EventType}", evt.Type);
+
             switch (evt.Type)
             {
                 case AgOpenGPS.Api.Client.Commands.SimulatorEventType.Start:
@@ -252,7 +277,10 @@ namespace AgOpenGPS.Api.Services
             lock (_lock)
             {
                 if (!IsEnabled)
+                {
+                    _logger.LogDebug("Tick called but simulator is DISABLED");
                     return null;
+                }
 
                 // Apply smooth speed transition
                 double newSpeedKmh = _physics.TransitionSpeed(
