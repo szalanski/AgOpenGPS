@@ -58,6 +58,7 @@ Fix the abstraction mismatch in FormGPS, establish working SignalR connection be
 1. [task1-fix-formgps-abstractions.md](task1-fix-formgps-abstractions.md) - Update FormGPS.cs to use IBackendClient and BackendClientFactory
 2. [task2-display-gps-data.md](task2-display-gps-data.md) - Wire FormGPS UI labels to display GPS data from backend state
 3. [task3-simulator-controls.md](task3-simulator-controls.md) - Wire simulator panel buttons to send CQRS commands to backend
+4. [task4-refactor-gpsquality-enum.md](task4-refactor-gpsquality-enum.md) - (Optional Enhancement) Refactor GpsQuality.FixQuality from int to enum for type safety while maintaining protocol compatibility
 
 **Manual Verification Steps** (no separate task files):
 

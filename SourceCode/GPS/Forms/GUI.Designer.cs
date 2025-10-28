@@ -258,7 +258,12 @@ namespace AgOpenGPS
                 if (panelNavigation.Visible)
                 {
                     if (navPanelCounter-- <= 0) panelNavigation.Visible = false;
-                    lblHz.Text = gpsHz.ToString("N1") + " ~ " + (frameTime.ToString("N1")) + " " + FixQuality;
+
+                    // Only update lblHz from legacy data if backend is not connected
+                    if (_backendClient?.IsConnected != true)
+                    {
+                        lblHz.Text = gpsHz.ToString("N1") + " ~ " + (frameTime.ToString("N1")) + " " + FixQuality;
+                    }
                 }
             }//end every 2 seconds
 
@@ -279,7 +284,11 @@ namespace AgOpenGPS
                 trk.autoTrack3SecTimer++;
                 vehicle.deadZoneDelayCounter++;
 
-                lblFix.Text = FixQuality + "Age: " + pn.age.ToString("N1");
+                // Only update lblFix from legacy data if backend is not connected
+                if (_backendClient?.IsConnected != true)
+                {
+                    lblFix.Text = FixQuality + "Age: " + pn.age.ToString("N1");
+                }
 
                 switch (pn.fixQuality)
                 {
@@ -342,16 +351,20 @@ namespace AgOpenGPS
 
 
                 //the main formgps window
-                if (isMetric)  //metric or imperial
+                // Only update lblSpeed from legacy data if backend is not connected
+                if (_backendClient?.IsConnected != true)
                 {
-                    lblSpeed.Text = SpeedKPH;
-                    //btnContour.Text = XTE; //cross track error
+                    if (isMetric)  //metric or imperial
+                    {
+                        lblSpeed.Text = SpeedKPH;
+                        //btnContour.Text = XTE; //cross track error
 
-                }
-                else  //Imperial Measurements
-                {
-                    lblSpeed.Text = SpeedMPH;
-                    //btnContour.Text = InchXTE; //cross track error
+                    }
+                    else  //Imperial Measurements
+                    {
+                        lblSpeed.Text = SpeedMPH;
+                        //btnContour.Text = InchXTE; //cross track error
+                    }
                 }
             } //end every 1/2 second
 

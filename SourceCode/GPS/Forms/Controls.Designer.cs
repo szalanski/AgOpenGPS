@@ -16,6 +16,8 @@ using AgOpenGPS.Forms;
 using AgOpenGPS.Forms.Pickers;
 using AgOpenGPS.Forms.Profiles;
 using AgOpenGPS.Properties;
+using AgOpenGPS.Api.Client.Commands;
+using AgOpenGPS.Api.Client.Models;
 
 namespace AgOpenGPS
 {
@@ -2095,23 +2097,31 @@ namespace AgOpenGPS
 
         #region Sim controls
 
-        private void btnSimSpeedUp_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
+        private async void btnSimSpeedUp_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            if (sim.stepDistance < 0)
+            // Send speed increase command to backend
+            try
             {
-                sim.stepDistance = 0;
-                return;
+                var command = new UpdateSimulatorCommand(SimulatorEvent.SpeedAdjust(1.0));
+                await _backendClient.SendCommandAsync(command);
             }
-            if (sim.stepDistance < 0.2) sim.stepDistance += 0.02;
-            else sim.stepDistance *= 1.15;
-
-            if (sim.stepDistance > 7.5) sim.stepDistance = 7.5;
+            catch (Exception ex)
+            {
+                Log.EventWriter($"Failed to send speed up command: {ex.Message}");
+            }
         }
-        private void btnSpeedDn_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
+        private async void btnSpeedDn_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            if (sim.stepDistance < 0.2 && sim.stepDistance > -0.51) sim.stepDistance -= 0.02;
-            else sim.stepDistance *= 0.8;
-            if (sim.stepDistance < -0.5) sim.stepDistance = -0.5;
+            // Send speed decrease command to backend
+            try
+            {
+                var command = new UpdateSimulatorCommand(SimulatorEvent.SpeedAdjust(-1.0));
+                await _backendClient.SendCommandAsync(command);
+            }
+            catch (Exception ex)
+            {
+                Log.EventWriter($"Failed to send speed down command: {ex.Message}");
+            }
         }
 
         double lastSimGuidanceAngle = 0;
@@ -2131,9 +2141,9 @@ namespace AgOpenGPS
             }
             else sim.DoSimTick(sim.steerAngleScrollBar);
         }
-        private void btnSimReverseDirection_Click(object sender, EventArgs e)
+        private async void btnSimReverseDirection_Click(object sender, EventArgs e)
         {
-            sim.headingTrue += Math.PI;
+            // Invalidate guidance lines (backend-driven mode doesn't affect AB/curve)
             ABLine.isABValid = false;
             curve.isCurveValid = false;
             if (isBtnAutoSteerOn)
@@ -2142,27 +2152,89 @@ namespace AgOpenGPS
                 TimedMessageBox(2000, gStr.gsGuidanceStopped, "Sim Reverse Touched");
                 Log.EventWriter("Steer Off, Sim Reverse Activated");
             }
+
+            // Send direction reverse command to backend
+            try
+            {
+                var command = new UpdateSimulatorCommand(SimulatorEvent.DirectionReverse());
+                await _backendClient.SendCommandAsync(command);
+            }
+            catch (Exception ex)
+            {
+                Log.EventWriter($"Failed to send direction reverse command: {ex.Message}");
+            }
         }
-        private void hsbarSteerAngle_Scroll(object sender, ScrollEventArgs e)
+        private async void hsbarSteerAngle_Scroll(object sender, ScrollEventArgs e)
         {
-            sim.steerAngleScrollBar = (hsbarSteerAngle.Value - 400) * 0.1;
-            btnResetSteerAngle.Text = sim.steerAngleScrollBar.ToString("N1");
+            // Calculate steering angle from scrollbar value (range -40 to +40 degrees)
+            double steerAngleDegrees = (hsbarSteerAngle.Value - 400) * 0.1;
+            btnResetSteerAngle.Text = steerAngleDegrees.ToString("N1");
+
+            // Send steering set command to backend
+            try
+            {
+                var command = new UpdateSimulatorCommand(SimulatorEvent.SteeringSet(new SteeringAngle(steerAngleDegrees)));
+                await _backendClient.SendCommandAsync(command);
+            }
+            catch (Exception ex)
+            {
+                Log.EventWriter($"Failed to send steering set command: {ex.Message}");
+            }
         }
-        private void btnResetSteerAngle_Click(object sender, EventArgs e)
+        private async void btnResetSteerAngle_Click(object sender, EventArgs e)
         {
-            sim.steerAngleScrollBar = 0;
+            // Reset scrollbar to center position
             hsbarSteerAngle.Value = 400;
-            btnResetSteerAngle.Text = sim.steerAngleScrollBar.ToString("N1");
+            btnResetSteerAngle.Text = "0.0";
+
+            // Send steering reset command to backend
+            try
+            {
+                var command = new UpdateSimulatorCommand(SimulatorEvent.SteeringReset());
+                await _backendClient.SendCommandAsync(command);
+            }
+            catch (Exception ex)
+            {
+                Log.EventWriter($"Failed to send steering reset command: {ex.Message}");
+            }
         }
-        private void btnResetSim_Click(object sender, EventArgs e)
+        private async void btnResetSim_Click(object sender, EventArgs e)
         {
-            sim.CurrentLatLon = new Wgs84(
-                Properties.Settings.Default.setGPS_SimLatitude,
-                Properties.Settings.Default.setGPS_SimLongitude);
+            // Send start/reset simulator command to backend with initial parameters
+            try
+            {
+                // Get simulator start position from settings
+                double lat = Properties.Settings.Default.setGPS_SimLatitude;
+                double lon = Properties.Settings.Default.setGPS_SimLongitude;
+                double heading = 0.0; // North
+                double speed = 10.0;  // 10 km/h
+
+                var position = new Wgs84Position(lat, lon);
+                var headingObj = new Heading(heading);
+                var speedObj = new Speed(speed);
+
+                var command = new UpdateSimulatorCommand(SimulatorEvent.Start(position, headingObj, speedObj));
+                await _backendClient.SendCommandAsync(command);
+
+                Log.EventWriter($"Simulator started at ({lat:F6}, {lon:F6}), heading {heading}°, speed {speed} km/h");
+            }
+            catch (Exception ex)
+            {
+                Log.EventWriter($"Failed to send simulator start command: {ex.Message}");
+            }
         }
-        private void btnSimSetSpeedToZero_Click(object sender, EventArgs e)
+        private async void btnSimSetSpeedToZero_Click(object sender, EventArgs e)
         {
-            sim.stepDistance = 0;
+            // Send speed zero command to backend
+            try
+            {
+                var command = new UpdateSimulatorCommand(SimulatorEvent.SpeedZero());
+                await _backendClient.SendCommandAsync(command);
+            }
+            catch (Exception ex)
+            {
+                Log.EventWriter($"Failed to send speed zero command: {ex.Message}");
+            }
         }
         private void btnSimReverse_Click(object sender, EventArgs e)
         {
