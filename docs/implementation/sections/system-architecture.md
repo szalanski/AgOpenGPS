@@ -12,12 +12,13 @@ This split keeps hardware integration stable while letting the backend evolve in
 
 ## Bounded Responsibilities
 
-- **UDP intake boundary** - `UdpPacketReceiver` owns socket lifecycle and protocol validation, ensuring downstream services only see well-formed packets.
-- **Domain processing core** - `ApplicationOrchestrator` and the services behind it (`GnssService`, forthcoming IMU handlers) transform transport-level packets into domain objects and enforce invariants such as "no broadcast without a valid local plane".
-- **State surface** - `SignalRStatePublisher` hides SignalR mechanics from the rest of the system, paving the way for alternate publishers (REST snapshots, message queues) without touching domain logic.
-- **Command intake** - The SignalR hub plus MediatR translate user intent (currently simulator-only) into domain events. Intent is modelled explicitly so future equipment-control commands can reuse the same flow.
-- **Adapter pattern layer** - `CNMEA.UpdateFromBackendState` (SourceCode/GPS/Classes/CNMEA.cs:37-60) acts as an adapter between backend ApplicationState and legacy FormGPS field references. This pattern implements the Strangler Fig migration strategy, enabling the backend to replace legacy GPS processing without breaking existing UI code. The adapter is a temporary bridge that will be removed once all FormGPS references are refactored to consume ApplicationState directly.
-- **Legacy bypass guard** - When FormGPS establishes a backend connection via IBackendClient, legacy UDP GPS processing (UDPComm.Designer.cs:60-66) is disabled through a connection guard. This ensures the backend remains the single source of truth for GPS data while maintaining fallback capability if the backend is unavailable.
+- **UDP intake boundary** - `UdpPacketReceiver.GetPacketsAsync` validates packet structure and exposes an async stream for the orchestrator (`SourceCode/AgOpenGPS.Api/Services/UdpPacketReceiver.cs:39`).
+- **Domain processing core** - `ApplicationOrchestrator.ExecuteAsync` consumes validated packets, initializes the local plane, and routes recognised PGNs to the appropriate domain services (`SourceCode/AgOpenGPS.Api/Services/ApplicationOrchestrator.cs:30`).
+- **State surface** - `SignalRStatePublisher.BroadcastStateAsync` keeps SignalR-specific concerns out of domain code so alternate transports can be added later (`SourceCode/AgOpenGPS.Api/Services/SignalRStatePublisher.cs:24`).
+- **Command intake** - `StateHub.UpdateSimulator` forwards frontend commands through MediatR, retaining a thin transport layer while enabling CQRS handlers (`SourceCode/AgOpenGPS.Api/Hubs/StateHub.cs:54`).
+- **Backend client hookup** - `FormGPS_Load` creates an `IBackendClient` via `BackendClientFactory.CreateSignalRClient`, subscribes to state updates, and connects to the backend (`SourceCode/GPS/Forms/FormGPS.cs:561`). The client implements both state subscriptions and command dispatch (`SourceCode/AgOpenGPS.Api.Client/SignalR/SignalRBackendClient.cs:32`).
+- **Adapter bridge** - `CNMEA.UpdateFromBackendState` translates `ApplicationState.Gnss` into legacy fields consumed by existing UI code (`SourceCode/GPS/Classes/CNMEA.cs:37`).
+- **Legacy bypass guard** - `ReceiveFromAgIO` skips legacy GPS parsing when the backend connection is active, allowing the UDP path to act as a fallback only (`SourceCode/GPS/Forms/UDPComm.Designer.cs:63`).
 
 ## Data Flow Overview
 

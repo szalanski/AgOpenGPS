@@ -42,7 +42,7 @@ Understanding both channels is critical for assessing interoperability, latency,
 - **Hub endpoint** - `/statehub` exposes both outbound state and inbound simulator commands.
 - **Message contract** - `ApplicationState` is serialised with camelCase properties; GNSS payloads mirror the shared client value objects (`GnssState`, `GpsHealth`, `GpsQuality`).
 - **Update pace** - The orchestrator publishes state whenever new GNSS data arrives. On clean 10 Hz feeds, that produces roughly 10 messages per second. Consumers should treat the timestamp as the source of truth for ordering.
-- **Command path** - `UpdateSimulatorCommand` wraps discrete simulator events (start, stop, speed changes). The hub forwards commands to MediatR, keeping transport logic thin.
+- **Command path** - `UpdateSimulatorCommand` wraps simulator events (start, stop, speed changes). The hub forwards commands to MediatR (`SourceCode/AgOpenGPS.Api/Hubs/StateHub.cs:54`), which in turn delegates to `SimulatorService` (`SourceCode/AgOpenGPS.Api/Commands/Handlers/UpdateSimulatorCommandHandler.cs:27`).
 
 ## Frontend Client Library (AgOpenGPS.Api.Client)
 
@@ -50,39 +50,25 @@ The shared client library (.NET Standard 2.0) provides FormGPS and other consume
 
 **Core Abstractions**
 
-- **IBackendClient** (SourceCode/AgOpenGPS.Api.Client/Abstractions/IBackendClient.cs) - Defines bidirectional communication contract:
-  - `ConnectAsync()` establishes the connection to the backend
-  - `SubscribeToState(onNext, onError)` registers callbacks for ApplicationState updates
-  - `SendCommandAsync(ICommand)` dispatches commands (simulator controls, future steering directives)
-  - `IsConnected` property tracks connection health
-  - `Dispose()` cleanly tears down the connection
+- **IBackendClient** (SourceCode/AgOpenGPS.Api.Client/Abstractions/IBackendClient.cs:14) - Defines the bidirectional communication contract (`ConnectAsync`, `SubscribeToState`, `SendCommandAsync`, `IsConnected`, and disposal members).
 
-- **SignalRBackendClient** (SourceCode/AgOpenGPS.Api.Client/SignalR/SignalRBackendClient.cs) - SignalR implementation of IBackendClient. Handles hub connection lifecycle, automatic reconnection, and command routing.
+- **SignalRBackendClient** (SourceCode/AgOpenGPS.Api.Client/SignalR/SignalRBackendClient.cs:18) - Registers the `ReceiveState` handler, exposes subscription APIs, and implements `SendCommandAsync`. At present the switch statement only supports `UpdateSimulatorCommand` (`SourceCode/AgOpenGPS.Api.Client/SignalR/SignalRBackendClient.cs:66`), ensuring unsupported commands throw clear errors.
 
-- **BackendClientFactory** (SourceCode/AgOpenGPS.Api.Client/Factories/BackendClientFactory.cs) - Factory for creating configured clients. The `CreateSignalRClient(ConnectionOptions)` method returns a ready-to-use SignalRBackendClient and centralises connection string configuration.
+- **BackendClientFactory** (SourceCode/AgOpenGPS.Api.Client/Factories/BackendClientFactory.cs:17) - Creates a configured SignalR client using `ConnectionOptions`. Automatic reconnection is enabled by default.
 
 **Usage Pattern**
 
-FormGPS establishes connection at startup (SourceCode/GPS/Forms/FormGPS.cs:561-570):
-- Creates ConnectionOptions with backend hub URL
-- Uses BackendClientFactory to create SignalRBackendClient
-- Subscribes to state updates with OnStateReceived callback
-- Calls ConnectAsync to establish SignalR connection
+FormGPS establishes the connection during startup (`SourceCode/GPS/Forms/FormGPS.cs:561-572`):
+- Builds `ConnectionOptions` (URL defaults to `http://localhost:5000` in `ConnectionOptions.Url`).
+- Creates an `IBackendClient` via `BackendClientFactory.CreateSignalRClient`.
+- Subscribes to state updates with `OnStateReceived`.
+- Calls `ConnectAsync` and logs the connection result.
 
-**Command Dispatching**
-
-Commands implement the ICommand marker interface. The client serialises commands and routes them through the SignalR hub to MediatR handlers. Example from simulator controls (SourceCode/GPS/Forms/Controls.Designer.cs:2100-2225):
-- UpdateSimulatorCommand wraps SimulatorEvent (Start, Stop, SpeedAdjust, etc.)
-- SendCommandAsync transmits command to backend
-- MediatR handler processes command and updates simulator state
-
-**SignalR Hub Method Workaround**
-
-SignalR does not support generic hub methods, so the StateHub exposes specific methods for each command type (StartSimulator, StopSimulator, etc.). SignalRBackendClient routes commands to the appropriate hub method based on the SimulatorEvent type. This is a transport-layer detail hidden from application code.
+- **Current frontend behaviour** - `OnStateReceived` caches the latest state and updates legacy CNMEA fields; outbound commands are not yet wired in FormGPS (`SourceCode/GPS/Forms/FormGPS.cs:587`). The backend client is ready to send simulator commands once UI handlers call `SendCommandAsync`.
 
 **Graceful Disconnection**
 
-When the backend disconnects, the client stops receiving state updates but does not crash. FormGPS can check `_backendClient.IsConnected` to decide whether to display warnings or fall back to legacy processing.
+When the backend disconnects, the client stops receiving state updates but remains resident. FormGPS checks `_backendClient.IsConnected` before deciding whether to bypass legacy UDP processing (`SourceCode/GPS/Forms/UDPComm.Designer.cs:63`).
 
 ## Client Expectations
 

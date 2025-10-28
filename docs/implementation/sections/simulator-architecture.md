@@ -10,9 +10,9 @@ The simulator provides a deterministic way to exercise the entire backend pipeli
 
 ## Control Surface
 
-- **Activation** - The simulator is disabled on boot and begins emitting packets only after a `Start` command supplies initial position, heading, and speed.
-- **Commands** - Speed adjustments, steering changes, direction reversals, and resets are modelled as discrete events. Each command expresses operator intent rather than low-level values.
-- **Safety rails** - Speeds are clamped between -21 and 322 km/h and steering changes are eased to mirror legacy FormGPS behaviour, preventing unrealistic motion that could skew downstream testing.
+- **Activation** - The simulator is disabled on boot and only starts emitting packets after a `Start` event enables it (`SourceCode/AgOpenGPS.Api/Services/SimulatorService.cs:44`).
+- **Command ingestion** - `SimulatorService.ProcessEvent` interprets `UpdateSimulatorCommand` events from MediatR and mutates internal state accordingly (`SourceCode/AgOpenGPS.Api/Services/SimulatorService.cs:173`). FormGPS does not yet call `IBackendClient.SendCommandAsync`, but the SignalR client supports sending `UpdateSimulatorCommand` when UI handlers are wired (`SourceCode/AgOpenGPS.Api.Client/SignalR/SignalRBackendClient.cs:51`).
+- **Safety rails** - Speeds are clamped between -21 and 322 km/h and steering changes are eased to mirror legacy behaviour (`SourceCode/AgOpenGPS.Api/Services/SimulatorService.cs:57`). This prevents unrealistic motion that would skew downstream testing.
 
 ## Motion Model
 
@@ -22,9 +22,9 @@ The simulator provides a deterministic way to exercise the entire backend pipeli
 
 ## Packet Output
 
-- **Format fidelity** - Packets are byte-for-byte compatible with AgIO PGN 0xD6. Fields the simulator cannot generate (dual antenna heading, IMU) deliberately use sentinel values so the GNSS service treats them the same as real receivers lacking those capabilities.
-- **Transport path** - Packets loop through the same UDP listener as hardware data, allowing the orchestrator, GNSS service, and publisher to behave identically regardless of source.
-- **Cadence** - The 93 ms interval mirrors the legacy timer; combined with the GNSS frequency filter, observed cadence converges on roughly 10.75 Hz.
+- **Format fidelity** - Packets are byte-for-byte compatible with AgIO PGN 0xD6 via `AgIoProtocolSerializer.EncodeGpsDataPacket` (`SourceCode/AgOpenGPS.Api/Services/AgIoProtocolSerializer.cs:17`). Fields the simulator cannot generate (dual antenna heading, IMU) deliberately use sentinel values so `GnssService` treats them the same as real receivers lacking those capabilities.
+- **Transport path** - `SimulatorHostedService.ExecuteAsync` sends packets over UDP to the same port that hardware uses, allowing the orchestrator, GNSS service, and publisher to behave identically regardless of source (`SourceCode/AgOpenGPS.Api/Services/SimulatorHostedService.cs:26`).
+- **Cadence** - The 93 ms interval mirrors the legacy timer; combined with the GNSS frequency filter in `GnssService`, observed cadence converges on roughly 10.75 Hz (`SourceCode/AgOpenGPS.Api/Services/GnssService.cs:36`).
 
 ## Usage Scenarios
 
