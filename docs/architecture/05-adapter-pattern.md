@@ -1,219 +1,80 @@
-# Adapter Pattern & Feature Flags
+# Adapter Pattern and Feature Flags
 
-## Adapter Pattern
+## Purpose
 
-**Wrap legacy code to delegate to new API** while keeping legacy interface.
+While GNSS processing now lives in the backend, many other subsystems (guidance, section control, headland management) still run inside FormGPS. Adapters let us introduce backend services incrementally without breaking the operator workflow. Feature flags give us a safe way to switch between legacy and new code during the migration.
 
-### Purpose
-- Allow gradual migration (not big bang)
-- Legacy code continues working
-- New API tested alongside legacy
-- Safe rollback if needed
+## Adapter Strategy
 
-### Concept Diagram
+1. Wrap the legacy entry point (for example `CABLine.Calculate`) inside an adapter that exposes a clean interface.
+2. Map UI state into a transport-friendly DTO when the backend service is enabled.
+3. Call the backend service when the feature flag is on; otherwise, fall back to the legacy code.
+4. Map backend results back into the UI model so the rest of the form remains untouched.
+5. Optionally log both results during the soak period for comparison.
+6. Remove the legacy branch once the backend service proves reliable.
 
-```
-Legacy Code
-  └─ Calls: guidanceAdapter.Calculate()
-      │
-      ▼
-  Adapter (wrapper)
-    └─ if (useNewApi)
-          └─ Call: newGuidanceService.CalculateAsync()  ← NEW API
-       else
-          └─ Call: legacyGuidance.Calculate()           ← OLD CODE
-```
-
-## Example: CABLine Migration
-
-### Stage 1: Legacy Only
+### Minimal Example (Conceptual)
 
 ```csharp
-// GPS/Classes/CABLine.cs (LEGACY)
-public class CABLine
+public class GuidanceAdapter
 {
-    private readonly FormGPS mf; // Tight coupling!
+    private readonly FormGPS _form;
+    private readonly IGuidanceService _service;
+    private readonly FeatureFlags _flags;
 
-    public void Calculate()
+    public GuidanceSnapshot Calculate()
     {
-        double speed = mf.avgSpeed;  // Access FormGPS
-        double width = mf.tool.width;
-        // ... calculations
-    }
-}
-
-// GPS/Forms/FormGPS.cs
-private void tmrWatchdog_Tick()
-{
-    ABLine.Calculate(); // Direct legacy call
-}
-```
-
-### Stage 2: API + Adapter
-
-```csharp
-// Backend: AgOpenGPS.Api/Services/Guidance/ABLineService.cs (NEW)
-public class ABLineService : IABLineService
-{
-    public ABLineState CalculateAsync(VehicleState vehicle, ToolConfig tool)
-    {
-        // Pure logic (no mf.xxx)
-        double speed = vehicle.Speed;
-        double width = tool.Width;
-        // ... calculations
-        return new ABLineState { ... };
-    }
-}
-
-// Frontend: GPS/Adapters/ABLineAdapter.cs (TEMPORARY)
-public class ABLineAdapter
-{
-    private readonly FormGPS _formGPS;
-    private readonly IABLineService _abLineService;
-    private readonly bool _useNewApi; // Feature flag!
-
-    public ABLineState Calculate()
-    {
-        if (_useNewApi)
+        if (_flags.UseBackendGuidance)
         {
-            // NEW: Call API
-            var vehicleState = new VehicleState {
-                Speed = _formGPS.avgSpeed,
-                Position = _formGPS.vehicle.pivotAxlePos.ToVector3()
-            };
-            var toolConfig = new ToolConfig {
-                Width = _formGPS.tool.width
-            };
-            return _abLineService.CalculateAsync(vehicleState, toolConfig).Result;
+            var request = GuidanceMapper.ToRequest(_form);
+            return _service.Calculate(request);
         }
-        else
-        {
-            // LEGACY: Fallback
-            _formGPS.ABLine.Calculate();
-            return ConvertLegacyToDto(_formGPS.ABLine);
-        }
+
+        _form.Guidance.CalculateLegacy();
+        return GuidanceMapper.FromLegacy(_form.Guidance);
     }
 }
-
-// GPS/Forms/FormGPS.cs (UPDATED)
-private void tmrWatchdog_Tick()
-{
-    var state = _abLineAdapter.Calculate(); // Through adapter
-    UpdateUI(state);
-}
 ```
 
-### Stage 3: API Only (Adapter Removed)
-
-```csharp
-// GPS/Forms/FormGPS.cs (FINAL)
-private void OnStateUpdated(ApplicationStateDto state)
-{
-    // Direct state from SignalR (no adapter!)
-    UpdateGuidanceDisplay(state.Guidance);
-}
-
-// DELETE:
-// - GPS/Classes/CABLine.cs (legacy)
-// - GPS/Adapters/ABLineAdapter.cs (adapter)
-```
+The adapter ensures callers always receive a `GuidanceSnapshot` no matter which implementation produced it.
 
 ## Feature Flags
 
-**Toggle between legacy and new code** for safe rollout.
-
-### Configuration
+Feature toggles live in configuration (JSON, environment variables, or any other provider supported by `Microsoft.Extensions.Options`). Each flag controls the cut-over for a specific subsystem.
 
 ```json
-// config.json
 {
-  "features": {
-    "useApiGuidance": true,     // true = NEW, false = LEGACY
-    "useApiField": false,        // false = not migrated yet
-    "useApiSections": false
+  "Features": {
+    "UseBackendGuidance": true,
+    "UseBackendSections": false,
+    "UseBackendHeadland": false
   }
 }
 ```
 
-### Implementation
-
-```csharp
-public class FeatureFlags
-{
-    public bool UseApiGuidance { get; set; }
-    public bool UseApiField { get; set; }
-    public bool UseApiSections { get; set; }
-}
-
-// Load from config
-var flags = LoadFromConfig();
-
-// Use in adapter
-public ABLineAdapter(FeatureFlags flags, ...)
-{
-    _useNewApi = flags.UseApiGuidance;
-}
-```
-
-### Benefits
-
-- ✅ **A/B testing**: Compare legacy vs new
-- ✅ **Safe rollback**: Set flag = false if broken
-- ✅ **Gradual rollout**: Enable per module
-- ✅ **Debug**: Run both side-by-side
+Guidelines:
+- Default to the legacy path until the backend version is ready for trial.
+- Allow runtime toggling when possible to simplify rollbacks.
+- Log both the flag value and the adapter decision to aid diagnostics.
 
 ## Migration Stages
 
-### Hybrid State (Both Active)
+1. **Parallel** - Adapter dispatches to backend when the flag is on, otherwise uses the legacy implementation. Both code paths remain available.
+2. **Soak** - Enable the flag for targeted users or environments, capture telemetry, and compare outputs when useful.
+3. **Full cut** - Flip the flag to `true` for everyone once confidence is high.
+4. **Removal** - Delete the legacy implementation and adapter branch; retire or reuse the flag.
 
-```
-FormGPS
-  └─ Timer (250ms) - still active
-      └─ Adapter checks flag
-          ├─ flag=true  → Call new API
-          └─ flag=false → Call legacy code
+## When to Remove Legacy Code
 
-Backend
-  └─ ApplicationOrchestrator (100ms) - already running
-      └─ Broadcasts state (frontend may ignore)
-```
-
-Both systems running, feature flag chooses which is used.
-
-### Transition (Gradual Flip)
-
-```
-Week 1: useApiGuidance = false (legacy)
-Week 2: useApiGuidance = true (NEW) - testing
-Week 3: useApiGuidance = true - confirmed working
-Week 4: Delete legacy Guidance code
-```
-
-### Final State (API Only)
-
-```
-FormGPS
-  └─ NO TIMER
-      └─ SignalR only
-          └─ Receives state from backend
-
-Backend
-  └─ ApplicationOrchestrator (100ms)
-      └─ Complete control
-```
-
-## When to Delete Legacy
-
-Delete legacy code ONLY when:
-1. ✅ New API 100% working
-2. ✅ Feature flag = true for 1+ weeks
-3. ✅ Zero issues reported
-4. ✅ Tests pass
-5. ✅ Team agrees
-
-**NEVER delete prematurely** - keep fallback until confident.
+Only remove the fallback path when:
+- The backend service has been enabled in production for an agreed soak period.
+- Monitoring shows acceptable performance and correctness.
+- A rollback plan is documented (even if it simply means redeploying with the flag set to `false`).
+- Automated and manual tests cover the backend implementation.
+- The product owner or lead developer signs off on removing the fallback.
 
 ## References
 
-- See: 02-strangler-fig.md (overall pattern)
-- See: 03-backend-driven.md (target architecture)
+- Migration pattern: `docs/architecture/02-strangler-fig.md`
+- Event-driven backend overview: `docs/architecture/03-backend-driven.md`
+- Operational workflow details: `docs/implementation/sections/operational-workflows.md`

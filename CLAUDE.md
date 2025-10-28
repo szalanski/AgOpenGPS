@@ -48,37 +48,34 @@ dotnet run --project SourceCode/AgIO/Source/AgIO.csproj
 
 ## Running the Application (Backend-Driven Mode)
 
-The application now uses a **two-process architecture**:
+The system runs as two cooperating processes: the backend owns GNSS processing and publishes state, while FormGPS renders the streamed results.
 
-### 1. Start Backend (Required)
+### 1. Start Backend (required)
 ```bash
 dotnet run --project SourceCode/AgOpenGPS.Api/AgOpenGPS.Api.csproj
 ```
-- Backend runs on http://localhost:5000
-- ApplicationOrchestrator starts automatically (4 Hz / 250ms)
-- Logs: "ApplicationOrchestrator starting - 4 Hz tick loop"
+- Listens on http://localhost:5000 by default.
+- Logs `ApplicationOrchestrator starting - GPS-driven UDP mode`.
+- Waits for UDP packets on the configured port (15556 in default appsettings).
 
 ### 2. Start Frontend
 ```bash
 dotnet run --project SourceCode/GPS/AgOpenGPS.csproj
 ```
-- FormGPS connects to backend automatically via SignalR
-- Logs: "Backend connection established"
-- Legacy timer (tmrWatchdog) is **completely deleted** - backend now drives application loop
+- Connects to the backend via SignalR automatically.
+- Logs `Backend connection established`.
+- `tmrWatchdog` still fires every 250 ms but now handles UI housekeeping (status labels, layout); GNSS data is no longer computed on that tick.
 
-### 3. Verify Connection
-- Backend logs: "ApplicationOrchestrator starting - 4 Hz tick loop"
-- FormGPS logs: "Backend connection established"
-- FormGPS logs: "Backend state received: HH:mm:ss.fff" (every 250ms)
+### 3. Verify Data Flow
+- Backend logs packet validation and state broadcasts whenever GNSS data arrives.
+- FormGPS logs each `ReceiveState` callback. Update cadence matches the incoming UDP frequency (simulator and typical receivers run near 10 Hz).
 
-**Note**: Backend must be running before starting FormGPS. If backend is unavailable, FormGPS will log connection error and use legacy timerSim for simulator only.
+**Reminder**: Start the backend first. If it is offline, FormGPS continues to render the last known values and surfaces connection errors until packets resume.
 
-### Architecture Changes from Workflow 001
-- **tmrWatchdog timer**: Completely deleted (was 250ms / 4 Hz)
-- **ProcessApplicationTick()**: Refactored timer logic (called on backend state updates)
-- **timerSim**: Still active at 93ms (simulator independent)
-- **Backend frequency**: 4 Hz (250ms) matches original tmrWatchdog timing
-- **State updates**: SignalR broadcasts ApplicationState with Timestamp
+### Current Architecture Highlights
+- **ApplicationOrchestrator** processes packets on arrival (no internal timer).
+- **SimulatorHostedService** still ticks at 93 ms but writes PGN 0xD6 packets into UDP so the full pipeline is exercised.
+- **ApplicationState.Gnss** is the canonical source for GPS, quality, and health metrics; FormGPS simply renders it.
 
 ## Architecture
 
