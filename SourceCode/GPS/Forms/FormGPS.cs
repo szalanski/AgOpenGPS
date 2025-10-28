@@ -592,9 +592,6 @@ namespace AgOpenGPS
 
             // Update UI to show backend is connected and timestamp
             Log.EventWriter($"Backend state received: {state.Timestamp:HH:mm:ss.fff}");
-
-            // Execute main application tick loop (replaces legacy tmrWatchdog timer)
-            ProcessApplicationTick();
         }
 
         private void OnStateError(Exception error)

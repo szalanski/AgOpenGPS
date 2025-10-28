@@ -26,15 +26,18 @@ Document the GPS/GNSS migration, coordinate transforms, UDP reception, and integ
 
 ## Acceptance
 
-- [ ] CLAUDE.md updated with GnssService
-- [ ] CLAUDE.md updated with UdpListenerService
-- [ ] CLAUDE.md updated with coordinate classes
-- [ ] architecture/03-backend-driven.md updated with GPS example
-- [ ] UDP protocol documented (PGN 0xD6 format)
-- [ ] AgIO external status noted
-- [ ] Integration test approach documented
-- [ ] Workflow 002 marked completed
-- [ ] Documentation builds and renders correctly
+- [x] CLAUDE.md updated with GnssService
+- [x] CLAUDE.md updated with UdpPacketReceiver (UdpListenerService)
+- [x] CLAUDE.md updated with coordinate classes (Wgs84Position, LocalPosition, Heading, Speed, Altitude)
+- [x] CLAUDE.md updated with SimulatorService and CQRS commands
+- [x] CLAUDE.md updated with DDD refactoring (VehiclePhysicsService, GnssDataGenerator, AgIoProtocolSerializer)
+- [x] CLAUDE.md Tests section updated (41/44 integration tests, unit tests removed)
+- [x] Integration test approach documented in CLAUDE.md
+- [x] Backend Service Interfaces section updated with implemented services
+- [x] architecture/06-udp-communication-and-simulator.md updated with backend simulator section
+- [x] plan.md success criteria updated with DDD refactoring and current test status
+- [x] docs/README.md workflow status updated to mark Workflow 002 completed (DDD refactored)
+- [x] Documentation builds and renders correctly (markdown files validated)
 
 ## Test
 

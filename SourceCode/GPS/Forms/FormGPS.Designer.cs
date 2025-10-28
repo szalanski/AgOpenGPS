@@ -50,6 +50,7 @@ namespace AgOpenGPS
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.AgShareApiMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tmrWatchdog = new System.Windows.Forms.Timer(this.components);
             this.contextMenuStripFlag = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemFlagRed = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuFlagGrn = new System.Windows.Forms.ToolStripMenuItem();
@@ -373,11 +374,16 @@ namespace AgOpenGPS
             this.AgShareApiMenuItem.Click += new System.EventHandler(this.AgShareApiMenuItem_Click);
             // 
             // helpMenuItem
-            // 
+            //
             this.helpMenuItem.Name = "helpMenuItem";
             this.helpMenuItem.Size = new System.Drawing.Size(382, 50);
             this.helpMenuItem.Text = "Help";
             this.helpMenuItem.Click += new System.EventHandler(this.helpMenuItem_Click);
+            //
+            // tmrWatchdog
+            //
+            this.tmrWatchdog.Interval = 250;
+            this.tmrWatchdog.Tick += new System.EventHandler(this.tmrWatchdog_tick);
             //
             // contextMenuStripFlag
             // 
@@ -2986,6 +2992,7 @@ namespace AgOpenGPS
         private System.Windows.Forms.Label lblHz;
         public System.Windows.Forms.Button btnContour;
         public System.Windows.Forms.Timer timerSim;
+        private System.Windows.Forms.Timer tmrWatchdog;
         public System.Windows.Forms.Button btnSectionMasterManual;
         public System.Windows.Forms.Button btnABDraw;
         public System.Windows.Forms.ToolStripMenuItem menustripLanguage;
