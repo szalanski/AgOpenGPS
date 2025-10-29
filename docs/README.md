@@ -60,6 +60,20 @@ Vertical slices of work organized as **workflow chunks**. Each chunk has:
      - SignalR bidirectional communication (state updates + commands)
      - IBackendClient abstraction for bidirectional transport
 
+3. **[005-remove-cnmea-adapter/](workflow/005-remove-cnmea-adapter/)** - 🔄 PLANNED - Remove CNMEA adapter and frontend simulator
+   - plan.md - CNMEA adapter and CSim removal concept
+   - task1.md through task7.md - Remove adapter, refactor frontend GPS access, eliminate CSim
+   - **Status**: Planned - ready to implement
+   - **Key Objectives**:
+     - Delete CSim frontend simulator (backend SimulatorService is authoritative)
+     - Refactor Position.UpdateFixPosition() to use ApplicationState directly
+     - Refactor CContour guidance to use ApplicationState directly
+     - Remove legacy UI guards (backend connection checks)
+     - Delete CNMEA.UpdateFromBackendState() adapter method
+     - Decide CNMEA class fate (delete entirely or keep minimal stub)
+     - Update documentation to reflect direct ApplicationState access
+   - **Expected Outcome**: Frontend GPS processing eliminated, clear visibility of remaining business logic
+
 **When to use**:
 - Ready to implement specific features
 - Need step-by-step implementation guidance
