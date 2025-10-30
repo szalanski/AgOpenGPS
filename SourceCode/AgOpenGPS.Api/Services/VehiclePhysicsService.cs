@@ -51,7 +51,11 @@ namespace AgOpenGPS.Api.Services
 
         /// <summary>
         /// Calculate heading change based on steering angle and step distance.
+        /// IMPORTANT: stepDistance must be in METRES (legacy CSim formula).
         /// </summary>
+        /// <param name="steerAngleAve">Steering angle in degrees</param>
+        /// <param name="stepDistance">Step distance in METRES (not kilometres)</param>
+        /// <returns>Heading change in radians</returns>
         public double CalculateHeadingChange(double steerAngleAve, double stepDistance)
         {
             return stepDistance * Math.Tan(steerAngleAve * DEG_TO_RAD) / 2.0;

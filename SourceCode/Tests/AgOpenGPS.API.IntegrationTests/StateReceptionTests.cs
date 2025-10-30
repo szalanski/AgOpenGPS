@@ -52,11 +52,11 @@ public class StateReceptionTests : BaseIntegrationTest
     }
 
     [Test]
-    public async Task SignalRStateSubscriber_ShouldConnect_ToBackend()
+    public async Task SignalRBackendClient_ShouldConnect_ToBackend()
     {
         // Arrange
         var hubConnection = CreateTestHubConnection("/statehub");
-        var subscriber = new SignalRStateSubscriber(hubConnection);
+        var subscriber = new SignalRBackendClient(hubConnection);
 
         // Act
         await subscriber.ConnectAsync();
@@ -70,15 +70,15 @@ public class StateReceptionTests : BaseIntegrationTest
     }
 
     [Test]
-    public async Task SignalRStateSubscriber_ShouldReceiveStateUpdates()
+    public async Task SignalRBackendClient_ShouldReceiveStateUpdates()
     {
         // Arrange
         var hubConnection = CreateTestHubConnection("/statehub");
-        var subscriber = new SignalRStateSubscriber(hubConnection);
+        var subscriber = new SignalRBackendClient(hubConnection);
         var receivedStates = CreateStateCollection();
 
         // Subscribe to state updates
-        subscriber.Subscribe(state => receivedStates.Enqueue(state));
+        subscriber.SubscribeToState(state => receivedStates.Enqueue(state));
 
         // Act
         await subscriber.ConnectAsync();
@@ -103,24 +103,24 @@ public class StateReceptionTests : BaseIntegrationTest
     }
 
     [Test]
-    public async Task Multiple_SignalRStateSubscribers_ShouldReceiveStateUpdates()
+    public async Task Multiple_SignalRBackendClients_ShouldReceiveStateUpdates()
     {
         // Arrange
         var hubConnection1 = CreateTestHubConnection("/statehub");
         var hubConnection2 = CreateTestHubConnection("/statehub");
         var hubConnection3 = CreateTestHubConnection("/statehub");
 
-        var subscriber1 = new SignalRStateSubscriber(hubConnection1);
-        var subscriber2 = new SignalRStateSubscriber(hubConnection2);
-        var subscriber3 = new SignalRStateSubscriber(hubConnection3);
+        var subscriber1 = new SignalRBackendClient(hubConnection1);
+        var subscriber2 = new SignalRBackendClient(hubConnection2);
+        var subscriber3 = new SignalRBackendClient(hubConnection3);
 
         var count1 = 0;
         var count2 = 0;
         var count3 = 0;
 
-        subscriber1.Subscribe(s => count1++);
-        subscriber2.Subscribe(s => count2++);
-        subscriber3.Subscribe(s => count3++);
+        subscriber1.SubscribeToState(s => count1++);
+        subscriber2.SubscribeToState(s => count2++);
+        subscriber3.SubscribeToState(s => count3++);
 
         // Act
         await subscriber1.ConnectAsync();

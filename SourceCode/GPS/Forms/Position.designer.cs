@@ -127,6 +127,35 @@ namespace AgOpenGPS
 
         public void UpdateFixPosition()
         {
+            // Null safety: Backend must be connected and providing GPS data
+            if (_cachedState?.Gnss == null)
+            {
+                return;
+            }
+
+            // Read current GPS data from backend state into CNMEA working variables
+            pn.fix.easting = _cachedState.Gnss.LocalPosition.Easting;
+            pn.fix.northing = _cachedState.Gnss.LocalPosition.Northing;
+            pn.altitude = _cachedState.Gnss.Altitude.Meters;
+            pn.fixQuality = _cachedState.Gnss.Quality.FixQuality;
+            pn.satellitesTracked = _cachedState.Gnss.Quality.SatellitesTracked;
+            pn.hdop = _cachedState.Gnss.Quality.Hdop;
+            pn.age = _cachedState.Gnss.Quality.Age;
+            pn.headingTrue = _cachedState.Gnss.HeadingSingle.Degrees;
+            pn.headingTrueDual = _cachedState.Gnss.HeadingDual.Degrees;
+
+            // Populate non-GPS fields that were previously set by CSim.DoSimTick()
+            AppModel.CurrentLatLon = new AgOpenGPS.Core.Models.Wgs84(
+                _cachedState.Gnss.WgsPosition.Latitude,
+                _cachedState.Gnss.WgsPosition.Longitude);
+
+            // Simulate IMU heading from GPS heading (matches CSim line 81 behavior)
+            ahrs.imuHeading = pn.headingTrue;
+            if (ahrs.imuHeading >= 360) ahrs.imuHeading -= 360;
+
+            // Reset GPS watchdog counter (matches CSim line 92)
+            sentenceCounter = 0;
+
             //swFrame.Stop();
             //Measure the frequency of the GPS updates
             timeSliceOfLastFix = (double)(swFrame.ElapsedTicks) / (double)System.Diagnostics.Stopwatch.Frequency;
@@ -169,7 +198,8 @@ namespace AgOpenGPS
                 hasBeenFirstHeadingSet = false;
             }
 
-            pn.speed = pn.vtgSpeed;
+            // Read speed from backend state (removed obsolete pn.speed = pn.vtgSpeed assignment)
+            pn.speed = _cachedState.Gnss.Speed.KilometersPerHour;
             pn.AverageTheSpeed();
 
             if (Properties.Settings.Default.setGPS_headingFromWhichSource == "Dual" && ahrs.autoSwitchDualFixOn)

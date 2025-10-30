@@ -49,10 +49,10 @@ public class GpsPacketProcessingTests : BaseIntegrationTest
     private async Task<List<ApplicationState>> ReceiveStatesAsync(int durationMs = 2000)
     {
         var hubConnection = CreateTestHubConnection("/statehub");
-        var subscriber = new SignalRStateSubscriber(hubConnection);
+        var subscriber = new SignalRBackendClient(hubConnection);
         var receivedStates = new List<ApplicationState>();
 
-        subscriber.Subscribe(state => receivedStates.Add(state));
+        subscriber.SubscribeToState(state => receivedStates.Add(state));
         await subscriber.ConnectAsync();
 
         await Task.Delay(durationMs);

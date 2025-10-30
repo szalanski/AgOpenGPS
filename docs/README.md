@@ -60,19 +60,45 @@ Vertical slices of work organized as **workflow chunks**. Each chunk has:
      - SignalR bidirectional communication (state updates + commands)
      - IBackendClient abstraction for bidirectional transport
 
-3. **[005-remove-cnmea-adapter/](workflow/005-remove-cnmea-adapter/)** - 🔄 PLANNED - Remove CNMEA adapter and frontend simulator
+3. **[005-remove-cnmea-adapter/](workflow/005-remove-cnmea-adapter/)** - ✅ COMPLETED - Remove CNMEA adapter and frontend simulator
    - plan.md - CNMEA adapter and CSim removal concept
    - task1.md through task7.md - Remove adapter, refactor frontend GPS access, eliminate CSim
-   - **Status**: Planned - ready to implement
-   - **Key Objectives**:
-     - Delete CSim frontend simulator (backend SimulatorService is authoritative)
-     - Refactor Position.UpdateFixPosition() to use ApplicationState directly
-     - Refactor CContour guidance to use ApplicationState directly
-     - Remove legacy UI guards (backend connection checks)
-     - Delete CNMEA.UpdateFromBackendState() adapter method
-     - Decide CNMEA class fate (delete entirely or keep minimal stub)
-     - Update documentation to reflect direct ApplicationState access
-   - **Expected Outcome**: Frontend GPS processing eliminated, clear visibility of remaining business logic
+   - **Status**: Completed (6/7 tasks done, task 7 documentation pending)
+   - **Key Implementations**:
+     - Deleted CSim.cs frontend simulator (125 lines)
+     - Refactored Position.UpdateFixPosition() to populate 11 fields from ApplicationState.Gnss
+     - Refactored CContour to use ApplicationState.Gnss.LocalPosition
+     - Removed legacy UI guards from GUI.Designer.cs
+     - Deleted CNMEA.UpdateFromBackendState() adapter method
+     - Kept CNMEA class as documented stub (still used for DefineLocalPlane, AverageTheSpeed)
+     - Fixed 3D view initialization (worldGrid, camHeading, startCounter)
+     - Fixed LocalPlane origin synchronization bug
+   - **Outcome**: Frontend reads directly from ApplicationState, no adapter layer
+
+4. **[006-coordinate-service-separation/](workflow/006-coordinate-service-separation/)** - ✅ COMPLETED - Extract coordinate transformation service
+   - plan.md - Coordinate service separation concept
+   - **Status**: Completed - all 5 phases implemented
+   - **Key Implementations**:
+     - Created ICoordinateService interface (7 methods)
+     - Created LocalPlaneInfo DTO (Origin, MetersPerDegreeLat, MetersPerDegreeLonAtOrigin)
+     - Created CoordinateService (thread-safe wrapper around CoordinateTransformer)
+     - Registered in DI container (Program.cs)
+     - Added ApplicationState.LocalPlane property
+     - ApplicationOrchestrator populates LocalPlane when broadcasting
+     - Frontend reads origin from state.LocalPlane.Origin (synchronized)
+   - **Outcome**: Single Responsibility Principle, coordinate synchronization, reusable service for boundaries/paths
+
+5. **[007-expose-steering-angle/](workflow/007-expose-steering-angle/)** - ✅ COMPLETED - Expose steering angle from backend
+   - plan.md - Steering angle exposure concept and vehicle shake fix
+   - **Status**: Completed - all 4 phases implemented
+   - **Key Implementations**:
+     - Created ControlState domain object (establishes Control domain pattern)
+     - Added ApplicationState.Control property (like Gnss for GPS domain)
+     - Exposed SimulatorService.GetCurrentSteering() method
+     - ApplicationOrchestrator populates Control.ActualSteeringAngle when broadcasting
+     - Frontend Position.designer.cs reads from _cachedState.Control (removed hardcoded zero)
+     - CVehicle wheel rendering automatically picks up backend steering
+   - **Outcome**: Fixed vehicle shaking bug, established Control domain for future migrations (sections, auto-steer, implement, IMU)
 
 **When to use**:
 - Ready to implement specific features

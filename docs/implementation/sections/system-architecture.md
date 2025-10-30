@@ -19,6 +19,7 @@ This split keeps hardware integration stable while letting the backend evolve in
 - **Backend client hookup** - `FormGPS_Load` creates an `IBackendClient` via `BackendClientFactory.CreateSignalRClient`, subscribes to state updates, and connects to the backend (`SourceCode/GPS/Forms/FormGPS.cs:561`). The client implements both state subscriptions and command dispatch (`SourceCode/AgOpenGPS.Api.Client/SignalR/SignalRBackendClient.cs:32`).
 - **Adapter bridge** - `CNMEA.UpdateFromBackendState` translates `ApplicationState.Gnss` into legacy fields consumed by existing UI code (`SourceCode/GPS/Classes/CNMEA.cs:37`).
 - **Legacy bypass guard** - `ReceiveFromAgIO` skips legacy GPS parsing when the backend connection is active, allowing the UDP path to act as a fallback only (`SourceCode/GPS/Forms/UDPComm.Designer.cs:63`).
+- **Control feedback** - `ApplicationOrchestrator` enriches state with steering data from the simulator (`SourceCode/AgOpenGPS.Api/Services/ApplicationOrchestrator.cs:84`), and FormGPS applies it to the wheel renderer before recalculating vehicle position (`SourceCode/GPS/Forms/FormGPS.cs:659`).
 
 ## Data Flow Overview
 

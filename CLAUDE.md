@@ -132,7 +132,12 @@ This codebase has TWO INDEPENDENT cross-platform initiatives:
 
 ### Backend API Migration (Strangler Fig Pattern - Initiative 2)
 
-**Status**: Workflow 002 (GPS/GNSS Migration) Completed - See [docs/README.md](docs/README.md) and [docs/workflow/002-gps-gnss-migration/](docs/workflow/002-gps-gnss-migration/)
+**Status**: Workflows 001, 002, 005, 006, 007 Completed - See [docs/README.md](docs/README.md) and [docs/workflow/](docs/workflow/)
+- ✅ Workflow 001: Backend State Foundation (ApplicationOrchestrator, SignalR)
+- ✅ Workflow 002: GPS/GNSS Migration (GnssService, UdpPacketReceiver, Simulator)
+- ✅ Workflow 005: Remove CNMEA Adapter (Direct ApplicationState access)
+- ✅ Workflow 006: Coordinate Service Separation (ICoordinateService, origin synchronization)
+- ✅ Workflow 007: Expose Steering Angle (ControlState domain, vehicle shake fix)
 
 **New Projects**:
 - `AgOpenGPS.Api/` (.NET 8) - Backend Web API
@@ -200,6 +205,7 @@ This codebase has TWO INDEPENDENT cross-platform initiatives:
 - ✅ `IUdpPacketReceiver` - UDP packet reception (IMPLEMENTED - Workflow 002)
 - ✅ `IStatePublisher` - State broadcasting abstraction (IMPLEMENTED - Workflow 001)
 - ✅ `ISimulationService` - Simulator (IMPLEMENTED via SimulatorService with DDD pattern: VehiclePhysicsService, GnssDataGenerator, AgIoProtocolSerializer)
+- ✅ `ICoordinateService` - Coordinate transformations (IMPLEMENTED - Workflow 006: WGS84 ↔ Local Plane conversions, origin management, LocalPlaneInfo exposure)
 - `IGuidanceService`, `IPathPlanner`, `ITramlineService` (Future)
 - `IFieldService`, `IBoundaryService`, `IHeadlandGenerator` (Future)
 - `ISectionControlService`, `ICoverageMapService` (Future)

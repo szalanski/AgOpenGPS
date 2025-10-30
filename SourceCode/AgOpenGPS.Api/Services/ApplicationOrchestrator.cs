@@ -13,17 +13,23 @@ public class ApplicationOrchestrator : BackgroundService
     private readonly ILogger<ApplicationOrchestrator> _logger;
     private readonly IStatePublisher _statePublisher;
     private readonly IGnssService _gnssService;
+    private readonly ICoordinateService _coordinateService;
+    private readonly SimulatorService _simulatorService;
     private readonly IUdpPacketReceiver _udpReceiver;
 
     public ApplicationOrchestrator(
         ILogger<ApplicationOrchestrator> logger,
         IStatePublisher statePublisher,
         IGnssService gnssService,
+        ICoordinateService coordinateService,
+        SimulatorService simulatorService,
         IUdpPacketReceiver udpReceiver)
     {
         _logger = logger;
         _statePublisher = statePublisher;
         _gnssService = gnssService;
+        _coordinateService = coordinateService;
+        _simulatorService = simulatorService;
         _udpReceiver = udpReceiver;
     }
 
@@ -33,7 +39,9 @@ public class ApplicationOrchestrator : BackgroundService
 
         // TODO: Initialize local plane (will be configurable in future)
         // For now, using placeholder coordinates for testing
-        _gnssService.InitializeLocalPlane(new Wgs84Position(45.0, -93.0));
+        var origin = new Wgs84Position(45.0, -93.0);
+        _gnssService.InitializeLocalPlane(origin);
+        _coordinateService.InitializeLocalPlane(origin);
 
         // Main loop: Consume UDP packets and broadcast GPS state
         await foreach (var packet in _udpReceiver.GetPacketsAsync(stoppingToken))
@@ -71,7 +79,12 @@ public class ApplicationOrchestrator : BackgroundService
                     var appState = new ApplicationState
                     {
                         Timestamp = DateTime.UtcNow,
-                        Gnss = gnssState
+                        Gnss = gnssState,
+                        LocalPlane = _coordinateService.GetLocalPlaneInfo(),
+                        Control = new ControlState
+                        {
+                            ActualSteeringAngle = _simulatorService.GetCurrentSteering()
+                        }
                     };
 
                     await _statePublisher.BroadcastStateAsync(appState);

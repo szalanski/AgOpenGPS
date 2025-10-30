@@ -47,8 +47,6 @@ namespace AgOpenGPS
 
         public int rpWidth;
 
-        private double textRotate;
-
         public Color[] secColors = new Color[16];
 
         public int zones;
@@ -193,7 +191,21 @@ namespace AgOpenGPS
 
                 if (Math.Abs(trailingToolToPivotLength) > 1 && mf.camera.camSetDistance > -100)
                 {
-                    textRotate += (mf.sim.stepDistance);
+                    // LEGACY: Tire texture rotation animation (removed during CSim deletion)
+                    // Original code: textRotate += (mf.sim.stepDistance);
+                    // This accumulated step distance to rotate tire textures realistically
+                    //
+                    // MIGRATION NOTE: Texture rotation now needs to be driven by backend speed
+                    // Option 1: Add textRotate field and update from ApplicationState.Gnss.Speed:
+                    //   private double textRotate = 0;
+                    //   double speedMetersPerSecond = _cachedState.Gnss.Speed.KilometersPerHour / 3.6;
+                    //   double distancePerFrame = speedMetersPerSecond / 60.0; // Assuming 60 FPS
+                    //   textRotate += distancePerFrame;
+                    //   // Then apply textRotate to tire texture rendering
+                    //
+                    // Option 2: Calculate rotation directly from current speed in OnRender()
+                    // Option 3: Backend could broadcast accumulated distance (odometer) in future
+
                     GL.Color4(1, 1, 1, 0.75);
                     XyCoord rightTire00 = new XyCoord(0.75 + offset, trailingTool + 0.51);
                     XyCoord rightTire11 = new XyCoord(1.4 + offset, trailingTool - 0.51);

@@ -182,7 +182,7 @@ namespace AgOpenGPS
                     GLW.SetColor(vehicleColor);
 
                     AckermannAngles(
-                        -(mf.timerSim.Enabled ? mf.sim.steerangleAve : mf.mc.actualSteerAngleDegrees),
+                        -mf.mc.actualSteerAngleDegrees,
                         out double leftAckermann,
                         out double rightAckermann);
                     XyCoord tractorCenter = new XyCoord(0.0, 0.5 * VehicleConfig.Wheelbase);
@@ -216,7 +216,7 @@ namespace AgOpenGPS
                     //vehicle body
 
                     AckermannAngles(
-                        mf.timerSim.Enabled ? mf.sim.steerAngle : mf.mc.actualSteerAngleDegrees,
+                        mf.mc.actualSteerAngleDegrees,
                         out double leftAckermannAngle,
                         out double rightAckermannAngle);
                     ColorRgba harvesterWheelColor = new ColorRgba(Colors.HarvesterWheelColor, (float)VehicleConfig.Opacity);
@@ -243,7 +243,7 @@ namespace AgOpenGPS
                 }
                 else if (VehicleConfig.Type == VehicleType.Articulated)
                 {
-                    double modelSteerAngle = 0.5 * (mf.timerSim.Enabled ? mf.sim.steerAngle : mf.mc.actualSteerAngleDegrees);
+                    double modelSteerAngle = 0.5 * mf.mc.actualSteerAngleDegrees;
                     GLW.SetColor(vehicleColor);
 
                     XyDelta articulated = new XyDelta(VehicleConfig.TrackWidth, -0.65 * VehicleConfig.Wheelbase);

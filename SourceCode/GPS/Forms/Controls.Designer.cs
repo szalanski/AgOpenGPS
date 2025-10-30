@@ -2124,23 +2124,6 @@ namespace AgOpenGPS
             }
         }
 
-        double lastSimGuidanceAngle = 0;
-        private void timerSim_Tick(object sender, EventArgs e)
-        {
-            if (recPath.isDrivingRecordedPath || isBtnAutoSteerOn && (guidanceLineDistanceOff != 32000))
-            {
-                if (vehicle.isInDeadZone)
-                {
-                    sim.DoSimTick((double)lastSimGuidanceAngle);
-                }
-                else
-                {
-                    lastSimGuidanceAngle = (double)guidanceLineSteerAngle * 0.01 * 0.9;
-                    sim.DoSimTick(lastSimGuidanceAngle);
-                }
-            }
-            else sim.DoSimTick(sim.steerAngleScrollBar);
-        }
         private async void btnSimReverseDirection_Click(object sender, EventArgs e)
         {
             // Invalidate guidance lines (backend-driven mode doesn't affect AB/curve)
@@ -2207,7 +2190,7 @@ namespace AgOpenGPS
                 double lat = Properties.Settings.Default.setGPS_SimLatitude;
                 double lon = Properties.Settings.Default.setGPS_SimLongitude;
                 double heading = 0.0; // North
-                double speed = 10.0;  // 10 km/h
+                double speed = 0.0;   // Start stationary (matches CSim behavior)
 
                 var position = new Wgs84Position(lat, lon);
                 var headingObj = new Heading(heading);
@@ -2236,15 +2219,31 @@ namespace AgOpenGPS
                 Log.EventWriter($"Failed to send speed zero command: {ex.Message}");
             }
         }
-        private void btnSimReverse_Click(object sender, EventArgs e)
+        private async void btnSimReverse_Click(object sender, EventArgs e)
         {
-            sim.stepDistance = 0;
-            sim.isAccelBack = true;
+            // Send reverse speed command to backend (decrease speed)
+            try
+            {
+                var command = new UpdateSimulatorCommand(SimulatorEvent.SpeedAdjust(-5.0));
+                await _backendClient.SendCommandAsync(command);
+            }
+            catch (Exception ex)
+            {
+                Log.EventWriter($"Failed to send reverse speed command: {ex.Message}");
+            }
         }
-        private void btnSimForward_Click(object sender, EventArgs e)
+        private async void btnSimForward_Click(object sender, EventArgs e)
         {
-            sim.stepDistance = 0;
-            sim.isAccelForward = true;
+            // Send forward speed command to backend (increase speed)
+            try
+            {
+                var command = new UpdateSimulatorCommand(SimulatorEvent.SpeedAdjust(5.0));
+                await _backendClient.SendCommandAsync(command);
+            }
+            catch (Exception ex)
+            {
+                Log.EventWriter($"Failed to send forward speed command: {ex.Message}");
+            }
         }
 
         #endregion

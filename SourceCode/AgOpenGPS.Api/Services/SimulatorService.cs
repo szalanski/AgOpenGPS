@@ -37,6 +37,12 @@ namespace AgOpenGPS.Api.Services
 
         public bool IsEnabled { get; private set; }
 
+        /// <summary>
+        /// Gets the current smoothed steering angle from the simulator.
+        /// Used by ApplicationOrchestrator to populate ApplicationState.Control.
+        /// </summary>
+        public SteeringAngle GetCurrentSteering() => _smoothedSteering;
+
         public SimulatorService(
             ILogger<SimulatorService> logger,
             VehiclePhysicsService physics,
@@ -52,8 +58,8 @@ namespace AgOpenGPS.Api.Services
             _currentPosition = new Wgs84Position(45.0, -93.0);
             _initialPosition = new Wgs84Position(45.0, -93.0);
             _currentHeading = new Heading(0.0);
-            _currentSpeed = new Speed(10.0);
-            _targetSpeed = new Speed(10.0);
+            _currentSpeed = new Speed(0.0);  // Start stationary (matches CSim behavior)
+            _targetSpeed = new Speed(0.0);   // Start stationary (matches CSim behavior)
             _targetSteering = SteeringAngle.Zero;
             _smoothedSteering = SteeringAngle.Zero;
             _stepDistance = 0.0;
@@ -297,10 +303,15 @@ namespace AgOpenGPS.Api.Services
                 _smoothedSteering = new SteeringAngle(newSmoothedSteeringDeg);
 
                 // Calculate step distance from speed (93ms tick, speed in km/h)
-                _stepDistance = (_currentSpeed.KilometersPerHour / 3600.0) * 0.093; // 93ms = 0.093 seconds
+                _stepDistance = (_currentSpeed.KilometersPerHour / 3600.0) * 0.093; // kilometres (93ms = 0.093 seconds)
+
+                // CRITICAL FIX: Convert to metres for heading calculation
+                // VehiclePhysicsService.CalculateHeadingChange() uses legacy CSim formula that expects metres
+                // CalculateNewPosition() below expects kilometres, so keep _stepDistance in km
+                double stepDistanceMeters = _stepDistance * 1000.0;
 
                 // Update heading based on steering
-                double headingChange = _physics.CalculateHeadingChange(_smoothedSteering.Degrees, _stepDistance);
+                double headingChange = _physics.CalculateHeadingChange(_smoothedSteering.Degrees, stepDistanceMeters);
                 double headingRad = _currentHeading.ToRadians();
                 headingRad += headingChange;
 

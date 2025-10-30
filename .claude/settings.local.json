@@ -17,7 +17,8 @@
       "Bash(Select-String -Pattern \"Powodzenie|Niepowodzenie|liczba testów|pomyślnie|niepowodzeniem\" -Context 0,1)",
       "Bash(ren IStateSubscriber.cs IBackendClient.cs)",
       "Bash(Select-String -Pattern \"Powodzenie|Niepowodzenie|liczba testów|pomyślnie|niepowodzeniem|Passed|Failed\" -Context 0,1)",
-      "Bash(powershell -Command:*)"
+      "Bash(powershell -Command:*)",
+      "Bash(git add:*)"
     ],
     "deny": [],
     "ask": []

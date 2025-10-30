@@ -39,6 +39,9 @@ builder.Services.AddSingleton<IUdpPacketReceiver, UdpPacketReceiver>();
 // Register GPS processing service
 builder.Services.AddSingleton<IGnssService, GnssService>();
 
+// Register coordinate transformation service
+builder.Services.AddSingleton<ICoordinateService, CoordinateService>();
+
 // Register MediatR for CQRS command handling
 builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));

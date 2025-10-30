@@ -26,15 +26,18 @@ The connection handles automatic reconnection if the backend restarts, ensuring 
 
 ## State Reception and Caching
 
-When the backend broadcasts ApplicationState, FormGPS caches it for UI thread access (SourceCode/GPS/Forms/FormGPS.cs:587-613).
+When the backend broadcasts ApplicationState, FormGPS caches it for UI thread access and immediately synchronises coordinate and steering metadata (SourceCode/GPS/Forms/FormGPS.cs:587-665).
 
 **OnStateReceived Flow:**
 
 1. **Thread marshaling** - If called from SignalR thread, marshal to UI thread via BeginInvoke
 2. **State caching** - Store ApplicationState in _cachedState field (line 94)
 3. **Null check** - Validate state.Gnss is not null before processing
-4. **Adapter invocation** - Call pn.UpdateFromBackendState(state) to populate legacy fields
-5. **Logging** - Log GPS data receipt for diagnostics
+4. **Local plane synchronisation** - On the first valid packet, read `state.LocalPlane.Origin` and call `pn.DefineLocalPlane` so the frontend uses the backend-origin plane (SourceCode/GPS/Forms/FormGPS.cs:605)
+5. **Adapter invocation** - Call pn.UpdateFromBackendState(state) to populate legacy fields (SourceCode/GPS/Classes/CNMEA.cs:37)
+6. **Steering feedback** - If `state.Control` is present, update `mc.actualSteerAngleDegrees` for wheel rendering before recalculating position (SourceCode/GPS/Forms/FormGPS.cs:659)
+7. **Position update** - Invoke `UpdateFixPosition()` which now reads directly from `_cachedState` to rebuild vehicle state (SourceCode/GPS/Forms/Position.designer.cs:128)
+8. **Logging** - Log GPS data receipt and diagnostic details (SourceCode/GPS/Forms/FormGPS.cs:667)
 
 SignalR callbacks arrive on a background thread. OnStateReceived uses InvokeRequired and BeginInvoke to ensure all UI updates and field modifications happen on the UI thread, preventing race conditions.
 
@@ -57,7 +60,7 @@ The CNMEA class acts as an adapter between backend GPS data and legacy FormGPS f
 | state.Gnss.Quality.Hdop | hdop | dimensionless | Horizontal dilution of precision |
 | state.Gnss.Quality.Age | age | seconds | Age of differential correction |
 
-Existing FormGPS code continues to reference legacy fields without modification. All UI labels, displays, and guidance calculations work transparently through the adapter.
+Existing FormGPS code continues to reference legacy fields without modification. All UI labels, displays, and guidance calculations work transparently through the adapter and the shared `_cachedState` snapshot.
 
 ## Legacy Processing Bypass
 
@@ -73,7 +76,7 @@ Labels for speed, fix quality, and Hz update from legacy data only when `_backen
 
 ## Command Dispatching
 
-FormGPS sends CQRS commands to the backend to control the simulator (SourceCode/GPS/Forms/Controls.Designer.cs:2100-2225).
+FormGPS sends CQRS commands to the backend to control the simulator (SourceCode/GPS/Forms/Controls.Designer.cs:2100-2270).
 
 **Available Commands:**
 

@@ -720,108 +720,131 @@ namespace AgOpenGPS
                 return true;
             }
 
-            // reset sim
+            // reset sim - now handled by backend simulator service
             if (keyData == Keys.R)
             {
                 btnResetSim.PerformClick();
                 return true;
             }
 
-            // U-Turn
-            if (keyData == Keys.U)
-            {
-                sim.headingTrue += Math.PI;
-                ABLine.isABValid = false;
-                curve.isCurveValid = false;
-                if (isBtnAutoSteerOn) btnAutoYouTurn.PerformClick();
-            }
+            #region Legacy Simulator Keyboard Controls - TO MIGRATE TO BACKEND
+            // These controls were removed during backend migration but logic is preserved here
+            // for future migration to CQRS commands via _backendClient.SendCommandAsync()
 
-            // speed up
-            if (keyData == Keys.Up)
-            {
-                if (sim.stepDistance < 0.4 && sim.stepDistance > -0.36) sim.stepDistance += 0.01;
-                else sim.stepDistance += 0.04;
-                if (sim.stepDistance > 4) sim.stepDistance = 4;
-                return true;
-            }
+            // MIGRATION GUIDE:
+            // 1. Speed controls (Up/Down/Period/Brackets/Quotes) → SimulatorEvent.SpeedAdjust(delta) or SetSpeed(value)
+            // 2. Steering controls (Left/Right/Question) → SimulatorEvent.SetSteering(angle) or ResetSteering()
+            // 3. U-Turn → SimulatorEvent.DirectionReverse()
+            // 4. F6 (fast/slow) → Backend timer adjustment (requires new command)
 
-            // slow down
-            if (keyData == Keys.Down)
-            {
-                if (sim.stepDistance < 0.2 && sim.stepDistance > -0.04) sim.stepDistance -= 0.01;
-                else sim.stepDistance -= 0.04;
-                if (sim.stepDistance < -0.35) sim.stepDistance = -0.35;
-                return true;
-            }
+            //// U-Turn - MIGRATE TO: SimulatorEvent.DirectionReverse()
+            //if (keyData == Keys.U)
+            //{
+            //    // Original: sim.headingTrue += Math.PI;
+            //    // New: await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(SimulatorEvent.DirectionReverse()));
+            //    // Also invalidate AB lines: ABLine.isABValid = false; curve.isCurveValid = false;
+            //    // Auto U-turn: if (isBtnAutoSteerOn) btnAutoYouTurn.PerformClick();
+            //}
 
-            // stop
-            if (keyData == Keys.OemPeriod)
-            {
-                sim.stepDistance = 0;
-                return true;
-            }
+            //// Speed up - MIGRATE TO: SimulatorEvent.SpeedAdjust(+delta)
+            //if (keyData == Keys.Up)
+            //{
+            //    // Original logic:
+            //    // if (sim.stepDistance < 0.4 && sim.stepDistance > -0.36) sim.stepDistance += 0.01;
+            //    // else sim.stepDistance += 0.04;
+            //    // if (sim.stepDistance > 4) sim.stepDistance = 4;
+            //    //
+            //    // New: Calculate speed increment in km/h (stepDistance ≈ speed/40 metres)
+            //    // Small increments: ~0.4 km/h, Large increments: ~1.6 km/h
+            //    // await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(SimulatorEvent.SpeedAdjust(1.0)));
+            //    return true;
+            //}
 
-            // turn right
-            if (keyData == Keys.Right)
-            {
-                sim.steerAngle += 1.0;
-                if (sim.steerAngle > 40) sim.steerAngle = 40;
-                if (sim.steerAngle < -40) sim.steerAngle = -40;
-                sim.steerAngleScrollBar = sim.steerAngle;
-                btnResetSteerAngle.Text = sim.steerAngle.ToString();
-                hsbarSteerAngle.Value = (int)(10 * sim.steerAngle) + 400;
-                return true;
-            }
+            //// Slow down - MIGRATE TO: SimulatorEvent.SpeedAdjust(-delta)
+            //if (keyData == Keys.Down)
+            //{
+            //    // Original logic:
+            //    // if (sim.stepDistance < 0.2 && sim.stepDistance > -0.04) sim.stepDistance -= 0.01;
+            //    // else sim.stepDistance -= 0.04;
+            //    // if (sim.stepDistance < -0.35) sim.stepDistance = -0.35;
+            //    //
+            //    // New: await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(SimulatorEvent.SpeedAdjust(-1.0)));
+            //    return true;
+            //}
 
-            // turn left
-            if (keyData == Keys.Left)
-            {
-                sim.steerAngle -= 1.0;
-                if (sim.steerAngle > 40) sim.steerAngle = 40;
-                if (sim.steerAngle < -40) sim.steerAngle = -40;
-                sim.steerAngleScrollBar = sim.steerAngle;
-                btnResetSteerAngle.Text = sim.steerAngle.ToString();
-                hsbarSteerAngle.Value = (int)(10 * sim.steerAngle) + 400;
-                return true;
-            }
+            //// Stop - MIGRATE TO: SimulatorEvent.SpeedZero()
+            //if (keyData == Keys.OemPeriod)
+            //{
+            //    // Original: sim.stepDistance = 0;
+            //    // New: await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(SimulatorEvent.SpeedZero()));
+            //    return true;
+            //}
 
-            // zero steering
-            if (keyData == Keys.OemQuestion)
-            {
-                sim.steerAngle = 0.0;
-                sim.steerAngleScrollBar = sim.steerAngle;
-                btnResetSteerAngle.Text = sim.steerAngle.ToString();
-                hsbarSteerAngle.Value = (int)(10 * sim.steerAngle) + 400;
-                return true;
-            }
+            //// Turn right - MIGRATE TO: SimulatorEvent.SetSteering(angle)
+            //if (keyData == Keys.Right)
+            //{
+            //    // Original logic:
+            //    // sim.steerAngle += 1.0;
+            //    // if (sim.steerAngle > 40) sim.steerAngle = 40;
+            //    // if (sim.steerAngle < -40) sim.steerAngle = -40;
+            //    // Update UI: btnResetSteerAngle.Text, hsbarSteerAngle.Value
+            //    //
+            //    // New: Get current steering from state, increment by 1°, send to backend
+            //    // var currentSteering = _cachedState?.Control?.ActualSteeringAngle.Degrees ?? 0;
+            //    // var newSteering = Math.Clamp(currentSteering + 1.0, -40, 40);
+            //    // await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(
+            //    //     SimulatorEvent.SetSteering(new SteeringAngle(newSteering))));
+            //    return true;
+            //}
 
-            if (keyData == Keys.OemOpenBrackets)
-            {
-                sim.stepDistance = 0;
-                sim.isAccelBack = true;
-            }
+            //// Turn left - MIGRATE TO: SimulatorEvent.SetSteering(angle)
+            //if (keyData == Keys.Left)
+            //{
+            //    // Original logic: sim.steerAngle -= 1.0; (see Right key above)
+            //    // New: Similar to Right key but decrement by 1°
+            //    return true;
+            //}
 
-            if (keyData == Keys.OemCloseBrackets)
-            {
-                sim.stepDistance = 0;
-                sim.isAccelForward = true;
-            }
+            //// Zero steering - MIGRATE TO: SimulatorEvent.ResetSteering()
+            //if (keyData == Keys.OemQuestion)
+            //{
+            //    // Original: sim.steerAngle = 0.0;
+            //    // New: await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(SimulatorEvent.ResetSteering()));
+            //    return true;
+            //}
 
-            if (keyData == Keys.OemQuotes)
-            {
-                sim.stepDistance = 0;
-                return true;
-            }
+            //// Accelerate backward - MIGRATE TO: SimulatorEvent.SpeedAdjust(large negative)
+            //if (keyData == Keys.OemOpenBrackets)
+            //{
+            //    // Original: sim.stepDistance = 0; sim.isAccelBack = true;
+            //    // New: await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(SimulatorEvent.SpeedAdjust(-5.0)));
+            //}
 
-            if (keyData == Keys.F6) // toggle fast/normal sim
-            {
-                if (timerSim.Enabled)
-                {
-                    if (timerSim.Interval < 20) timerSim.Interval = 93;
-                    else timerSim.Interval = 15;
-                }
-                return true;
-            }
+            //// Accelerate forward - MIGRATE TO: SimulatorEvent.SpeedAdjust(large positive)
+            //if (keyData == Keys.OemCloseBrackets)
+            //{
+            //    // Original: sim.stepDistance = 0; sim.isAccelForward = true;
+            //    // New: await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(SimulatorEvent.SpeedAdjust(5.0)));
+            //}
+
+            //// Emergency stop - MIGRATE TO: SimulatorEvent.SpeedZero()
+            //if (keyData == Keys.OemQuotes)
+            //{
+            //    // Original: sim.stepDistance = 0;
+            //    // New: Same as OemPeriod key
+            //    return true;
+            //}
+
+            //// Toggle fast/slow simulator - REQUIRES NEW BACKEND COMMAND
+            //if (keyData == Keys.F6)
+            //{
+            //    // Original: Toggle timerSim.Interval between 15ms (fast) and 93ms (normal)
+            //    // Backend runs at fixed 93ms in SimulatorHostedService
+            //    // TODO: Add SimulatorEvent.SetTickRate(milliseconds) if needed
+            //    // Note: Fast mode may cause physics instability, consider if really needed
+            //}
+
+            #endregion
 
             // Fallback: let base handle anything else
             return base.ProcessCmdKey(ref msg, keyData);

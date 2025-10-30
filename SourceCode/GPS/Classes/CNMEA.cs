@@ -7,12 +7,34 @@ using System.Text;
 
 namespace AgOpenGPS
 {
+    /// <summary>
+    /// CNMEA - Legacy GPS data container (partial migration complete)
+    ///
+    /// STATUS: Adapter pattern removed (Workflow 005), but class retained as working variable container
+    ///
+    /// MIGRATION HISTORY:
+    /// - ✅ Workflow 002: Backend now owns GPS processing via GnssService
+    /// - ✅ Workflow 005: UpdateFromBackendState() adapter removed
+    /// - ✅ Position.UpdateFixPosition() now reads directly from _cachedState.Gnss
+    ///
+    /// CURRENT USAGE:
+    /// - fix: Working variable for position calculations (initialized from backend state)
+    /// - speed, altitude, heading fields: Still read throughout codebase (GUI labels, OpenGL rendering)
+    /// - DefineLocalPlane(): Domain logic for coordinate transformation (7+ call sites)
+    /// - AverageTheSpeed(): Speed filtering logic
+    ///
+    /// TODO (Future Workflows):
+    /// - Migrate DefineLocalPlane() to backend CoordinateTransformService
+    /// - Replace pn.altitude/hdop/age reads with _cachedState.Gnss.* reads in UI code
+    /// - Move speed averaging to backend or vehicle state service
+    /// - Eventually delete this class entirely when all domain logic migrated
+    /// </summary>
     public class CNMEA
     {
-        //our current fix
+        //our current fix (working variable, initialized from backend state in UpdateFixPosition)
         public vec2 fix = new vec2(0, 0);
 
-        //other GIS Info
+        //other GIS Info (TODO: Replace reads with _cachedState.Gnss.* throughout codebase)
         public double altitude, speed, vtgSpeed = float.MaxValue;
 
         public double headingTrueDual, headingTrue, hdop, age, headingTrueDualOffset;
@@ -30,35 +52,6 @@ namespace AgOpenGPS
             ageAlarm = Properties.Settings.Default.setGPS_ageAlarm;
         }
 
-        /// <summary>
-        /// Updates legacy CNMEA fields from backend ApplicationState.
-        /// Adapter pattern: translates backend GPS data to legacy field references.
-        /// </summary>
-        public void UpdateFromBackendState(ApplicationState state)
-        {
-            if (state?.Gnss == null)
-            {
-                return;
-            }
-
-            // Map backend GNSS state to legacy fields
-            fix.easting = state.Gnss.LocalPosition.Easting;
-            fix.northing = state.Gnss.LocalPosition.Northing;
-
-            speed = state.Gnss.Speed.KilometersPerHour;
-            vtgSpeed = state.Gnss.Speed.KilometersPerHour;
-
-            altitude = state.Gnss.Altitude.Meters;
-
-            headingTrue = state.Gnss.HeadingSingle.Degrees;
-            headingTrueDual = state.Gnss.HeadingDual.Degrees;
-
-            fixQuality = state.Gnss.Quality.FixQuality;
-            satellitesTracked = state.Gnss.Quality.SatellitesTracked;
-            hdop = state.Gnss.Quality.Hdop;
-            age = state.Gnss.Quality.Age;
-        }
-
         public void AverageTheSpeed()
         {
             //average the speed
@@ -72,7 +65,6 @@ namespace AgOpenGPS
             if (setSim && mf.timerSim.Enabled)
             {
                 mf.AppModel.CurrentLatLon = origin;
-                mf.sim.CurrentLatLon = origin;
 
                 Properties.Settings.Default.setGPS_SimLatitude = mf.AppModel.LocalPlane.Origin.Latitude;
                 Properties.Settings.Default.setGPS_SimLongitude = mf.AppModel.LocalPlane.Origin.Longitude;

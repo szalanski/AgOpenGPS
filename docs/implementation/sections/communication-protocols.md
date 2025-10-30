@@ -64,7 +64,13 @@ FormGPS establishes the connection during startup (`SourceCode/GPS/Forms/FormGPS
 - Subscribes to state updates with `OnStateReceived`.
 - Calls `ConnectAsync` and logs the connection result.
 
-- **Current frontend behaviour** - `OnStateReceived` caches the latest state and updates legacy CNMEA fields; outbound commands are not yet wired in FormGPS (`SourceCode/GPS/Forms/FormGPS.cs:587`). The backend client is ready to send simulator commands once UI handlers call `SendCommandAsync`.
+**State Payload**
+
+- `Gnss` carries the decoded GPS snapshot.
+- `LocalPlane` exposes origin and conversion factors so the frontend can synchronise its coordinate system (`SourceCode/GPS/Forms/FormGPS.cs:605`).
+- `Control` currently reports the simulator steering angle, which the frontend applies to the wheel model (`SourceCode/GPS/Forms/FormGPS.cs:659`).
+
+- **Current frontend behaviour** - `OnStateReceived` caches the latest state, synchronises the plane, updates legacy fields, and triggers geometry recomputation. Simulator controls now dispatch `UpdateSimulatorCommand` instances through `_backendClient.SendCommandAsync` (`SourceCode/GPS/Forms/Controls.Designer.cs:2100`).
 
 **Graceful Disconnection**
 

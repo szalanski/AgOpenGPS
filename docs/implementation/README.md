@@ -9,6 +9,7 @@ When descriptions conflict, defer to the referenced source code - code wins.
   - [System Architecture](sections/system-architecture.md)
   - [GNSS Capabilities](sections/gnss-capabilities.md)
   - [Communication Protocols](sections/communication-protocols.md)
+  - [Coordinate Service](sections/coordinate-service.md)
   - [Frontend Integration Guide](sections/frontend-integration.md)
   - [Operational Workflows](sections/operational-workflows.md)
   - [Simulator Architecture](sections/simulator-architecture.md)

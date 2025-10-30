@@ -24,21 +24,23 @@ The cadence is entirely packet-driven; there is no auxiliary timer. If packets a
 FormGPS consumes backend GPS data through an adapter pattern that preserves compatibility with existing UI code while implementing the Strangler Fig migration strategy.
 
 1. **State reception** - `FormGPS.OnStateReceived` receives `ApplicationState` from SignalR and caches it in `_cachedState` (`SourceCode/GPS/Forms/FormGPS.cs:587`).
-2. **Adapter invocation** - The handler calls `CNMEA.UpdateFromBackendState` to translate backend GPS data into legacy field references (`SourceCode/GPS/Classes/CNMEA.cs:37`).
-3. **Field mapping** - The adapter populates legacy CNMEA fields:
+2. **Local plane handshake** - On the first valid packet, the handler reads `state.LocalPlane.Origin` and calls `pn.DefineLocalPlane` to align the WinForms plane with the backend (`SourceCode/GPS/Forms/FormGPS.cs:605`).
+3. **Adapter invocation** - The handler calls `CNMEA.UpdateFromBackendState` to translate backend GPS data into legacy field references (`SourceCode/GPS/Classes/CNMEA.cs:37`).
+4. **Field mapping** - The adapter populates legacy CNMEA fields:
    - Backend LocalPosition.Easting/Northing maps to fix.easting/northing
    - Backend Speed.KilometersPerHour maps to speed and vtgSpeed
    - Backend Altitude.Meters maps to altitude
    - Backend Heading (single/dual) maps to headingTrue and headingTrueDual
    - Backend Quality metrics map to fixQuality, satellitesTracked, hdop, and age
-4. **UI rendering** - Existing UI code continues to reference `pn` fields. No labels are updated directly inside `OnStateReceived`; the adapter keeps legacy drawing routines fed with backend data.
-5. **Legacy bypass** - `ReceiveFromAgIO` short-circuits legacy UDP processing when `_backendClient.IsConnected` returns `true`, but still supports fallback when the backend is offline (`SourceCode/GPS/Forms/UDPComm.Designer.cs:63`).
+5. **Steering feedback** - If `state.Control` is present, the current steering angle is applied to `mc.actualSteerAngleDegrees` before geometry recalculation (`SourceCode/GPS/Forms/FormGPS.cs:659`).
+6. **Position update** - `UpdateFixPosition()` rebuilds guidance vectors, speed filters, and IMU proxies from `_cachedState` (`SourceCode/GPS/Forms/Position.designer.cs:128`).
+7. **Legacy bypass** - `ReceiveFromAgIO` short-circuits legacy UDP processing when `_backendClient.IsConnected` returns `true`, but still supports fallback when the backend is offline (`SourceCode/GPS/Forms/UDPComm.Designer.cs:63`).
 
 This pattern allows zero breaking changes to existing code while gradually migrating GPS processing to the backend. The adapter serves as a temporary bridge that can be removed once all FormGPS GPS references are refactored to consume ApplicationState directly.
 
 ## Simulator Control Loop
 
-1. **Command availability** - `SignalRBackendClient.SendCommandAsync` supports sending `UpdateSimulatorCommand` instances to the hub (`SourceCode/AgOpenGPS.Api.Client/SignalR/SignalRBackendClient.cs:51`). FormGPS does not yet invoke this API, but future UI work can wire button handlers to these commands.
+1. **Command availability** - `SignalRBackendClient.SendCommandAsync` supports sending `UpdateSimulatorCommand` instances to the hub (`SourceCode/AgOpenGPS.Api.Client/SignalR/SignalRBackendClient.cs:51`), and FormGPS binds simulator panel interactions directly to these commands (`SourceCode/GPS/Forms/Controls.Designer.cs:2100`).
 2. **Hub dispatch** - `StateHub.UpdateSimulator` forwards commands to MediatR (`SourceCode/AgOpenGPS.Api/Hubs/StateHub.cs:54`).
 3. **Service processing** - `UpdateSimulatorCommandHandler` delegates to `SimulatorService.ProcessEvent` to mutate simulator state (`SourceCode/AgOpenGPS.Api/Commands/Handlers/UpdateSimulatorCommandHandler.cs:27`).
 4. **Packet synthesis** - `SimulatorHostedService` ticks every 93 ms, generates PGN 0xD6 packets, and sends them over UDP to reuse the production pipeline (`SourceCode/AgOpenGPS.Api/Services/SimulatorHostedService.cs:26`).
