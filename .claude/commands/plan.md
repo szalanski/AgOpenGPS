@@ -1,121 +1,84 @@
 ---
-description: Build workflow plans through deep context discovery and codebase exploration
+description: Create a new workflow plan in docs/workflow/ that captures only the context and tasks required for implementation
 ---
 
-You are helping create a workflow plan for the AgOpenGPS backend migration by building deep understanding of the problem space.
+You are helping the user create a workflow plan for the AgOpenGPS backend migration. Keep the interaction lean: get enough detail to start, create the plan files immediately, and then refine them together through fast iterations.
 
-# Core Philosophy: Context is Everything
+# Guiding Principles
 
-Don't rush to create structure. First understand:
-- What exists now
-- Why it needs to change
-- What depends on it
-- What constraints exist
-- What patterns are already established
+- Ask only for context that changes implementation (objective, scope, dependencies, constraints, acceptance).
+- Turn new information into written notes immediately so the user can correct or confirm.
+- Create the workflow files as soon as you have a viable objective and initial task outline; leave TODO markers where detail is missing.
+- Make each plan and task file stand on its own: capture the minimum background, scope, and dependencies someone needs without reading the conversation.
+- Stay high-level - no code, no detailed instructions - but make each task actionable.
+- Revisit the plan often. Each new detail should trigger an edit to the existing files instead of waiting for a big batch update.
+- Treat the plan and task files as shared scratchpads - keep them lightweight, current, and implementation-focused.
 
-The plan emerges from understanding, not from templates.
+# Working Loop
 
-# Phase 1: Initial Discovery
+1. **Bootstrapping** - Read `docs/README.md` and skim similar entries in `docs/workflow/` to match tone and structure.
+2. **Quick Objective & Setup** - Confirm the workflow objective, rough scope, and any obvious constraints or dependencies. If the name/number is clear enough, propose it and get light approval.
+3. **Seed the Files Early** - Create the workflow folder and minimal `plan-*.md` (plus task stubs if obvious) using the templates. Capture what you know, include any context needed for standalone reading, and mark unknowns with TODO notes.
+4. **Iterative Refinement** - Whenever new information arrives, update the existing plan/task files immediately: adjust scope, flesh out context and actions, add acceptance checks, prune outdated notes.
+5. **Shared Check-ins** - Periodically summarize the current plan back to the user, verify alignment, and keep refining until both objective and tasks feel implementation-ready.
 
-1. Understand the objective (from user or conversation)
-2. Create minimal initial structure:
-   ```
-   docs/workflow/NNN-name/plan.md
-   ```
-   with just the goal
+# File Creation Workflow
 
-# Phase 2: Deep Exploration (THIS IS THE MOST IMPORTANT PHASE)
+Create `docs/workflow/NNN-workflow-name/` using the next number and a lowercase objective name, then drop `plan-workflow-name.md` (and any task stubs) inside it right away. Treat those files as the live plan, updating them in place as new context arrives and clearing TODOs once resolved.
 
-## Explore the Current Implementation
+# Templates
 
-Use Task tool with Explore agent, Grep, Glob, Read extensively:
-- Find all relevant files
-- Trace data flow through the system
-- Identify all dependencies
-- Understand existing patterns
-- Find similar implementations elsewhere
-- Check for tests that reveal behavior
-- Look for documentation or comments
+Use these scratchpad-style templates. Add or trim bullets to match the context, but keep things high-level and implementation-oriented.
 
-Document discoveries in plan.md AS YOU FIND THEM, not after.
+````markdown
+# {Workflow Title}
 
-## Understand the Problem Space
+## Context
+- Objective: {one sentence}
+- Current state: {phrase}
+- Constraints / dependencies: {bullets for anything that affects execution}
+- Extra notes: {links, reminders, open questions}
 
-Through code exploration, understand:
-- What problem does this solve?
-- How is it currently solved?
-- Where does it fail?
-- What are the constraints?
-- What are the integration points?
-- What will break if we change it?
-- What new capabilities are needed?
+## Task Board
+- [task-one.md](task-one.md): {one-line summary or outcome}
+- {Add more task entries as needed}
 
-## Map Dependencies and Impacts
+## Success Criteria
+- [ ] Criterion 1
+- [ ] Criterion 2
+````
 
-- What reads this data?
-- What writes this data?
-- What assumes this behavior?
-- What will need updates?
-- What can stay the same?
-- Where are the natural boundaries?
+````markdown
+# Task: {Task Title}
 
-## Discover Hidden Complexity
+Objective: {sentence describing the outcome}
 
-Look for:
-- Implicit assumptions in the code
-- Undocumented behaviors
-- Side effects
-- Performance considerations
-- Thread safety issues
-- Platform-specific code
-- External dependencies
+Context:
+- {fact, dependency, or rationale}
+- {add bullets as needed}
 
-# Phase 3: Let Tasks Emerge Naturally
+Plan:
+- {high-level action or experiment}
+- {another action}
+- {optional scratch notes or TODOs}
 
-Tasks aren't predetermined - they emerge from understanding:
+Definition of Done:
+- [ ] Criterion 1
+- [ ] Criterion 2
 
-- Each task addresses a specific discovered need
-- Task boundaries align with natural code boundaries
-- Dependencies are clear from the exploration
-- Testing approach is obvious from the implementation
+Scratchpad:
+- {loose notes, links, follow-ups}
+````
 
-Update plan.md continuously as tasks become clear.
 
-# Phase 4: Validate Through Code
+# Completion Message Template
 
-Before finalizing any task:
-- Verify your understanding with targeted code reads
-- Check that dependencies are correctly mapped
-- Ensure no hidden blockers exist
-- Confirm approach fits existing patterns
+```
+Created workflow NNN-workflow-name with:
+- plan-workflow-name.md
+- {N} task file(s) / 'plan-workflow-name.md only'
 
-# Key Principles
+Location: docs/workflow/NNN-workflow-name/
+Ready for implementation.
+```
 
-1. **Explore First, Structure Later** - Deep understanding before planning
-2. **Context Over Process** - Understanding the code matters more than following steps
-3. **Discovery Over Assumption** - Find out, don't guess
-4. **Continuous Documentation** - Write findings as you discover them
-5. **Tasks Emerge** - Don't force task boundaries, let them reveal themselves
-
-# What NOT to Do
-
-- Don't ask template questions just to fill sections
-- Don't create tasks without understanding the code
-- Don't assume - explore and verify
-- Don't focus on markdown structure over content
-- Don't skip exploration to save time
-
-# The Plan Emerges
-
-A good plan shows:
-- Deep understanding of current implementation
-- Clear mapping of dependencies
-- Natural task boundaries
-- Obvious testing approaches
-- Minimal assumptions
-
-The structure (Current State, Target State, Tasks, etc.) is just a container for this understanding.
-
-# Remember
-
-You're not filling out a form. You're building shared understanding through code exploration. The plan documents what you discovered, not what you assumed.
