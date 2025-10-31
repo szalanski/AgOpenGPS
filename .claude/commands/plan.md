@@ -1,236 +1,121 @@
 ---
-description: Incrementally build a workflow plan in docs/workflow/ through iterative refinement
+description: Build workflow plans through deep context discovery and codebase exploration
 ---
 
-You are helping the user create a new workflow plan for the AgOpenGPS backend migration project using an incremental, iterative approach.
+You are helping create a workflow plan for the AgOpenGPS backend migration by building deep understanding of the problem space.
+
+# Core Philosophy: Context is Everything
 
-# Phase 1: Initial Setup
+Don't rush to create structure. First understand:
+- What exists now
+- Why it needs to change
+- What depends on it
+- What constraints exist
+- What patterns are already established
+
+The plan emerges from understanding, not from templates.
 
-## Step 1: Read Context
-Read `docs/README.md` to understand the documentation structure and patterns.
+# Phase 1: Initial Discovery
 
-## Step 2: Find Next Workflow Number
-Check the `docs/workflow/` directory to find the highest existing workflow number.
+1. Understand the objective (from user or conversation)
+2. Create minimal initial structure:
+   ```
+   docs/workflow/NNN-name/plan.md
+   ```
+   with just the goal
 
-## Step 3: Establish Working Objective
-Ask: "What is the objective of this workflow?" (unless already clear from conversation)
+# Phase 2: Deep Exploration (THIS IS THE MOST IMPORTANT PHASE)
 
-## Step 4: Create Initial Structure
-Once you have the objective:
-1. Propose a workflow name in `lowercase-with-dashes`
-2. Create the folder: `docs/workflow/NNN-workflow-name/`
-3. Create initial `plan-workflow-name.md` with just the Goal section:
+## Explore the Current Implementation
 
-```markdown
-# [Workflow Title]
+Use Task tool with Explore agent, Grep, Glob, Read extensively:
+- Find all relevant files
+- Trace data flow through the system
+- Identify all dependencies
+- Understand existing patterns
+- Find similar implementations elsewhere
+- Check for tests that reveal behavior
+- Look for documentation or comments
 
-## Goal
+Document discoveries in plan.md AS YOU FIND THEM, not after.
 
-[1-2 sentence goal based on initial objective]
+## Understand the Problem Space
 
----
-*Plan under development - sections will be added incrementally*
-```
+Through code exploration, understand:
+- What problem does this solve?
+- How is it currently solved?
+- Where does it fail?
+- What are the constraints?
+- What are the integration points?
+- What will break if we change it?
+- What new capabilities are needed?
 
-Tell the user: "Created initial workflow structure at `docs/workflow/NNN-workflow-name/`. Let's build the plan incrementally."
+## Map Dependencies and Impacts
 
-# Phase 2: Incremental Plan Building
+- What reads this data?
+- What writes this data?
+- What assumes this behavior?
+- What will need updates?
+- What can stay the same?
+- Where are the natural boundaries?
 
-Work through each section one at a time, updating the plan.md file as you go:
+## Discover Hidden Complexity
 
-## Step 5: Current State
-Ask: "What's the current state of the system/feature we're changing?"
-Update plan.md to add:
-```markdown
-## Current State
+Look for:
+- Implicit assumptions in the code
+- Undocumented behaviors
+- Side effects
+- Performance considerations
+- Thread safety issues
+- Platform-specific code
+- External dependencies
 
-[Brief description of current state]
-```
+# Phase 3: Let Tasks Emerge Naturally
 
-## Step 6: Target State
-Ask: "What should the system look like after this workflow?"
-Update plan.md to add:
-```markdown
-## Target State
+Tasks aren't predetermined - they emerge from understanding:
 
-[Brief description of target state]
-```
+- Each task addresses a specific discovered need
+- Task boundaries align with natural code boundaries
+- Dependencies are clear from the exploration
+- Testing approach is obvious from the implementation
 
-## Step 7: Benefits
-Ask: "What are the key benefits or reasons for this change?"
-Update plan.md to add:
-```markdown
-## Why
+Update plan.md continuously as tasks become clear.
 
-- Benefit 1
-- Benefit 2
-- Benefit 3
-```
+# Phase 4: Validate Through Code
 
-## Step 8: Non-Goals
-Ask: "What's explicitly OUT of scope for this workflow?"
-Update plan.md to add:
-```markdown
-## What This Is NOT
+Before finalizing any task:
+- Verify your understanding with targeted code reads
+- Check that dependencies are correctly mapped
+- Ensure no hidden blockers exist
+- Confirm approach fits existing patterns
 
-- Anti-goal 1
-- Anti-goal 2
-- Anti-goal 3
-```
+# Key Principles
 
-## Step 9: Migration Path (if applicable)
-If this involves migration, ask: "Will this be done all at once or in phases?"
-If phases exist, update plan.md to add:
-```markdown
-## Migration Path
+1. **Explore First, Structure Later** - Deep understanding before planning
+2. **Context Over Process** - Understanding the code matters more than following steps
+3. **Discovery Over Assumption** - Find out, don't guess
+4. **Continuous Documentation** - Write findings as you discover them
+5. **Tasks Emerge** - Don't force task boundaries, let them reveal themselves
 
-[Description of phases/steps]
-```
+# What NOT to Do
 
-## Step 10: Task Discovery
-Ask: "Let's identify the implementation tasks. What major pieces of work do you see?"
+- Don't ask template questions just to fill sections
+- Don't create tasks without understanding the code
+- Don't assume - explore and verify
+- Don't focus on markdown structure over content
+- Don't skip exploration to save time
 
-As the user describes tasks, incrementally update plan.md:
-```markdown
-## Tasks
+# The Plan Emerges
 
-1. [task-name] - Brief description (details TBD)
-2. [another-task] - Brief description (details TBD)
-```
+A good plan shows:
+- Deep understanding of current implementation
+- Clear mapping of dependencies
+- Natural task boundaries
+- Obvious testing approaches
+- Minimal assumptions
 
-Keep adding tasks as they emerge from discussion. Don't worry about perfect names or descriptions yet.
+The structure (Current State, Target State, Tasks, etc.) is just a container for this understanding.
 
-## Step 11: Task Refinement
-For each task identified, ask ONE AT A TIME:
-- "For [task-name], what's the main goal?"
-- "What are the key steps?" (3-7 bullets, high-level)
-- "How would we verify it's working?"
+# Remember
 
-Update the task entry in plan.md with a better name and description as you learn more.
-
-## Step 12: Success Criteria
-Ask: "How will we know the entire workflow is successful? What should be working?"
-Update plan.md to add:
-```markdown
-## Success Criteria
-
-- [ ] Criterion 1
-- [ ] Criterion 2
-- [ ] Criterion 3
-```
-
-# Phase 3: Task File Creation
-
-## Step 13: Create Task Files
-Only after the plan.md is complete and refined:
-
-Ask: "The plan looks good. Should I create the individual task files now?"
-
-If yes, for each task in the plan:
-1. Create `taskN-name.md` using the information gathered
-2. Update plan.md to link to the task file
-
-**Task file structure**:
-```markdown
-# Task N: [Task Title]
-
-## Goal
-
-[1 sentence goal from refinement phase]
-
-## Steps
-
-1. Step 1 (high-level, NO CODE)
-2. Step 2
-3. Step 3
-...
-
-## Key Points
-
-- Important note 1
-- Important note 2
-
-## Acceptance
-
-- [ ] Criterion 1
-- [ ] Criterion 2
-- [ ] Criterion 3
-```
-
-## Step 14: Finalize Plan
-Remove the "Plan under development" note and ensure all task links work.
-
-Final plan.md structure:
-```markdown
-# [Workflow Title]
-
-## Goal
-[1-2 sentence goal]
-
-## Current State
-[Brief description of current state]
-
-## Target State
-[Brief description of target state]
-
-## Why
-- Benefit 1
-- Benefit 2
-- Benefit 3
-
-## What This Is NOT
-- Anti-goal 1
-- Anti-goal 2
-- Anti-goal 3
-
-## Migration Path (if applicable)
-[Optional: phases/steps if this is gradual migration]
-
-## Tasks
-1. [task1-name.md](task1-name.md) - Short description
-2. [task2-name.md](task2-name.md) - Short description
-...
-
-## Success Criteria
-- [ ] Criterion 1
-- [ ] Criterion 2
-- [ ] Criterion 3
-```
-
-# CRITICAL RULES
-
-- **NEVER write code in markdown files**
-- **NO code snippets, examples, or implementations**
-- **NO detailed "how to" - only high-level "what to do"**
-- Build the plan incrementally - don't try to gather everything upfront
-- Update plan.md as you go, allowing user to see progress
-- Only create task files after the plan is solid
-- Tell WHAT to do, not HOW
-- Keep guidance short and actionable
-
-# Key Benefits of Incremental Approach
-
-1. **Visibility**: User sees the plan evolving in real-time
-2. **Flexibility**: Easy to adjust direction as understanding deepens
-3. **Less Overwhelming**: One section at a time vs. all questions upfront
-4. **Natural Discovery**: Tasks emerge organically from discussion
-5. **Iterative Refinement**: Can revisit and improve sections as needed
-
-# Confirm Completion
-
-After all files are created:
-
-"Workflow NNN-workflow-name complete:
-- plan-workflow-name.md (built incrementally)
-- N task files
-
-Location: docs/workflow/NNN-workflow-name/
-
-The plan was built iteratively and is ready for implementation."
-
-# Example Reference
-
-Look at existing workflows in `docs/workflow/` for patterns, but remember:
-- Build incrementally, not all at once
-- Create structure early, fill in details as you go
-- Let the conversation guide the plan development
+You're not filling out a form. You're building shared understanding through code exploration. The plan documents what you discovered, not what you assumed.
