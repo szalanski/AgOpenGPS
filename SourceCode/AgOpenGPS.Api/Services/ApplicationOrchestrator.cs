@@ -37,11 +37,10 @@ public class ApplicationOrchestrator : BackgroundService
     {
         _logger.LogInformation("ApplicationOrchestrator starting - GPS-driven UDP mode");
 
-        // TODO: Initialize local plane (will be configurable in future)
-        // For now, using placeholder coordinates for testing
-        var origin = new Wgs84Position(45.0, -93.0);
-        _gnssService.InitializeLocalPlane(origin);
-        _coordinateService.InitializeLocalPlane(origin);
+        // Local plane initialization happens in two scenarios:
+        // 1. Simulator mode: SimulatorService.ProcessEvent(Start) initializes on simulator start
+        // 2. Real GPS mode: GnssService.ProcessGpsPacket() initializes on first valid GPS fix
+        // This ensures coordinate transformations use actual GPS position, not placeholder
 
         // Main loop: Consume UDP packets and broadcast GPS state
         await foreach (var packet in _udpReceiver.GetPacketsAsync(stoppingToken))

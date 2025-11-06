@@ -1,3 +1,4 @@
+using AgOpenGPS.Api.Abstractions;
 using AgOpenGPS.Api.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -20,30 +21,30 @@ namespace AgOpenGPS.Api.Services
         private readonly ILogger<SimulatorHostedService> _logger;
         private readonly UdpClient _udpClient;
         private readonly int _udpPort;
+        private readonly ISimulatorTimer _timer;
 
         public SimulatorHostedService(
             SimulatorService simulator,
             IOptions<UdpOptions> udpOptions,
-            ILogger<SimulatorHostedService> logger)
+            ILogger<SimulatorHostedService> logger,
+            ISimulatorTimer timer)
         {
             _simulator = simulator;
             _logger = logger;
             _udpPort = udpOptions.Value.ListenPort;
             _udpClient = new UdpClient();
+            _timer = timer;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             _logger.LogInformation("SimulatorHostedService starting - will send UDP packets to localhost:{Port}", _udpPort);
 
-            // Use PeriodicTimer (available in .NET 6+)
-            using var timer = new PeriodicTimer(TimeSpan.FromMilliseconds(93)); // Match FormGPS timerSim
-
             while (!stoppingToken.IsCancellationRequested)
             {
                 try
                 {
-                    await timer.WaitForNextTickAsync(stoppingToken);
+                    await _timer.WaitForNextTickAsync(stoppingToken);
 
                     // Get simulated GPS packet
                     var packet = _simulator.Tick();

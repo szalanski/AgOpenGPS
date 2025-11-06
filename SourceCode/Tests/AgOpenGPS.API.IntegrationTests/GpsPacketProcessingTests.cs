@@ -1,79 +1,67 @@
 using AgOpenGPS.Api.Client.Models;
 using AgOpenGPS.Api.Client.SignalR;
 using AgOpenGPS.API.IntegrationTests.Common;
-using AgOpenGPS.API.IntegrationTests.Helpers;
 using FluentAssertions;
+using Microsoft.AspNetCore.SignalR.Client;
+using System.Collections.Concurrent;
 
 namespace AgOpenGPS.API.IntegrationTests;
 
 /// <summary>
 /// Integration tests for GPS packet processing end-to-end using GPS simulator.
-/// Tests: GPS Simulator → UDP (port 15556) → Backend → SignalR → Verification
+/// Tests: GPS Simulator → UDP (hardcoded port 15556) → Backend → SignalR → Verification
 /// Based on FormGPS CSim simulation logic.
-/// Note: Backend uses port 15556, FormGPS uses port 15555 (no conflict).
+/// Each test fixture gets isolated UDP port (unique per fixture).
 /// </summary>
 [TestFixture]
 public class GpsPacketProcessingTests : BaseIntegrationTest
 {
-    private GpsSimulator? _simulator;
+    protected override int TestFixturePort => 15556;
+    private HubConnection? _hubConnection;
+    private SignalRBackendClient? _subscriber;
+    private ConcurrentQueue<ApplicationState>? _receivedStates;
 
     /// <summary>
-    /// Start GPS simulator before each test.
-    /// Simulator sends PGN 0xD6 packets at 10 Hz to port 15556.
+    /// Start GPS simulator and SignalR subscriber before each test.
+    /// Simulator sends PGN 0xD6 packets at 10 Hz to fixture's UDP port.
     /// </summary>
     [SetUp]
-    public void StartSimulator()
+    public async Task StartSimulator()
     {
-        _simulator = new GpsSimulator(
-            startLatitude: 45.0,
-            startLongitude: -93.0,
-            headingDegrees: 0.0, // North
-            speedKmh: 10.0,
-            updateIntervalMs: 100 // 10 Hz
-        );
-        _simulator.Start();
+        // Setup SignalR connection for event-driven testing
+        _hubConnection = CreateTestHubConnection("/statehub");
+        _subscriber = new SignalRBackendClient(_hubConnection);
+        _receivedStates = new ConcurrentQueue<ApplicationState>();
+
+        _subscriber.SubscribeToState(state => _receivedStates.Enqueue(state));
+        await _subscriber.ConnectAsync();
     }
 
     /// <summary>
-    /// Stop GPS simulator after each test.
+    /// Stop GPS simulator and SignalR subscriber after each test.
     /// </summary>
     [TearDown]
-    public void StopSimulator()
+    public async Task StopSimulator()
     {
-        _simulator?.Dispose();
-    }
-
-    /// <summary>
-    /// Helper to receive SignalR states for a duration.
-    /// </summary>
-    private async Task<List<ApplicationState>> ReceiveStatesAsync(int durationMs = 2000)
-    {
-        var hubConnection = CreateTestHubConnection("/statehub");
-        var subscriber = new SignalRBackendClient(hubConnection);
-        var receivedStates = new List<ApplicationState>();
-
-        subscriber.SubscribeToState(state => receivedStates.Add(state));
-        await subscriber.ConnectAsync();
-
-        await Task.Delay(durationMs);
-
-        await subscriber.DisposeAsync();
-        await hubConnection.DisposeAsync();
-
-        return receivedStates;
+        if (_subscriber != null)
+            await _subscriber.DisposeAsync();
+        if (_hubConnection != null)
+            await _hubConnection.DisposeAsync();
     }
 
     [Test]
     public async Task GpsSimulator_ShouldSendDataToBackend_ViaSignalR()
     {
-        // Act - Wait for simulator to send packets
-        var receivedStates = await ReceiveStatesAsync(durationMs: 2000);
+        // Act - Wait for GPS states via polling
+        Assert.That(() => _receivedStates!.Count(s => s.Gnss != null),
+            Is.GreaterThanOrEqualTo(15)
+            .After(2000).MilliSeconds.PollEvery(50).MilliSeconds);
 
         // Assert
-        receivedStates.Should().NotBeEmpty("should receive state updates from backend");
+        _receivedStates!.Should().NotBeEmpty("should receive state updates from backend");
 
-        var gpsStates = receivedStates.Where(s => s.Gnss != null).ToList();
-        gpsStates.Should().HaveCountGreaterThan(10,
+        var gpsStates = _receivedStates.Where(s => s.Gnss != null).ToList();
+        gpsStates.Should().HaveCountGreaterThanOrEqualTo(15,
             "should receive multiple GPS updates from simulator (10 Hz for 2 seconds)");
 
         // Verify GPS data is present and valid
@@ -93,11 +81,13 @@ public class GpsPacketProcessingTests : BaseIntegrationTest
     [Test]
     public async Task GpsSimulator_ShouldUnpackBinaryDataCorrectly()
     {
-        // Act
-        var receivedStates = await ReceiveStatesAsync(durationMs: 1500);
+        // Act - Wait for GPS state via polling
+        Assert.That(() => _receivedStates!.Any(s => s.Gnss != null),
+            Is.True
+            .After(1500).MilliSeconds.PollEvery(50).MilliSeconds);
 
         // Assert
-        var gpsState = receivedStates.FirstOrDefault(s => s.Gnss != null)?.Gnss;
+        var gpsState = _receivedStates!.FirstOrDefault(s => s.Gnss != null)?.Gnss;
         gpsState.Should().NotBeNull("GPS state should be broadcast");
 
         // Verify binary unpacking preserves precision
@@ -116,16 +106,18 @@ public class GpsPacketProcessingTests : BaseIntegrationTest
     [Test]
     public async Task GpsSimulator_ShouldTransformCoordinatesToLocalPlane()
     {
-        // Act
-        var receivedStates = await ReceiveStatesAsync(durationMs: 1500);
+        // Act - Wait for GPS state via polling
+        Assert.That(() => _receivedStates!.Any(s => s.Gnss != null),
+            Is.True
+            .After(1500).MilliSeconds.PollEvery(50).MilliSeconds);
 
         // Assert
-        var gpsState = receivedStates.FirstOrDefault(s => s.Gnss != null)?.Gnss;
+        var gpsState = _receivedStates!.FirstOrDefault(s => s.Gnss != null)?.Gnss;
         gpsState.Should().NotBeNull();
 
         // Verify local plane transformation happened
         // Backend initializes local plane at (45.0, -93.0), so first position should be near origin
-        var firstGps = receivedStates.Where(s => s.Gnss != null).First().Gnss!;
+        var firstGps = _receivedStates.Where(s => s.Gnss != null).First().Gnss!;
         firstGps.LocalPosition.Easting.Should().BeInRange(-100.0, 100.0,
             "easting should be near zero at start (within 100m)");
         firstGps.LocalPosition.Northing.Should().BeInRange(-100.0, 100.0,
@@ -138,11 +130,13 @@ public class GpsPacketProcessingTests : BaseIntegrationTest
     [Test]
     public async Task GpsSimulator_ShouldPopulateAllFields()
     {
-        // Act
-        var receivedStates = await ReceiveStatesAsync(durationMs: 1500);
+        // Act - Wait for GPS state via polling
+        Assert.That(() => _receivedStates!.Any(s => s.Gnss != null),
+            Is.True
+            .After(1500).MilliSeconds.PollEvery(50).MilliSeconds);
 
         // Assert
-        var gpsState = receivedStates.FirstOrDefault(s => s.Gnss != null)?.Gnss;
+        var gpsState = _receivedStates!.FirstOrDefault(s => s.Gnss != null)?.Gnss;
         gpsState.Should().NotBeNull();
 
         // Verify all fields from simulator are populated
@@ -167,12 +161,14 @@ public class GpsPacketProcessingTests : BaseIntegrationTest
     [Test]
     public async Task GpsSimulator_ShouldCalculateFrequencyFromPacketRate()
     {
-        // Act - Run simulator for 2 seconds at 10 Hz
-        var receivedStates = await ReceiveStatesAsync(durationMs: 2000);
+        // Act - Wait for multiple GPS states via polling
+        Assert.That(() => _receivedStates!.Count(s => s.Gnss != null),
+            Is.GreaterThanOrEqualTo(15)
+            .After(2000).MilliSeconds.PollEvery(50).MilliSeconds);
 
         // Assert
-        var gpsStates = receivedStates.Where(s => s.Gnss != null).Select(s => s.Gnss!).ToList();
-        gpsStates.Should().HaveCountGreaterThan(5, "multiple GPS states should be received");
+        var gpsStates = _receivedStates!.Where(s => s.Gnss != null).Select(s => s.Gnss!).ToList();
+        gpsStates.Should().HaveCountGreaterThanOrEqualTo(15, "multiple GPS states should be received");
 
         // Check GPS frequency calculation (complementary filter converges over time)
         var lastGpsState = gpsStates.Last();
@@ -186,11 +182,13 @@ public class GpsPacketProcessingTests : BaseIntegrationTest
     [Test]
     public async Task GpsSimulator_ShouldResetSentenceCounter()
     {
-        // Act
-        var receivedStates = await ReceiveStatesAsync(durationMs: 1000);
+        // Act - Wait for GPS state via polling
+        Assert.That(() => _receivedStates!.Any(s => s.Gnss != null),
+            Is.True
+            .After(1000).MilliSeconds.PollEvery(50).MilliSeconds);
 
         // Assert
-        var gpsState = receivedStates.FirstOrDefault(s => s.Gnss != null)?.Gnss;
+        var gpsState = _receivedStates!.FirstOrDefault(s => s.Gnss != null)?.Gnss;
         gpsState.Should().NotBeNull();
 
         // Sentence counter should be reset to 0 on each packet
@@ -201,12 +199,14 @@ public class GpsPacketProcessingTests : BaseIntegrationTest
     [Test]
     public async Task GpsSimulator_ShouldShowVehicleMovement()
     {
-        // Act - Run simulator longer to see movement
-        var receivedStates = await ReceiveStatesAsync(durationMs: 3000);
+        // Act - Wait for many GPS states via polling
+        Assert.That(() => _receivedStates!.Count(s => s.Gnss != null),
+            Is.GreaterThanOrEqualTo(25)
+            .After(3000).MilliSeconds.PollEvery(50).MilliSeconds);
 
         // Assert
-        var gpsStates = receivedStates.Where(s => s.Gnss != null).Select(s => s.Gnss!).ToList();
-        gpsStates.Should().HaveCountGreaterThan(20, "should receive many GPS updates");
+        var gpsStates = _receivedStates!.Where(s => s.Gnss != null).Select(s => s.Gnss!).ToList();
+        gpsStates.Should().HaveCountGreaterThanOrEqualTo(25, "should receive many GPS updates");
 
         // Get first and last positions
         var firstGps = gpsStates.First();
