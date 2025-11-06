@@ -22,11 +22,4 @@ public interface IGnssService
     /// </summary>
     /// <returns>Current GPS state, or null if no valid GPS data received yet</returns>
     GnssState? GetCurrentState();
-
-    /// <summary>
-    /// Initialize the local coordinate plane with field origin.
-    /// Must be called before ProcessGpsPacket to enable coordinate transformations.
-    /// </summary>
-    /// <param name="origin">WGS84 coordinates of field origin (local plane center)</param>
-    void InitializeLocalPlane(Wgs84Position origin);
 }
