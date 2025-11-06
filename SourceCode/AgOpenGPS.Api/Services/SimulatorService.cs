@@ -1,80 +1,56 @@
 using System;
+using AgOpenGPS.Api.Abstractions;
 using AgOpenGPS.Api.Client.Models;
+using AgOpenGPS.Api.Domain.Simulator;
 using Microsoft.Extensions.Logging;
 
 namespace AgOpenGPS.Api.Services
 {
     /// <summary>
-    /// GPS simulator service. Generates simulated GPS data for testing.
-    /// Based on FormGPS CSim.DoSimTick() logic.
+    /// Application service orchestrating the simulator aggregate and related infrastructure components.
     /// </summary>
     public class SimulatorService
     {
-        private const double RAD_TO_DEG = 180.0 / Math.PI;
+        private static readonly TimeSpan TickInterval = TimeSpan.FromMilliseconds(93);
+        private readonly object _lock = new();
 
-        // Thread synchronization
-        private readonly object _lock = new object();
-
-        // Injected services
         private readonly ILogger<SimulatorService> _logger;
-        private readonly VehiclePhysicsService _physics;
+        private readonly ICoordinateService _coordinateService;
+        private readonly VehiclePhysicsDomainService _physics;
         private readonly GnssDataGenerator _gnssGenerator;
         private readonly AgIoProtocolSerializer _serializer;
+        private readonly SimulatorAggregate _aggregate;
 
-        // Simulator state (value objects)
-        private Wgs84Position _currentPosition;
-        private Wgs84Position _initialPosition;  // For Reset() - legacy behavior
-        private Heading _currentHeading;
-        private Speed _currentSpeed;
-        private Speed _targetSpeed;             // For smooth speed transitions
-        private SteeringAngle _targetSteering;
-        private SteeringAngle _smoothedSteering;
-        private double _stepDistance;           // Calculated per tick (intermediate value)
+        public bool IsEnabled => _aggregate.IsEnabled;
 
-        // Smooth speed transition rates
-        private const double ACCELERATION_RATE = 0.86;  // km/h per tick (matches legacy)
-        private const double DECELERATION_RATE = 0.43;  // km/h per tick (matches legacy)
-
-        public bool IsEnabled { get; private set; }
+        public SteeringAngle GetCurrentSteering() => _aggregate.SmoothedSteering;
 
         public SimulatorService(
             ILogger<SimulatorService> logger,
-            VehiclePhysicsService physics,
+            ICoordinateService coordinateService,
+            VehiclePhysicsDomainService physics,
             GnssDataGenerator gnssGenerator,
             AgIoProtocolSerializer serializer)
         {
             _logger = logger;
+            _coordinateService = coordinateService;
             _physics = physics;
             _gnssGenerator = gnssGenerator;
             _serializer = serializer;
-
-            IsEnabled = false;
-            _currentPosition = new Wgs84Position(45.0, -93.0);
-            _initialPosition = new Wgs84Position(45.0, -93.0);
-            _currentHeading = new Heading(0.0);
-            _currentSpeed = new Speed(10.0);
-            _targetSpeed = new Speed(10.0);
-            _targetSteering = SteeringAngle.Zero;
-            _smoothedSteering = SteeringAngle.Zero;
-            _stepDistance = 0.0;
+            _aggregate = new SimulatorAggregate();
         }
 
-        public void Start(double lat, double lon, double headingDeg, double speedKmh)
+        public void Start(Wgs84Position position, Heading heading, Speed speed)
         {
             lock (_lock)
             {
-                _currentPosition = new Wgs84Position(lat, lon);
-                _initialPosition = new Wgs84Position(lat, lon);  // Save for Reset() - legacy behavior
-                _currentHeading = new Heading(headingDeg);
-                _currentSpeed = new Speed(speedKmh);
-                _targetSpeed = new Speed(speedKmh);
-                _targetSteering = SteeringAngle.Zero;
-                _smoothedSteering = SteeringAngle.Zero;
-                _stepDistance = 0.0;
-                IsEnabled = true;
-
-                _logger.LogInformation("Simulator STARTED: Position=({Lat:F6}, {Lon:F6}), Heading={Heading:F1}°, Speed={Speed:F1} km/h",
-                    lat, lon, headingDeg, speedKmh);
+                _aggregate.Start(position, heading, speed);
+                _logger.LogInformation(
+                    "Simulator STARTED: Position=({Lat:F6}, {Lon:F6}), Heading={Heading:F1} deg, Speed={Speed:F1} km/h",
+                    _aggregate.CurrentPosition.Latitude,
+                    _aggregate.CurrentPosition.Longitude,
+                    _aggregate.CurrentHeading.Degrees,
+                    _aggregate.CurrentSpeed.KilometersPerHour);
             }
         }
 
@@ -82,44 +58,37 @@ namespace AgOpenGPS.Api.Services
         {
             lock (_lock)
             {
-                IsEnabled = false;
+                _aggregate.Stop();
                 _logger.LogInformation("Simulator STOPPED");
             }
         }
 
-        public void SetSpeed(double speedKmh, bool smooth = false)
+        public void SetSpeed(Speed speed, bool smooth = false)
         {
             lock (_lock)
             {
-                double clampedSpeed = Math.Clamp(speedKmh, -21.0, 322.0);
-                var speed = new Speed(clampedSpeed);
-
                 if (smooth)
                 {
-                    // Set target for gradual transition
-                    _targetSpeed = speed;
-                    _logger.LogDebug("Speed set (smooth): Target={Target:F1} km/h (current={Current:F1} km/h)",
-                        clampedSpeed, _currentSpeed.KilometersPerHour);
+                    _aggregate.SetTargetSpeed(speed);
+                    _logger.LogDebug(
+                        "Speed set (smooth): Target={Target:F1} km/h (current={Current:F1} km/h)",
+                        _aggregate.TargetSpeed.KilometersPerHour,
+                        _aggregate.CurrentSpeed.KilometersPerHour);
                 }
                 else
                 {
-                    // Instant change
-                    _currentSpeed = speed;
-                    _targetSpeed = speed;
-                    _logger.LogDebug("Speed set (instant): {Speed:F1} km/h", clampedSpeed);
+                    _aggregate.SetInstantSpeed(speed);
+                    _logger.LogDebug("Speed set (instant): {Speed:F1} km/h", _aggregate.CurrentSpeed.KilometersPerHour);
                 }
             }
         }
 
-        public void AdjustSpeed(double delta)
+        public void AdjustSpeed(double deltaKph)
         {
             lock (_lock)
             {
-                double oldSpeed = _targetSpeed.KilometersPerHour;
-                double newSpeed = Math.Clamp(oldSpeed + delta, -21.0, 322.0);
-                _targetSpeed = new Speed(newSpeed);
-
-                _logger.LogDebug("Speed adjusted:{NewSpeed:F1} km/h)", newSpeed);
+                _aggregate.AdjustTargetSpeed(deltaKph);
+                _logger.LogDebug("Speed adjusted: {NewSpeed:F1} km/h", _aggregate.TargetSpeed.KilometersPerHour);
             }
         }
 
@@ -127,18 +96,17 @@ namespace AgOpenGPS.Api.Services
         {
             lock (_lock)
             {
-                _currentSpeed = new Speed(0.0);
-                _targetSpeed = new Speed(0.0);
+                _aggregate.ZeroSpeed();
                 _logger.LogDebug("Speed set to ZERO");
             }
         }
 
-        public void SetSteering(double steerAngle)
+        public void SetSteering(SteeringAngle steeringAngle)
         {
             lock (_lock)
             {
-                _targetSteering = new SteeringAngle(steerAngle);
-                _logger.LogDebug("Steering set: {Angle:F1}°", _targetSteering.Degrees);
+                _aggregate.SetTargetSteering(steeringAngle);
+                _logger.LogDebug("Steering set: {Angle:F1} deg", _aggregate.TargetSteering.Degrees);
             }
         }
 
@@ -146,9 +114,8 @@ namespace AgOpenGPS.Api.Services
         {
             lock (_lock)
             {
-                _targetSteering = SteeringAngle.Zero;
-                _smoothedSteering = SteeringAngle.Zero;
-                _logger.LogDebug("Steering RESET to 0°");
+                _aggregate.ResetSteering();
+                _logger.LogDebug("Steering RESET to 0 deg");
             }
         }
 
@@ -156,43 +123,31 @@ namespace AgOpenGPS.Api.Services
         {
             lock (_lock)
             {
-                double oldHeading = _currentHeading.Degrees;
-                double newHeadingDeg = oldHeading + 180.0;
-                if (newHeadingDeg >= 360.0) newHeadingDeg -= 360.0;
-                _currentHeading = new Heading(newHeadingDeg);
-
-                _logger.LogDebug("Direction REVERSED: NewHeading:F1}°", newHeadingDeg);
+                _aggregate.ReverseDirection();
+                _logger.LogDebug("Direction REVERSED: {Heading:F1} deg", _aggregate.CurrentHeading.Degrees);
             }
         }
 
-        public void ResetPosition(double lat, double lon)
+        public void ResetPosition(Wgs84Position position)
         {
             lock (_lock)
             {
-                _currentPosition = new Wgs84Position(lat, lon);
+                _aggregate.ResetPosition(position);
             }
         }
 
-        /// <summary>
-        /// Reset simulator to initial start position (legacy FormGPS behavior).
-        /// Does NOT clear speed, steering, or stop simulator - only resets position.
-        /// Matches: btnResetSim_Click in FormGPS (Controls.Designer.cs:2157)
-        /// </summary>
         public void Reset()
         {
             lock (_lock)
             {
-                _currentPosition = _initialPosition;
-                // Legacy behavior: Does NOT clear speed, steering, or disable simulator
-
-                _logger.LogDebug("Position RESET to initial: ({Lat:F6}, {Lon:F6})",
-                    _initialPosition.Latitude, _initialPosition.Longitude);
+                _aggregate.ResetToInitialPosition();
+                _logger.LogDebug(
+                    "Position RESET to initial: ({Lat:F6}, {Lon:F6})",
+                    _aggregate.InitialPosition.Latitude,
+                    _aggregate.InitialPosition.Longitude);
             }
         }
 
-        /// <summary>
-        /// Process a simulator event. Unified entry point for all simulator commands.
-        /// </summary>
         public void ProcessEvent(AgOpenGPS.Api.Client.Commands.SimulatorEvent evt)
         {
             _logger.LogInformation("SimulatorEvent received: {EventType}", evt.Type);
@@ -202,11 +157,26 @@ namespace AgOpenGPS.Api.Services
                 case AgOpenGPS.Api.Client.Commands.SimulatorEventType.Start:
                     if (evt.StartData != null)
                     {
-                        Start(
-                            lat: evt.StartData.Position.Latitude,
-                            lon: evt.StartData.Position.Longitude,
-                            headingDeg: evt.StartData.Heading.Degrees,
-                            speedKmh: evt.StartData.Speed.KilometersPerHour);
+                        var effectiveOrigin = evt.StartData.GetEffectiveOrigin();
+                        _coordinateService.InitializeLocalPlane(effectiveOrigin);
+
+                        bool isExplicitOrigin = evt.StartData.LocalPlaneOrigin.HasValue;
+                        if (isExplicitOrigin)
+                        {
+                            _logger.LogInformation(
+                                "Local plane initialized with explicit origin: ({Lat:F6}, {Lon:F6})",
+                                effectiveOrigin.Latitude,
+                                effectiveOrigin.Longitude);
+                        }
+                        else
+                        {
+                            _logger.LogInformation(
+                                "Local plane initialized with default origin (start position): ({Lat:F6}, {Lon:F6})",
+                                effectiveOrigin.Latitude,
+                                effectiveOrigin.Longitude);
+                        }
+
+                        Start(evt.StartData.Position, evt.StartData.Heading, evt.StartData.Speed);
                     }
                     break;
 
@@ -224,14 +194,14 @@ namespace AgOpenGPS.Api.Services
                 case AgOpenGPS.Api.Client.Commands.SimulatorEventType.SpeedSet:
                     if (evt.SpeedValue.HasValue)
                     {
-                        SetSpeed(evt.SpeedValue.Value.KilometersPerHour, smooth: false);
+                        SetSpeed(evt.SpeedValue.Value, smooth: false);
                     }
                     break;
 
                 case AgOpenGPS.Api.Client.Commands.SimulatorEventType.SpeedSetSmooth:
                     if (evt.SpeedValue.HasValue)
                     {
-                        SetSpeed(evt.SpeedValue.Value.KilometersPerHour, smooth: true);
+                        SetSpeed(evt.SpeedValue.Value, smooth: true);
                     }
                     break;
 
@@ -242,7 +212,7 @@ namespace AgOpenGPS.Api.Services
                 case AgOpenGPS.Api.Client.Commands.SimulatorEventType.SteeringSet:
                     if (evt.SteeringValue != null)
                     {
-                        SetSteering(evt.SteeringValue.Degrees);
+                        SetSteering(evt.SteeringValue);
                     }
                     break;
 
@@ -257,7 +227,7 @@ namespace AgOpenGPS.Api.Services
                 case AgOpenGPS.Api.Client.Commands.SimulatorEventType.PositionReset:
                     if (evt.StartData != null)
                     {
-                        ResetPosition(evt.StartData.Position.Latitude, evt.StartData.Position.Longitude);
+                        ResetPosition(evt.StartData.Position);
                     }
                     break;
 
@@ -269,61 +239,28 @@ namespace AgOpenGPS.Api.Services
 
         /// <summary>
         /// Simulation tick - updates position and generates GPS packet.
-        /// Called by SimulatorHostedService timer (93ms).
-        /// Returns PGN 0xD6 binary packet, or null if simulator disabled.
         /// </summary>
         public byte[]? Tick()
         {
             lock (_lock)
             {
-                if (!IsEnabled)
+                if (!_aggregate.IsEnabled)
                 {
                     _logger.LogDebug("Tick called but simulator is DISABLED");
                     return null;
                 }
 
-                // Apply smooth speed transition
-                double newSpeedKmh = _physics.TransitionSpeed(
-                    _currentSpeed.KilometersPerHour,
-                    _targetSpeed.KilometersPerHour,
-                    ACCELERATION_RATE,
-                    DECELERATION_RATE);
-                _currentSpeed = new Speed(newSpeedKmh);
+                _aggregate.AdvanceTick(TickInterval, _physics);
 
-                // Smooth steering angle
-                double newSmoothedSteeringDeg = _physics.SmoothSteeringAngle(
-                    _smoothedSteering.Degrees,
-                    _targetSteering.Degrees);
-                _smoothedSteering = new SteeringAngle(newSmoothedSteeringDeg);
-
-                // Calculate step distance from speed (93ms tick, speed in km/h)
-                _stepDistance = (_currentSpeed.KilometersPerHour / 3600.0) * 0.093; // 93ms = 0.093 seconds
-
-                // Update heading based on steering
-                double headingChange = _physics.CalculateHeadingChange(_smoothedSteering.Degrees, _stepDistance);
-                double headingRad = _currentHeading.ToRadians();
-                headingRad += headingChange;
-
-                // Normalize heading to [0, 2π)
-                headingRad = _physics.NormalizeHeading(headingRad);
-                _currentHeading = new Heading(headingRad * RAD_TO_DEG);
-
-                // Update position using great circle navigation
-                var (newLat, newLon) = _physics.CalculateNewPosition(
-                    _currentPosition.Latitude,
-                    _currentPosition.Longitude,
-                    headingRad,
-                    _stepDistance);
-                _currentPosition = new Wgs84Position(newLat, newLon);
-
-                // Generate PGN 0xD6 packet
-                double altitude = _gnssGenerator.SimulateAltitude(_currentPosition.Latitude, _currentPosition.Longitude);
+                double altitude = _gnssGenerator.SimulateAltitude(
+                    _aggregate.CurrentPosition.Latitude,
+                    _aggregate.CurrentPosition.Longitude);
 
                 return _serializer.EncodeGpsDataPacket(
-                    _currentPosition.Latitude,
-                    _currentPosition.Longitude,
-                    _currentHeading.Degrees,
-                    _currentSpeed.KilometersPerHour,
+                    _aggregate.CurrentPosition.Latitude,
+                    _aggregate.CurrentPosition.Longitude,
+                    _aggregate.CurrentHeading.Degrees,
+                    _aggregate.CurrentSpeed.KilometersPerHour,
                     altitude,
                     _gnssGenerator.GetSatelliteCount(),
                     _gnssGenerator.GetFixQuality(),

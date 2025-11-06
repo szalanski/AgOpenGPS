@@ -2,6 +2,7 @@ using System.Text.Json;
 using AgOpenGPS.Api.Abstractions;
 using AgOpenGPS.Api.Configuration;
 using AgOpenGPS.Api.Hubs;
+using AgOpenGPS.Api.Domain.Simulator;
 using AgOpenGPS.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -39,14 +40,18 @@ builder.Services.AddSingleton<IUdpPacketReceiver, UdpPacketReceiver>();
 // Register GPS processing service
 builder.Services.AddSingleton<IGnssService, GnssService>();
 
+// Register coordinate transformation service
+builder.Services.AddSingleton<ICoordinateService, CoordinateService>();
+
 // Register MediatR for CQRS command handling
 builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 
 // Register simulator services
-builder.Services.AddSingleton<VehiclePhysicsService>();
+builder.Services.AddSingleton<VehiclePhysicsDomainService>();
 builder.Services.AddSingleton<GnssDataGenerator>();
 builder.Services.AddSingleton<AgIoProtocolSerializer>();
+builder.Services.AddSingleton<ISimulatorTimer, ProductionSimulatorTimer>();
 builder.Services.AddSingleton<SimulatorService>();
 builder.Services.AddHostedService<SimulatorHostedService>();
 

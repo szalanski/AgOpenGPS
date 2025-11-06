@@ -8,6 +8,8 @@ namespace AgOpenGPS.Api.Client.Models
     /// </summary>
     public record SteeringAngle
     {
+        private const double DegToRad = Math.PI / 180.0;
+
         /// <summary>
         /// Zero steering angle (straight ahead).
         /// </summary>
@@ -29,12 +31,17 @@ namespace AgOpenGPS.Api.Client.Models
         public double Degrees { get; init; }
 
         /// <summary>
+        /// Gets the steering angle in radians.
+        /// </summary>
+        public double Radians => Degrees * DegToRad;
+
+        /// <summary>
         /// Converts the steering angle to radians.
         /// </summary>
         /// <returns>Steering angle in radians</returns>
         public double ToRadians()
         {
-            return Degrees * Math.PI / 180.0;
+            return Radians;
         }
 
         /// <summary>

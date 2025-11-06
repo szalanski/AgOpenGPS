@@ -24,6 +24,7 @@ using OpenTK.Graphics.OpenGL;
 using AgOpenGPS.Api.Client.Abstractions;
 using AgOpenGPS.Api.Client.Models;
 using AgOpenGPS.Api.Client.Factories;
+using AgOpenGPS.Api.Client.Commands;
 
 namespace AgOpenGPS
 {
@@ -90,8 +91,8 @@ namespace AgOpenGPS
         // Backend state subscription
         private IBackendClient _backendClient;
 
-        // Cached backend state for GPS data consumption
-        private ApplicationState _cachedState;
+        // Cached backend state for GPS data consumption (public for use by domain classes)
+        public ApplicationState _cachedState;
 
         #region // Class Props and instances
 
@@ -225,11 +226,6 @@ namespace AgOpenGPS
         /// Building a headland instance
         /// </summary>
         public CHeadLine hdl;
-
-        /// <summary>
-        /// The internal simulator
-        /// </summary>
-        public CSim sim;
 
         /// <summary>
         /// Heading, Roll, Pitch, GPS, Properties
@@ -369,9 +365,6 @@ namespace AgOpenGPS
 
             //boundary object
             bnd = new CBoundary(this);
-
-            //nmea simulator built in.
-            sim = new CSim(this);
 
             ////all the attitude, heading, roll, pitch reference system
             ahrs = new CAHRS();
@@ -568,7 +561,17 @@ namespace AgOpenGPS
 
                 // Connect to backend
                 await _backendClient.ConnectAsync();
+                double lat = Properties.Settings.Default.setGPS_SimLatitude;
+                double lon = Properties.Settings.Default.setGPS_SimLongitude;
+                double heading = 0.0; // North
+                double speed = 0.0;  // 10 km/h
 
+                var position = new Wgs84Position(lat, lon);
+                var headingObj = new Heading(heading);
+                var speedObj = new Speed(speed);
+
+                var command = new UpdateSimulatorCommand(SimulatorEvent.Start(position, headingObj, speedObj));
+                await _backendClient.SendCommandAsync(command);
                 Log.EventWriter("Backend connection established");
 
                 // Disable legacy simulator timer (backend now drives state updates)
@@ -603,11 +606,63 @@ namespace AgOpenGPS
                 return;
             }
 
-            // Update CNMEA fields from backend state (adapter pattern)
-            pn.UpdateFromBackendState(state);
+            // FIX 1: Initialize local plane and world grid on first valid GNSS data
+            if (!isFirstFixPositionSet)
+            {
+                // CRITICAL: Use backend's LocalPlane origin, NOT the current position!
+                // Backend's local coordinates (easting/northing) are relative to ITS origin.
+                // If we use current position, coordinate systems won't match.
 
-            // Trigger vehicle position update (equivalent to legacy UpdateFixPosition)
-            // TODO: Wire up vehicle state calculations
+                // Read origin from backend state (synchronized via ApplicationState.LocalPlane)
+                if (state.LocalPlane?.Origin == null)
+                {
+                    Log.EventWriter("WARNING: Backend LocalPlane origin not available yet, deferring initialization");
+                    return;
+                }
+
+                var backendOrigin = new AgOpenGPS.Core.Models.Wgs84(
+                    state.LocalPlane.Origin.Latitude,
+                    state.LocalPlane.Origin.Longitude);
+
+                // Set current position for rendering
+                AppModel.CurrentLatLon = new AgOpenGPS.Core.Models.Wgs84(
+                    state.Gnss.WgsPosition.Latitude,
+                    state.Gnss.WgsPosition.Longitude);
+
+                // Initialize LocalPlane with backend's origin (matches backend's coordinate system)
+                pn.DefineLocalPlane(backendOrigin, false);
+                isFirstFixPositionSet = true;
+                Log.EventWriter($"Local plane synchronized with backend origin: {backendOrigin.Latitude:F6}, {backendOrigin.Longitude:F6}");
+                Log.EventWriter($"  MetersPerDegreeLat: {state.LocalPlane.MetersPerDegreeLat:F2}");
+                Log.EventWriter($"  MetersPerDegreeLon: {state.LocalPlane.MetersPerDegreeLonAtOrigin:F2}");
+                Log.EventWriter($"Current vehicle position: {AppModel.CurrentLatLon.Latitude:F6}, {AppModel.CurrentLatLon.Longitude:F6}");
+            }
+
+            // FIX 2: Initialize camera heading from backend state
+            if (!isFirstHeadingSet)
+            {
+                camHeading = state.Gnss.HeadingSingle.Degrees;
+                isFirstHeadingSet = true;
+                hasBeenFirstHeadingSet = true;
+                Log.EventWriter($"Camera heading initialized: {camHeading:F1}°");
+            }
+
+            // FIX 3: Reset sentence counter (was in CSim.DoSimTick line 100)
+            sentenceCounter = 0;
+
+            // FIX 4: Accelerate position initialization (backend data is already valid)
+            if (startCounter < 25) startCounter++;
+            if (startCounter >= 20) isGPSPositionInitialized = true;
+
+            // FIX 5: Update steering angle BEFORE position update (matches CSim pattern)
+            // This decouples steering from GPS packet processing, preventing render jitter
+            if (state.Control != null)
+            {
+                mc.actualSteerAngleDegrees = state.Control.ActualSteeringAngle.Degrees;
+            }
+
+            // Trigger vehicle position update (reads directly from _cachedState)
+            UpdateFixPosition();
 
             Log.EventWriter($"Backend GPS data received: Speed={state.Gnss.Speed.KilometersPerHour:F1} km/h, Fix={state.Gnss.Quality.FixQuality}");
         }

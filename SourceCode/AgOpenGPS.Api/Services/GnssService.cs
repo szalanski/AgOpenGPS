@@ -12,8 +12,8 @@ namespace AgOpenGPS.Api.Services;
 public class GnssService : IGnssService
 {
     private readonly ILogger<GnssService> _logger;
+    private readonly ICoordinateService _coordinateService;
     private GnssState? _currentState;
-    private CoordinateTransformer? _coordinateTransformer;
 
     // GPS frequency tracking
     private readonly Stopwatch _packetTimer = new();
@@ -21,9 +21,10 @@ public class GnssService : IGnssService
     private double _gpsHz = 10.0; // Initial value
     private uint _sentenceCounter = 0;
 
-    public GnssService(ILogger<GnssService> logger)
+    public GnssService(ILogger<GnssService> logger, ICoordinateService coordinateService)
     {
         _logger = logger;
+        _coordinateService = coordinateService;
     }
 
     /// <summary>
@@ -43,30 +44,34 @@ public class GnssService : IGnssService
             return; // Invalid position - skip packet
         }
 
-        // Step 3: Transform to local coordinates
-        if (_coordinateTransformer == null)
+        // Step 3: Initialize local plane on first valid GPS fix (real GPS scenario)
+        // In simulator mode, SimulatorService.ProcessEvent(Start) handles initialization
+        if (!_coordinateService.IsInitialized)
         {
-            _logger.LogWarning("Local plane not initialized - cannot transform coordinates. Call InitializeLocalPlane() first.");
-            return;
+            _coordinateService.InitializeLocalPlane(wgsPosition.Value);
+            _logger.LogInformation("Local plane auto-initialized on first GPS fix: ({Lat:F6}, {Lon:F6})",
+                wgsPosition.Value.Latitude, wgsPosition.Value.Longitude);
         }
-        var localPosition = _coordinateTransformer.ToLocal(wgsPosition.Value);
 
-        // Step 4: Extract headings
+        // Step 4: Transform to local coordinates
+        LocalPosition localPosition = _coordinateService.ConvertToLocal(wgsPosition.Value);
+
+        // Step 5: Extract headings
         var headingDual = UnpackHeadingDual(packetData);
         var headingSingle = UnpackHeadingSingle(packetData);
 
-        // Step 5: Extract motion data
+        // Step 6: Extract motion data
         var speed = UnpackSpeed(packetData);
         var altitude = UnpackAltitude(packetData);
 
-        // Step 6: Extract quality data
+        // Step 7: Extract quality data
         var quality = UnpackQuality(packetData);
 
-        // Step 7: Create GPS health
+        // Step 8: Create GPS health
         _sentenceCounter = 0; // Reset watchdog counter
         var health = new GpsHealth(gpsHz, _sentenceCounter);
 
-        // Step 8: Populate current state
+        // Step 9: Populate current state
         _currentState = new GnssState
         {
             WgsPosition = wgsPosition.Value,
@@ -89,17 +94,6 @@ public class GnssService : IGnssService
     public GnssState? GetCurrentState()
     {
         return _currentState;
-    }
-
-    /// <summary>
-    /// Initialize local coordinate plane with field origin.
-    /// Must be called before ProcessGpsPacket to enable coordinate transformations.
-    /// </summary>
-    public void InitializeLocalPlane(Wgs84Position origin)
-    {
-        _coordinateTransformer = new CoordinateTransformer(origin);
-        _logger.LogInformation("Local plane initialized at {Lat:F6}, {Lon:F6}",
-            origin.Latitude, origin.Longitude);
     }
 
     /// <summary>

@@ -1,5 +1,4 @@
 using System.Collections.Concurrent;
-using System.Net.Sockets;
 using AgOpenGPS.Api.Client.Models;
 using Microsoft.AspNetCore.SignalR.Client;
 
@@ -7,54 +6,61 @@ namespace AgOpenGPS.API.IntegrationTests.Common;
 
 /// <summary>
 /// Base class for all integration tests.
-/// Manages the test web application factory and HTTP client lifecycle.
+/// Each fixture gets isolated factory instance with unique UDP port.
+/// Tests run sequentially (not in parallel) to avoid SignalR HubConnection state conflicts.
 /// </summary>
 [TestFixture]
 public abstract class BaseIntegrationTest
 {
-    protected TestWebApplicationFactory Factory { get; private set; } = null!;
-    protected HttpClient HttpClient { get; private set; } = null!;
-    protected string BackendUrl => HttpClient.BaseAddress?.ToString().TrimEnd('/') ?? string.Empty;
+    protected TestWebApplicationFactory? _factory;
+    protected HttpClient? _httpClient;
 
+    /// <summary>
+    /// UDP port assigned to this test fixture (hardcoded per fixture class).
+    /// Each derived class must override this property.
+    /// Example: 15556 for GpsPacketProcessingTests, 15557 for SimulatorIntegrationTests, etc.
+    /// </summary>
+    protected abstract int TestFixturePort { get; }
+
+    /// <summary>
+    /// Create isolated factory instance for this fixture with hardcoded port.
+    /// </summary>
     [OneTimeSetUp]
-    public async Task OneTimeSetUp()
+    public virtual void InitializeFixture()
     {
-        // Check if port 15556 is available (backend uses 15556, FormGPS uses 15555)
-        if (IsPortInUse(15556))
-        {
-            Assert.Fail("Port 15556 is already in use. Backend must bind to this port for tests.");
-        }
-
-        Factory = new TestWebApplicationFactory();
-        HttpClient = Factory.CreateClient();
-
-        // Wait for ApplicationOrchestrator BackgroundService to start and bind UDP socket
-        // BackgroundServices start asynchronously, need extra time to fully initialize
-        await Task.Delay(2000);
-    }
-
-    [OneTimeTearDown]
-    public void OneTimeTearDown()
-    {
-        HttpClient?.Dispose();
-        Factory?.Dispose();
+        _factory = new TestWebApplicationFactory(TestFixturePort);
+        _httpClient = _factory.CreateClient();
     }
 
     /// <summary>
-    /// Check if a UDP port is already in use.
+    /// Dispose factory and HttpClient after all tests complete.
     /// </summary>
-    private bool IsPortInUse(int port)
+    [OneTimeTearDown]
+    public virtual void CleanupFixture()
     {
-        try
-        {
-            using var udpClient = new UdpClient(port);
-            return false;
-        }
-        catch (SocketException)
-        {
-            return true;
-        }
+        _httpClient?.Dispose();
+        _factory?.Dispose();
     }
+
+    /// <summary>
+    /// Get the factory instance for this fixture.
+    /// </summary>
+    protected TestWebApplicationFactory Factory => _factory ?? throw new InvalidOperationException("Factory not initialized");
+
+    /// <summary>
+    /// Get the HttpClient instance for this fixture.
+    /// </summary>
+    protected HttpClient HttpClient => _httpClient ?? throw new InvalidOperationException("HttpClient not initialized");
+
+    /// <summary>
+    /// UDP port allocated to this fixture instance (unique per fixture).
+    /// </summary>
+    protected int UdpPort => Factory.UdpPort;
+
+    /// <summary>
+    /// Backend URL derived from HttpClient.
+    /// </summary>
+    protected string BackendUrl => HttpClient.BaseAddress?.ToString().TrimEnd('/') ?? string.Empty;
 
     /// <summary>
     /// Creates a HubConnection configured for testing with the in-memory test server.

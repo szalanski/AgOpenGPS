@@ -259,10 +259,10 @@ namespace AgOpenGPS
                 {
                     if (navPanelCounter-- <= 0) panelNavigation.Visible = false;
 
-                    // Only update lblHz from legacy data if backend is not connected
-                    if (_backendClient?.IsConnected != true)
+                    // Update lblHz from backend state
+                    if (_cachedState?.Gnss != null)
                     {
-                        lblHz.Text = gpsHz.ToString("N1") + " ~ " + (frameTime.ToString("N1")) + " " + FixQuality;
+                        lblHz.Text = gpsHz.ToString("N1") + " ~ " + (frameTime.ToString("N1")) + " " + _cachedState.Gnss.Quality.FixQuality;
                     }
                 }
             }//end every 2 seconds
@@ -284,13 +284,13 @@ namespace AgOpenGPS
                 trk.autoTrack3SecTimer++;
                 vehicle.deadZoneDelayCounter++;
 
-                // Only update lblFix from legacy data if backend is not connected
-                if (_backendClient?.IsConnected != true)
+                // Update lblFix from backend state
+                if (_cachedState?.Gnss != null)
                 {
-                    lblFix.Text = FixQuality + "Age: " + pn.age.ToString("N1");
+                    lblFix.Text = _cachedState.Gnss.Quality.FixQuality + "Age: " + _cachedState.Gnss.Quality.Age.ToString("N1");
                 }
 
-                switch (pn.fixQuality)
+                switch (_cachedState?.Gnss?.Quality.FixQuality ?? 0)
                 {
                     case 4:
                         btnGPSData.BackColor = Color.PaleGreen;
@@ -351,18 +351,20 @@ namespace AgOpenGPS
 
 
                 //the main formgps window
-                // Only update lblSpeed from legacy data if backend is not connected
-                if (_backendClient?.IsConnected != true)
+                // Update lblSpeed from backend state
+                if (_cachedState?.Gnss != null)
                 {
+                    double speedKph = _cachedState.Gnss.Speed.KilometersPerHour;
                     if (isMetric)  //metric or imperial
                     {
-                        lblSpeed.Text = SpeedKPH;
+                        lblSpeed.Text = speedKph.ToString("N1");
                         //btnContour.Text = XTE; //cross track error
 
                     }
                     else  //Imperial Measurements
                     {
-                        lblSpeed.Text = SpeedMPH;
+                        double speedMph = speedKph * 0.621371;
+                        lblSpeed.Text = speedMph.ToString("N1");
                         //btnContour.Text = InchXTE; //cross track error
                     }
                 }

@@ -19,18 +19,21 @@ The simulator provides a deterministic way to exercise the entire backend pipeli
 - **Kinematic integration** - Every 93 ms tick computes distance travelled from speed, applies steering curvature, and updates heading using a great-circle calculation. This keeps long-distance behaviour realistic.
 - **Smoothing functions** - Speed and steering transitions reuse the FormGPS easing rates (`TransitionSpeed`, `SmoothSteeringAngle`), ensuring UI behaviour (such as guidance line convergence) matches production expectations.
 - **Telemetry generation** - Altitude, satellite counts, fix quality, HDOP, and correction age are deterministic yet plausible, giving the rest of the system meaningful numbers during simulation.
+- **Unit correction** - Heading changes now use step distance in metres (conversion happens before calling `VehiclePhysicsService.CalculateHeadingChange`, SourceCode/AgOpenGPS.Api/Services/SimulatorService.cs:302), eliminating the steering “shudder” caused by kilometre-based values.
 
 ## Packet Output
 
 - **Format fidelity** - Packets are byte-for-byte compatible with AgIO PGN 0xD6 via `AgIoProtocolSerializer.EncodeGpsDataPacket` (`SourceCode/AgOpenGPS.Api/Services/AgIoProtocolSerializer.cs:17`). Fields the simulator cannot generate (dual antenna heading, IMU) deliberately use sentinel values so `GnssService` treats them the same as real receivers lacking those capabilities.
 - **Transport path** - `SimulatorHostedService.ExecuteAsync` sends packets over UDP to the same port that hardware uses, allowing the orchestrator, GNSS service, and publisher to behave identically regardless of source (`SourceCode/AgOpenGPS.Api/Services/SimulatorHostedService.cs:26`).
 - **Cadence** - The 93 ms interval mirrors the legacy timer; combined with the GNSS frequency filter in `GnssService`, observed cadence converges on roughly 10.75 Hz (`SourceCode/AgOpenGPS.Api/Services/GnssService.cs:36`).
+- **Origin handshake** - When a `Start` command arrives, the command handler initialises both `IGnssService` and `ICoordinateService` with the simulator’s starting position to keep local-plane maths stable (`SourceCode/AgOpenGPS.Api/Commands/Handlers/UpdateSimulatorCommandHandler.cs:37`).
 
 ## Usage Scenarios
 
 - **Integration testing** - Automated tests and developers can validate SignalR clients, command handling, or GNSS processing without specialised equipment.
 - **Demo and training mode** - Operators can demonstrate the system indoors while still showing realistic motion and signal quality.
 - **Regression protection** - Because the simulator feeds the production pipeline, changes that break packet parsing, coordinate conversion, or publishing are caught even when hardware is unavailable.
+- **Steering visualisation** - `SimulatorService.GetCurrentSteering()` exposes the smoothed steering angle so the orchestrator can populate `ApplicationState.Control` (`SourceCode/AgOpenGPS.Api/Services/SimulatorService.cs:44`), allowing FormGPS to render wheel motion without decoding packets.
 
 ## Known Limitations
 

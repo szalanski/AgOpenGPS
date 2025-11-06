@@ -10,6 +10,7 @@ namespace AgOpenGPS.Api.Commands.Handlers
     /// <summary>
     /// Unified handler for all simulator commands.
     /// Delegates to SimulatorService.ProcessEvent() for business logic.
+    /// SimulatorService handles its own initialization internally.
     /// </summary>
     public class UpdateSimulatorCommandHandler : IRequestHandler<UpdateSimulatorCommand>
     {

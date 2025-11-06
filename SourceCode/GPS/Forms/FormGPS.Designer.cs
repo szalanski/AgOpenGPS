@@ -664,11 +664,10 @@ namespace AgOpenGPS
             this.btnResetSteerAngle.Text = ">0<";
             this.btnResetSteerAngle.UseVisualStyleBackColor = false;
             this.btnResetSteerAngle.Click += new System.EventHandler(this.btnResetSteerAngle_Click);
-            // 
+            //
             // timerSim
-            // 
+            //
             this.timerSim.Interval = 93;
-            this.timerSim.Tick += new System.EventHandler(this.timerSim_Tick);
             // 
             // toolStripMenuItem2
             // 

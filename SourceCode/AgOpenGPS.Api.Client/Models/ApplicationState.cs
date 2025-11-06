@@ -20,5 +20,21 @@ namespace AgOpenGPS.Api.Client.Models
         /// May be null if GPS data is not yet available or signal is lost.
         /// </summary>
         public GnssState? Gnss { get; set; }
+
+        /// <summary>
+        /// Gets or sets the local plane coordinate system information.
+        /// Defines the origin and conversion factors for transforming between WGS84 and local coordinates.
+        /// Frontend must use this origin to ensure coordinate systems match between backend and frontend.
+        /// May be null if coordinate system is not yet initialized.
+        /// </summary>
+        public LocalPlaneInfo? LocalPlane { get; set; }
+
+        /// <summary>
+        /// Gets or sets the vehicle control feedback state.
+        /// Contains real-time operational feedback from vehicle actuators (steering, sections, implement).
+        /// Grouped by control domain (like Gnss groups GPS data, Control groups actuation feedback).
+        /// May be null if control data is not yet available.
+        /// </summary>
+        public ControlState? Control { get; set; }
     }
 }

@@ -164,8 +164,21 @@ namespace AgOpenGPS
         {
             if (isFollowingDubinsToPath)
             {
-                //set a speed of 10 kmh
-                mf.sim.stepDistance = shuttleDubinsList[C].speed / 50;
+                // LEGACY: Simulator speed control during recorded path playback (removed during CSim deletion)
+                // Original code: mf.sim.stepDistance = shuttleDubinsList[C].speed / 50;
+                // This set simulator speed to match recorded path speed (speed stored in km/h)
+                //
+                // MIGRATION NOTE: Speed control during path playback now needs backend integration
+                // Option 1: Send speed commands to backend simulator:
+                //   double targetSpeed = shuttleDubinsList[C].speed; // km/h from recorded path
+                //   await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(
+                //       SimulatorEvent.SetSpeed(new Speed(targetSpeed), smooth: true)));
+                //
+                // Option 2: Backend could have "PlayRecordedPath" mode that handles speed automatically
+                // Option 3: Create dedicated IPathPlaybackService in backend
+                //
+                // NOTE: Original formula (speed / 50) converted km/h to stepDistance (metres per 93ms tick)
+                // Backend uses km/h directly, so no conversion needed
 
                 pivotAxlePosRP = mf.pivotAxlePos;
 
@@ -201,7 +214,13 @@ namespace AgOpenGPS
                 //if end of the line then stop
                 if (!isEndOfTheRecLine)
                 {
-                    mf.sim.stepDistance = recList[C].speed / 34.86;
+                    // LEGACY: Speed control during recorded path following (removed during CSim deletion)
+                    // Original code: mf.sim.stepDistance = recList[C].speed / 34.86;
+                    // Conversion factor 34.86 ≈ 40/1.148 (different from Dubins path /50)
+                    //
+                    // MIGRATION NOTE: See isFollowingDubinsToPath section above for migration options
+                    // Same approach applies here: send speed commands to backend during path playback
+
                     north = recList[C].northing;
 
                     pathCount = recList.Count - C;
@@ -246,7 +265,12 @@ namespace AgOpenGPS
                     return;
                 }
 
-                mf.sim.stepDistance = shuttleDubinsList[C].speed / 35;
+                // LEGACY: Speed control during Dubins path home (removed during CSim deletion)
+                // Original code: mf.sim.stepDistance = shuttleDubinsList[C].speed / 35;
+                // Different conversion factor (35) from approach path (50)
+                //
+                // MIGRATION NOTE: See isFollowingDubinsToPath section above for migration options
+
                 pivotAxlePosRP = mf.pivotAxlePos;
 
                 //StanleyDubinsPath(shuttleListCount);
@@ -261,7 +285,18 @@ namespace AgOpenGPS
             isFollowingDubinsToPath = false;
             shuttleDubinsList.Clear();
             shortestDubinsList.Clear();
-            mf.sim.stepDistance = 0;
+
+            // LEGACY: Stop simulator when stopping recorded path (removed during CSim deletion)
+            // Original code: mf.sim.stepDistance = 0;
+            //
+            // MIGRATION NOTE: Send stop command to backend simulator:
+            //   await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(
+            //       SimulatorEvent.SpeedZero()));
+            //
+            // Or if simulator should be completely disabled:
+            //   await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(
+            //       SimulatorEvent.Stop()));
+
             isDrivingRecordedPath = false;
             mf.btnPathGoStop.Image = Properties.Resources.boundaryPlay;
             mf.btnPathRecordStop.Enabled = true;

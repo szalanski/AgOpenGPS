@@ -680,8 +680,11 @@ namespace AgOpenGPS
 
                     if (Math.Abs(dx) < Double.Epsilon && Math.Abs(dy) < Double.Epsilon) return;
 
-                    //how far from current AB Line is fix
-                    distanceFromCurrentLinePivot = ((dy * mf.pn.fix.easting) - (dx * mf.pn.fix.northing) + (ctList[B].easting
+                    // Null safety: Ensure backend GPS data is available
+                    if (mf._cachedState?.Gnss == null) return;
+
+                    //how far from current AB Line is fix (read from backend state)
+                    distanceFromCurrentLinePivot = ((dy * mf._cachedState.Gnss.LocalPosition.Easting) - (dx * mf._cachedState.Gnss.LocalPosition.Northing) + (ctList[B].easting
                                 * ctList[A].northing) - (ctList[B].northing * ctList[A].easting))
                                     / Math.Sqrt((dy * dy) + (dx * dx));
 

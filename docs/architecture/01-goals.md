@@ -1,19 +1,22 @@
 # Phase 1: Goals
 
 ## End Goal (After All Phases)
+
 - **Frontend**: Electron + React/Angular
 - **Backend**: REST/gRPC API (.NET 8+)
 - **Deployment**: Separate backend service + desktop/web frontend
 
 ## Phase 1 Goal
+
 Extract business logic from WinForms to backend API:
+
 - **Frontend**: WinForms (minimal changes, stays .NET Framework 4.8)
 - **Backend**: AgOpenGPS.Api (.NET 8, API-ready services)
-- **Communication**: In-process → HTTP-ready for Phase 2
 
 ## Current Problem
 
 **FormGPS.cs (1287 lines) - Everything in one place:**
+
 ```
 FormGPS
 ├─ UI (WinForms controls)
@@ -24,11 +27,13 @@ FormGPS
 ```
 
 **GPS/Classes/ (44 classes):**
+
 - 19 classes with `private readonly FormGPS mf;`
 - Tight coupling: `mf.vehicle`, `mf.ABLine`, `mf.tool`
 - Logic mixed with FormGPS
 
 **Consequences:**
+
 - Cannot replace UI
 - Cannot test business logic
 - Cannot expose as API
@@ -37,6 +42,7 @@ FormGPS
 ## Target State (Phase 1 Complete)
 
 **FormGPS.cs (<300 lines) - Thin UI:**
+
 ```
 FormGPS
 ├─ SignalR Client (receives state updates)
@@ -45,6 +51,7 @@ FormGPS
 ```
 
 **AgOpenGPS.Api (.NET 8) - Backend:**
+
 ```
 AgOpenGPS.Api
 ├─ ApplicationOrchestrator (event-driven, processes UDP packets on arrival)
@@ -54,6 +61,7 @@ AgOpenGPS.Api
 ```
 
 **Separation achieved:**
+
 - Business logic → Backend
 - UI → Frontend
 - Communication → SignalR (in-process → HTTP)
@@ -69,14 +77,15 @@ AgOpenGPS.Api
 
 **We do NOT use `AgOpenGPS.Core`** (separate team's work).
 
-| Aspect | AgOpenGPS.Core | AgOpenGPS.Api (OUR) |
-|--------|----------------|---------------------|
-| Team | Different team | This team |
-| Pattern | MVP + WPF | Backend-driven + Strangler Fig |
-| Backend | Presenters + ViewModels | ASP.NET Core + SignalR |
-| Status | In progress | Planning |
+| Aspect  | AgOpenGPS.Core          | AgOpenGPS.Api (OUR)            |
+| ------- | ----------------------- | ------------------------------ |
+| Team    | Different team          | This team                      |
+| Pattern | MVP + WPF               | Backend-driven + Strangler Fig |
+| Backend | Presenters + ViewModels | ASP.NET Core + SignalR         |
+| Status  | In progress             | Planning                       |
 
 **Projects:**
+
 - ✅ `AgOpenGPS.Api/` (.NET 8) - NEW backend
 - ✅ `AgOpenGPS.Api.Client/` (.NET Standard 2.0) - NEW client
 - ❌ `AgOpenGPS.Core/` - NOT USED
