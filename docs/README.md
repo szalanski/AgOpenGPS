@@ -1,216 +1,88 @@
-# AgOpenGPS Backend API Migration Documentation
+# AgOpenGPS AI Context Guide
 
-This documentation supports **Phase 1 cross-platform migration** using the Strangler Fig Pattern.
+## Project Overview
+**Mission**: Migrate AgOpenGPS from monolithic WinForms to backend-driven architecture (Phase 1), enabling future Electron+React frontend (Phase 2).
 
-**Goal**: Extract business logic from WinForms (GPS/Forms/FormGPS.cs) to backend API (AgOpenGPS.Api) while keeping the application running throughout the entire migration.
+**Current State**: Workflows 001-007 completed. Backend processes GNSS via UDP, broadcasts state via SignalR. FormGPS remains functional but delegates GPS processing to backend.
+
+## Core Architecture
+
+### Migration Strategy: Strangler Fig Pattern
+- **Gradual replacement** without breaking the app at any commit
+- **Feature flags** toggle between legacy/backend implementations
+- **Adapter pattern** wraps legacy code with clean interfaces
+- **Safety first**: Application must work after every commit
+
+### Backend-Driven Event Processing
+```
+UDP Packets (port 15556) → UdpPacketReceiver → ApplicationOrchestrator (event-driven)
+→ GnssService → SignalRStatePublisher → FormGPS/Frontends
+```
+
+**Key Services**:
+- `ApplicationOrchestrator`: Event-driven main loop, processes packets on arrival
+- `GnssService`: GNSS processing, coordinate transforms (WGS84↔Local)
+- `UdpPacketReceiver`: Validates AgIO protocol packets
+- `SignalRStatePublisher`: Broadcasts `ApplicationState` to all clients
+- `SimulatorHostedService`: Generates realistic test packets at 10Hz
+
+### Communication: SignalR
+- **Bidirectional**: Backend pushes state, frontend sends commands
+- **CQRS Commands**: Start/Stop/SetSpeed/SetSteering/Reset (via MediatR)
+- **Thread-safe**: Uses `SynchronizationContext.Post()` for WinForms UI updates
+- **Transport abstraction**: Easy to swap SignalR for gRPC/WebSocket later
+
+## Development Workflow
+
+### Running the System
+```bash
+# 1. Start Backend (required first)
+dotnet run --project SourceCode/AgOpenGPS.Api/AgOpenGPS.Api.csproj
+# Logs: "ApplicationOrchestrator starting - GPS-driven UDP mode"
+
+# 2. Start Frontend
+dotnet run --project SourceCode/GPS/AgOpenGPS.csproj
+# Logs: "Backend connection established"
+```
+
+### Testing
+```bash
+dotnet test SourceCode/AgOpenGPS.sln
+# 41 integration tests covering UDP→SignalR pipeline
+```
+
+## Essential Constraints
+
+- **No breaking changes**: Every commit must compile and pass all tests
+- **Event-driven architecture**: ApplicationOrchestrator processes UDP packets on arrival (no timers)
+- **ApplicationState is canonical source**: Frontend renders streamed state, never computes GNSS locally
+- **Thread-safe UI updates**: SignalR callbacks require `SynchronizationContext.Post()` marshaling
+- **Feature flags for migration**: Adapter pattern with toggleable backend/legacy paths (appsettings.json)
 
 ## Documentation Structure
 
-This documentation is organized into **two complementary sets**:
+- `docs/architecture/`: Migration strategy and patterns (5 files)
+- `docs/implementation/`: What's actually built (sections/, adrs/)
+- `docs/workflow/`: Task-based implementation guides (001-008 completed/planned)
+- `CLAUDE.md`: Full codebase context for AI agents
 
-### Set A: Architecture (Static Knowledge Base)
+## Important Notes
 
-Small, self-contained files (~100-200 lines) that serve as **AI context** for understanding the migration architecture.
+### Independence from AgOpenGPS.Core
+This migration (AgOpenGPS.Api) is **completely independent** from the AgOpenGPS.Core MVP/WPF initiative by another team. No code sharing, no conflicts.
 
-**Location**: [architecture/](architecture/)
+## Planning New Workflows
 
-**Files**:
-1. **[01-goals.md](architecture/01-goals.md)** - Phase 1 goals, current problems, target state
-2. **[02-strangler-fig.md](architecture/02-strangler-fig.md)** - Gradual migration pattern
-3. **[03-backend-driven.md](architecture/03-backend-driven.md)** - Backend-driven architecture (ApplicationOrchestrator)
-4. **[04-signalr.md](architecture/04-signalr.md)** - Real-time communication (Backend → Frontend push)
-5. **[05-adapter-pattern.md](architecture/05-adapter-pattern.md)** - Safe migration with Feature Flags
+When planning new work:
+1. **Identify domain module** to migrate (e.g., "Guidance")
+2. **Design DTOs** for API↔Client communication
+3. **Create backend service** interface + implementation
+4. **Add feature flag** in appsettings.json
+5. **Implement adapter** in FormGPS with flag check
+6. **Write integration tests** covering full pipeline
+7. **Document rollback plan** and soak period
 
-**When to read**:
-- Starting the migration
-- Need to understand core patterns
-- Providing context to AI tools
-- Onboarding new team members
-
-**Total reading time**: ~30-40 minutes
-
----
-
-### Set B: Workflow (Task-Based Work)
-
-Vertical slices of work organized as **workflow chunks**. Each chunk has:
-- **plan.md** - High-level concept (~150-200 lines, zero code)
-- **task1.md, task2.md, ...** - Independent units of work
-
-**Location**: [workflow/](workflow/)
-
-**Current chunks**:
-1. **[001-application-orchestrator/](workflow/001-application-orchestrator/)** - ✅ COMPLETED - Backend main loop
-   - plan.md - Concept overview
-   - task1.md through task6.md - Backend infrastructure and SignalR state broadcasting
-   - **Status**: ApplicationOrchestrator running at 4 Hz, SignalR state updates working
-
-2. **[002-gps-gnss-migration/](workflow/002-gps-gnss-migration/)** - ✅ COMPLETED (DDD refactored) - GPS/GNSS backend migration
-   - plan.md - GPS processing migration concept
-   - task1.md through task9.md - GnssService, UdpPacketReceiver, Simulator, Integration Tests
-   - **Status**: 41/44 integration tests passing (3 steering failures remain)
-   - **Key Implementations**:
-     - Event-driven ApplicationOrchestrator (processes UDP packets immediately)
-     - GnssService (PGN 0xD6 unpacking, coordinate transforms)
-     - SimulatorService (93ms physics tick, DDD refactored with 3 domain services)
-       - VehiclePhysicsService (speed transitions, steering smoothing, heading changes, position calculations)
-       - GnssDataGenerator (altitude, satellites, fix quality, HDOP, age)
-       - AgIoProtocolSerializer (binary PGN 0xD6 packet serialization)
-     - CQRS command pattern (Start/Stop/SetSpeed/SetSteering/Reset via MediatR)
-     - SignalR bidirectional communication (state updates + commands)
-     - IBackendClient abstraction for bidirectional transport
-
-3. **[005-remove-cnmea-adapter/](workflow/005-remove-cnmea-adapter/)** - ✅ COMPLETED - Remove CNMEA adapter and frontend simulator
-   - plan.md - CNMEA adapter and CSim removal concept
-   - task1.md through task7.md - Remove adapter, refactor frontend GPS access, eliminate CSim
-   - **Status**: Completed (6/7 tasks done, task 7 documentation pending)
-   - **Key Implementations**:
-     - Deleted CSim.cs frontend simulator (125 lines)
-     - Refactored Position.UpdateFixPosition() to populate 11 fields from ApplicationState.Gnss
-     - Refactored CContour to use ApplicationState.Gnss.LocalPosition
-     - Removed legacy UI guards from GUI.Designer.cs
-     - Deleted CNMEA.UpdateFromBackendState() adapter method
-     - Kept CNMEA class as documented stub (still used for DefineLocalPlane, AverageTheSpeed)
-     - Fixed 3D view initialization (worldGrid, camHeading, startCounter)
-     - Fixed LocalPlane origin synchronization bug
-   - **Outcome**: Frontend reads directly from ApplicationState, no adapter layer
-
-4. **[006-coordinate-service-separation/](workflow/006-coordinate-service-separation/)** - ✅ COMPLETED - Extract coordinate transformation service
-   - plan.md - Coordinate service separation concept
-   - **Status**: Completed - all 5 phases implemented
-   - **Key Implementations**:
-     - Created ICoordinateService interface (7 methods)
-     - Created LocalPlaneInfo DTO (Origin, MetersPerDegreeLat, MetersPerDegreeLonAtOrigin)
-     - Created CoordinateService (thread-safe wrapper around CoordinateTransformer)
-     - Registered in DI container (Program.cs)
-     - Added ApplicationState.LocalPlane property
-     - ApplicationOrchestrator populates LocalPlane when broadcasting
-     - Frontend reads origin from state.LocalPlane.Origin (synchronized)
-   - **Outcome**: Single Responsibility Principle, coordinate synchronization, reusable service for boundaries/paths
-
-5. **[007-expose-steering-angle/](workflow/007-expose-steering-angle/)** - ✅ COMPLETED - Expose steering angle from backend
-   - plan.md - Steering angle exposure concept and vehicle shake fix
-   - **Status**: Completed - all 4 phases implemented
-   - **Key Implementations**:
-     - Created ControlState domain object (establishes Control domain pattern)
-     - Added ApplicationState.Control property (like Gnss for GPS domain)
-     - Exposed SimulatorService.GetCurrentSteering() method
-     - ApplicationOrchestrator populates Control.ActualSteeringAngle when broadcasting
-     - Frontend Position.designer.cs reads from _cachedState.Control (removed hardcoded zero)
-     - CVehicle wheel rendering automatically picks up backend steering
-   - **Outcome**: Fixed vehicle shaking bug, established Control domain for future migrations (sections, auto-steer, implement, IMU)
-
-**When to use**:
-- Ready to implement specific features
-- Need step-by-step implementation guidance
-- Working with AI-assisted development
-- Breaking down complex tasks
-
-**How it works**:
-1. Read **plan.md** for high-level understanding
-2. Pick a **task.md** file to work on
-3. Each task is self-contained and actionable
-4. Tasks reference architecture docs when needed
+Each workflow = one vertical slice (complete feature migration).
 
 ---
-
-## Quick Start
-
-### For AI Context (Understanding Architecture)
-
-Read Set A (Architecture) files in order:
-```
-1. architecture/01-goals.md          (What & Why)
-2. architecture/02-strangler-fig.md  (Migration pattern)
-3. architecture/03-backend-driven.md (Backend ownership)
-4. architecture/04-signalr.md        (Communication)
-5. architecture/05-adapter-pattern.md (Safe rollout)
-```
-
-### For Implementation (Doing Work)
-
-Pick a workflow chunk from Set B (Workflow):
-```
-1. Read workflow/001-application-orchestrator/plan.md
-2. Pick a task (task1.md, task2.md, etc.)
-3. Execute the task
-4. Move to next task
-```
-
----
-
-## Key Architecture Patterns
-
-### Strangler Fig Pattern
-Gradually replace legacy code with new API while keeping application running. Never "big bang" rewrite.
-
-### Backend-Driven Architecture
-**Backend** owns event-driven processing (ApplicationOrchestrator processes UDP packets as they arrive), **Frontend** is passive receiver via SignalR.
-
-### Adapter Pattern + Feature Flags
-Wrap legacy code to delegate to new API. Feature flags allow instant rollback if issues found.
-
-### SignalR Communication
-Real-time bidirectional communication:
-- **Backend → Frontend**: State updates pushed on GPS data arrival (~10 Hz typical, event-driven)
-- **Frontend → Backend**: Commands via CQRS pattern (MediatR)
-
----
-
-## Migration Phases
-
-### Phase 1: Backend API (Current Work)
-- Extract business logic to AgOpenGPS.Api (.NET 8)
-- WinForms frontend remains (.NET Framework 4.8)
-- Communication: In-process SignalR (no HTTP overhead)
-- **Result**: API-ready backend, testable, cross-platform
-
-### Phase 2: Frontend Migration (Future)
-- Replace WinForms with Electron + React/Angular
-- Communication: HTTP SignalR (just URL change)
-- Backend unchanged
-- **Result**: Modern web-based UI
-
----
-
-## Independence from AgOpenGPS.Core
-
-**IMPORTANT**: This migration is INDEPENDENT from `AgOpenGPS.Core` project.
-
-| Aspect | AgOpenGPS.Core | AgOpenGPS.Api (OUR) |
-|--------|----------------|---------------------|
-| Team | Different team | This team |
-| Pattern | MVP + WPF | Backend-driven + Strangler Fig |
-| Backend | Presenters + ViewModels | ASP.NET Core + SignalR |
-| Status | In progress | Planning |
-
-**No conflicts** - completely separate initiatives.
-
----
-
-## Contributing
-
-When adding new workflow chunks:
-1. Create `workflow/NNN-feature-name/` folder
-2. Write `plan.md` (concept only, ~150-200 lines, zero code)
-3. Write `taskN.md` files (independent units of work)
-4. Each task should be self-contained and actionable
-5. Reference architecture docs when needed
-
-**Rules**:
-- Architecture docs: Small (~100-200 lines), no code bloat
-- Workflow tasks: Self-contained, links to architecture if needed
-- No milestones (tasks are independent)
-- No time estimates, ADRs, or success metrics
-- Focus on concepts and actionable steps
-
----
-
-## Additional Resources
-
-- **[CLAUDE.md](../CLAUDE.md)** - Full project context for AI tools
-- **[Simulator Architecture](simulator-architecture.md)** - Detailed technical description of the GPS/GNSS simulator
-- **[Simulator Comparison](simulator-legacy-vs-api-comparison.md)** - Legacy (CSim) vs API (SimulatorService) comparison
-- **[Official Docs](https://docs.agopengps.com/)** - AgOpenGPS documentation
-- **[Community Forum](https://discourse.agopengps.com/)** - Discussion and support
-- **GitHub Branch**: `cross-platform-support` (this migration work)
+*Context optimized for AI planning sessions. For detailed architecture, see subdirectories.*
