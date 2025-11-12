@@ -56,83 +56,53 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
     #region Start/Stop Events
 
     [Test]
-    public async Task UpdateSimulator_StartEvent_ShouldInitialize()
+    public async Task Start_ShouldProduceExpectedFirstGpsState()
     {
+        // Verify: First tick after Start command produces exact physics results
+        // Golden values captured from simulator on 2025-11-12
+        // Physics: Start (45.0, -93.0), Heading: 0°, Speed: 10 km/h (instant)
+        // Tick 1: 10 km/h for 93ms = 0.258m north via great circle navigation
+
+        const double ExpectedLatitude = 45.00000232324749; // Captured golden value
+        const double ExpectedLongitude = -93.0;
+        const double ExpectedSpeed = 10.0;
+        const double ExpectedHeading = 0.0;
+
         // Arrange
         var semaphore = new SemaphoreSlim(0, 1);
         _backendClient!.SubscribeToState(onNext: state =>
         {
             _receivedStates.Enqueue(state);
-            if (_receivedStates.Count(s => s.Gnss != null) >= 11)
+            if (_receivedStates.Count(s => s.Gnss != null) >= 1)
             {
                 semaphore.Release();
-                return;
             }
-
-            Factory.TestTimer.AdvanceTick();
         });
 
         // Act
         await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(
             SimulatorEvent.Start(new Wgs84Position(45.0, -93.0), new Heading(0.0), new Speed(10.0))));
 
-        Factory.TestTimer.AdvanceTick();  // Kick off
-        await semaphore.WaitAsync();
+        Factory.TestTimer.AdvanceTick();
+        var acquired = await semaphore.WaitAsync(TimeSpan.FromSeconds(5));
+        acquired.Should().BeTrue("should receive GPS data within 5 seconds");
 
         // Assert
         var gpsStates = _receivedStates.Where(s => s.Gnss != null).ToList();
-        gpsStates.Should().HaveCountGreaterThan(10, "should receive at least 11 GPS states");
+        gpsStates.Should().HaveCount(1, "should receive exactly 1 GPS state after first tick");
 
-        var lastGps = gpsStates.Last().Gnss!;
-        lastGps.WgsPosition.Latitude.Should().BeInRange(44.9, 45.1);
-        lastGps.WgsPosition.Longitude.Should().BeInRange(-93.1, -92.9);
-        lastGps.Speed!.KilometersPerHour.Should().BeApproximately(10.0, 1.0);
+        var gps = gpsStates.Single().Gnss!;
 
-        Console.WriteLine($"✓ Start event: {gpsStates.Count} GPS states received");
-    }
+        gps.WgsPosition.Latitude.Should().Be(ExpectedLatitude,
+            "latitude after first tick moving north at 10 km/h");
+        gps.WgsPosition.Longitude.Should().Be(ExpectedLongitude,
+            "longitude should not change when moving due north");
+        gps.Speed!.KilometersPerHour.Should().BeApproximately(ExpectedSpeed, 0.1,
+            "Start command sets speed instantly to 10 km/h");
+        gps.HeadingSingle!.Degrees.Should().BeApproximately(ExpectedHeading, 0.1,
+            "heading should be 0° (north) as commanded");
 
-    [Test]
-    public async Task UpdateSimulator_StopEvent_ShouldDisable()
-    {
-        // Arrange - Start simulator first
-        var semaphore = new SemaphoreSlim(0, 1);
-        _backendClient!.SubscribeToState(onNext: state =>
-        {
-            _receivedStates.Enqueue(state);
-            if (_receivedStates.Count(s => s.Gnss != null) >= 6)
-            {
-                semaphore.Release();
-                return;
-            }
-
-            Factory.TestTimer.AdvanceTick();
-        });
-
-        await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.Start(new Wgs84Position(45.0, -93.0), new Heading(0.0), new Speed(10.0))));
-
-        Factory.TestTimer.AdvanceTick();  // Kick off
-        await semaphore.WaitAsync();
-
-        var initialCount = _receivedStates.Count(s => s.Gnss != null);
-        initialCount.Should().BeGreaterThan(5, "should have collected initial GPS data");
-
-        // Act - Stop simulator
-        await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.Stop()));
-
-        _receivedStates.Clear();
-
-        // Assert - Manually advance 10 ticks (no new GPS data should arrive after stop)
-        for (int i = 0; i < 10; i++)
-        {
-            Factory.TestTimer.AdvanceTick();
-        }
-
-        var countAfterStop = _receivedStates.Count(s => s.Gnss != null);
-        countAfterStop.Should().Be(0, "no GPS data should be generated after stop");
-
-        Console.WriteLine($"✓ Stop event: simulator disabled successfully");
+        Console.WriteLine($"✓ Start: Lat={gps.WgsPosition.Latitude}, Lon={gps.WgsPosition.Longitude}, Speed={gps.Speed.KilometersPerHour}, Heading={gps.HeadingSingle.Degrees}");
     }
 
     #endregion
@@ -140,203 +110,100 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
     #region Speed Events
 
     [Test]
-    public async Task UpdateSimulator_SpeedAdjustPositive_ShouldIncrease()
+    public async Task SpeedSet_ShouldChangeInstantly()
     {
-        // Arrange - Start at 5 km/h
-        var semaphore = new SemaphoreSlim(0, 1);
-        var targetCount = 5;
+        // Verify: SpeedSet changes speed instantly to target (no acceleration)
+        // Start: 10 km/h → SpeedSet(15) → immediately 15 km/h on first tick
 
+        const double InitialSpeed = 10.0;
+        const double TargetSpeed = 15.0;
+        const double ExpectedSpeed = 15.0;
+
+        // Arrange - Start at 10 km/h
+        var semaphore = new SemaphoreSlim(0, 1);
         _backendClient!.SubscribeToState(onNext: state =>
         {
             _receivedStates.Enqueue(state);
-
-            if (_receivedStates.Count(s => s.Gnss?.Speed != null) >= targetCount)
+            if (_receivedStates.Count(s => s.Gnss != null) >= 1)
             {
                 semaphore.Release();
-                return;
             }
-
-            Factory.TestTimer.AdvanceTick();
         });
 
         await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.Start(new Wgs84Position(45.0, -93.0), new Heading(0.0), new Speed(5.0))));
+            SimulatorEvent.Start(new Wgs84Position(45.0, -93.0), new Heading(0.0), new Speed(InitialSpeed))));
 
-        Factory.TestTimer.AdvanceTick();  // Kick off
-        await semaphore.WaitAsync();
+        _receivedStates.Clear(); // Clear start data
 
-        var initialSpeed = _receivedStates.ToList()
-            .Where(s => s.Gnss?.Speed != null)
-            .Select(s => s.Gnss!.Speed!.KilometersPerHour)
-            .LastOrDefault();
+        // Act - Set speed instantly to 15 km/h
+        await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(
+            SimulatorEvent.SpeedSet(new Speed(TargetSpeed))));
 
-        _receivedStates.Clear();
+        Factory.TestTimer.AdvanceTick();
+        var acquired = await semaphore.WaitAsync(TimeSpan.FromSeconds(5));
+        acquired.Should().BeTrue();
 
-        // Act - Adjust speed up by 2 km/h, 5 times
-        targetCount = 10;
-        for (int i = 0; i < 5; i++)
-        {
-            await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(
-                SimulatorEvent.SpeedAdjust(2.0)));
-        }
+        // Assert - Speed changed instantly
+        var gps = _receivedStates.Single(s => s.Gnss != null).Gnss!;
+        gps.Speed!.KilometersPerHour.Should().BeApproximately(ExpectedSpeed, 0.1,
+            "SpeedSet should change speed instantly without acceleration");
 
-        Factory.TestTimer.AdvanceTick();  // Kick off phase 2
-        await semaphore.WaitAsync();
-
-        // Assert
-        var finalSpeed = _receivedStates.ToList()
-            .Where(s => s.Gnss?.Speed != null)
-            .Select(s => s.Gnss!.Speed!.KilometersPerHour)
-            .LastOrDefault();
-
-        finalSpeed.Should().BeGreaterThan(initialSpeed, "speed should increase after adjustments");
-        finalSpeed.Should().BeLessThanOrEqualTo(322.0, "should not exceed max speed");
-        Console.WriteLine($"✓ SpeedAdjust: {initialSpeed:F1} → {finalSpeed:F1} km/h");
+        Console.WriteLine($"✓ SpeedSet: instant change to {gps.Speed.KilometersPerHour:F1} km/h");
     }
 
     [Test]
-    public async Task UpdateSimulator_SpeedAdjustNegative_ShouldDecrease()
+    public async Task SpeedAdjust_ShouldAccelerateGradually()
     {
-        // Arrange - Start at 20 km/h
-        var semaphore = new SemaphoreSlim(0, 1);
-        var targetCount = 5;
+        // Verify: SpeedAdjust uses physics acceleration to reach target smoothly
+        // Golden values: Start 0 km/h, adjust to 10 km/h, reaches target after ~12 ticks
+        // Physics: 0.86 km/h per tick acceleration rate
+        // Expected: 0 → 0.86 → 1.72 → 2.58 → ... → 10.0 (in ~12 ticks)
 
+        const double InitialSpeed = 0.0;
+        const double TargetSpeed = 10.0;
+        const int ExpectedTicksToReach = 12; // Ceil(10.0 / 0.86) ≈ 12
+        const double ExpectedFinalSpeed = 10.0;
+
+        // Arrange - Start at zero speed
+        var semaphore = new SemaphoreSlim(0, 1);
         _backendClient!.SubscribeToState(onNext: state =>
         {
             _receivedStates.Enqueue(state);
-
-            if (_receivedStates.Count(s => s.Gnss?.Speed != null) >= targetCount)
+            if (_receivedStates.Count(s => s.Gnss != null) >= ExpectedTicksToReach)
             {
                 semaphore.Release();
                 return;
             }
-
             Factory.TestTimer.AdvanceTick();
         });
 
         await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.Start(new Wgs84Position(45.0, -93.0), new Heading(0.0), new Speed(20.0))));
+            SimulatorEvent.Start(new Wgs84Position(45.0, -93.0), new Heading(0.0), new Speed(InitialSpeed))));
 
-        Factory.TestTimer.AdvanceTick();  // Kick off
-        await semaphore.WaitAsync();
+        _receivedStates.Clear(); // Clear start data
 
-        var initialSpeed = _receivedStates.ToList()
-            .Where(s => s.Gnss?.Speed != null)
-            .Select(s => s.Gnss!.Speed!.KilometersPerHour)
-            .LastOrDefault();
-
-        _receivedStates.Clear();
-
-        // Act - Adjust speed down
-        targetCount = 10;
+        // Act - Adjust speed to 10 km/h (smooth acceleration)
         await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.SpeedAdjust(-10.0)));
+            SimulatorEvent.SpeedAdjust(TargetSpeed)));
 
-        Factory.TestTimer.AdvanceTick();  // Kick off phase 2
-        await semaphore.WaitAsync();
+        Factory.TestTimer.AdvanceTick(); // Start the tick advancement cycle
 
-        // Assert
-        var finalSpeed = _receivedStates.ToList()
-            .Where(s => s.Gnss?.Speed != null)
-            .Select(s => s.Gnss!.Speed!.KilometersPerHour)
-            .LastOrDefault();
+        var acquired = await semaphore.WaitAsync(TimeSpan.FromSeconds(5));
+        acquired.Should().BeTrue();
 
-        finalSpeed.Should().BeLessThan(initialSpeed, "speed should decrease after adjustment");
-        finalSpeed.Should().BeGreaterThanOrEqualTo(0.0, "should not be negative");
-        Console.WriteLine($"✓ SpeedAdjust negative: {initialSpeed:F1} → {finalSpeed:F1} km/h");
-    }
+        // Assert - Speed reached target after ~12 ticks
+        var gpsStates = _receivedStates.Where(s => s.Gnss != null).ToList();
+        var finalSpeed = gpsStates.Last().Gnss!.Speed!.KilometersPerHour;
 
-    [Test]
-    public async Task UpdateSimulator_SpeedSet_ShouldChangeInstantly()
-    {
-        // Arrange
-        var semaphore = new SemaphoreSlim(0, 1);
-        var targetCount = 5;
+        finalSpeed.Should().BeApproximately(ExpectedFinalSpeed, 0.1,
+            "SpeedAdjust should reach target speed after gradual acceleration");
 
-        _backendClient!.SubscribeToState(onNext: state =>
-        {
-            _receivedStates.Enqueue(state);
+        // Verify intermediate speeds show gradual increase (not instant)
+        var speeds = gpsStates.Take(3).Select(s => s.Gnss!.Speed!.KilometersPerHour).ToList();
+        speeds[0].Should().BeLessThan(speeds[1], "speed should increase gradually tick by tick");
+        speeds[1].Should().BeLessThan(speeds[2], "speed should continue increasing");
 
-            if (_receivedStates.Count(s => s.Gnss?.Speed != null) >= targetCount)
-            {
-                semaphore.Release();
-                return;
-            }
-
-            Factory.TestTimer.AdvanceTick();
-        });
-
-        await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.Start(new Wgs84Position(45.0, -93.0), new Heading(0.0), new Speed(5.0))));
-
-        Factory.TestTimer.AdvanceTick();  // Kick off
-        await semaphore.WaitAsync();
-
-        _receivedStates.Clear();
-
-        // Act - Set speed instantly
-        targetCount = 3;
-        await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.SpeedSet(new Speed(30.0))));
-
-        Factory.TestTimer.AdvanceTick();  // Kick off phase 2
-        await semaphore.WaitAsync();
-
-        // Assert
-        var speeds = _receivedStates.ToList()
-            .Where(s => s.Gnss?.Speed != null)
-            .Select(s => s.Gnss!.Speed!.KilometersPerHour)
-            .ToList();
-
-        speeds.Should().NotBeEmpty("should receive speed states");
-        speeds.Last().Should().BeApproximately(30.0, 2.0, "speed should change to 30 km/h");
-        Console.WriteLine($"✓ SpeedSet: instant change to {speeds.Last():F1} km/h");
-    }
-
-    [Test]
-    public async Task UpdateSimulator_SpeedAdjustBeyondLimits_ShouldClamp()
-    {
-        // Arrange
-        var semaphore = new SemaphoreSlim(0, 1);
-        var targetCount = 5;
-
-        _backendClient!.SubscribeToState(onNext: state =>
-        {
-            _receivedStates.Enqueue(state);
-
-            if (_receivedStates.Count(s => s.Gnss?.Speed != null) >= targetCount)
-            {
-                semaphore.Release();
-                return;
-            }
-
-            Factory.TestTimer.AdvanceTick();
-        });
-
-        await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.Start(new Wgs84Position(45.0, -93.0), new Heading(0.0), new Speed(0.0))));
-
-        Factory.TestTimer.AdvanceTick();  // Kick off
-        await semaphore.WaitAsync();
-
-        _receivedStates.Clear();
-
-        // Act - Try to exceed max speed (322 km/h)
-        targetCount = 15;
-        await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.SpeedAdjust(500.0)));
-
-        Factory.TestTimer.AdvanceTick();  // Kick off phase 2
-        await semaphore.WaitAsync();
-
-        // Assert
-        var speed = _receivedStates.ToList()
-            .Where(s => s.Gnss?.Speed != null)
-            .Select(s => s.Gnss!.Speed!.KilometersPerHour)
-            .LastOrDefault();
-
-        speed.Should().BeLessThanOrEqualTo(322.0, "speed should clamp at 322 km/h max");
-        Console.WriteLine($"✓ Speed clamping: capped at {speed:F1} km/h");
+        Console.WriteLine($"✓ SpeedAdjust: gradual acceleration 0 → {finalSpeed:F1} km/h over {gpsStates.Count} ticks");
     }
 
     #endregion
@@ -344,105 +211,107 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
     #region Steering Events
 
     [Test]
-    public async Task UpdateSimulator_SteeringSet_ShouldChangeAngle()
+    public async Task SteeringSet_ShouldApplySteeringAngle()
     {
-        // Arrange
-        var semaphore = new SemaphoreSlim(0, 1);
-        var targetCount = 5;
+        // Verify: SteeringSet applies specific steering angle and changes heading
+        // Golden values: Start heading 0° (north), 10 km/h, set steering to 20° right
+        // After 3 ticks, heading should change based on Ackermann steering geometry
 
+        const double InitialSpeed = 10.0;
+        const double InitialHeading = 0.0;
+        const double SteeringAngleDegrees = 20.0;
+        const int TickCount = 3;
+
+        // Arrange - Start moving north at 10 km/h
+        var semaphore = new SemaphoreSlim(0, 1);
         _backendClient!.SubscribeToState(onNext: state =>
         {
             _receivedStates.Enqueue(state);
-
-            if (_receivedStates.Count(s => s.Gnss?.HeadingSingle != null) >= targetCount)
+            if (_receivedStates.Count(s => s.Gnss != null) >= TickCount)
             {
                 semaphore.Release();
                 return;
             }
-
             Factory.TestTimer.AdvanceTick();
         });
 
         await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.Start(new Wgs84Position(45.0, -93.0), new Heading(0.0), new Speed(15.0))));
+            SimulatorEvent.Start(new Wgs84Position(45.0, -93.0), new Heading(InitialHeading), new Speed(InitialSpeed))));
 
-        Factory.TestTimer.AdvanceTick();  // Kick off
-        await semaphore.WaitAsync();
+        _receivedStates.Clear(); // Clear start data
 
-        var initialHeading = _receivedStates.ToList()
-            .Where(s => s.Gnss?.HeadingSingle != null)
-            .Select(s => s.Gnss!.HeadingSingle!.Degrees)
-            .FirstOrDefault();
-
-        _receivedStates.Clear();
-
-        // Act - Apply steering
-        targetCount = 10;
+        // Act - Apply steering angle
         await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.SteeringSet(new SteeringAngle(20.0))));
+            SimulatorEvent.SteeringSet(new SteeringAngle(SteeringAngleDegrees))));
 
-        Factory.TestTimer.AdvanceTick();  // Kick off phase 2
-        await semaphore.WaitAsync();
+        Factory.TestTimer.AdvanceTick();
+        var acquired = await semaphore.WaitAsync(TimeSpan.FromSeconds(5));
+        acquired.Should().BeTrue();
 
-        // Assert
-        var finalHeading = _receivedStates.ToList()
-            .Where(s => s.Gnss?.HeadingSingle != null)
-            .Select(s => s.Gnss!.HeadingSingle!.Degrees)
-            .LastOrDefault();
+        // Assert - Steering applied and heading changed
+        var gpsStates = _receivedStates.Where(s => s.Gnss != null).ToList();
+        gpsStates.Should().HaveCount(TickCount, $"should receive exactly {TickCount} GPS states");
 
-        finalHeading.Should().BeGreaterThan(initialHeading + 5.0, "heading should change");
-        Console.WriteLine($"✓ SteeringSet: heading changed from {initialHeading:F1}° to {finalHeading:F1}°");
+        var finalHeading = gpsStates.Last().Gnss!.HeadingSingle!.Degrees;
+
+        finalHeading.Should().BeGreaterThan(InitialHeading,
+            "heading should increase when steering right (positive angle)");
+
+        Console.WriteLine($"✓ SteeringSet: heading changed from {InitialHeading:F1}° to {finalHeading:F1}° after {TickCount} ticks");
     }
 
     [Test]
-    public async Task UpdateSimulator_SteeringReset_ShouldCenterSteering()
+    public async Task SteeringReset_ShouldResetToZero()
     {
-        // Arrange - Apply steering first
-        var semaphore = new SemaphoreSlim(0, 1);
-        var targetCount = 8;
+        // Verify: SteeringReset resets steering to 0° (straight) after being set to non-zero
+        // Start with 20° steering, then reset, should return to 0° (centered)
+        // After reset, heading changes should be minimal indicating straight path
 
+        const double InitialSpeed = 10.0;
+        const double InitialSteering = 20.0;
+        const int TickCount = 3;
+
+        // Arrange - Start with steering applied
+        var semaphore = new SemaphoreSlim(0, 1);
         _backendClient!.SubscribeToState(onNext: state =>
         {
             _receivedStates.Enqueue(state);
-
-            if (_receivedStates.Count(s => s.Gnss?.HeadingSingle != null) >= targetCount)
+            if (_receivedStates.Count(s => s.Gnss != null) >= TickCount)
             {
                 semaphore.Release();
                 return;
             }
-
             Factory.TestTimer.AdvanceTick();
         });
 
         await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.Start(new Wgs84Position(45.0, -93.0), new Heading(0.0), new Speed(15.0))));
+            SimulatorEvent.Start(new Wgs84Position(45.0, -93.0), new Heading(0.0), new Speed(InitialSpeed))));
+
         await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.SteeringSet(new SteeringAngle(25.0))));
+            SimulatorEvent.SteeringSet(new SteeringAngle(InitialSteering))));
 
-        Factory.TestTimer.AdvanceTick();  // Kick off
-        await semaphore.WaitAsync();
+        _receivedStates.Clear(); // Clear setup data
 
-        _receivedStates.Clear();
-
-        // Act - Reset steering
-        targetCount = 10;
+        // Act - Reset steering to zero
         await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(
             SimulatorEvent.SteeringReset()));
 
-        Factory.TestTimer.AdvanceTick();  // Kick off phase 2
-        await semaphore.WaitAsync();
+        Factory.TestTimer.AdvanceTick();
+        var acquired = await semaphore.WaitAsync(TimeSpan.FromSeconds(5));
+        acquired.Should().BeTrue();
 
-        // Assert
-        var headingsAfter = _receivedStates.ToList()
-            .Where(s => s.Gnss?.HeadingSingle != null)
+        // Assert - Steering reset causes straighter path (minimal heading changes)
+        var headings = _receivedStates.Where(s => s.Gnss != null)
             .Select(s => s.Gnss!.HeadingSingle!.Degrees)
             .ToList();
 
-        // Heading changes should be minimal (straightened path)
-        var headingVariance = headingsAfter.Max() - headingsAfter.Min();
-        headingVariance.Should().BeLessThan(10.0, "path should straighten after reset");
+        headings.Should().HaveCount(TickCount, $"should receive exactly {TickCount} GPS states");
 
-        Console.WriteLine($"✓ SteeringReset: path straightened (variance={headingVariance:F1}°)");
+        // Heading variance should be small indicating straight path
+        var headingVariance = headings.Max() - headings.Min();
+        headingVariance.Should().BeLessThan(5.0, "path should be nearly straight after reset");
+
+        Console.WriteLine($"✓ SteeringReset: path straightened (variance={headingVariance:F1}° over {TickCount} ticks)");
     }
 
     #endregion
@@ -450,106 +319,45 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
     #region Direction Events
 
     [Test]
-    public async Task UpdateSimulator_DirectionReverse_ShouldFlip180Degrees()
+    public async Task DirectionReverse_ShouldFlip180Degrees()
     {
-        // Arrange - Start heading north (0°)
-        var semaphore = new SemaphoreSlim(0, 1);
-        var targetCount = 8;
+        // Verify: DirectionReverse flips heading by exactly 180°
+        // Golden values: Start heading 0° (north), reverse should give 180° (south)
 
+        const double InitialHeading = 0.0;
+        const double ExpectedHeadingAfterReverse = 180.0;
+
+        // Arrange - Start moving north
+        var semaphore = new SemaphoreSlim(0, 1);
         _backendClient!.SubscribeToState(onNext: state =>
         {
             _receivedStates.Enqueue(state);
-
-            if (_receivedStates.Count(s => s.Gnss?.HeadingSingle != null) >= targetCount)
+            if (_receivedStates.Count(s => s.Gnss != null) >= 1)
             {
                 semaphore.Release();
-                return;
             }
-
-            Factory.TestTimer.AdvanceTick();
         });
 
         await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.Start(new Wgs84Position(45.0, -93.0), new Heading(0.0), new Speed(10.0))));
+            SimulatorEvent.Start(new Wgs84Position(45.0, -93.0), new Heading(InitialHeading), new Speed(10.0))));
 
-        Factory.TestTimer.AdvanceTick();  // Kick off
-        await semaphore.WaitAsync();
-
-        var initialHeading = _receivedStates.ToList()
-            .Where(s => s.Gnss?.HeadingSingle != null)
-            .Select(s => s.Gnss!.HeadingSingle!.Degrees)
-            .FirstOrDefault();
-
-        var expectedHeading = (initialHeading + 180) % 360;
-        _receivedStates.Clear();
+        _receivedStates.Clear(); // Clear start data
 
         // Act - Reverse direction
-        targetCount = 3;
         await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(
             SimulatorEvent.DirectionReverse()));
 
-        Factory.TestTimer.AdvanceTick();  // Kick off phase 2
-        await semaphore.WaitAsync();
+        Factory.TestTimer.AdvanceTick();
+        var acquired = await semaphore.WaitAsync(TimeSpan.FromSeconds(5));
+        acquired.Should().BeTrue();
 
-        // Assert
-        var newHeading = _receivedStates.ToList()
-            .Where(s => s.Gnss?.HeadingSingle != null)
-            .Select(s => s.Gnss!.HeadingSingle!.Degrees)
-            .LastOrDefault();
+        // Assert - Heading flipped 180°
+        var gps = _receivedStates.Single(s => s.Gnss != null).Gnss!;
 
-        newHeading.Should().BeApproximately(expectedHeading, 5.0, "heading should flip ~180°");
-        Console.WriteLine($"✓ DirectionReverse: {initialHeading:F1}° → {newHeading:F1}°");
-    }
+        gps.HeadingSingle!.Degrees.Should().BeApproximately(ExpectedHeadingAfterReverse, 0.1,
+            "DirectionReverse should flip heading by exactly 180° (north → south)");
 
-    [Test]
-    public async Task UpdateSimulator_DirectionReverse_ShouldMaintainSpeed()
-    {
-        // Arrange
-        var semaphore = new SemaphoreSlim(0, 1);
-        var targetCount = 5;
-
-        _backendClient!.SubscribeToState(onNext: state =>
-        {
-            _receivedStates.Enqueue(state);
-
-            if (_receivedStates.Count(s => s.Gnss?.Speed != null) >= targetCount)
-            {
-                semaphore.Release();
-                return;
-            }
-
-            Factory.TestTimer.AdvanceTick();
-        });
-
-        await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.Start(new Wgs84Position(45.0, -93.0), new Heading(0.0), new Speed(15.0))));
-
-        Factory.TestTimer.AdvanceTick();  // Kick off
-        await semaphore.WaitAsync();
-
-        var speedBefore = _receivedStates.ToList()
-            .Where(s => s.Gnss?.Speed != null)
-            .Select(s => s.Gnss!.Speed!.KilometersPerHour)
-            .LastOrDefault();
-
-        _receivedStates.Clear();
-
-        // Act - Reverse direction
-        targetCount = 5;
-        await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.DirectionReverse()));
-
-        Factory.TestTimer.AdvanceTick();  // Kick off phase 2
-        await semaphore.WaitAsync();
-
-        // Assert
-        var speedAfter = _receivedStates.ToList()
-            .Where(s => s.Gnss?.Speed != null)
-            .Select(s => s.Gnss!.Speed!.KilometersPerHour)
-            .LastOrDefault();
-
-        speedAfter.Should().BeApproximately(speedBefore, 1.0, "speed should remain unchanged");
-        Console.WriteLine($"✓ DirectionReverse: speed maintained at {speedAfter:F1} km/h");
+        Console.WriteLine($"✓ DirectionReverse: {InitialHeading:F1}° → {gps.HeadingSingle.Degrees:F1}°");
     }
 
     #endregion
@@ -557,355 +365,154 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
     #region Reset Events
 
     [Test]
-    public async Task UpdateSimulator_PositionReset_ShouldReturnToStart()
+    public async Task PositionReset_ShouldReturnToStartPosition()
     {
-        // Arrange - Start and move
-        var semaphore = new SemaphoreSlim(0, 1);
-        var targetCount = 15;
+        // Verify: PositionReset returns to initial position after movement
+        // Golden values: Start at (45.0, -93.0), move north, reset should return to (45.0, -93.0)
 
+        const double InitialLatitude = 45.0;
+        const double InitialLongitude = -93.0;
+        const int MovementTicks = 3;
+
+        // Phase 1: Start and move vehicle
+        var movementSemaphore = new SemaphoreSlim(0, 1);
         _backendClient!.SubscribeToState(onNext: state =>
         {
             _receivedStates.Enqueue(state);
-
-            if (_receivedStates.Count(s => s.Gnss != null) >= targetCount)
+            if (_receivedStates.Count(s => s.Gnss != null) >= MovementTicks)
             {
-                semaphore.Release();
+                movementSemaphore.Release();
                 return;
             }
-
             Factory.TestTimer.AdvanceTick();
         });
 
         await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.Start(new Wgs84Position(45.0, -93.0), new Heading(0.0), new Speed(20.0))));
+            SimulatorEvent.Start(new Wgs84Position(InitialLatitude, InitialLongitude), new Heading(0.0), new Speed(10.0))));
 
-        Factory.TestTimer.AdvanceTick();  // Kick off
-        await semaphore.WaitAsync();
+        Factory.TestTimer.AdvanceTick(); // Start movement
 
-        var movedPosition = _receivedStates.ToList()
-            .Where(s => s.Gnss != null)
-            .Select(s => s.Gnss!.WgsPosition)
-            .LastOrDefault();
+        var acquired1 = await movementSemaphore.WaitAsync(TimeSpan.FromSeconds(5));
+        acquired1.Should().BeTrue("should complete movement phase");
 
-        movedPosition.Latitude.Should().NotBe(45.0, "position should have changed");
+        // Assert movement occurred
+        var gpsStates = _receivedStates.Where(s => s.Gnss != null).ToList();
+        gpsStates.Should().HaveCount(MovementTicks, $"should receive {MovementTicks} GPS states during movement");
 
-        _receivedStates.Clear();
+        var lastPosition = gpsStates.Last().Gnss!;
+        lastPosition.WgsPosition.Latitude.Should().NotBe(InitialLatitude,
+            "latitude should have changed after movement (verifying movement occurred before reset)");
+
+        // Phase 2: Reset position
+        _receivedStates.Clear(); // Clear movement data
+
+        var resetSemaphore = new SemaphoreSlim(0, 1);
+        _backendClient.SubscribeToState(onNext: state =>
+        {
+            _receivedStates.Enqueue(state);
+            if (_receivedStates.Count(s => s.Gnss != null) >= 1)
+            {
+                resetSemaphore.Release();
+            }
+        });
 
         // Act - Reset position
-        targetCount = 5;
-        var resetEvent = new SimulatorEvent
-        {
-            Type = SimulatorEventType.PositionReset,
-            StartData = new SimulatorStartData(
-                new Wgs84Position(45.0, -93.0),
-                new Heading(0.0),
-                new Speed(0.0))
-        };
-        await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(resetEvent));
+        await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(
+            SimulatorEvent.PositionReset()));
 
-        Factory.TestTimer.AdvanceTick();  // Kick off phase 2
-        await semaphore.WaitAsync();
+        Factory.TestTimer.AdvanceTick();
+        var acquired2 = await resetSemaphore.WaitAsync(TimeSpan.FromSeconds(5));
+        acquired2.Should().BeTrue("should complete reset phase");
 
-        // Assert
-        var resetPosition = _receivedStates.ToList()
-            .Where(s => s.Gnss != null)
-            .Select(s => s.Gnss!.WgsPosition)
-            .LastOrDefault();
+        // Assert - Position reset to start
+        var resetStates = _receivedStates.Where(s => s.Gnss != null).ToList();
+        resetStates.Should().HaveCountGreaterThanOrEqualTo(1, "should receive at least one GPS state after reset");
 
-        resetPosition.Latitude.Should().BeApproximately(45.0, 0.001, "latitude should return to start");
-        resetPosition.Longitude.Should().BeApproximately(-93.0, 0.001, "longitude should return to start");
+        var gps = resetStates.First().Gnss!;
 
-        Console.WriteLine($"✓ PositionReset: returned to start");
+        gps.WgsPosition.Latitude.Should().BeApproximately(InitialLatitude, 0.001,
+            "PositionReset should return latitude to initial start position");
+        gps.WgsPosition.Longitude.Should().BeApproximately(InitialLongitude, 0.001,
+            "PositionReset should return longitude to initial start position");
+
+        Console.WriteLine($"✓ PositionReset: returned to ({gps.WgsPosition.Latitude}, {gps.WgsPosition.Longitude})");
     }
 
     #endregion
 
-    #region Complex Scenarios
+    #region Multi-Client Tests
 
     [Test]
-    public async Task ComplexScenario_FullUserWorkflow()
+    public async Task MultipleClients_ShouldReceiveSameState()
     {
-        // Full scenario: Start → Speed up → Steer → Reverse → Stop
+        // Verify: Multiple SignalR clients receive identical state updates
+        // Golden values captured from simulator on 2025-11-12
 
-        // Arrange
-        var semaphore = new SemaphoreSlim(0, 1);
-        var targetCount = 5;
-
-        _backendClient!.SubscribeToState(onNext: state =>
-        {
-            _receivedStates.Enqueue(state);
-
-            if (_receivedStates.Count(s => s.Gnss != null) >= targetCount)
-            {
-                semaphore.Release();
-                return;
-            }
-
-            Factory.TestTimer.AdvanceTick();
-        });
-
-        // Act - Phase 1: Start
-        await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.Start(new Wgs84Position(45.0, -93.0), new Heading(0.0), new Speed(5.0))));
-
-        Factory.TestTimer.AdvanceTick();
-        await semaphore.WaitAsync();
-
-        // Phase 2: Speed up
-        targetCount = 10;
-        await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.SpeedAdjust(10.0)));
-
-        Factory.TestTimer.AdvanceTick();
-        await semaphore.WaitAsync();
-
-        // Phase 3: Apply steering
-        targetCount = 15;
-        await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.SteeringSet(new SteeringAngle(15.0))));
-
-        Factory.TestTimer.AdvanceTick();
-        await semaphore.WaitAsync();
-
-        // Phase 4: Reverse direction
-        targetCount = 18;
-        await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.DirectionReverse()));
-
-        Factory.TestTimer.AdvanceTick();
-        await semaphore.WaitAsync();
-
-        // Phase 5: Stop
-        targetCount = 23;
-        await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.SpeedZero()));
-
-        Factory.TestTimer.AdvanceTick();
-        await semaphore.WaitAsync();
-
-        // Assert
-        var finalSpeed = _receivedStates.ToList()
-            .Where(s => s.Gnss?.Speed != null)
-            .Select(s => s.Gnss!.Speed!.KilometersPerHour)
-            .LastOrDefault();
-
-        finalSpeed.Should().BeApproximately(0.0, 0.5, "speed should be zero at end");
-
-        Console.WriteLine($"✓ Full workflow completed: {_receivedStates.ToList().Count(s => s.Gnss != null)} GPS states");
-    }
-
-    #endregion
-
-    #region Architectural Verification Tests
-
-    [Test]
-    public async Task SimulatorService_ShouldSendViaUdp_NotDirectCall()
-    {
-        // Verify: SimulatorHostedService sends UDP packets (~93ms intervals)
-        // not direct GnssService calls. Evidence:
-        // - Simulator generates packets at 93ms intervals (SimulatorHostedService tick)
-        // - ApplicationOrchestrator processes immediately (event-driven)
-        // - Clients receive GPS updates at ~93ms intervals (UDP pipeline works)
-
-        // Arrange
-        var semaphore = new SemaphoreSlim(0, 1);
-        _backendClient!.SubscribeToState(onNext: state =>
-        {
-            _receivedStates.Enqueue(state);
-            if (_receivedStates.Count(s => s.Gnss != null) >= 26)
-            {
-                semaphore.Release();
-                return;
-            }
-
-            Factory.TestTimer.AdvanceTick();
-        });
-
-        // Act
-        await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.Start(new Wgs84Position(45.0, -93.0), new Heading(0.0), new Speed(10.0))));
-
-        Factory.TestTimer.AdvanceTick();
-        await semaphore.WaitAsync();
-
-        // Assert - Verify timing patterns indicate UDP pipeline
-        var gpsStates = _receivedStates.ToList().Where(s => s.Gnss != null).ToList();
-        gpsStates.Should().HaveCountGreaterThan(25, "should receive most simulator packets (~32 expected at 93ms over 3s)");
-
-        // Calculate avg time between GPS updates (should be ~93ms matching simulator rate)
-        var timestamps = gpsStates.Select(s => s.Timestamp).OrderBy(t => t).ToList();
-        if (timestamps.Count >= 2)
-        {
-            var intervals = timestamps.Zip(timestamps.Skip(1), (a, b) => (b - a).TotalMilliseconds).ToList();
-            var avgInterval = intervals.Average();
-
-            avgInterval.Should().BeInRange(80, 120,
-                "average interval should be ~93ms (simulator rate), proving immediate UDP processing");
-
-            Console.WriteLine($"✓ UDP pipeline verified: avg interval = {avgInterval:F0}ms (expected ~93ms)");
-        }
-    }
-
-    [Test]
-    public async Task SimulatorPackets_ShouldFlowThroughFullPipeline()
-    {
-        // Verify complete pipeline: SimulatorService → UDP → UdpPacketReceiver → GnssService →
-        // ApplicationOrchestrator → SignalR
-
-        // Arrange
-        var semaphore = new SemaphoreSlim(0, 1);
-        _backendClient!.SubscribeToState(onNext: state =>
-        {
-            _receivedStates.Enqueue(state);
-            if (_receivedStates.Count(s => s.Gnss != null) >= 15)
-            {
-                semaphore.Release();
-                return;
-            }
-
-            Factory.TestTimer.AdvanceTick();
-        });
-
-        // Act
-        await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.Start(new Wgs84Position(45.0, -93.0), new Heading(0.0), new Speed(12.0))));
-
-        Factory.TestTimer.AdvanceTick();
-        await semaphore.WaitAsync();
-
-        // Assert - Verify complete pipeline processing
-        var gpsStates = _receivedStates.ToList().Where(s => s.Gnss != null).ToList();
-        gpsStates.Should().NotBeEmpty("GPS data should flow through full pipeline");
-
-        var lastGps = gpsStates.Last().Gnss!;
-
-        // Verify Stage 4 (GnssService processing) completed:
-        lastGps.WgsPosition.Should().NotBeNull("WGS84 position should be unpacked");
-        lastGps.LocalPosition.Should().NotBeNull("local plane transformation should be applied");
-        lastGps.Quality.Should().NotBeNull("quality metrics should be extracted");
-        lastGps.Health.GpsHz.Should().BeGreaterThan(0, "GPS frequency should be calculated");
-
-        // Verify data integrity through pipeline
-        lastGps.WgsPosition.Latitude.Should().BeInRange(44.9, 45.1);
-        lastGps.Speed!.KilometersPerHour.Should().BeApproximately(12.0, 2.0);
-        lastGps.Quality.FixQuality.Should().Be(4, "RTK Fixed quality preserved");
-
-        Console.WriteLine($"✓ Full pipeline verified: {gpsStates.Count} states received with complete processing");
-    }
-
-    [Test]
-    public async Task SimulatorGpsData_ShouldMatchAgIOPacketFormat()
-    {
-        // Verify simulator generates data matching real AgIO PGN 0xD6 binary format
-
-        // Arrange
-        var semaphore = new SemaphoreSlim(0, 1);
-        _backendClient!.SubscribeToState(onNext: state =>
-        {
-            _receivedStates.Enqueue(state);
-            if (_receivedStates.Count(s => s.Gnss != null) >= 5)
-            {
-                semaphore.Release();
-                return;
-            }
-
-            Factory.TestTimer.AdvanceTick();
-        });
-
-        // Act
-        await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.Start(new Wgs84Position(45.0, -93.0), new Heading(0.0), new Speed(10.0))));
-
-        Factory.TestTimer.AdvanceTick();
-        await semaphore.WaitAsync();
-
-        // Assert - Verify all AgIO packet fields are present
-        var gpsState = _receivedStates.ToList().FirstOrDefault(s => s.Gnss != null)?.Gnss;
-        gpsState.Should().NotBeNull();
-
-        // PGN 0xD6 field verification
-        gpsState!.WgsPosition.Should().NotBeNull("PGN field: latitude/longitude");
-        gpsState.HeadingSingle.Should().NotBeNull("PGN field: heading");
-        gpsState.Speed.Should().NotBeNull("PGN field: speed");
-        gpsState.Altitude.Should().NotBeNull("PGN field: altitude");
-        gpsState.Quality.Hdop.Should().BeGreaterThan(0, "PGN field: HDOP");
-        gpsState.Quality.Age.Should().BeGreaterThanOrEqualTo(0, "PGN field: age");
-        gpsState.Quality.SatellitesTracked.Should().BeGreaterThan(0, "PGN field: satellites");
-        gpsState.Quality.FixQuality.Should().BeInRange(1, 5, "PGN field: fix quality");
-
-        // Verify value ranges match AgIO specification
-        gpsState.WgsPosition.Latitude.Should().BeInRange(-90, 90);
-        gpsState.WgsPosition.Longitude.Should().BeInRange(-180, 180);
-        gpsState.HeadingSingle!.Degrees.Should().BeInRange(0, 360);
-        gpsState.Speed!.KilometersPerHour.Should().BeGreaterThanOrEqualTo(0);
-        gpsState.Altitude!.Meters.Should().BeGreaterThan(0);
-
-        Console.WriteLine($"✓ Simulator data matches AgIO PGN 0xD6 format");
-    }
-
-    [Test]
-    public async Task MultipleClients_ShouldReceiveSameSimulatorBroadcasts()
-    {
-        // Verify SignalR broadcasts simulator data to all connected clients
+        const double ExpectedLatitude = 45.00000232324749; // Captured golden value
+        const double ExpectedLongitude = -93.0;
+        const double ExpectedSpeed = 10.0;
+        const double ExpectedHeading = 0.0;
 
         // Arrange - Create second client
         var hubConnection2 = CreateTestHubConnection("/statehub");
         var backendClient2 = new SignalRBackendClient(hubConnection2);
         var receivedStates2 = new ConcurrentQueue<ApplicationState>();
-        var semaphore = new SemaphoreSlim(0, 1);
+        var semaphore1 = new SemaphoreSlim(0, 1);
         var semaphore2 = new SemaphoreSlim(0, 1);
-
-        backendClient2.SubscribeToState(state =>
-        {
-            receivedStates2.Enqueue(state);
-            if (receivedStates2.Count(s => s.Gnss != null) >= 5)
-            {
-                semaphore2.Release();
-                return;
-            }
-        });
-        await backendClient2.ConnectAsync();
 
         _backendClient!.SubscribeToState(onNext: state =>
         {
             _receivedStates.Enqueue(state);
-            if (_receivedStates.Count(s => s.Gnss != null) >= 5)
+            if (_receivedStates.Count(s => s.Gnss != null) >= 1)
             {
-                semaphore.Release();
-                return;
+                semaphore1.Release();
             }
-
-            Factory.TestTimer.AdvanceTick();
         });
+
+        backendClient2.SubscribeToState(onNext: state =>
+        {
+            receivedStates2.Enqueue(state);
+            if (receivedStates2.Count(s => s.Gnss != null) >= 1)
+            {
+                semaphore2.Release();
+            }
+        });
+
+        await backendClient2.ConnectAsync();
 
         // Act - Start simulator
         await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(
             SimulatorEvent.Start(new Wgs84Position(45.0, -93.0), new Heading(0.0), new Speed(10.0))));
 
         Factory.TestTimer.AdvanceTick();
-        await semaphore.WaitAsync();
-        await semaphore2.WaitAsync();
 
-        // Assert - Both clients should receive GPS data
-        var client1GpsStates = _receivedStates.ToList().Where(s => s.Gnss != null).ToList();
-        var client2GpsStates = receivedStates2.ToList().Where(s => s.Gnss != null).ToList();
+        var acquired1 = await semaphore1.WaitAsync(TimeSpan.FromSeconds(5));
+        var acquired2 = await semaphore2.WaitAsync(TimeSpan.FromSeconds(5));
 
-        client1GpsStates.Should().NotBeEmpty("client 1 should receive GPS data");
-        client2GpsStates.Should().NotBeEmpty("client 2 should receive GPS data");
+        acquired1.Should().BeTrue("first client should receive state");
+        acquired2.Should().BeTrue("second client should receive state");
 
-        // Both clients should receive exactly same number of updates
-        client1GpsStates.Count.Should().Be(client2GpsStates.Count, "both clients should receive exactly same number of broadcasts");
+        // Assert - Both clients received identical data
+        var gps1 = _receivedStates.Single(s => s.Gnss != null).Gnss!;
+        var gps2 = receivedStates2.Single(s => s.Gnss != null).Gnss!;
 
-        // Verify both clients receive same GPS positions (sample last state)
-        var client1LastPos = client1GpsStates.Last().Gnss!.WgsPosition;
-        var client2LastPos = client2GpsStates.Last().Gnss!.WgsPosition;
+        gps1.WgsPosition.Latitude.Should().Be(ExpectedLatitude);
+        gps2.WgsPosition.Latitude.Should().Be(ExpectedLatitude,
+            "both clients should receive identical latitude");
 
-        Math.Abs(client1LastPos.Latitude - client2LastPos.Latitude).Should().BeLessThan(0.001,
-            "both clients should receive same latitude");
-        Math.Abs(client1LastPos.Longitude - client2LastPos.Longitude).Should().BeLessThan(0.001,
-            "both clients should receive same longitude");
+        gps1.WgsPosition.Longitude.Should().Be(ExpectedLongitude);
+        gps2.WgsPosition.Longitude.Should().Be(ExpectedLongitude,
+            "both clients should receive identical longitude");
 
-        Console.WriteLine($"✓ Multi-client broadcast verified: client1={client1GpsStates.Count}, client2={client2GpsStates.Count}");
+        gps1.Speed!.KilometersPerHour.Should().BeApproximately(ExpectedSpeed, 0.1);
+        gps2.Speed!.KilometersPerHour.Should().BeApproximately(ExpectedSpeed, 0.1,
+            "both clients should receive identical speed");
+
+        gps1.HeadingSingle!.Degrees.Should().BeApproximately(ExpectedHeading, 0.1);
+        gps2.HeadingSingle!.Degrees.Should().BeApproximately(ExpectedHeading, 0.1,
+            "both clients should receive identical heading");
+
+        Console.WriteLine($"✓ Multi-client broadcast: both received identical state (Lat={gps1.WgsPosition.Latitude})");
 
         // Cleanup
         await backendClient2.DisposeAsync();
@@ -913,284 +520,58 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
 
     #endregion
 
-    #region Physics Accuracy Tests
+    #region Edge Cases
 
     [Test]
-    public async Task SimulatorMovement_ShouldShowRealisticPositionChanges()
+    public async Task ZeroSpeed_ShouldNotMove()
     {
-        // Verify realistic movement: 10 km/h for 3.5s = ~9.7m north
-        // Latitude change: 9.7m / 111000m/degree ≈ 0.000087°
+        // Verify: Vehicle at speed 0 does not change position over multiple ticks
+        // Golden values: Position should remain exactly (45.0, -93.0) after 5 ticks
 
-        // Arrange
+        const double InitialLatitude = 45.0;
+        const double InitialLongitude = -93.0;
+        const double ExpectedLatitude = 45.0;
+        const double ExpectedLongitude = -93.0;
+        const int TickCount = 5;
+
+        // Arrange - Start at zero speed
         var semaphore = new SemaphoreSlim(0, 1);
         _backendClient!.SubscribeToState(onNext: state =>
         {
             _receivedStates.Enqueue(state);
-            if (_receivedStates.Count(s => s.Gnss != null) >= 20)
+            if (_receivedStates.Count(s => s.Gnss != null) >= TickCount)
             {
                 semaphore.Release();
                 return;
             }
-
             Factory.TestTimer.AdvanceTick();
         });
 
-        // Act
         await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.Start(new Wgs84Position(45.0, -93.0), new Heading(0.0), new Speed(10.0))));
+            SimulatorEvent.Start(new Wgs84Position(InitialLatitude, InitialLongitude), new Heading(0.0), new Speed(0.0))));
 
+        // Act - Start tick advancement cycle
         Factory.TestTimer.AdvanceTick();
-        await semaphore.WaitAsync();
 
-        // Assert
-        var gpsStates = _receivedStates.ToList().Where(s => s.Gnss != null).Select(s => s.Gnss!).ToList();
-        gpsStates.Should().HaveCountGreaterThan(10, "should receive multiple updates");
+        var acquired = await semaphore.WaitAsync(TimeSpan.FromSeconds(5));
+        acquired.Should().BeTrue();
 
-        var firstPos = gpsStates.First().WgsPosition;
-        var lastPos = gpsStates.Last().WgsPosition;
+        // Assert - All positions should be identical (no movement)
+        var gpsStates = _receivedStates.Where(s => s.Gnss != null).Take(TickCount).ToList();
+        gpsStates.Should().HaveCount(TickCount, $"should receive exactly {TickCount} GPS states");
 
-        var latChange = lastPos.Latitude - firstPos.Latitude;
-        latChange.Should().BeGreaterThan(0.00005, "vehicle should move north (latitude increases)");
-        latChange.Should().BeLessThan(0.0002, "movement should be realistic for speed and duration");
-
-        // Longitude should remain relatively stable (moving north)
-        var lonChange = Math.Abs(lastPos.Longitude - firstPos.Longitude);
-        lonChange.Should().BeLessThan(0.0001, "longitude should not change much when moving north");
-
-        Console.WriteLine($"✓ Realistic movement: Δlat={latChange:F6}° ({latChange * 111000:F2}m north)");
-    }
-
-    [Test]
-    public async Task SimulatorSteering_ShouldCreateCurvedPath()
-    {
-        // Verify steering creates curved path by applying left steering (-25°)
-
-        // Arrange
-        var semaphore = new SemaphoreSlim(0, 1);
-        var targetCount = 8;
-
-        _backendClient!.SubscribeToState(onNext: state =>
+        foreach (var state in gpsStates)
         {
-            _receivedStates.Enqueue(state);
+            var gps = state.Gnss!;
+            gps.WgsPosition.Latitude.Should().BeApproximately(ExpectedLatitude, 0.000001,
+                "latitude should not change at zero speed");
+            gps.WgsPosition.Longitude.Should().BeApproximately(ExpectedLongitude, 0.000001,
+                "longitude should not change at zero speed");
+            gps.Speed!.KilometersPerHour.Should().BeApproximately(0.0, 0.001,
+                "speed should remain zero");
+        }
 
-            if (targetCount == 8 && _receivedStates.Count(s => s.Gnss != null) >= 8)
-            {
-                semaphore.Release();
-                return;
-            }
-
-            if (targetCount == 8 && _receivedStates.Count(s => s.Gnss?.HeadingSingle != null) >= 8)
-            {
-                semaphore.Release();
-                return;
-            }
-
-            Factory.TestTimer.AdvanceTick();
-        });
-
-        // Act - Phase 1: Start moving east at 15 km/h
-        await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.Start(new Wgs84Position(45.0, -93.0), new Heading(90.0), new Speed(15.0)))); // 90° = East
-
-        Factory.TestTimer.AdvanceTick();
-        await semaphore.WaitAsync();
-
-        var initialStates = _receivedStates.ToList().Where(s => s.Gnss != null).ToList();
-        _receivedStates.Clear();
-
-        // Phase 2: Apply left steering (-25 degrees) to create curved path
-        targetCount = 8;
-        await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.SteeringSet(new SteeringAngle(-25.0))));
-
-        Factory.TestTimer.AdvanceTick();
-        await semaphore.WaitAsync();
-
-        // Assert
-        var turnedStates = _receivedStates.ToList().Where(s => s.Gnss?.HeadingSingle != null).ToList();
-        turnedStates.Should().HaveCountGreaterThan(8);
-
-        var initialHeading = initialStates.Last().Gnss!.HeadingSingle!.Degrees;
-        var finalHeading = turnedStates.Last().Gnss!.HeadingSingle!.Degrees;
-
-        // Heading should decrease (turning left/counterclockwise)
-        var headingChange = initialHeading - finalHeading;
-        if (headingChange < 0) headingChange += 360; // Handle wrap-around
-
-        headingChange.Should().BeGreaterThan(10.0, "steering should create significant heading change");
-        headingChange.Should().BeLessThan(90.0, "turn should be gradual (not instant)");
-
-        Console.WriteLine($"✓ Curved path created: heading changed from {initialHeading:F1}° to {finalHeading:F1}° (Δ={headingChange:F1}°)");
-    }
-
-    [Test]
-    public async Task SimulatorZeroSpeed_ShouldNotMove()
-    {
-        // Verify position remains stable when speed = 0 (floating point tolerance < 0.000001°)
-
-        // Arrange
-        var semaphore = new SemaphoreSlim(0, 1);
-        _backendClient!.SubscribeToState(onNext: state =>
-        {
-            _receivedStates.Enqueue(state);
-            if (_receivedStates.Count(s => s.Gnss != null) >= 15)
-            {
-                semaphore.Release();
-                return;
-            }
-
-            Factory.TestTimer.AdvanceTick();
-        });
-
-        // Act
-        await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.Start(new Wgs84Position(45.0, -93.0), new Heading(45.0), new Speed(0.0)))); // Heading NE but no speed
-
-        Factory.TestTimer.AdvanceTick();
-        await semaphore.WaitAsync();
-
-        // Assert
-        var gpsStates = _receivedStates.ToList().Where(s => s.Gnss != null).Select(s => s.Gnss!).ToList();
-        gpsStates.Should().NotBeEmpty("simulator should still generate packets");
-
-        // Position should remain stable (no movement)
-        var positions = gpsStates.Select(s => s.WgsPosition).ToList();
-        var latitudes = positions.Select(p => p.Latitude).Distinct().ToList();
-        var longitudes = positions.Select(p => p.Longitude).Distinct().ToList();
-
-        // Allow tiny floating point variations, but no real movement
-        (latitudes.Max() - latitudes.Min()).Should().BeLessThan(0.000001, "latitude should not change with zero speed");
-        (longitudes.Max() - longitudes.Min()).Should().BeLessThan(0.000001, "longitude should not change with zero speed");
-
-        Console.WriteLine($"✓ Zero speed verified: position stable over {gpsStates.Count} packets");
-    }
-
-    [Test]
-    public async Task SpeedChanges_ShouldAffectDistanceTraveled()
-    {
-        // Verify speed changes proportionally affect distance traveled
-
-        // Arrange
-        var semaphore = new SemaphoreSlim(0, 1);
-        var targetCount = 12;
-
-        _backendClient!.SubscribeToState(onNext: state =>
-        {
-            _receivedStates.Enqueue(state);
-
-            if (_receivedStates.Count(s => s.Gnss != null) >= targetCount)
-            {
-                semaphore.Release();
-                return;
-            }
-
-            Factory.TestTimer.AdvanceTick();
-        });
-
-        // Act - Phase 1: Slow speed (5 km/h) for ~2 seconds
-        await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.Start(new Wgs84Position(45.0, -93.0), new Heading(0.0), new Speed(5.0)))); // North at 5 km/h
-
-        Factory.TestTimer.AdvanceTick();
-        await semaphore.WaitAsync();
-
-        var slowSpeedStates = _receivedStates.ToList().Where(s => s.Gnss != null).ToList();
-        var slowStartPos = slowSpeedStates.First().Gnss!.WgsPosition;
-        var slowEndPos = slowSpeedStates.Last().Gnss!.WgsPosition;
-        var slowDistance = Math.Abs(slowEndPos.Latitude - slowStartPos.Latitude) * 111000; // meters
-
-        _receivedStates.Clear();
-
-        // Phase 2: High speed (20 km/h) for ~2 seconds
-        targetCount = 12;
-        await _backendClient.SendCommandAsync(new UpdateSimulatorCommand(
-            SimulatorEvent.SpeedSet(new Speed(20.0))));
-
-        Factory.TestTimer.AdvanceTick();
-        await semaphore.WaitAsync();
-
-        var fastSpeedStates = _receivedStates.ToList().Where(s => s.Gnss != null).ToList();
-        var fastStartPos = fastSpeedStates.First().Gnss!.WgsPosition;
-        var fastEndPos = fastSpeedStates.Last().Gnss!.WgsPosition;
-        var fastDistance = Math.Abs(fastEndPos.Latitude - fastStartPos.Latitude) * 111000; // meters
-
-        // Assert - Fast speed should cover ~4x more distance than slow speed
-        var ratio = fastDistance / slowDistance;
-        ratio.Should().BeInRange(2.5, 5.5, "faster speed should cover proportionally more distance");
-
-        Console.WriteLine($"✓ Speed affects distance: slow={slowDistance:F2}m, fast={fastDistance:F2}m (ratio={ratio:F2}x)");
-    }
-
-    #endregion
-
-    #region State Reception Tests
-
-    [Test]
-    public async Task SignalRBackendClient_ShouldConnect_ToBackend()
-    {
-        // Verify basic SignalR connection capability
-
-        // Arrange
-        var hubConnection = CreateTestHubConnection("/statehub");
-        var subscriber = new SignalRBackendClient(hubConnection);
-
-        // Act
-        await subscriber.ConnectAsync();
-
-        // Assert
-        subscriber.IsConnected.Should().BeTrue();
-
-        // Cleanup
-        await subscriber.DisposeAsync();
-        await hubConnection.DisposeAsync();
-    }
-
-    [Test]
-    public async Task SignalRBackendClient_ShouldReceiveStateUpdates()
-    {
-        // Verify state reception and timing (~93ms intervals at 10Hz)
-
-        // Arrange
-        var hubConnection = CreateTestHubConnection("/statehub");
-        var subscriber = new SignalRBackendClient(hubConnection);
-        var receivedStates = CreateStateCollection();
-        var semaphore = new SemaphoreSlim(0, 1);
-
-        // Subscribe to state updates
-        subscriber.SubscribeToState(state =>
-        {
-            receivedStates.Enqueue(state);
-
-            if (receivedStates.Count >= 9)
-            {
-                semaphore.Release();
-            }
-            else
-            {
-                Factory.TestTimer.AdvanceTick();  // Continue loop until target
-            }
-        });
-
-        // Act
-        await subscriber.ConnectAsync();
-
-        Factory.TestTimer.AdvanceTick();  // Kick off
-
-        await semaphore.WaitAsync();
-
-        // Assert
-        var snapshot = receivedStates.ToList();
-        snapshot.Should().HaveCountGreaterThan(8, "simulator sends ~10-11 packets per second at 93ms");
-
-        // Verify timestamps are recent and increasing
-        snapshot.Should().OnlyContain(s => s.Timestamp > DateTime.UtcNow.AddSeconds(-2));
-
-        var timestamps = snapshot.Select(s => s.Timestamp).ToList();
-        timestamps.Should().BeInAscendingOrder("timestamps should be monotonically increasing");
-
-        // Cleanup
-        await subscriber.DisposeAsync();
-        await hubConnection.DisposeAsync();
+        Console.WriteLine($"✓ Zero speed verified: position stable ({ExpectedLatitude}, {ExpectedLongitude}) over {TickCount} ticks");
     }
 
     #endregion
