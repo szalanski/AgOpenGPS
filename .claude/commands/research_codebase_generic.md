@@ -52,7 +52,16 @@ Then wait for the user's research query.
    - Highlight patterns, connections, and architectural decisions
    - Answer the user's specific questions with concrete evidence
 
-5. **Gather metadata for the research document:**
+5. **Classify codebase type based on researched directories:**
+   - Review all file paths from research findings
+   - Categorize based on directory patterns:
+     - **new_api**: Primarily `SourceCode/AgOpenGPS.Api/*`, `SourceCode/AgOpenGPS.Api.Client/*`
+     - **legacy**: Primarily `SourceCode/GPS/*`, `SourceCode/AgIO/*`, utilities
+     - **mixed**: Spans both new and legacy directories
+     - **separate_migration**: `AgOpenGPS.Core/*`, `AgOpenGPS.WpfApp/*` (different team)
+   - Track unique directories encountered
+
+6. **Gather metadata for the research document:**
    - generate all relevant metadata
    - Filename: `thoughts/shared/research/YYYY-MM-DD-ENG-XXXX-description.md`
      - Format: `YYYY-MM-DD-ENG-XXXX-description.md` where:
@@ -63,8 +72,8 @@ Then wait for the user's research query.
        - With ticket: `2025-01-08-ENG-1478-parent-child-tracking.md`
        - Without ticket: `2025-01-08-authentication-flow.md`
 
-6. **Generate research document:**
-   - Use the metadata gathered in step 4
+7. **Generate research document:**
+   - Use the metadata gathered in step 6
    - Structure the document with YAML frontmatter followed by content:
      ```markdown
      ---
@@ -74,6 +83,8 @@ Then wait for the user's research query.
      branch: [Current branch name]
      repository: [Repository name]
      topic: "[User's Question/Topic]"
+     codebase_type: [new_api | legacy | mixed | separate_migration]
+     directories: [comma-separated list of main directories researched]
      tags: [research, codebase, relevant-component-names]
      status: complete
      last_updated: [Current date in YYYY-MM-DD format]
@@ -124,19 +135,19 @@ Then wait for the user's research query.
      [Any areas that need further investigation]
      ```
 
-7. **Add GitHub permalinks (if applicable):**
+8. **Add GitHub permalinks (if applicable):**
    - Check if on main branch or if commit is pushed: `git branch --show-current` and `git status`
    - If on main/master or pushed, generate GitHub permalinks:
      - Get repo info: `gh repo view --json owner,name`
      - Create permalinks: `https://github.com/{owner}/{repo}/blob/{commit}/{file}#L{line}`
    - Replace local file references with permalinks in the document
 
-8. **Sync and present findings:**
+9. **Sync and present findings:**
    - Present a concise summary of findings to the user
    - Include key file references for easy navigation
    - Ask if they have follow-up questions or need clarification
 
-9. **Handle follow-up questions:**
+10. **Handle follow-up questions:**
    - If the user has follow-up questions, append to the same research document
    - Update the frontmatter fields `last_updated` and `last_updated_by` to reflect the update
    - Add `last_updated_note: "Added follow-up research for [brief description]"` to frontmatter
