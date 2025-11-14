@@ -18,15 +18,17 @@ namespace AgOpenGPS.Api.Client.SignalR
     {
         private readonly HubConnection _hubConnection;
         private readonly Subject<ApplicationState> _stateSubject = new Subject<ApplicationState>();
+        private readonly ISignalRCommandRouter _commandRouter;
         private IDisposable? _subscription;
 
         /// <summary>
         /// Initializes a new instance of SignalRBackendClient.
         /// </summary>
         /// <param name="hubConnection">Pre-configured HubConnection to use for communication</param>
-        public SignalRBackendClient(HubConnection hubConnection)
+        public SignalRBackendClient(HubConnection hubConnection, ISignalRCommandRouter commandRouter)
         {
             _hubConnection = hubConnection ?? throw new ArgumentNullException(nameof(hubConnection));
+            _commandRouter = commandRouter ?? throw new ArgumentNullException(nameof(commandRouter));
 
             // Register handler for state update messages (backend → client)
             _hubConnection.On<ApplicationState>("ReceiveState", state =>
@@ -56,18 +58,13 @@ namespace AgOpenGPS.Api.Client.SignalR
             if (!IsConnected)
                 throw new InvalidOperationException("Not connected to backend. Call ConnectAsync() first.");
 
-            // Route command to specific hub method based on type
-            // Note: SignalR doesn't support generic hub methods, so we need specific methods for each command type
-            switch (command)
+            if (!_commandRouter.TryGetHubMethodForCommand(command.GetType(), out var hubMethod))
             {
-                case UpdateSimulatorCommand cmd:
-                    await _hubConnection.InvokeAsync("UpdateSimulator", cmd);
-                    break;
-
-                default:
-                    throw new NotSupportedException($"Command type '{command.GetType().Name}' is not supported. " +
-                        "Add a new case to SignalRBackendClient.SendCommandAsync and a corresponding hub method.");
+                throw new NotSupportedException($"Command type '{command.GetType().Name}' is not supported. " +
+                    "Ensure the command type is discovered by SignalRCommandRouter.");
             }
+
+            await _hubConnection.InvokeAsync(hubMethod, command);
         }
 
         /// <inheritdoc />

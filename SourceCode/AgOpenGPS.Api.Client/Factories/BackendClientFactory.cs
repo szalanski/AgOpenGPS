@@ -38,7 +38,8 @@ namespace AgOpenGPS.Api.Client.Factories
             var hubConnection = builder.Build();
 
             // Create and return SignalRBackendClient with injected HubConnection
-            return new SignalRBackendClient(hubConnection);
+            var commandRouter = new SignalRCommandRouter();
+            return new SignalRBackendClient(hubConnection, commandRouter);
         }
     }
 }
