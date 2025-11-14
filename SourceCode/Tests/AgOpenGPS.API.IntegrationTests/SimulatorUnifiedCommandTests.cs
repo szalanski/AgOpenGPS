@@ -27,7 +27,7 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
         _receivedStates.Clear();
 
         var hubConnection = CreateTestHubConnection("/statehub");
-        _backendClient = new SignalRBackendClient(hubConnection);
+        _backendClient = new SignalRBackendClient(hubConnection, new SignalRCommandRouter());
         await _backendClient.ConnectAsync();
     }
 
@@ -455,7 +455,7 @@ public class SimulatorUnifiedCommandTests : BaseIntegrationTest
 
         // Arrange - Create second client
         var hubConnection2 = CreateTestHubConnection("/statehub");
-        var backendClient2 = new SignalRBackendClient(hubConnection2);
+        var backendClient2 = new SignalRBackendClient(hubConnection2, new SignalRCommandRouter());
         var receivedStates2 = new ConcurrentQueue<ApplicationState>();
         var semaphore1 = new SemaphoreSlim(0, 1);
         var semaphore2 = new SemaphoreSlim(0, 1);

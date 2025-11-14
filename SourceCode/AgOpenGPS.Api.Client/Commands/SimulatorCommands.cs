@@ -1,5 +1,4 @@
 using AgOpenGPS.Api.Client.Models;
-
 namespace AgOpenGPS.Api.Client.Commands
 {
     /// <summary>

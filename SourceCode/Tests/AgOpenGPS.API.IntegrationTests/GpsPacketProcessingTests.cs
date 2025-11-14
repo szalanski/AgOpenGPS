@@ -31,7 +31,7 @@ public class GpsPacketProcessingTests : BaseIntegrationTest
     {
         // Setup SignalR connection for event-driven testing
         _hubConnection = CreateTestHubConnection("/statehub");
-        _subscriber = new SignalRBackendClient(_hubConnection);
+        _subscriber = new SignalRBackendClient(_hubConnection, new SignalRCommandRouter());
         _receivedStates = new ConcurrentQueue<ApplicationState>();
 
         await _subscriber.ConnectAsync();
