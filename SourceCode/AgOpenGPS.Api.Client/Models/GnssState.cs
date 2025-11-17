@@ -43,6 +43,13 @@ namespace AgOpenGPS.Api.Client.Models
         public Speed Speed { get; set; }
 
         /// <summary>
+        /// Gets or sets the exponentially averaged ground speed.
+        /// Filtered using 0.75/0.25 exponential moving average for smoother display
+        /// and reduced jitter in speed-dependent calculations.
+        /// </summary>
+        public Speed AveragedSpeed { get; set; }
+
+        /// <summary>
         /// Gets or sets the altitude above mean sea level (MSL).
         /// Elevation from GPS receiver.
         /// </summary>
@@ -71,6 +78,7 @@ namespace AgOpenGPS.Api.Client.Models
             HeadingSingle = new Heading(0);
             HeadingDual = new Heading(0);
             Speed = new Speed(0);
+            AveragedSpeed = new Speed(0);
             Altitude = new Altitude(0);
             Quality = new GpsQuality(0, 0, 99.9, 0);
             Health = new GpsHealth(0, 0);
