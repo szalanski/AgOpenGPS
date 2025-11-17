@@ -587,6 +587,24 @@ namespace AgOpenGPS
             }
         }
 
+        /// <summary>
+        /// Sends a command to the backend if connected. Used by child forms to dispatch commands.
+        /// </summary>
+        public async Task SendBackendCommandAsync(ICommand command)
+        {
+            if (_backendClient?.IsConnected == true)
+            {
+                try
+                {
+                    await _backendClient.SendCommandAsync(command);
+                }
+                catch (Exception ex)
+                {
+                    Log.EventWriter($"Failed to send backend command: {ex.Message}");
+                }
+            }
+        }
+
         private void OnStateReceived(ApplicationState state)
         {
             // Marshal to UI thread if needed
@@ -630,7 +648,9 @@ namespace AgOpenGPS
                     state.Gnss.WgsPosition.Longitude);
 
                 // Initialize LocalPlane with backend's origin (matches backend's coordinate system)
-                pn.DefineLocalPlane(backendOrigin, false);
+                AppModel.LocalPlane = new LocalPlane(backendOrigin, AppModel.SharedFieldProperties);
+                GeoCoord geoCoord = AppModel.LocalPlane.ConvertWgs84ToGeoCoord(AppModel.CurrentLatLon);
+                worldGrid.checkZoomWorldGrid(geoCoord);
                 isFirstFixPositionSet = true;
                 Log.EventWriter($"Local plane synchronized with backend origin: {backendOrigin.Latitude:F6}, {backendOrigin.Longitude:F6}");
                 Log.EventWriter($"  MetersPerDegreeLat: {state.LocalPlane.MetersPerDegreeLat:F2}");

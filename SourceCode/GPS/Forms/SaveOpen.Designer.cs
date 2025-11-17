@@ -35,7 +35,7 @@ namespace AgOpenGPS
         }
 
         // Open a field with required precheck and per-file loaders.
-        public void FileOpenField(string openType)
+        public async void FileOpenField(string openType)
         {
             if (isJobStarted)
             {
@@ -79,7 +79,11 @@ namespace AgOpenGPS
             {
                 return;
             }
-            pn.DefineLocalPlane(origin, true);
+
+            // Update local plane via backend command
+            var wgs84Origin = new AgOpenGPS.Api.Client.Models.Wgs84Position(origin.Latitude, origin.Longitude);
+            var command = new AgOpenGPS.Api.Client.Commands.UpdateLocalPlaneCommand(wgs84Origin);
+            await SendBackendCommandAsync(command);
 
             JobNew();
 

@@ -130,6 +130,18 @@ namespace AgOpenGPS.Api.Services
         }
 
         /// <summary>
+        /// Set or update the local plane origin.
+        /// Creates new transformer regardless of current state.
+        /// </summary>
+        public void SetOrigin(Wgs84Position origin)
+        {
+            lock (_lock)
+            {
+                _transformer = new CoordinateTransformer(origin);
+            }
+        }
+
+        /// <summary>
         /// Calculates meters per degree of latitude at a given latitude.
         /// Formula from WGS84 ellipsoid model.
         /// </summary>

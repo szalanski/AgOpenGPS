@@ -53,4 +53,11 @@ public interface ICoordinateService
     /// </summary>
     /// <param name="newOrigin">New WGS84 position to use as origin</param>
     void UpdateOrigin(Wgs84Position newOrigin);
+
+    /// <summary>
+    /// Set or update the local plane origin.
+    /// Works whether the coordinate system is already initialized or not.
+    /// </summary>
+    /// <param name="origin">WGS84 position to use as local plane origin</param>
+    void SetOrigin(Wgs84Position origin);
 }

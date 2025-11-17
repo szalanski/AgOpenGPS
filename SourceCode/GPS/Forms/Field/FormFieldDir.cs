@@ -70,7 +70,7 @@ namespace AgOpenGPS
             tboxFieldName.Text += " " + DateTime.Now.ToString("HH-mm", CultureInfo.InvariantCulture);
         }
 
-        private void btnSave_Click(object sender, EventArgs e)
+        private async void btnSave_Click(object sender, EventArgs e)
         {
             //fill something in
             if (String.IsNullOrEmpty(tboxFieldName.Text.Trim()))
@@ -100,7 +100,12 @@ namespace AgOpenGPS
                 }
                 else
                 {
-                    mf.pn.DefineLocalPlane(mf.AppModel.CurrentLatLon, false);
+                    // Update local plane via backend command
+                    var wgs84Origin = new AgOpenGPS.Api.Client.Models.Wgs84Position(
+                        mf.AppModel.CurrentLatLon.Latitude,
+                        mf.AppModel.CurrentLatLon.Longitude);
+                    var command = new AgOpenGPS.Api.Client.Commands.UpdateLocalPlaneCommand(wgs84Origin);
+                    await mf.SendBackendCommandAsync(command);
 
                     dirNewField.Create();
 
