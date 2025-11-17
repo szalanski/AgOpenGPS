@@ -58,5 +58,15 @@ public class StateHub : Hub
         await _mediator.Send(command);
     }
 
+    /// <summary>
+    /// Updates the local plane coordinate system origin.
+    /// </summary>
+    public async Task UpdateLocalPlane(UpdateLocalPlaneCommand command)
+    {
+        _logger.LogDebug("UpdateLocalPlane command from {ConnectionId}: Lat={Lat:F6}, Lon={Lon:F6}",
+            Context.ConnectionId, command.Origin.Latitude, command.Origin.Longitude);
+        await _mediator.Send(command);
+    }
+
     #endregion
 }

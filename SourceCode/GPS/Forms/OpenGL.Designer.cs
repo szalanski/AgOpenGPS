@@ -495,7 +495,7 @@ namespace AgOpenGPS
 
                     if (isRTK_AlarmOn)
                     {
-                        if (pn.fixQuality != 4)
+                        if (_cachedState.Gnss.Quality.FixQuality != 4)
                         {
                             // LOST: raise alarm (existing behavior) and arm "recovered" for next time
                             if (!sounds.isRTKAlarming)
@@ -566,7 +566,7 @@ namespace AgOpenGPS
                     }
 
 
-                    if (pn.age > pn.ageAlarm) DrawAge();
+                    if (_cachedState.Gnss.Quality.Age > Properties.Settings.Default.setGPS_ageAlarm) DrawAge();
 
                     //at least one track
                     if (guideLineCounter > 0) DrawGuidanceLineText();
@@ -2575,7 +2575,7 @@ namespace AgOpenGPS
         private void DrawAge()
         {
             GL.Color3(0.9752f, 0.52f, 0.0f);
-            font.DrawText(oglMain.Width / 4, 60, "Age:" + pn.age.ToString("N1"), 1.5);
+            font.DrawText(oglMain.Width / 4, 60, "Age:" + _cachedState.Gnss.Quality.Age.ToString("N1"), 1.5);
         }
 
         private void DrawGuidanceLineText()

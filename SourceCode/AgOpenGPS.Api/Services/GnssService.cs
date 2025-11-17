@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using AgOpenGPS.Api.Abstractions;
 using AgOpenGPS.Api.Client.Models;
+using AgOpenGPS.Api.Utilities;
 
 namespace AgOpenGPS.Api.Services;
 
@@ -20,6 +21,9 @@ public class GnssService : IGnssService
     private bool _isFirstPacket = true;
     private double _gpsHz = 10.0; // Initial value
     private uint _sentenceCounter = 0;
+
+    // Speed averaging filter
+    private readonly ExponentialMovingAverageFilter _speedFilter = new(weight: 0.75);
 
     public GnssService(ILogger<GnssService> logger, ICoordinateService coordinateService)
     {
@@ -64,6 +68,17 @@ public class GnssService : IGnssService
         var speed = UnpackSpeed(packetData);
         var altitude = UnpackAltitude(packetData);
 
+        // Step 6a: Apply speed averaging
+        // Early return pattern - if no speed data, use current filtered value
+        if (speed == null)
+        {
+            // Maintain continuity when GPS temporarily loses speed data
+            speed = new Speed(_speedFilter.Current);
+        }
+
+        // Update filter with new speed data
+        var averagedSpeedKmh = _speedFilter.Update(speed.Value.KilometersPerHour);
+
         // Step 7: Extract quality data
         var quality = UnpackQuality(packetData);
 
@@ -78,7 +93,8 @@ public class GnssService : IGnssService
             LocalPosition = localPosition,
             HeadingDual = headingDual ?? headingSingle, // Fall back to single if dual not available
             HeadingSingle = headingSingle,
-            Speed = speed ?? Speed.FromMetersPerSecond(0), // Default to 0 if not available
+            Speed = speed.Value, // Raw instantaneous speed
+            AveragedSpeed = new Speed(averagedSpeedKmh), // Filtered speed for display
             Altitude = altitude ?? new Altitude(0), // Default to 0 if not available
             Quality = quality,
             Health = health

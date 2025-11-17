@@ -319,7 +319,7 @@ namespace AgOpenGPS
             mf.bnd.isOkToAddPoints = false;
         }
 
-        private void CreateNewField()
+        private async void CreateNewField()
         {
             //fill something in
             if (String.IsNullOrEmpty(tboxFieldName.Text.Trim()))
@@ -349,7 +349,10 @@ namespace AgOpenGPS
                 }
                 else
                 {
-                    mf.pn.DefineLocalPlane(new Wgs84(latK, lonK), true);
+                    // Update local plane via backend command
+                    var wgs84Origin = new AgOpenGPS.Api.Client.Models.Wgs84Position(latK, lonK);
+                    var command = new AgOpenGPS.Api.Client.Commands.UpdateLocalPlaneCommand(wgs84Origin);
+                    await mf.SendBackendCommandAsync(command);
 
                     //make sure directory exists, or create it
                     if ((!string.IsNullOrEmpty(directoryName)) && (!Directory.Exists(directoryName)))

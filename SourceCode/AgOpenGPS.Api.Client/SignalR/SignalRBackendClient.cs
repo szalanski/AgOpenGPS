@@ -64,6 +64,10 @@ namespace AgOpenGPS.Api.Client.SignalR
                     await _hubConnection.InvokeAsync("UpdateSimulator", cmd);
                     break;
 
+                case UpdateLocalPlaneCommand cmd:
+                    await _hubConnection.InvokeAsync("UpdateLocalPlane", cmd);
+                    break;
+
                 default:
                     throw new NotSupportedException($"Command type '{command.GetType().Name}' is not supported. " +
                         "Add a new case to SignalRBackendClient.SendCommandAsync and a corresponding hub method.");

@@ -29,7 +29,7 @@ namespace AgOpenGPS
             nudLongitude.Value = (decimal)Properties.Settings.Default.setGPS_SimLongitude;
         }
 
-        private void bntOK_Click(object sender, EventArgs e)
+        private async void bntOK_Click(object sender, EventArgs e)
         {
             if (mf.isJobStarted)
             {
@@ -42,7 +42,12 @@ namespace AgOpenGPS
                 mf.TimedMessageBox(2000, "Simulator is off", "Go Back To Work, No Time For Games");
                 Close();
             }
-            mf.pn.DefineLocalPlane(new Wgs84((double)nudLatitude.Value, (double)nudLongitude.Value), true);
+
+            // Update local plane via backend command
+            var wgs84Origin = new AgOpenGPS.Api.Client.Models.Wgs84Position((double)nudLatitude.Value, (double)nudLongitude.Value);
+            var command = new AgOpenGPS.Api.Client.Commands.UpdateLocalPlaneCommand(wgs84Origin);
+            await mf.SendBackendCommandAsync(command);
+
             Close();
         }
 

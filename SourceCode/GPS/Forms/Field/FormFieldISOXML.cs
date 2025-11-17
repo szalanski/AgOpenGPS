@@ -247,7 +247,7 @@ namespace AgOpenGPS
 
         }
 
-        private void btnBuildFields_Click(object sender, EventArgs e)
+        private async void btnBuildFields_Click(object sender, EventArgs e)
         {
             mf.currentFieldDirectory = tboxFieldName.Text.Trim();
             string directoryPath = Path.Combine(RegistrySettings.fieldsDirectory, mf.currentFieldDirectory);
@@ -269,7 +269,11 @@ namespace AgOpenGPS
             }
 
             mf.JobNew();
-            mf.pn.DefineLocalPlane(_origin, true);
+
+            // Update local plane via backend command
+            var wgs84Origin = new AgOpenGPS.Api.Client.Models.Wgs84Position(_origin.Latitude, _origin.Longitude);
+            var command = new AgOpenGPS.Api.Client.Commands.UpdateLocalPlaneCommand(wgs84Origin);
+            await mf.SendBackendCommandAsync(command);
 
             List<CBoundaryList> boundaries = importer.GetBoundaries();
             foreach (var bnd in boundaries)
