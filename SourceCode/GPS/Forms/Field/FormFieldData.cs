@@ -36,9 +36,6 @@ namespace AgOpenGPS
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            //lblEastingField.Text = Math.Round(mf.pn.fix.easting, 1).ToString();
-            //lblNorthingField.Text = Math.Round(mf.pn.fix.northing, 1).ToString();
-
             lblOverlapPercent.Text = mf.fd.ActualOverlapPercent;
 
             if (mf.isMetric)
