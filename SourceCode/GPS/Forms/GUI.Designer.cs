@@ -241,8 +241,7 @@ namespace AgOpenGPS
                     lblCurrentField.Text = "\u25B6" + " " + lblCurrentField.Text;
                 }
 
-                //fix
-                if (timerSim.Enabled && pn.fixQuality++ > 5) pn.fixQuality = 2;
+                // Note: Simulator fixQuality cycling removed - backend now manages GPS quality state
 
                 fileSaveAlwaysCounter += 3;
             }
@@ -611,7 +610,7 @@ namespace AgOpenGPS
             isRTK_AlarmOn = Properties.Settings.Default.setGPS_isRTK;
             isRTK_KillAutosteer = Properties.Settings.Default.setGPS_isRTK_KillAutoSteer;
 
-            pn.ageAlarm = Properties.Settings.Default.setGPS_ageAlarm;
+            // Note: pn.ageAlarm initialization removed - age alarm now read from backend state
 
             isConstantContourOn = Properties.Settings.Default.setAS_isConstantContourOn;
             isSteerInReverse = Properties.Settings.Default.setAS_isSteerInReverse;
@@ -1488,23 +1487,24 @@ namespace AgOpenGPS
 
         public string Latitude { get { return Convert.ToString(Math.Round(AppModel.CurrentLatLon.Latitude, 7)); } }
         public string Longitude { get { return Convert.ToString(Math.Round(AppModel.CurrentLatLon.Longitude, 7)); } }
-        public string SatsTracked { get { return Convert.ToString(pn.satellitesTracked); } }
-        public string HDOP { get { return Convert.ToString(pn.hdop); } }
+        public string SatsTracked { get { return Convert.ToString(_cachedState.Gnss.Quality.SatellitesTracked); } }
+        public string HDOP { get { return Convert.ToString(_cachedState.Gnss.Quality.Hdop); } }
         public string Heading { get { return Convert.ToString(Math.Round(glm.toDegrees(fixHeading), 1)) + "\u00B0"; } }
         public string GPSHeading { get { return (Math.Round(glm.toDegrees(gpsHeading), 1)) + "\u00B0"; } }
         public string FixQuality
         {
             get
             {
-                if (pn.fixQuality == 0) return "Invalid: ";
-                else if (pn.fixQuality == 1) return "GPS single: ";
-                else if (pn.fixQuality == 2) return "DGPS: ";
-                else if (pn.fixQuality == 3) return "PPS: ";
-                else if (pn.fixQuality == 4) return "RTK fix: ";
-                else if (pn.fixQuality == 5) return "RTK Float: ";
-                else if (pn.fixQuality == 6) return "Estimate: ";
-                else if (pn.fixQuality == 7) return "Man IP: ";
-                else if (pn.fixQuality == 8) return "Sim: ";
+                int fixQuality = _cachedState?.Gnss?.Quality.FixQuality ?? 0;
+                if (fixQuality == 0) return "Invalid: ";
+                else if (fixQuality == 1) return "GPS single: ";
+                else if (fixQuality == 2) return "DGPS: ";
+                else if (fixQuality == 3) return "PPS: ";
+                else if (fixQuality == 4) return "RTK fix: ";
+                else if (fixQuality == 5) return "RTK Float: ";
+                else if (fixQuality == 6) return "Estimate: ";
+                else if (fixQuality == 7) return "Man IP: ";
+                else if (fixQuality == 8) return "Sim: ";
                 else return "Unknown: ";
             }
         }
@@ -1551,8 +1551,8 @@ namespace AgOpenGPS
             }
         }
 
-        public string Altitude { get { return Convert.ToString(Math.Round(pn.altitude, 2)); } }
-        public string AltitudeFeet { get { return Convert.ToString((Math.Round((pn.altitude * 3.28084), 1))); } }
+        public string Altitude { get { return Convert.ToString(Math.Round(_cachedState.Gnss.Altitude.Meters, 2)); } }
+        public string AltitudeFeet { get { return Convert.ToString(Math.Round(_cachedState.Gnss.Altitude.ToFeet(), 1)); } }
         public string DistPivotM
         {
             get

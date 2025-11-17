@@ -133,21 +133,31 @@ namespace AgOpenGPS
                 return;
             }
 
-            // Read current GPS data from backend state into CNMEA working variables
-            pn.fix.easting = _cachedState.Gnss.LocalPosition.Easting;
-            pn.fix.northing = _cachedState.Gnss.LocalPosition.Northing;
-            pn.altitude = _cachedState.Gnss.Altitude.Meters;
-            pn.fixQuality = _cachedState.Gnss.Quality.FixQuality;
-            pn.satellitesTracked = _cachedState.Gnss.Quality.SatellitesTracked;
-            pn.hdop = _cachedState.Gnss.Quality.Hdop;
-            pn.age = _cachedState.Gnss.Quality.Age;
-            pn.headingTrue = _cachedState.Gnss.HeadingSingle.Degrees;
-            pn.headingTrueDual = _cachedState.Gnss.HeadingDual.Degrees;
+            // Performance optimization: Cache frequently accessed state values
+            var gnssState = _cachedState.Gnss;
+            var localPos = gnssState.LocalPosition;
+            var quality = gnssState.Quality;
+
+            // Create local working variable from backend state
+            // This allows existing correction algorithms to work unchanged
+            vec2 currentFix = new vec2(
+                localPos.Easting,
+                localPos.Northing
+            );
+
+            // Populate pn.fix from backend state (legacy compatibility during migration)
+            // TODO: Replace all pn.fix references with currentFix after full migration
+            pn.fix = currentFix;
+
+            // Read GPS data from backend state - only essential fields for compatibility
+            // Most code should now read directly from gnssState instead of pn.*
+            pn.headingTrue = gnssState.HeadingSingle.Degrees;
+            pn.headingTrueDual = gnssState.HeadingDual.Degrees;
 
             // Populate non-GPS fields that were previously set by CSim.DoSimTick()
             AppModel.CurrentLatLon = new AgOpenGPS.Core.Models.Wgs84(
-                _cachedState.Gnss.WgsPosition.Latitude,
-                _cachedState.Gnss.WgsPosition.Longitude);
+                gnssState.WgsPosition.Latitude,
+                gnssState.WgsPosition.Longitude);
 
             // Simulate IMU heading from GPS heading (matches CSim line 81 behavior)
             ahrs.imuHeading = pn.headingTrue;
@@ -198,9 +208,9 @@ namespace AgOpenGPS
                 hasBeenFirstHeadingSet = false;
             }
 
-            // Read speed from backend state (removed obsolete pn.speed = pn.vtgSpeed assignment)
-            pn.speed = _cachedState.Gnss.Speed.KilometersPerHour;
-            pn.AverageTheSpeed();
+            // Read speed from backend state
+            pn.speed = gnssState.Speed.KilometersPerHour; // Raw speed for immediate calculations
+            avgSpeed = gnssState.AveragedSpeed.KilometersPerHour; // Pre-averaged from backend
 
             if (Properties.Settings.Default.setGPS_headingFromWhichSource == "Dual" && ahrs.autoSwitchDualFixOn)
             {
@@ -1248,12 +1258,12 @@ namespace AgOpenGPS
                 sbGrid.Append(
                     AppModel.CurrentLatLon.Latitude.ToString("N7", CultureInfo.InvariantCulture) + ","
                     + AppModel.CurrentLatLon.Longitude.ToString("N7", CultureInfo.InvariantCulture) + ","
-                    + Math.Round((pn.altitude - vehicle.VehicleConfig.AntennaHeight),3).ToString(CultureInfo.InvariantCulture) + ","
-                    + pn.fixQuality.ToString(CultureInfo.InvariantCulture) + ","
+                    + Math.Round((_cachedState.Gnss.Altitude.Meters - vehicle.VehicleConfig.AntennaHeight),3).ToString(CultureInfo.InvariantCulture) + ","
+                    + _cachedState.Gnss.Quality.FixQuality.ToString(CultureInfo.InvariantCulture) + ","
                     + pn.fix.easting.ToString("N2", CultureInfo.InvariantCulture) + ","
                     + pn.fix.northing.ToString("N2", CultureInfo.InvariantCulture) + ","
                     + pivotAxlePos.heading.ToString("N3", CultureInfo.InvariantCulture) + ","
-                    + Math.Round(ahrs.imuRoll,3).ToString(CultureInfo.InvariantCulture) + 
+                    + Math.Round(ahrs.imuRoll,3).ToString(CultureInfo.InvariantCulture) +
                     "\r\n");
 
                 prevGridPos.easting = pivotAxlePos.easting;
@@ -1702,10 +1712,9 @@ namespace AgOpenGPS
         {
             if (!isFirstFixPositionSet)
             {
-                if (!isJobStarted)
-                {
-                    pn.DefineLocalPlane(AppModel.CurrentLatLon, false);
-                }
+                // Backend automatically initializes local plane on first GPS fix (GnssService.cs:52-58)
+                // No need to call DefineLocalPlane here - backend has already initialized it
+
                 GeoCoord fixCoord = AppModel.LocalPlane.ConvertWgs84ToGeoCoord(AppModel.CurrentLatLon);
                 pn.fix.northing = fixCoord.Northing;
                 pn.fix.easting = fixCoord.Easting;
